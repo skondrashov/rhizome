@@ -5,14 +5,10 @@ import os
 
 structures = []
 seen_ids = set()
-structure_dir = os.path.join(os.path.dirname(__file__), 'structures')
-
-# Also read from agent-forge's exports (agent-forge owns deployed system data)
-agent_forge_export = os.path.expanduser('~/agent-forge/exports/rhizome.json')
+root_dir = os.path.dirname(__file__)
+structure_dir = os.path.join(root_dir, 'structures')
 
 source_files = sorted(glob.glob(os.path.join(structure_dir, '*.json')))
-if os.path.exists(agent_forge_export):
-    source_files.append(agent_forge_export)
 
 for fpath in source_files:
     try:
@@ -28,8 +24,8 @@ for fpath in source_files:
     except Exception as e:
         print(f"  ERROR reading {os.path.basename(fpath)}: {e}")
 
-# Read structural classes from agent-forge (agent-forge owns this data)
-structural_classes_path = os.path.expanduser('~/agent-forge/exports/structural-classes.json')
+# Read structural classes (lives in this repo)
+structural_classes_path = os.path.join(root_dir, 'structural-classes.json')
 structural_classes = {}
 structural_mappings = {}
 if os.path.exists(structural_classes_path):

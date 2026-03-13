@@ -25,7 +25,8 @@ Browsable taxonomy of 207 agent orchestration patterns. Live at https://thisminu
 |------|-------------|
 | `index.html` | Entire frontend — filtering, hierarchy types, votes, comments |
 | `data.js` | Generated. 207 patterns as `window.STRUCTURES` array |
-| `build.py` | Aggregates `structures/*.json`, dedupes by ID, validates hierarchy types, sorts |
+| `build.py` | Aggregates `structures/*.json`, merges structural classes, dedupes by ID, validates, sorts |
+| `structural-classes.json` | 15 structural classes with mappings for all 207 patterns |
 | `schema.json` | JSON Schema (draft-07) defining pattern shape including `hierarchyTypes` |
 | `deploy.sh` | Build + scp to GCloud + HTTP verify + optional API deploy |
 | `structures/` | 13 source JSON files, ~14K lines total |
