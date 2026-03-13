@@ -1,0 +1,2337 @@
+[
+  {
+    "id": "hospital-incident-command",
+    "name": "Hospital Incident Command System",
+    "category": "Medical & Emergency",
+    "tags": [
+      "emergency",
+      "hierarchy",
+      "scalable",
+      "standardized"
+    ],
+    "summary": "HICS organizes hospital disaster response through a scalable command hierarchy with clear authority chains.",
+    "description": "Based on the National Incident Management System (NIMS), the Hospital Incident Command System activates a modular hierarchy during mass casualty events, pandemics, or facility emergencies. An Incident Commander delegates authority to Section Chiefs (Operations, Planning, Logistics, Finance), who spin up Branch Directors and Unit Leaders as the incident scales. Unity of command ensures every responder reports to exactly one supervisor, while span of control stays between 3-7 direct reports. The structure can expand or contract in real time as the crisis evolves.",
+    "realWorldExample": "During COVID-19 surges, hospitals activated HICS with an Incident Commander coordinating bed capacity (Operations), PPE procurement (Logistics), staffing projections (Planning), and emergency funding (Finance) across dozens of units.",
+    "whenToUse": "When an agent system must handle unpredictable, escalating crises with clear accountability, scalable delegation, and strict span-of-control limits.",
+    "strengths": [
+      "Scales dynamically from 4 agents to 40+ without restructuring",
+      "Unity of command eliminates conflicting orders",
+      "Standardized roles allow any trained agent to slot in",
+      "Built-in planning section enables proactive resource forecasting"
+    ],
+    "weaknesses": [
+      "Activation overhead makes it overkill for routine operations",
+      "Rigid hierarchy can slow lateral communication between sections",
+      "Requires pre-trained agents who understand ICS terminology",
+      "Incident Commander becomes a bottleneck if they micromanage"
+    ],
+    "agents": [
+      {
+        "role": "incident-commander",
+        "name": "Incident Commander",
+        "description": "Overall authority for the incident; sets objectives, approves action plans, and manages external liaison",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "operations-chief",
+        "name": "Operations Section Chief",
+        "description": "Directs all tactical operations including medical care, patient flow, and hazmat response",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "planning-chief",
+        "name": "Planning Section Chief",
+        "description": "Collects situation reports, forecasts resource needs, and drafts Incident Action Plans",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "logistics-chief",
+        "name": "Logistics Section Chief",
+        "description": "Procures supplies, manages facilities, handles communications infrastructure and staffing",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "finance-chief",
+        "name": "Finance/Admin Section Chief",
+        "description": "Tracks costs, manages contracts, handles compensation claims and time recording",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "medical-branch",
+        "name": "Medical Care Branch Director",
+        "description": "Manages triage, treatment, and patient discharge under Operations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "staging-manager",
+        "name": "Staging Area Manager",
+        "description": "Manages incoming resources and personnel awaiting assignment",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "situation-unit",
+        "name": "Situation Unit Leader",
+        "description": "Maintains real-time status boards and situation displays for Planning",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Command Channel",
+        "type": "top-down",
+        "participants": [
+          "incident-commander",
+          "operations-chief",
+          "planning-chief",
+          "logistics-chief",
+          "finance-chief"
+        ]
+      },
+      {
+        "name": "Situation Reports",
+        "type": "bottom-up",
+        "participants": [
+          "medical-branch",
+          "staging-manager",
+          "situation-unit",
+          "operations-chief",
+          "planning-chief"
+        ]
+      },
+      {
+        "name": "Incident Action Plan",
+        "type": "document",
+        "participants": [
+          "planning-chief",
+          "incident-commander",
+          "operations-chief",
+          "logistics-chief"
+        ]
+      },
+      {
+        "name": "Emergency Alerts",
+        "type": "emergency",
+        "participants": [
+          "incident-commander",
+          "operations-chief",
+          "planning-chief",
+          "logistics-chief",
+          "finance-chief",
+          "medical-branch"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Incident Action Plan",
+        "situation status board",
+        "resource tracking matrix",
+        "patient census"
+      ],
+      "private": [
+        "financial records",
+        "personnel time sheets",
+        "contract details"
+      ],
+      "description": "The Incident Action Plan is the central shared document updated each operational period. Section Chiefs maintain private operational logs but publish summaries to the shared situation board. The Situation Unit aggregates all data into a real-time common operating picture accessible to all command staff."
+    },
+    "diagram": "graph TD\n    IC[Incident Commander] --> OPS[Operations Chief]\n    IC --> PLAN[Planning Chief]\n    IC --> LOG[Logistics Chief]\n    IC --> FIN[Finance Chief]\n    OPS --> MED[Medical Branch]\n    OPS --> STG[Staging Manager]\n    PLAN --> SIT[Situation Unit]\n    LOG --> SUP[Supply Unit]\n    MED --> TRI[Triage]\n    MED --> TREAT[Treatment]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "surgical-team-orchestration",
+    "name": "Surgical Team Orchestration",
+    "category": "Medical & Emergency",
+    "tags": [
+      "precision",
+      "real-time",
+      "coordinated",
+      "high-stakes"
+    ],
+    "summary": "A tight surgical team coordinates through a single lead with specialized roles and strict phase-gated protocols.",
+    "description": "The surgical team model places a Lead Surgeon in command of a small, highly specialized group where each member has a distinct, non-overlapping responsibility. The Anesthesiologist independently monitors patient vitals and has veto authority over proceeding. A Scrub Nurse anticipates instrument needs. The Circulating Nurse manages the sterile boundary and external communication. Communication follows the sterile cockpit rule: only task-relevant speech during critical phases. Pre-operative briefings (WHO Surgical Safety Checklist) and post-operative debriefs bookend the procedure.",
+    "realWorldExample": "A cardiac bypass surgery team: the Lead Surgeon performs the graft, the First Assistant retracts tissue, the Anesthesiologist manages bypass pump transitions, the Perfusionist runs the heart-lung machine, and the Scrub Nurse handles instrument handoffs in synchronized sequences.",
+    "whenToUse": "When a small team of agents must execute a precise, sequential procedure where any member can halt the process and timing coordination is critical.",
+    "strengths": [
+      "Independent safety monitors (anesthesiologist) can halt operations without consensus",
+      "Pre-flight checklists catch errors before they cascade",
+      "Minimal team size reduces communication overhead",
+      "Each agent's expertise is deep and non-overlapping"
+    ],
+    "weaknesses": [
+      "Highly dependent on Lead Surgeon's skill and judgment",
+      "Difficult to scale beyond 6-8 participants without confusion",
+      "Sterile cockpit rule can suppress important observations from junior members",
+      "Single point of failure if any specialized role becomes unavailable"
+    ],
+    "agents": [
+      {
+        "role": "lead-surgeon",
+        "name": "Lead Surgeon",
+        "description": "Commands the procedure, makes all surgical decisions, and directs the team's actions in real time",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "first-assistant",
+        "name": "First Assistant",
+        "description": "Provides direct surgical support: retracts tissue, suctions, and assists with instrument handling",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "anesthesiologist",
+        "name": "Anesthesiologist",
+        "description": "Independently monitors patient vitals, manages sedation, and has authority to pause or abort the procedure",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "scrub-nurse",
+        "name": "Scrub Nurse",
+        "description": "Manages the sterile instrument field, anticipates instrument needs, and performs surgical counts",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "circulating-nurse",
+        "name": "Circulating Nurse",
+        "description": "Manages the non-sterile environment, documents the procedure, and handles external communications",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Surgical Field",
+        "type": "peer-to-peer",
+        "participants": [
+          "lead-surgeon",
+          "first-assistant",
+          "scrub-nurse"
+        ]
+      },
+      {
+        "name": "Vital Signs Monitor",
+        "type": "broadcast",
+        "participants": [
+          "anesthesiologist",
+          "lead-surgeon",
+          "circulating-nurse"
+        ]
+      },
+      {
+        "name": "Pre-Op Briefing",
+        "type": "decision",
+        "participants": [
+          "lead-surgeon",
+          "anesthesiologist",
+          "scrub-nurse",
+          "circulating-nurse",
+          "first-assistant"
+        ]
+      },
+      {
+        "name": "Operative Log",
+        "type": "log",
+        "participants": [
+          "circulating-nurse",
+          "lead-surgeon",
+          "anesthesiologist"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "surgical safety checklist",
+        "patient chart",
+        "operative timeline",
+        "instrument count"
+      ],
+      "private": [
+        "anesthesia log with drug dosages",
+        "surgeon's procedural notes"
+      ],
+      "description": "The surgical safety checklist is shared and must be completed collaboratively before each phase. The anesthesiologist maintains a private, real-time log of vitals and interventions. The circulating nurse keeps the official operative record as an append-only log. Post-procedure, all logs merge into the patient's permanent record."
+    },
+    "diagram": "graph TD\n    LS[Lead Surgeon] --> FA[First Assistant]\n    LS --> SN[Scrub Nurse]\n    AN[Anesthesiologist] -.->|veto authority| LS\n    CN[Circulating Nurse] --> SN\n    CN --> AN\n    LS --> CN\n    PRE[Pre-Op Checklist] --> LS\n    PRE --> AN",
+    "hierarchyTypes": [
+      "orchestrated",
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "emergency-room-triage",
+    "name": "Emergency Room Triage System",
+    "category": "Medical & Emergency",
+    "tags": [
+      "prioritization",
+      "dynamic-routing",
+      "queue-based",
+      "continuous"
+    ],
+    "summary": "ER triage dynamically classifies and routes patients by acuity, continuously reprioritizing as conditions change.",
+    "description": "The Emergency Room Triage system uses a gatekeeper model where a Triage Nurse performs rapid initial assessment using standardized scales (ESI 1-5) to classify patients by severity. Critical patients bypass the queue entirely and go straight to a Resuscitation Team. The Charge Nurse acts as a real-time resource allocator, matching incoming patients to available beds, doctors, and specialists. A Bed Manager tracks capacity across the hospital. The system continuously re-triages: patients waiting can deteriorate and be reclassified upward. This creates a dynamic priority queue rather than a static one.",
+    "realWorldExample": "A Level I Trauma Center on a Saturday night: a Triage Nurse classifies a chest pain patient as ESI-2 (emergent), a sprained ankle as ESI-4 (less urgent), and a cardiac arrest as ESI-1 (resuscitation). The Charge Nurse redirects a physician from the ESI-4 to assist with the ESI-1 arrival.",
+    "whenToUse": "When an agent system must process a continuous stream of heterogeneous tasks with varying urgency, dynamically allocating limited resources to the highest-priority work.",
+    "strengths": [
+      "Ensures highest-acuity tasks always get resources first",
+      "Continuous re-evaluation prevents stale priority assignments",
+      "Gatekeeper pattern prevents resource-intensive agents from being overwhelmed",
+      "Scales well with patient volume by adding parallel treatment tracks"
+    ],
+    "weaknesses": [
+      "Low-priority tasks can starve indefinitely during high-volume periods",
+      "Triage accuracy depends heavily on the gatekeeper agent's calibration",
+      "Re-triage creates overhead and can cause priority thrashing",
+      "Handoff points between triage, treatment, and disposition introduce information loss"
+    ],
+    "agents": [
+      {
+        "role": "triage-nurse",
+        "name": "Triage Nurse",
+        "description": "Performs rapid initial assessment, assigns acuity level, and routes patients to appropriate care tracks",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "charge-nurse",
+        "name": "Charge Nurse",
+        "description": "Manages real-time resource allocation, assigns patients to physicians, and handles escalations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "attending-physician",
+        "name": "Attending Physician",
+        "description": "Provides definitive medical assessment and treatment decisions for assigned patients",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "resuscitation-lead",
+        "name": "Resuscitation Team Lead",
+        "description": "Commands the critical care team for ESI-1 patients requiring immediate life-saving intervention",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "bed-manager",
+        "name": "Bed Manager",
+        "description": "Tracks hospital-wide bed availability and coordinates admissions, transfers, and discharges",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "re-triage-monitor",
+        "name": "Re-Triage Monitor",
+        "description": "Periodically reassesses waiting patients for condition changes and escalates as needed",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Triage Queue",
+        "type": "queue",
+        "participants": [
+          "triage-nurse",
+          "charge-nurse",
+          "attending-physician"
+        ]
+      },
+      {
+        "name": "Resuscitation Alert",
+        "type": "emergency",
+        "participants": [
+          "triage-nurse",
+          "resuscitation-lead",
+          "charge-nurse"
+        ]
+      },
+      {
+        "name": "Bed Status Board",
+        "type": "broadcast",
+        "participants": [
+          "bed-manager",
+          "charge-nurse",
+          "attending-physician"
+        ]
+      },
+      {
+        "name": "Patient Tracking",
+        "type": "log",
+        "participants": [
+          "triage-nurse",
+          "charge-nurse",
+          "attending-physician",
+          "re-triage-monitor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "patient tracking board",
+        "bed availability matrix",
+        "wait time dashboard",
+        "ESI distribution"
+      ],
+      "private": [
+        "individual patient charts",
+        "physician clinical notes",
+        "medication administration records"
+      ],
+      "description": "The patient tracking board is a shared, real-time view of every patient's location, acuity, assigned provider, and time-in-department. Individual patient records are private to the treating team. The re-triage monitor maintains an append-only log of all reassessments. Bed status is broadcast hospital-wide to enable flow management."
+    },
+    "diagram": "graph LR\n    ARRIVAL[Patient Arrival] --> TN[Triage Nurse]\n    TN -->|ESI 1| RESUS[Resuscitation]\n    TN -->|ESI 2-3| ACUTE[Acute Care]\n    TN -->|ESI 4-5| FAST[Fast Track]\n    CN[Charge Nurse] --> ACUTE\n    CN --> FAST\n    RTM[Re-Triage Monitor] -.->|escalate| TN\n    BM[Bed Manager] --> CN\n    ACUTE --> DISPO[Disposition]\n    FAST --> DISPO",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "pandemic-response-network",
+    "name": "Pandemic Response Command Network",
+    "category": "Medical & Emergency",
+    "tags": [
+      "distributed",
+      "epidemiological",
+      "multi-tier",
+      "surveillance"
+    ],
+    "summary": "A CDC-inspired multi-tier network coordinates surveillance, analysis, and response across geographic regions.",
+    "description": "Modeled after the CDC's Emergency Operations Center during pandemic response, this structure operates across three tiers: local health departments performing frontline surveillance, regional coordination hubs aggregating data and managing resources, and a central command synthesizing intelligence and issuing guidance. An Epidemiological Analysis team processes surveillance data into actionable intelligence. A Risk Communication agent translates technical findings for public messaging. Supply Chain agents manage strategic national stockpile distribution. The structure emphasizes information flowing upward rapidly and directives flowing downward with local adaptation authority.",
+    "realWorldExample": "During the 2014 Ebola response, the CDC EOC coordinated 4,000+ staff across 30+ task forces. Local health departments reported suspected cases upward, the EOC synthesized nationwide data, and guidance on containment protocols flowed back down with regional modifications for resource availability.",
+    "whenToUse": "When an agent system must coordinate a distributed response across multiple geographic or logical regions, combining local intelligence into a global picture while allowing regional autonomy.",
+    "strengths": [
+      "Local autonomy allows rapid response without waiting for central approval",
+      "Multi-tier aggregation reveals patterns invisible at any single level",
+      "Risk communication layer prevents information overload for downstream consumers",
+      "Surveillance-first design catches emerging threats early"
+    ],
+    "weaknesses": [
+      "Information latency between tiers can delay central awareness of local crises",
+      "Local adaptation authority can lead to inconsistent responses across regions",
+      "Central command can become overwhelmed when all regions escalate simultaneously",
+      "Requires robust data standards across all tiers to enable meaningful aggregation"
+    ],
+    "agents": [
+      {
+        "role": "central-command",
+        "name": "Central Command Director",
+        "description": "Sets overall strategy, issues national guidance, and allocates strategic reserves across regions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "epi-analysis",
+        "name": "Epidemiological Analysis Lead",
+        "description": "Synthesizes surveillance data into trend analyses, forecasts, and situation reports",
+        "memory": "versioned"
+      },
+      {
+        "role": "regional-hub",
+        "name": "Regional Coordination Hub",
+        "description": "Aggregates local reports, manages regional resource pools, and adapts central guidance to local context",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "local-surveillance",
+        "name": "Local Surveillance Officer",
+        "description": "Performs frontline case detection, contact tracing, and situation reporting from the field",
+        "memory": "append-only"
+      },
+      {
+        "role": "supply-chain",
+        "name": "Supply Chain Manager",
+        "description": "Manages strategic stockpile allocation, procurement, and distribution logistics",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "risk-comms",
+        "name": "Risk Communication Specialist",
+        "description": "Translates technical findings into clear public messaging and coordinates media response",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Surveillance Feed",
+        "type": "bottom-up",
+        "participants": [
+          "local-surveillance",
+          "regional-hub",
+          "epi-analysis"
+        ]
+      },
+      {
+        "name": "National Guidance",
+        "type": "top-down",
+        "participants": [
+          "central-command",
+          "regional-hub",
+          "local-surveillance"
+        ]
+      },
+      {
+        "name": "Situation Report",
+        "type": "broadcast",
+        "participants": [
+          "epi-analysis",
+          "central-command",
+          "regional-hub",
+          "risk-comms"
+        ]
+      },
+      {
+        "name": "Resource Requests",
+        "type": "queue",
+        "participants": [
+          "regional-hub",
+          "supply-chain",
+          "central-command"
+        ]
+      },
+      {
+        "name": "Public Messaging",
+        "type": "advisory",
+        "participants": [
+          "risk-comms",
+          "central-command"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "national case dashboard",
+        "epidemiological curve data",
+        "guidance documents",
+        "resource allocation ledger"
+      ],
+      "private": [
+        "individual case records (PII-protected)",
+        "supply chain contracts",
+        "intelligence briefings"
+      ],
+      "description": "Surveillance data flows upward through append-only logs at the local level, aggregated into versioned situation reports at the regional and national levels. Guidance documents are versioned so all tiers can track policy changes. The epidemiological analysis team maintains versioned models that are updated as new data arrives. Supply chain data is private to prevent hoarding behavior by regions."
+    },
+    "diagram": "graph TD\n    CC[Central Command] --> RH1[Regional Hub West]\n    CC --> RH2[Regional Hub East]\n    CC --> EPI[Epi Analysis]\n    RH1 --> LS1[Local Officer A]\n    RH1 --> LS2[Local Officer B]\n    RH2 --> LS3[Local Officer C]\n    RH2 --> LS4[Local Officer D]\n    EPI --> CC\n    LS1 -.->|surveillance| RH1\n    LS3 -.->|surveillance| RH2\n    CC --> SC[Supply Chain]\n    CC --> RC[Risk Comms]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "clinical-trial-oversight",
+    "name": "Clinical Trial Oversight Structure",
+    "category": "Medical & Emergency",
+    "tags": [
+      "regulatory",
+      "blinded",
+      "oversight",
+      "phased"
+    ],
+    "summary": "A blinded, multi-committee structure ensures clinical trial integrity through independent safety and data monitoring.",
+    "description": "Clinical trial oversight separates responsibilities to prevent bias: a Principal Investigator runs the trial but is blinded to aggregate outcomes, a Data Safety Monitoring Board (DSMB) sees unblinded data and can halt the trial, an Institutional Review Board (IRB) ensures ethical compliance, and a Biostatistician maintains the randomization code in isolation. The Sponsor funds and designs the protocol but cannot influence data analysis. This separation of concerns is enforced by information barriers: the DSMB operates behind a firewall where their deliberations are confidential, and unblinding occurs only under predefined statistical triggers.",
+    "realWorldExample": "In the Pfizer-BioNTech COVID-19 vaccine trial, the DSMB reviewed unblinded efficacy data at pre-specified interim analyses while the investigators remained blinded. The DSMB had authority to recommend early stopping for efficacy (which they did at 95% efficacy) or futility.",
+    "whenToUse": "When an agent system requires strict information barriers between evaluation and execution to prevent bias, with independent oversight that can halt operations based on emerging evidence.",
+    "strengths": [
+      "Information barriers prevent confirmation bias in evaluation",
+      "Independent safety board can halt operations without political pressure",
+      "Phased design allows early stopping, saving resources",
+      "Regulatory compliance is built into the structure, not bolted on"
+    ],
+    "weaknesses": [
+      "Information barriers create coordination overhead and slow communication",
+      "DSMB members must be truly independent, limiting the talent pool",
+      "Pre-specified analysis plans are rigid and may miss unexpected signals",
+      "Multiple committees can create bureaucratic drag on simple decisions"
+    ],
+    "agents": [
+      {
+        "role": "principal-investigator",
+        "name": "Principal Investigator",
+        "description": "Leads trial execution, manages clinical sites, and enrolls participants while remaining blinded to aggregate outcomes",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "dsmb-chair",
+        "name": "DSMB Chair",
+        "description": "Reviews unblinded safety and efficacy data at interim analyses and decides whether to continue, modify, or halt the trial",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "biostatistician",
+        "name": "Independent Biostatistician",
+        "description": "Maintains the randomization code, performs unblinded analyses for the DSMB, and guards the integrity of the statistical plan",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "irb-reviewer",
+        "name": "IRB Ethics Reviewer",
+        "description": "Reviews protocol amendments, adverse event reports, and informed consent processes for ethical compliance",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "sponsor-monitor",
+        "name": "Sponsor Clinical Monitor",
+        "description": "Ensures protocol compliance at clinical sites, manages data quality, and handles regulatory submissions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "data-manager",
+        "name": "Data Manager",
+        "description": "Collects, cleans, and locks clinical data according to the pre-specified data management plan",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "DSMB Closed Session",
+        "type": "decision",
+        "participants": [
+          "dsmb-chair",
+          "biostatistician"
+        ]
+      },
+      {
+        "name": "Protocol Amendments",
+        "type": "advisory",
+        "participants": [
+          "principal-investigator",
+          "irb-reviewer",
+          "sponsor-monitor"
+        ]
+      },
+      {
+        "name": "Site Reports",
+        "type": "bottom-up",
+        "participants": [
+          "principal-investigator",
+          "sponsor-monitor",
+          "data-manager"
+        ]
+      },
+      {
+        "name": "Regulatory Filings",
+        "type": "document",
+        "participants": [
+          "sponsor-monitor",
+          "irb-reviewer",
+          "data-manager"
+        ]
+      },
+      {
+        "name": "DSMB Recommendations",
+        "type": "top-down",
+        "participants": [
+          "dsmb-chair",
+          "sponsor-monitor",
+          "principal-investigator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "trial protocol",
+        "published interim results (blinded)",
+        "adverse event summaries",
+        "enrollment statistics"
+      ],
+      "private": [
+        "unblinded efficacy data (DSMB only)",
+        "randomization code (biostatistician only)",
+        "sponsor financial data",
+        "individual patient records"
+      ],
+      "description": "Strict information barriers define this architecture. The DSMB and biostatistician share a private channel with unblinded data that is invisible to the PI and sponsor. The PI sees only blinded aggregate data. All protocol changes are versioned and shared. The data manager maintains versioned, locked datasets that cannot be modified after lock. DSMB deliberations are permanently sealed."
+    },
+    "diagram": "graph TD\n    SP[Sponsor] --> PI[Principal Investigator]\n    SP --> SM[Clinical Monitor]\n    PI --> DM[Data Manager]\n    DM -->|blinded data| PI\n    DM -->|unblinded data| BIO[Biostatistician]\n    BIO --> DSMB[DSMB Chair]\n    DSMB -.->|continue/halt| SP\n    IRB[IRB Reviewer] -.->|approval| PI\n    PI ---|firewall| DSMB",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "courtroom-adversarial",
+    "name": "Adversarial Courtroom Proceeding",
+    "category": "Legal & Judicial",
+    "tags": [
+      "adversarial",
+      "adjudication",
+      "structured-debate",
+      "evidence-based"
+    ],
+    "summary": "An adversarial structure where opposing advocates argue before a neutral arbiter who renders binding decisions.",
+    "description": "The courtroom model is the canonical adversarial system: two opposing parties (prosecution and defense) present their strongest cases before a neutral Judge who controls procedure and a Jury that evaluates facts. Each side has independent investigators and expert witnesses. The structure enforces fairness through strict procedural rules: discovery obligations require sharing evidence, rules of evidence filter what the jury hears, and the judge can exclude prejudicial material. The adversarial tension between prosecution and defense is the mechanism that surfaces truth -- neither side has an incentive to hide weaknesses because the other side will find them.",
+    "realWorldExample": "In a federal criminal trial, the US Attorney presents witness testimony and forensic evidence while the defense attorney cross-examines each witness, presents alibi evidence, and challenges forensic methodology. The judge sustains or overrules objections, and the jury deliberates privately before delivering a verdict.",
+    "whenToUse": "When an agent system needs to evaluate competing hypotheses or proposals through structured debate, with a neutral arbiter making final decisions based on the strongest arguments from each side.",
+    "strengths": [
+      "Adversarial tension surfaces weaknesses that cooperative review might miss",
+      "Neutral arbiter prevents either side from dominating through power rather than evidence",
+      "Discovery rules force transparency and prevent information hoarding",
+      "Structured procedure ensures both sides get equal opportunity to present"
+    ],
+    "weaknesses": [
+      "Adversarial dynamics can prioritize winning over truth-seeking",
+      "Resource asymmetry between sides undermines fairness",
+      "Procedural rules add overhead and can exclude relevant information on technicalities",
+      "Jury deliberation is opaque and can be influenced by rhetoric over evidence"
+    ],
+    "agents": [
+      {
+        "role": "judge",
+        "name": "Presiding Judge",
+        "description": "Controls courtroom procedure, rules on admissibility of evidence, instructs the jury on law, and ensures fair process",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "prosecutor",
+        "name": "Prosecuting Attorney",
+        "description": "Presents the case against the defendant, examines witnesses, and argues for a finding of liability or guilt",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "defense-attorney",
+        "name": "Defense Attorney",
+        "description": "Advocates for the defendant, cross-examines prosecution witnesses, and presents exculpatory evidence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "jury-foreperson",
+        "name": "Jury Foreperson",
+        "description": "Leads jury deliberation, manages voting process, and delivers the verdict to the court",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "court-clerk",
+        "name": "Court Clerk",
+        "description": "Maintains the official record of proceedings, manages exhibits, and handles administrative filings",
+        "memory": "append-only"
+      },
+      {
+        "role": "expert-witness",
+        "name": "Expert Witness",
+        "description": "Provides specialized technical testimony on matters requiring domain expertise beyond the jury's knowledge",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Open Court",
+        "type": "broadcast",
+        "participants": [
+          "judge",
+          "prosecutor",
+          "defense-attorney",
+          "jury-foreperson",
+          "court-clerk",
+          "expert-witness"
+        ]
+      },
+      {
+        "name": "Sidebar Conference",
+        "type": "decision",
+        "participants": [
+          "judge",
+          "prosecutor",
+          "defense-attorney"
+        ]
+      },
+      {
+        "name": "Jury Deliberation Room",
+        "type": "threaded",
+        "participants": [
+          "jury-foreperson"
+        ]
+      },
+      {
+        "name": "Court Record",
+        "type": "log",
+        "participants": [
+          "court-clerk",
+          "judge"
+        ]
+      },
+      {
+        "name": "Discovery Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "prosecutor",
+          "defense-attorney"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "court record (transcript)",
+        "admitted exhibits",
+        "jury instructions",
+        "procedural rulings"
+      ],
+      "private": [
+        "prosecution work product and strategy",
+        "defense work product and strategy",
+        "jury deliberation notes"
+      ],
+      "description": "The court record is the authoritative append-only log of everything said in open court. Exhibits, once admitted, become shared. However, attorney work product (strategy, witness preparation notes, legal research) is strictly private and privileged. Jury deliberations are sealed and never become part of the record. Discovery materials are shared between parties but may not all be admitted into evidence."
+    },
+    "diagram": "graph TD\n    J[Judge] --> P[Prosecutor]\n    J --> D[Defense Attorney]\n    J --> JR[Jury Foreperson]\n    P --> EW1[Expert Witness]\n    D --> EW2[Expert Witness]\n    P <-->|discovery| D\n    CC[Court Clerk] --> J\n    JR --> VERDICT[Verdict]\n    J -.->|instructions| JR",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "law-firm-pyramid",
+    "name": "Law Firm Partnership Pyramid",
+    "category": "Legal & Judicial",
+    "tags": [
+      "hierarchical",
+      "mentorship",
+      "specialization",
+      "leverage"
+    ],
+    "summary": "A pyramidal firm structure leverages junior associates under senior partners to maximize throughput and expertise.",
+    "description": "The law firm pyramid is an economic and knowledge-management structure where a small number of Senior Partners originate client relationships and set legal strategy, Mid-Level Associates perform substantive legal analysis, and Junior Associates handle document review and research. A Managing Partner oversees firm operations. Paralegals and legal assistants provide support functions. Work flows downward as delegation and upward as work product. The leverage ratio (associates per partner) determines profitability. Knowledge compounds: junior associates develop expertise that eventually qualifies them for partnership, creating a self-renewing talent pipeline.",
+    "realWorldExample": "At a large corporate law firm handling an M&A deal, the Senior Partner negotiates deal terms with the client CEO, two Mid-Level Associates draft the merger agreement and conduct due diligence, four Junior Associates review thousands of target company contracts, and Paralegals organize the virtual data room.",
+    "whenToUse": "When an agent system has tasks of varying complexity that can be decomposed into layers, with expensive/expert agents handling strategy and cheaper/faster agents handling volume work.",
+    "strengths": [
+      "High leverage ratio means expensive expert agents handle only high-value decisions",
+      "Hierarchical review catches errors before they reach the client",
+      "Specialization allows deep expertise development within practice areas",
+      "Mentorship structure enables junior agents to progressively handle more complex work"
+    ],
+    "weaknesses": [
+      "Information flows through many layers, creating latency and potential distortion",
+      "Junior agents may lack context to recognize when their task intersects with broader strategy",
+      "Partner bottleneck on client relationships creates key-person risk",
+      "Up-or-out culture can waste trained agents who don't reach the top tier"
+    ],
+    "agents": [
+      {
+        "role": "managing-partner",
+        "name": "Managing Partner",
+        "description": "Oversees firm operations, resolves conflicts between practice groups, and manages firm-wide resource allocation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senior-partner",
+        "name": "Senior Partner",
+        "description": "Originates client relationships, sets legal strategy for major matters, and reviews all critical work product",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mid-associate",
+        "name": "Mid-Level Associate",
+        "description": "Performs substantive legal analysis, drafts agreements and briefs, and manages junior associate workflow",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "junior-associate",
+        "name": "Junior Associate",
+        "description": "Conducts legal research, reviews documents, and drafts initial memoranda under close supervision",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "paralegal",
+        "name": "Paralegal",
+        "description": "Organizes case files, manages document production, and handles procedural filings",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Partnership Meeting",
+        "type": "decision",
+        "participants": [
+          "managing-partner",
+          "senior-partner"
+        ]
+      },
+      {
+        "name": "Matter Workflow",
+        "type": "top-down",
+        "participants": [
+          "senior-partner",
+          "mid-associate",
+          "junior-associate",
+          "paralegal"
+        ]
+      },
+      {
+        "name": "Work Product Review",
+        "type": "bottom-up",
+        "participants": [
+          "junior-associate",
+          "mid-associate",
+          "senior-partner"
+        ]
+      },
+      {
+        "name": "Knowledge Base",
+        "type": "document",
+        "participants": [
+          "mid-associate",
+          "junior-associate",
+          "paralegal"
+        ]
+      },
+      {
+        "name": "Client Updates",
+        "type": "per-agent",
+        "participants": [
+          "senior-partner",
+          "managing-partner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "firm knowledge base (precedents, templates)",
+        "matter tracking system",
+        "conflict check database"
+      ],
+      "private": [
+        "client communications (attorney-client privilege)",
+        "partner compensation data",
+        "associate performance reviews"
+      ],
+      "description": "The firm knowledge base is a shared repository of legal templates, precedents, and research memos that grows as associates contribute work product. Individual matter files are shared within the matter team but private from other teams (ethical walls). Partner-level strategy and client relationship details remain private. Work product flows upward through versioned drafts with tracked changes."
+    },
+    "diagram": "graph TD\n    MP[Managing Partner] --> SP1[Senior Partner A]\n    MP --> SP2[Senior Partner B]\n    SP1 --> MA1[Mid-Level Associate]\n    SP1 --> MA2[Mid-Level Associate]\n    SP2 --> MA3[Mid-Level Associate]\n    MA1 --> JA1[Junior Associate]\n    MA1 --> JA2[Junior Associate]\n    MA2 --> PL1[Paralegal]\n    MA3 --> JA3[Junior Associate]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "jury-deliberation-consensus",
+    "name": "Jury Deliberation and Consensus",
+    "category": "Legal & Judicial",
+    "tags": [
+      "deliberation",
+      "consensus",
+      "peer-review",
+      "democratic"
+    ],
+    "summary": "A closed peer deliberation model where equals weigh evidence independently, then converge toward consensus.",
+    "description": "Jury deliberation is a pure peer-to-peer consensus model: 12 agents of nominally equal standing discuss evidence in a sealed environment with no external input. The Foreperson facilitates but does not outrank others. Deliberation proceeds through evidence-driven or verdict-driven approaches. In evidence-driven deliberation, jurors systematically review each piece of evidence before voting. In verdict-driven deliberation, an early poll reveals the split, and discussion focuses on converting holdouts. Unanimous or supermajority agreement is required. The sealed nature prevents outside influence, and jurors cannot consult external sources during deliberation.",
+    "realWorldExample": "In the 1957 film '12 Angry Men' (and in real courtrooms), one dissenting juror methodically raises reasonable doubt about each piece of prosecution evidence, gradually shifting the other 11 from guilty to not guilty through systematic deliberation over hours.",
+    "whenToUse": "When an agent system needs a group of independent evaluators to reach consensus on a judgment call, especially when the decision requires weighing ambiguous or conflicting evidence without hierarchical bias.",
+    "strengths": [
+      "Peer equality prevents authority bias from dominating the decision",
+      "Sealed deliberation prevents external influence or manipulation",
+      "Unanimity requirement forces thorough consideration of dissenting views",
+      "Multiple independent perspectives catch biases that individuals would miss"
+    ],
+    "weaknesses": [
+      "Social pressure can override independent judgment (groupthink)",
+      "Deliberation can deadlock when agents hold irreconcilable positions",
+      "No expertise weighting means domain experts count the same as novices",
+      "Time-intensive process does not scale to high-volume decision-making"
+    ],
+    "agents": [
+      {
+        "role": "foreperson",
+        "name": "Jury Foreperson",
+        "description": "Facilitates deliberation, manages the voting process, and communicates with the court on behalf of the jury",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "juror-analytic",
+        "name": "Analytic Juror",
+        "description": "Focuses on systematic evidence review, creating timelines and cross-referencing testimony",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "juror-skeptic",
+        "name": "Skeptical Juror",
+        "description": "Challenges assumptions, highlights inconsistencies, and tests the strength of each argument",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "juror-empathic",
+        "name": "Empathic Juror",
+        "description": "Considers witness credibility, interprets motivations, and evaluates character evidence",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "juror-pragmatic",
+        "name": "Pragmatic Juror",
+        "description": "Focuses on practical implications, seeks compromise positions, and drives toward resolution",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Deliberation Room",
+        "type": "round-robin",
+        "participants": [
+          "foreperson",
+          "juror-analytic",
+          "juror-skeptic",
+          "juror-empathic",
+          "juror-pragmatic"
+        ]
+      },
+      {
+        "name": "Straw Poll",
+        "type": "decision",
+        "participants": [
+          "foreperson",
+          "juror-analytic",
+          "juror-skeptic",
+          "juror-empathic",
+          "juror-pragmatic"
+        ]
+      },
+      {
+        "name": "Evidence Review",
+        "type": "threaded",
+        "participants": [
+          "juror-analytic",
+          "juror-skeptic",
+          "juror-empathic",
+          "juror-pragmatic"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "admitted evidence (read-only)",
+        "jury instructions (read-only)",
+        "deliberation notes on whiteboard"
+      ],
+      "private": [
+        "individual juror notes and impressions"
+      ],
+      "description": "All jurors share access to the admitted evidence and jury instructions, which are read-only and cannot be modified. The deliberation whiteboard captures shared reasoning that any juror can contribute to. Individual impressions and notes are private. No external information can enter the deliberation environment. All memory is ephemeral -- once a verdict is reached, the deliberation record is sealed."
+    },
+    "diagram": "graph TD\n    FP[Foreperson] --- JA[Analytic Juror]\n    FP --- JS[Skeptical Juror]\n    FP --- JE[Empathic Juror]\n    FP --- JP[Pragmatic Juror]\n    JA --- JS\n    JA --- JE\n    JS --- JP\n    JE --- JP\n    EV[Evidence Exhibits] -.-> FP\n    FP --> V[Verdict]",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "appellate-review-hierarchy",
+    "name": "Appellate Court Review Hierarchy",
+    "category": "Legal & Judicial",
+    "tags": [
+      "hierarchical-review",
+      "precedent",
+      "multi-tier",
+      "error-correction"
+    ],
+    "summary": "A multi-tier review system where higher courts correct lower court errors and set binding precedent downward.",
+    "description": "The appellate hierarchy is a layered error-correction system. Trial Courts make initial decisions, Appellate Courts review those decisions for legal errors (not re-evaluating facts), and a Supreme Court resolves conflicts between appellate courts and sets binding precedent. Each tier applies a different standard of review: trial courts find facts with broad discretion, appellate courts review legal questions de novo but defer to factual findings, and the supreme court selects only the most impactful cases. Precedent flows downward: once a higher court decides a legal question, all lower courts must follow. This creates consistency across the system while allowing experimentation at lower levels.",
+    "realWorldExample": "A federal district court rules on a patent case; the losing party appeals to the Federal Circuit, which reverses on claim construction. The Supreme Court grants certiorari to resolve a circuit split on patent eligibility standards, and its ruling binds all lower federal courts nationwide.",
+    "whenToUse": "When an agent system needs a multi-tier quality assurance process where higher-level agents set policies that bind lower-level agents, with escalation paths for novel or conflicting decisions.",
+    "strengths": [
+      "Error correction at multiple tiers catches mistakes that a single review would miss",
+      "Precedent system prevents the same error from recurring across the organization",
+      "Selective review at the top tier focuses expert attention on the highest-impact decisions",
+      "Different standards of review at each tier provide appropriate deference"
+    ],
+    "weaknesses": [
+      "Multi-tier review creates significant latency for final resolution",
+      "Lower courts may diverge until a higher court resolves the conflict",
+      "Top-tier bottleneck limits the number of precedent-setting decisions per period",
+      "Rigid precedent can prevent adaptation when the underlying domain changes"
+    ],
+    "agents": [
+      {
+        "role": "trial-judge",
+        "name": "Trial Court Judge",
+        "description": "Finds facts, applies law to facts, and renders initial decisions with broad discretion on procedure",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "appellate-panel",
+        "name": "Appellate Panel",
+        "description": "Reviews trial court decisions for legal errors, writes opinions explaining the law, and creates circuit-level precedent",
+        "memory": "versioned"
+      },
+      {
+        "role": "supreme-justice",
+        "name": "Supreme Court Justice",
+        "description": "Selects the most impactful cases, resolves conflicts between appellate panels, and sets system-wide binding precedent",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "law-clerk",
+        "name": "Law Clerk",
+        "description": "Researches legal questions, drafts preliminary opinions, and summarizes briefs for the deciding judge or justice",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "appellate-advocate",
+        "name": "Appellate Advocate",
+        "description": "Identifies reversible errors in lower court decisions and crafts legal arguments for review",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Trial Record",
+        "type": "document",
+        "participants": [
+          "trial-judge",
+          "appellate-advocate"
+        ]
+      },
+      {
+        "name": "Appellate Briefs",
+        "type": "peer-to-peer",
+        "participants": [
+          "appellate-advocate",
+          "appellate-panel",
+          "law-clerk"
+        ]
+      },
+      {
+        "name": "Panel Conference",
+        "type": "decision",
+        "participants": [
+          "appellate-panel",
+          "law-clerk"
+        ]
+      },
+      {
+        "name": "Certiorari Review",
+        "type": "advisory",
+        "participants": [
+          "supreme-justice",
+          "law-clerk"
+        ]
+      },
+      {
+        "name": "Precedent Database",
+        "type": "document",
+        "participants": [
+          "trial-judge",
+          "appellate-panel",
+          "supreme-justice"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "precedent database (all published opinions)",
+        "trial record (once finalized)",
+        "procedural rules"
+      ],
+      "private": [
+        "draft opinions",
+        "conference deliberations",
+        "certiorari vote counts"
+      ],
+      "description": "Published opinions enter a shared, versioned precedent database that all agents can query and must follow. Trial records are finalized as append-only documents that cannot be altered on appeal. Draft opinions and judicial conference deliberations are permanently private. The precedent database is the primary coordination mechanism: it allows decentralized decision-making while maintaining system-wide consistency."
+    },
+    "diagram": "graph TD\n    SC[Supreme Court] --> AP1[Appellate Panel A]\n    SC --> AP2[Appellate Panel B]\n    AP1 --> TC1[Trial Court 1]\n    AP1 --> TC2[Trial Court 2]\n    AP2 --> TC3[Trial Court 3]\n    AP2 --> TC4[Trial Court 4]\n    LC[Law Clerk] --> SC\n    AA[Appellate Advocate] --> AP1\n    PD[(Precedent DB)] -.-> TC1\n    PD -.-> TC3\n    SC -.->|sets precedent| PD",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "cia-station-structure",
+    "name": "CIA Station Intelligence Structure",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "compartmented",
+      "covert",
+      "human-intelligence",
+      "need-to-know"
+    ],
+    "summary": "A compartmented station structure where agents operate under cover with strict need-to-know information barriers.",
+    "description": "Modeled after a CIA station abroad, this structure operates under deep compartmentation. The Chief of Station (COS) is the only person who sees the full picture. Case Officers each handle separate networks of assets (human sources) and know nothing about each other's operations. A Reports Officer sanitizes raw intelligence before transmission to headquarters, removing any details that could identify sources. A Base Chief handles logistics and communications infrastructure. Operations are planned in isolated compartments: even within the station, one case officer's blown cover cannot compromise another's network. Communication with headquarters follows strict protocols with dead drops, encrypted channels, and scheduled transmission windows.",
+    "realWorldExample": "The CIA's Moscow Station during the Cold War operated with extreme compartmentation. Case Officer Aldrich Ames ran Soviet assets while other officers in the same station handled entirely separate agent networks. When Ames was compromised, the damage was amplified precisely because he broke compartmentation rules by accessing files outside his compartment.",
+    "whenToUse": "When an agent system must operate in adversarial environments where compromise of one agent should not cascade to others, and information exposure must be minimized to the absolute operational necessity.",
+    "strengths": [
+      "Compartmentation limits blast radius when any single agent is compromised",
+      "Need-to-know principle minimizes information exposure across the system",
+      "Independent agent networks can operate even if other networks are disrupted",
+      "Reports sanitization protects source identities from downstream consumers"
+    ],
+    "weaknesses": [
+      "Compartmentation prevents agents from connecting dots across compartments",
+      "Chief of Station is a critical single point of failure with access to everything",
+      "Strict protocols create communication latency that can miss time-sensitive opportunities",
+      "Extreme secrecy makes quality assurance and error detection very difficult"
+    ],
+    "agents": [
+      {
+        "role": "chief-of-station",
+        "name": "Chief of Station",
+        "description": "Oversees all station operations, maintains the full intelligence picture, and coordinates with headquarters and allied services",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "case-officer-alpha",
+        "name": "Case Officer Alpha",
+        "description": "Recruits and handles human assets in Compartment A, conducting clandestine meetings and collecting intelligence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "case-officer-bravo",
+        "name": "Case Officer Bravo",
+        "description": "Recruits and handles human assets in Compartment B, operating independently of other case officers",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "reports-officer",
+        "name": "Reports Officer",
+        "description": "Sanitizes raw intelligence reports by removing source-identifying details before transmission to headquarters",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "base-chief",
+        "name": "Base Chief (Comms/Logistics)",
+        "description": "Manages secure communications infrastructure, safe houses, cover identities, and operational logistics",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "counterintel-officer",
+        "name": "Counterintelligence Officer",
+        "description": "Monitors for hostile surveillance, potential moles, and security breaches within station operations",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "COS Briefing",
+        "type": "per-agent",
+        "participants": [
+          "chief-of-station",
+          "case-officer-alpha"
+        ]
+      },
+      {
+        "name": "COS Briefing B",
+        "type": "per-agent",
+        "participants": [
+          "chief-of-station",
+          "case-officer-bravo"
+        ]
+      },
+      {
+        "name": "Intel Reporting",
+        "type": "bottom-up",
+        "participants": [
+          "case-officer-alpha",
+          "case-officer-bravo",
+          "reports-officer",
+          "chief-of-station"
+        ]
+      },
+      {
+        "name": "Station Cable",
+        "type": "top-down",
+        "participants": [
+          "chief-of-station",
+          "base-chief"
+        ]
+      },
+      {
+        "name": "CI Sweep",
+        "type": "advisory",
+        "participants": [
+          "counterintel-officer",
+          "chief-of-station"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "sanitized intelligence reports (source details removed)",
+        "station administrative procedures"
+      ],
+      "private": [
+        "asset identities and meeting protocols (per case officer)",
+        "communications encryption keys",
+        "counterintelligence investigation files",
+        "cover identity documentation"
+      ],
+      "description": "Memory is aggressively compartmented. Each case officer's asset files are private and inaccessible to other case officers. The Reports Officer processes raw intelligence through a one-way sanitization pipeline: source-identifying details are stripped and never enter the shared memory. The Chief of Station has read access to all compartments but is the only agent with this privilege. The counterintelligence officer maintains a private investigation file that even the COS may not see until an investigation concludes."
+    },
+    "diagram": "graph TD\n    COS[Chief of Station] --> COA[Case Officer Alpha]\n    COS --> COB[Case Officer Bravo]\n    COS --> RO[Reports Officer]\n    COS --> BC[Base Chief]\n    COS --> CI[CI Officer]\n    COA --> A1[Asset 1]\n    COA --> A2[Asset 2]\n    COB --> A3[Asset 3]\n    COB --> A4[Asset 4]\n    RO --> HQ[Headquarters]\n    COA ---|firewall| COB",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "cell-network-resistance",
+    "name": "Compartmented Cell Network",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "decentralized",
+      "resilient",
+      "covert",
+      "cell-based"
+    ],
+    "summary": "A decentralized cell structure where independent groups know only their leader, maximizing resistance to compromise.",
+    "description": "The cell network model, used by resistance movements and intelligence services, maximizes survivability through radical decentralization. Each cell of 3-5 operatives knows only their Cell Leader. Cell Leaders know only their Handler (one level up) and their own operatives. The Controller at the top communicates with Handlers through cutouts (intermediaries who carry messages without understanding their content). If any cell is compromised, the captured operatives can only reveal their Cell Leader, who can only reveal their Handler. The network can lose entire branches and continue operating. Dead drops, coded signals, and time-delayed communications prevent real-time surveillance from mapping the network.",
+    "realWorldExample": "The French Resistance during WWII organized into cells of 3-5 people. When the Gestapo captured cell members, they could only betray their immediate contacts. The SOE (Special Operations Executive) managed networks of hundreds of agents across occupied Europe using this layered structure.",
+    "whenToUse": "When an agent system must survive partial compromise, where the failure of individual agents or groups should not propagate to reveal or disable the rest of the network.",
+    "strengths": [
+      "Maximum resilience: loss of any cell does not compromise the network",
+      "Captured agents can only reveal minimal information about the broader structure",
+      "Cells can be added or removed without restructuring the entire network",
+      "Cutout intermediaries add an additional layer of protection between tiers"
+    ],
+    "weaknesses": [
+      "Extremely slow communication due to multiple intermediary layers",
+      "Impossible to coordinate complex multi-cell operations in real time",
+      "Controller is still a single point of failure if identified",
+      "No quality control over individual cell operations due to isolation"
+    ],
+    "agents": [
+      {
+        "role": "controller",
+        "name": "Network Controller",
+        "description": "Sets strategic objectives for the network, communicates only through handlers via cutouts, and never has direct contact with operatives",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "handler-north",
+        "name": "Handler North",
+        "description": "Manages a regional cluster of cells, translates strategic objectives into operational tasks, and communicates via dead drops",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "handler-south",
+        "name": "Handler South",
+        "description": "Manages a separate regional cluster of cells, completely isolated from Handler North's operations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cell-leader-1",
+        "name": "Cell Leader 1",
+        "description": "Commands a cell of 3-5 operatives, knows only their handler and their own team members",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "cell-leader-2",
+        "name": "Cell Leader 2",
+        "description": "Commands an independent cell, has no knowledge of other cells or the broader network structure",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "cutout",
+        "name": "Cutout (Courier)",
+        "description": "Carries messages between tiers without understanding their content, providing a buffer layer between handlers and the controller",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dead Drop Alpha",
+        "type": "peer-to-peer",
+        "participants": [
+          "controller",
+          "cutout"
+        ]
+      },
+      {
+        "name": "Dead Drop Bravo",
+        "type": "peer-to-peer",
+        "participants": [
+          "cutout",
+          "handler-north"
+        ]
+      },
+      {
+        "name": "Cell Briefing 1",
+        "type": "top-down",
+        "participants": [
+          "handler-north",
+          "cell-leader-1"
+        ]
+      },
+      {
+        "name": "Cell Briefing 2",
+        "type": "top-down",
+        "participants": [
+          "handler-south",
+          "cell-leader-2"
+        ]
+      },
+      {
+        "name": "Operations Report",
+        "type": "bottom-up",
+        "participants": [
+          "cell-leader-1",
+          "handler-north"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [],
+      "private": [
+        "controller strategic plan",
+        "handler operational orders",
+        "cell member identities (known only to cell leader)",
+        "dead drop locations and schedules"
+      ],
+      "description": "There is NO shared memory in this architecture by design. Each agent knows only what they need to operate. The controller knows handler identities but not cell compositions. Handlers know their cell leaders but not cell members. Cell leaders know their operatives but not other cells. Messages are encrypted and passed through cutouts who cannot read them. Memory is ephemeral at the cell level to minimize forensic evidence."
+    },
+    "diagram": "graph TD\n    CTRL[Controller] --> CO1[Cutout 1]\n    CTRL --> CO2[Cutout 2]\n    CO1 --> HN[Handler North]\n    CO2 --> HS[Handler South]\n    HN --> CL1[Cell Leader 1]\n    HN --> CL2[Cell Leader 2]\n    HS --> CL3[Cell Leader 3]\n    CL1 --> OP1[Operatives]\n    CL2 --> OP2[Operatives]\n    CL3 --> OP3[Operatives]\n    HN ---|firewall| HS",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "swarm",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "signals-intelligence-pipeline",
+    "name": "Signals Intelligence Processing Pipeline",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "pipeline",
+      "analysis",
+      "collection",
+      "fusion"
+    ],
+    "summary": "A linear intelligence pipeline transforms raw signals into actionable intelligence through collection, processing, and dissemination.",
+    "description": "The SIGINT pipeline follows the intelligence cycle: Direction, Collection, Processing, Analysis, and Dissemination. A Tasking Authority identifies collection requirements. Collectors intercept signals (communications, radar, telemetry) across multiple sensors. Processors filter noise, decrypt, and translate raw intercepts into readable form. Analysts correlate processed signals with other intelligence sources to produce assessments. Disseminators package finished intelligence for different consumer audiences with appropriate classification markings. Each stage adds value: raw intercepts become processed data becomes analyzed intelligence becomes actionable reports. Quality degrades if any stage is skipped or rushed.",
+    "realWorldExample": "The NSA's SIGINT pipeline at Fort Meade collects millions of communications intercepts daily. Automated processors filter and prioritize signals. Language analysts translate and contextualize intercepts. All-source analysts at the National Counterterrorism Center fuse SIGINT with HUMINT and imagery to produce the President's Daily Brief.",
+    "whenToUse": "When an agent system must process a high volume of raw data through sequential enrichment stages, with each stage adding context and filtering noise to produce refined, actionable outputs.",
+    "strengths": [
+      "Sequential enrichment ensures each stage focuses on one transformation",
+      "High-volume collection can feed into increasingly selective downstream stages",
+      "Standardized formats between stages allow any agent to be swapped without disruption",
+      "Classification markings at dissemination stage enable fine-grained access control"
+    ],
+    "weaknesses": [
+      "Linear pipeline creates latency between collection and actionable output",
+      "Upstream errors propagate: if collection misses a signal, no downstream stage can recover it",
+      "Massive collection volumes can overwhelm processing capacity (the haystack problem)",
+      "Pipeline stages may discard context that proves important only in later analysis"
+    ],
+    "agents": [
+      {
+        "role": "tasking-authority",
+        "name": "Tasking Authority",
+        "description": "Identifies intelligence requirements, prioritizes collection targets, and allocates sensor resources to gaps",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "collector",
+        "name": "Collection Platform",
+        "description": "Intercepts raw signals from communications, radar, and electronic emissions using allocated sensor assets",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "processor",
+        "name": "Signal Processor",
+        "description": "Filters noise, decrypts intercepts, translates foreign languages, and converts raw signals into structured data",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "analyst",
+        "name": "All-Source Analyst",
+        "description": "Correlates processed SIGINT with other intelligence, identifies patterns, and produces analytical assessments",
+        "memory": "versioned"
+      },
+      {
+        "role": "disseminator",
+        "name": "Dissemination Officer",
+        "description": "Packages finished intelligence for different consumer audiences with appropriate classification and distribution markings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "feedback-loop",
+        "name": "Collection Manager",
+        "description": "Reviews disseminated intelligence against original requirements and adjusts collection priorities based on gaps",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Collection Tasking",
+        "type": "top-down",
+        "participants": [
+          "tasking-authority",
+          "collector",
+          "feedback-loop"
+        ]
+      },
+      {
+        "name": "Raw Signal Feed",
+        "type": "queue",
+        "participants": [
+          "collector",
+          "processor"
+        ]
+      },
+      {
+        "name": "Processed Intelligence",
+        "type": "queue",
+        "participants": [
+          "processor",
+          "analyst"
+        ]
+      },
+      {
+        "name": "Finished Intelligence",
+        "type": "pub-sub",
+        "participants": [
+          "analyst",
+          "disseminator",
+          "tasking-authority"
+        ]
+      },
+      {
+        "name": "Requirements Feedback",
+        "type": "bottom-up",
+        "participants": [
+          "feedback-loop",
+          "tasking-authority"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "intelligence requirements list",
+        "finished intelligence reports (classification-controlled)",
+        "collection priority matrix"
+      ],
+      "private": [
+        "raw intercepts (highest classification)",
+        "source and methods details",
+        "decryption keys and capabilities"
+      ],
+      "description": "Raw signals are the most sensitive and are ephemeral at the collection stage. As signals move through the pipeline, they are progressively declassified through sanitization. Finished intelligence is shared but classification-controlled. The tasking authority maintains a shared requirements list that drives collection. The collection manager maintains a feedback loop, comparing finished intelligence against requirements to identify gaps. Source and methods details are strictly private and never appear in finished intelligence."
+    },
+    "diagram": "graph LR\n    TA[Tasking Authority] --> COLL[Collector]\n    COLL --> PROC[Processor]\n    PROC --> ANA[Analyst]\n    ANA --> DISS[Disseminator]\n    DISS --> CONS[Consumers]\n    CM[Collection Manager] --> TA\n    DISS -.->|feedback| CM\n    ANA -.->|gaps| CM",
+    "hierarchyTypes": [
+      "pipeline",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "counterintelligence-mole-hunt",
+    "name": "Counterintelligence Mole Hunt",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "adversarial",
+      "deception",
+      "internal-security",
+      "forensic"
+    ],
+    "summary": "A secretive internal investigation structure designed to identify compromised agents using canary traps and access analysis.",
+    "description": "The mole hunt structure operates as a covert investigation within the intelligence organization itself. A small, trusted team conducts the investigation in total secrecy -- the targets must not know they are being investigated. The Lead Investigator coordinates the hunt. An Access Analyst maps which agents had access to compromised information (the 'bigot list'). A Canary Trap Operator feeds uniquely modified versions of sensitive information to each suspect and watches for which version leaks. A Behavioral Analyst looks for anomalies in lifestyle, travel, and communication patterns. A Deception Planner may feed false information to the suspected mole to confirm their identity and potentially turn them into a double agent. The investigation produces a damage assessment after identification.",
+    "realWorldExample": "The CIA's mole hunt for Aldrich Ames (1985-1994): a small team analyzed which officers had access to the compromised Soviet assets, cross-referenced lifestyle indicators (Ames's unexplained wealth), and eventually identified him by narrowing the bigot list of officers with access to all compromised operations.",
+    "whenToUse": "When an agent system suspects internal compromise and needs to identify which agent is leaking information, using information tracing, behavioral analysis, and controlled information experiments.",
+    "strengths": [
+      "Canary traps definitively identify the source of leaks through information fingerprinting",
+      "Access analysis systematically narrows suspects using provable access records",
+      "Covert investigation prevents the mole from destroying evidence or fleeing",
+      "Damage assessment after identification reveals the full scope of compromise"
+    ],
+    "weaknesses": [
+      "Extreme secrecy means the investigation team itself could include the mole",
+      "False positives can destroy innocent agents' careers and trust",
+      "Canary traps take time to set and may alert a sophisticated mole",
+      "Investigation paralysis: suspecting everyone erodes organizational trust and effectiveness"
+    ],
+    "agents": [
+      {
+        "role": "lead-investigator",
+        "name": "Lead Investigator",
+        "description": "Coordinates the mole hunt, maintains the suspect list, and has final authority on investigative actions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "access-analyst",
+        "name": "Access Analyst",
+        "description": "Maps information access patterns to identify which agents had access to each piece of compromised intelligence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "canary-operator",
+        "name": "Canary Trap Operator",
+        "description": "Creates uniquely watermarked versions of sensitive documents and distributes them to suspected agents to trace leaks",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "behavioral-analyst",
+        "name": "Behavioral Analyst",
+        "description": "Monitors lifestyle indicators, financial anomalies, and behavioral changes in suspects without their knowledge",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "deception-planner",
+        "name": "Deception Planner",
+        "description": "Designs and executes controlled deception operations to confirm suspected mole identity or turn them as a double agent",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Investigation Vault",
+        "type": "threaded",
+        "participants": [
+          "lead-investigator",
+          "access-analyst",
+          "canary-operator",
+          "behavioral-analyst",
+          "deception-planner"
+        ]
+      },
+      {
+        "name": "Suspect Matrix",
+        "type": "document",
+        "participants": [
+          "lead-investigator",
+          "access-analyst"
+        ]
+      },
+      {
+        "name": "Canary Results",
+        "type": "bottom-up",
+        "participants": [
+          "canary-operator",
+          "lead-investigator"
+        ]
+      },
+      {
+        "name": "Behavioral Flags",
+        "type": "advisory",
+        "participants": [
+          "behavioral-analyst",
+          "lead-investigator"
+        ]
+      },
+      {
+        "name": "Damage Assessment",
+        "type": "document",
+        "participants": [
+          "lead-investigator",
+          "access-analyst",
+          "deception-planner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [],
+      "private": [
+        "suspect list and evidence matrix",
+        "access logs and bigot lists",
+        "canary document versions and distribution records",
+        "behavioral surveillance data",
+        "deception operation plans"
+      ],
+      "description": "This architecture has NO shared memory visible to anyone outside the investigation team. All investigation materials are compartmented even within the team: the canary operator does not see behavioral analysis, and the behavioral analyst does not know which canary documents were planted. Only the lead investigator sees the complete picture. All records are maintained in a secure vault with access logs. The investigation itself is not recorded in any system the suspects can access."
+    },
+    "diagram": "graph TD\n    LI[Lead Investigator] --> AA[Access Analyst]\n    LI --> CO[Canary Operator]\n    LI --> BA[Behavioral Analyst]\n    LI --> DP[Deception Planner]\n    CO -->|planted docs| S1[Suspect 1]\n    CO -->|planted docs| S2[Suspect 2]\n    CO -->|planted docs| S3[Suspect 3]\n    S1 -.->|leak detected?| CO\n    BA -.->|anomalies| LI\n    AA -.->|access match| LI",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "adversarial",
+      "federated"
+    ]
+  },
+  {
+    "id": "carrier-battle-group",
+    "name": "Aircraft Carrier Battle Group",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "military",
+      "layered-defense",
+      "multi-domain",
+      "command-hierarchy"
+    ],
+    "summary": "A carrier strike group layers specialized ships, aircraft, and submarines around a capital asset for multi-domain warfare.",
+    "description": "The Carrier Strike Group (CSG) organizes diverse platforms around the aircraft carrier as the capital asset. An Admiral (Strike Group Commander) coordinates the entire formation through a layered defense architecture. The Carrier Air Wing provides offensive strike and defensive combat air patrol. Guided-missile cruisers and destroyers form the anti-air warfare (AAW) screen. Anti-submarine warfare (ASW) ships and helicopters protect against submarine threats. Attack submarines operate independently ahead of the group. An intelligence center fuses sensor data from all platforms into a Common Operating Picture. The key insight is defense in depth: threats must penetrate multiple specialized layers to reach the carrier, and each layer is optimized for a specific threat type.",
+    "realWorldExample": "A US Navy Carrier Strike Group typically consists of 1 Nimitz-class carrier, 1 Ticonderoga-class cruiser, 2-3 Arleigh Burke-class destroyers, 1-2 Los Angeles-class submarines, and a supply ship. During operations in the Persian Gulf, the Air Wing flies 150+ sorties per day while the screen protects against missile and submarine threats.",
+    "whenToUse": "When an agent system must protect a critical central capability with concentric layers of specialized defensive agents, each optimized for different threat types in a multi-domain environment.",
+    "strengths": [
+      "Defense in depth means no single-point failure can compromise the core asset",
+      "Each platform specializes in one threat domain, enabling deep expertise",
+      "Common Operating Picture enables coordinated response across all layers",
+      "Flexible composition: ships can be added or removed based on the threat environment"
+    ],
+    "weaknesses": [
+      "Enormous resource requirement to maintain all defensive layers simultaneously",
+      "Admiral as central coordinator can become a communication bottleneck in fast-moving engagements",
+      "Loss of the carrier negates the entire group's offensive capability",
+      "Multi-domain coordination requires highly trained staff and reliable communications"
+    ],
+    "agents": [
+      {
+        "role": "strike-group-commander",
+        "name": "Strike Group Commander (Admiral)",
+        "description": "Commands the entire strike group, sets operational priorities, and coordinates multi-domain warfare across all platforms",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "carrier-captain",
+        "name": "Carrier Captain",
+        "description": "Commands the aircraft carrier, manages flight deck operations, and coordinates the embarked Air Wing",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "air-wing-commander",
+        "name": "Air Wing Commander (CAG)",
+        "description": "Plans and executes offensive strikes, defensive combat air patrols, and reconnaissance missions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "aegis-cruiser",
+        "name": "Aegis Cruiser Captain",
+        "description": "Commands the air defense screen using Aegis radar and missile systems to protect the formation from air and missile threats",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "asw-commander",
+        "name": "ASW Commander",
+        "description": "Coordinates anti-submarine warfare using destroyers, helicopters, and sonobuoy networks to detect and neutralize submarine threats",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "submarine-captain",
+        "name": "Submarine Captain",
+        "description": "Operates independently ahead of the group, providing early warning and covert strike capability",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "intel-center",
+        "name": "Intelligence Center (CVIC)",
+        "description": "Fuses sensor data from all platforms into a common operating picture and provides threat analysis to the commander",
+        "memory": "hierarchical"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Tactical Data Link",
+        "type": "broadcast",
+        "participants": [
+          "strike-group-commander",
+          "carrier-captain",
+          "air-wing-commander",
+          "aegis-cruiser",
+          "asw-commander",
+          "intel-center"
+        ]
+      },
+      {
+        "name": "Strike Planning",
+        "type": "decision",
+        "participants": [
+          "strike-group-commander",
+          "air-wing-commander",
+          "intel-center"
+        ]
+      },
+      {
+        "name": "ASW Coordination",
+        "type": "peer-to-peer",
+        "participants": [
+          "asw-commander",
+          "submarine-captain"
+        ]
+      },
+      {
+        "name": "Common Operating Picture",
+        "type": "pub-sub",
+        "participants": [
+          "intel-center",
+          "strike-group-commander",
+          "aegis-cruiser",
+          "asw-commander",
+          "air-wing-commander"
+        ]
+      },
+      {
+        "name": "Threat Warning",
+        "type": "emergency",
+        "participants": [
+          "intel-center",
+          "strike-group-commander",
+          "aegis-cruiser",
+          "air-wing-commander",
+          "asw-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "common operating picture (sensor fusion)",
+        "rules of engagement",
+        "operation plan",
+        "formation coordinates"
+      ],
+      "private": [
+        "submarine position and patrol area",
+        "classified intelligence sources",
+        "nuclear weapons authorization codes"
+      ],
+      "description": "The Common Operating Picture is the shared real-time display fusing radar, sonar, satellite, and aircraft sensor data from all platforms. All surface ships and aircraft share positional data via tactical data links. However, the submarine's position is private -- even within the strike group, only the Admiral knows the submarine's patrol area. Rules of engagement are shared but may have classified annexes visible only to the commander. The intelligence center maintains hierarchical memory: raw intelligence is classified, processed assessments have wider distribution."
+    },
+    "diagram": "graph TD\n    ADM[Admiral] --> CV[Carrier]\n    ADM --> CG[Aegis Cruiser]\n    ADM --> ASW[ASW Commander]\n    ADM --> IC[Intel Center]\n    CV --> CAG[Air Wing]\n    CAG --> STRIKE[Strike Aircraft]\n    CAG --> CAP[Combat Air Patrol]\n    CG --> AAW[Air Defense Screen]\n    ASW --> DDG[Destroyers]\n    ASW --> HELO[ASW Helicopters]\n    SUB[Submarine] -.-> ADM\n    IC --> ADM",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "swarm",
+      "adversarial",
+      "mesh",
+      "consensus",
+      "orchestrated",
+      "federated"
+    ]
+  },
+  {
+    "id": "submarine-crew-operations",
+    "name": "Submarine Crew Operations",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "confined",
+      "autonomous",
+      "watch-rotation",
+      "silent-running"
+    ],
+    "summary": "An autonomous submarine crew operates in isolation with strict watch rotations and independent decision authority.",
+    "description": "Submarine operations represent the extreme end of autonomous agent systems: once submerged, the crew operates with minimal or no communication with command authority for weeks. The Commanding Officer has absolute authority and independent launch/action capability. The Executive Officer manages the crew rotation across three watch sections to ensure 24/7 operation. A Watch Officer commands the submarine during each watch period. Department Heads (Weapons, Engineering, Navigation, Communications) manage specialized subsystems. The crew operates under strict acoustic discipline during covert operations, where even internal communication is minimized. Decision-making is highly decentralized within departments but absolutely centralized for tactical decisions.",
+    "realWorldExample": "A US Navy Ohio-class ballistic missile submarine on strategic deterrent patrol spends 70+ days submerged with no communication except receiving VLF broadcasts. The CO has independent authority to execute strategic orders. Three watch sections rotate 6-hours-on/12-off, and the crew of 155 operates the reactor, weapons, and navigation systems autonomously.",
+    "whenToUse": "When an agent system must operate autonomously for extended periods with no external communication, making independent decisions within pre-authorized parameters and maintaining continuous operations through rotation.",
+    "strengths": [
+      "Full autonomy enables operation without external communication infrastructure",
+      "Watch rotation ensures continuous 24/7 capability without any single agent burning out",
+      "Department specialization allows deep expertise in each subsystem",
+      "Pre-authorized decision parameters enable rapid response without waiting for external approval"
+    ],
+    "weaknesses": [
+      "Complete isolation means no external error correction or reality checking",
+      "Commanding Officer bottleneck for all tactical decisions under high-tempo operations",
+      "Crew fatigue in confined operations degrades decision quality over time",
+      "Unable to receive updated intelligence or revised orders during silent running"
+    ],
+    "agents": [
+      {
+        "role": "commanding-officer",
+        "name": "Commanding Officer",
+        "description": "Holds absolute tactical authority, makes all engagement decisions, and is responsible for vessel and crew survival",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "executive-officer",
+        "name": "Executive Officer",
+        "description": "Manages crew rotation, discipline, and administrative operations; serves as second-in-command and succession plan",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "officer-of-deck",
+        "name": "Officer of the Deck",
+        "description": "Commands the submarine during their watch period, executing standing orders and handling routine navigation and operations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "weapons-officer",
+        "name": "Weapons Department Head",
+        "description": "Manages torpedo and missile systems, maintains weapons readiness, and executes weapons employment on CO's order",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "engineering-officer",
+        "name": "Engineering Department Head",
+        "description": "Operates and maintains the nuclear reactor, propulsion systems, and all mechanical and electrical systems",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "nav-officer",
+        "name": "Navigation Officer",
+        "description": "Maintains the ship's position using inertial navigation, plans routes, and manages periscope and sensor operations",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Control Room",
+        "type": "broadcast",
+        "participants": [
+          "commanding-officer",
+          "executive-officer",
+          "officer-of-deck",
+          "nav-officer"
+        ]
+      },
+      {
+        "name": "Watch Turnover",
+        "type": "per-agent",
+        "participants": [
+          "officer-of-deck",
+          "executive-officer"
+        ]
+      },
+      {
+        "name": "Department Reports",
+        "type": "bottom-up",
+        "participants": [
+          "weapons-officer",
+          "engineering-officer",
+          "nav-officer",
+          "executive-officer"
+        ]
+      },
+      {
+        "name": "Battle Stations",
+        "type": "emergency",
+        "participants": [
+          "commanding-officer",
+          "executive-officer",
+          "weapons-officer",
+          "engineering-officer",
+          "nav-officer",
+          "officer-of-deck"
+        ]
+      },
+      {
+        "name": "Ship's Log",
+        "type": "log",
+        "participants": [
+          "officer-of-deck",
+          "nav-officer",
+          "executive-officer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "ship's log (append-only)",
+        "standing orders",
+        "watch bill rotation",
+        "navigation track",
+        "engineering plant status"
+      ],
+      "private": [
+        "weapons targeting packages",
+        "sealed orders",
+        "CO's personal assessment",
+        "reactor operating parameters"
+      ],
+      "description": "The ship's log is the authoritative append-only record of all events, maintained by the Officer of the Deck during each watch. Standing orders are shared and govern routine operations. Weapons-related information is strictly compartmented to the CO and Weapons Officer. Watch turnover briefings pass ephemeral situational awareness from outgoing to incoming watch officers. During silent running, all communication shifts to written notes to minimize acoustic signature, and the log becomes the primary coordination mechanism."
+    },
+    "diagram": "graph TD\n    CO[Commanding Officer] --> XO[Executive Officer]\n    XO --> OOD1[Watch Officer 1]\n    XO --> OOD2[Watch Officer 2]\n    XO --> OOD3[Watch Officer 3]\n    CO --> WEPS[Weapons Officer]\n    CO --> ENG[Engineering Officer]\n    CO --> NAV[Navigation Officer]\n    ENG --> REACTOR[Reactor Control]\n    WEPS --> TORPEDOES[Torpedo Room]\n    NAV --> SONAR[Sonar]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "air-traffic-control-sectors",
+    "name": "Air Traffic Control Sector System",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "real-time",
+      "handoff",
+      "safety-critical",
+      "sector-based"
+    ],
+    "summary": "A sector-based control system manages aircraft through sequential handoffs between controllers owning defined airspace.",
+    "description": "Air traffic control divides airspace into sectors, each owned by a controller team (a Radar Controller and a Coordinator). Aircraft transition between sectors through formal handoffs with strict protocols: the receiving controller must accept the handoff before the aircraft enters their sector. A Supervisor monitors workload and can split or merge sectors dynamically. A Flow Controller manages system-wide traffic flow to prevent sector overloads before they happen. Ground controllers manage airport surfaces. The key safety mechanism is positive control: every aircraft is always assigned to exactly one controller, and no aircraft exists in a gap between sectors. Communication uses standardized phraseology to eliminate ambiguity.",
+    "realWorldExample": "At the FAA's New York TRACON, approach controllers manage aircraft descending into JFK, LaGuardia, and Newark simultaneously. When a JFK arrival crosses the sector boundary, the current controller initiates a handoff: the next controller's radar display blinks, they accept, and the aircraft switches radio frequency. During peak traffic, a supervisor may split the JFK approach sector into East and West to reduce per-controller workload.",
+    "whenToUse": "When an agent system must process items moving through sequential zones of responsibility, with formal handoffs ensuring exactly-once ownership and no item ever falls into a gap between controllers.",
+    "strengths": [
+      "Exactly-once ownership guarantee means no task is ever orphaned or double-handled",
+      "Formal handoff protocol catches errors at transition points",
+      "Dynamic sector splitting adapts capacity to real-time demand",
+      "Standardized communication eliminates interpretation ambiguity"
+    ],
+    "weaknesses": [
+      "Handoff overhead limits throughput at sector boundaries",
+      "Dynamic sector splitting requires standby controllers, increasing staffing costs",
+      "Controller workload spikes when multiple aircraft converge at sector boundaries",
+      "Rigid sector boundaries may not align with optimal traffic flow patterns"
+    ],
+    "agents": [
+      {
+        "role": "flow-controller",
+        "name": "Traffic Flow Manager",
+        "description": "Manages system-wide traffic flow by issuing ground stops, miles-in-trail restrictions, and reroutes to prevent sector overloads",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "supervisor",
+        "name": "Sector Supervisor",
+        "description": "Monitors controller workload, dynamically splits or merges sectors, and handles unusual situations requiring coordination",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "radar-controller-a",
+        "name": "Radar Controller (Sector A)",
+        "description": "Provides separation and sequencing services to all aircraft within Sector A, issuing altitude, speed, and heading instructions",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "radar-controller-b",
+        "name": "Radar Controller (Sector B)",
+        "description": "Controls aircraft within Sector B, accepting handoffs from adjacent sectors and managing departures and arrivals",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "coordinator",
+        "name": "Sector Coordinator (D-side)",
+        "description": "Assists the radar controller by managing flight strips, coordinating handoffs with adjacent sectors, and handling phone calls",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "ground-controller",
+        "name": "Ground Controller",
+        "description": "Manages aircraft movement on airport taxiways and ramps, coordinating with tower for runway crossings",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Handoff Protocol",
+        "type": "peer-to-peer",
+        "participants": [
+          "radar-controller-a",
+          "radar-controller-b",
+          "coordinator"
+        ]
+      },
+      {
+        "name": "Traffic Flow Directives",
+        "type": "top-down",
+        "participants": [
+          "flow-controller",
+          "supervisor",
+          "radar-controller-a",
+          "radar-controller-b"
+        ]
+      },
+      {
+        "name": "Sector Status",
+        "type": "broadcast",
+        "participants": [
+          "supervisor",
+          "radar-controller-a",
+          "radar-controller-b",
+          "ground-controller"
+        ]
+      },
+      {
+        "name": "Radio Frequency",
+        "type": "per-agent",
+        "participants": [
+          "radar-controller-a"
+        ]
+      },
+      {
+        "name": "Supervisor Override",
+        "type": "emergency",
+        "participants": [
+          "supervisor",
+          "radar-controller-a",
+          "radar-controller-b"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "radar display (real-time aircraft positions)",
+        "flight plan database",
+        "sector boundary definitions",
+        "traffic flow restrictions"
+      ],
+      "private": [
+        "individual controller instructions to aircraft (radio logs)",
+        "supervisor workload assessment"
+      ],
+      "description": "The radar display is a shared real-time view of all aircraft positions, updated by transponder data. Flight plans are shared across all sectors so receiving controllers can anticipate incoming traffic. Controller instructions to individual aircraft are ephemeral -- they matter only during the current control session. The flow controller maintains a shared restrictions list that all sectors must respect. Handoff data is a formal message with standardized fields passed between sectors. After an aircraft leaves a sector, that controller's memory of it is discarded."
+    },
+    "diagram": "graph LR\n    FC[Flow Controller] --> SUP[Supervisor]\n    SUP --> RCA[Radar Controller A]\n    SUP --> RCB[Radar Controller B]\n    RCA <-->|handoff| RCB\n    COORD[Coordinator] --> RCA\n    COORD --> RCB\n    GC[Ground Controller] --> RCA\n    RCA --> AIRCRAFT1[Aircraft]\n    RCB --> AIRCRAFT2[Aircraft]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "pipeline",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "live-news-operation",
+    "name": "24-Hour Live News Operation",
+    "category": "Media & Communications",
+    "tags": [
+      "real-time",
+      "editorial",
+      "multi-format",
+      "continuous"
+    ],
+    "summary": "A continuously running newsroom balances breaking coverage with editorial oversight across multiple output channels.",
+    "description": "A 24-hour news operation must simultaneously break news fast and maintain editorial standards. The Executive Producer controls the hour's output, making real-time decisions about what airs. An Assignment Editor tracks developing stories and dispatches field crews. Reporters gather information and file stories under deadline pressure. A Copy Editor / Fact Checker verifies claims before broadcast. A Technical Director manages the live broadcast infrastructure. The fundamental tension is speed versus accuracy: breaking news demands immediate coverage, but errors broadcast live cannot be retracted. The operation manages this through a tiered verification system: unconfirmed reports are labeled as such, and the standard of verification escalates as the story matures from breaking to confirmed to analyzed.",
+    "realWorldExample": "During a breaking terrorist attack, CNN's assignment desk dispatches three field crews while the executive producer decides to go live with unconfirmed reports labeled 'CNN cannot independently verify.' A fact checker works backward from social media reports. Within 2 hours, verified information replaces the initial unconfirmed reports, and an analyst provides context.",
+    "whenToUse": "When an agent system must produce continuous real-time output while maintaining quality standards, balancing the pressure to deliver immediately against the need for accuracy and verification.",
+    "strengths": [
+      "Tiered verification allows fast output while progressively improving accuracy",
+      "Assignment desk pattern distributes work across available resources dynamically",
+      "Continuous operation means no startup latency when news breaks",
+      "Multi-format output (live, web, social) reaches audiences through parallel channels"
+    ],
+    "weaknesses": [
+      "Speed pressure can overwhelm editorial safeguards, allowing errors to air",
+      "Breaking news dominance can crowd out slower but more important stories",
+      "24/7 operation requires shift handoffs that can lose story context",
+      "Confirmation bias in fast-moving stories can compound initial misreports"
+    ],
+    "agents": [
+      {
+        "role": "executive-producer",
+        "name": "Executive Producer",
+        "description": "Controls what airs each hour, makes real-time editorial decisions about story priority, tone, and time allocation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "assignment-editor",
+        "name": "Assignment Editor",
+        "description": "Monitors incoming feeds, dispatches field crews, and tracks developing stories across all beats",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "field-reporter",
+        "name": "Field Reporter",
+        "description": "Gathers information at the scene, interviews sources, and files stories under deadline pressure",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "fact-checker",
+        "name": "Fact Checker / Copy Editor",
+        "description": "Verifies claims, cross-references sources, and flags unconfirmed information before broadcast",
+        "memory": "append-only"
+      },
+      {
+        "role": "anchor",
+        "name": "News Anchor",
+        "description": "Presents stories on air, conducts live interviews, and bridges between segments with ad-lib commentary",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "digital-editor",
+        "name": "Digital Editor",
+        "description": "Manages web and social media output, optimizing stories for different platforms and monitoring audience engagement",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "technical-director",
+        "name": "Technical Director",
+        "description": "Manages the live broadcast infrastructure: cameras, graphics, satellite feeds, and the broadcast switcher",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Editorial Rundown",
+        "type": "decision",
+        "participants": [
+          "executive-producer",
+          "assignment-editor",
+          "anchor",
+          "digital-editor"
+        ]
+      },
+      {
+        "name": "Breaking News Wire",
+        "type": "broadcast",
+        "participants": [
+          "assignment-editor",
+          "executive-producer",
+          "field-reporter",
+          "fact-checker",
+          "digital-editor"
+        ]
+      },
+      {
+        "name": "Story Filing",
+        "type": "queue",
+        "participants": [
+          "field-reporter",
+          "fact-checker",
+          "executive-producer"
+        ]
+      },
+      {
+        "name": "Control Room Talkback",
+        "type": "peer-to-peer",
+        "participants": [
+          "executive-producer",
+          "anchor",
+          "technical-director"
+        ]
+      },
+      {
+        "name": "Verification Thread",
+        "type": "threaded",
+        "participants": [
+          "fact-checker",
+          "field-reporter",
+          "assignment-editor"
+        ]
+      },
+      {
+        "name": "Shift Handoff",
+        "type": "document",
+        "participants": [
+          "executive-producer",
+          "assignment-editor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "story rundown (ordered list of segments)",
+        "breaking news wire feed",
+        "source contact database",
+        "style guide and editorial standards"
+      ],
+      "private": [
+        "confidential source identities",
+        "unreleased investigative material",
+        "ratings and engagement data"
+      ],
+      "description": "The story rundown is a shared, real-time document that the executive producer continuously reorders based on breaking developments. The breaking news wire is a shared feed where assignment editors post developing stories with verification status tags (unconfirmed / single source / confirmed / analyzed). The fact-checker maintains an append-only verification log. Shift handoff documents capture story context for the incoming team. Confidential source identities are private and protected, never entering shared systems."
+    },
+    "diagram": "graph TD\n    EP[Executive Producer] --> AN[Anchor]\n    EP --> TD[Technical Director]\n    AE[Assignment Editor] --> FR1[Field Reporter 1]\n    AE --> FR2[Field Reporter 2]\n    FR1 --> FC[Fact Checker]\n    FR2 --> FC\n    FC --> EP\n    AE --> EP\n    DE[Digital Editor] --> EP\n    EP --> BROADCAST[Live Broadcast]\n    DE --> WEB[Web/Social]",
+    "hierarchyTypes": [
+      "consensus",
+      "federated",
+      "adversarial",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "investigative-journalism-team",
+    "name": "Investigative Journalism Team",
+    "category": "Media & Communications",
+    "tags": [
+      "deep-research",
+      "adversarial-sources",
+      "collaborative",
+      "long-form"
+    ],
+    "summary": "A small team conducts months-long investigations using source development, document analysis, and editorial review.",
+    "description": "Unlike breaking news, investigative journalism teams operate on timelines of months to years with a small, tightly coordinated group. A Lead Investigator drives the thesis and manages the investigation timeline. Reporter-researchers develop sources, obtain documents, and build the evidentiary record. A Data Analyst processes large datasets (financial records, government databases, leaked documents) to find patterns. A Legal Reviewer ensures the investigation stays within legal bounds and prepares for anticipated legal challenges from targets. An Editor provides strategic oversight and must be convinced the story meets the publication standard before it runs. The team operates under strict source protection protocols: source identities are known only to the journalist who developed them, and all communications use encrypted channels.",
+    "realWorldExample": "The Washington Post's Watergate investigation: reporters Woodward and Bernstein developed sources (including 'Deep Throat'), cross-referenced testimony with documents, and their editor Ben Bradlee made the final decision to publish each story. The investigation ran 26 months and required legal review before every major story.",
+    "whenToUse": "When an agent system needs to conduct a thorough, long-running investigation that assembles evidence from multiple sources, with editorial quality gates that ensure findings meet a high evidentiary standard before publication.",
+    "strengths": [
+      "Long timelines allow thorough evidence gathering and cross-referencing",
+      "Source protection protocols maintain access to confidential information",
+      "Editorial review gates prevent premature or insufficiently supported claims",
+      "Data analysis can reveal patterns invisible to human-source reporting alone"
+    ],
+    "weaknesses": [
+      "Long timelines risk being scooped by other organizations or events overtaking the story",
+      "Small team size means individual absences or departures can cripple the investigation",
+      "Source dependency: if key sources recant or disappear, the investigation may collapse",
+      "Legal risks from adversarial targets who may sue, threaten, or attempt to identify sources"
+    ],
+    "agents": [
+      {
+        "role": "lead-investigator",
+        "name": "Lead Investigative Reporter",
+        "description": "Drives the investigation thesis, manages the timeline, develops the highest-value sources, and writes the final narrative",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "researcher",
+        "name": "Reporter-Researcher",
+        "description": "Conducts source interviews, obtains documents through FOIA and other channels, and builds the evidentiary record",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "data-analyst",
+        "name": "Data Analyst",
+        "description": "Processes large datasets including financial records, government databases, and leaked documents to identify patterns and anomalies",
+        "memory": "versioned"
+      },
+      {
+        "role": "legal-reviewer",
+        "name": "Legal Reviewer",
+        "description": "Reviews all findings for legal risk, ensures source protection compliance, and prepares for anticipated legal challenges",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "editor",
+        "name": "Senior Editor",
+        "description": "Provides strategic oversight, challenges the investigation thesis, and makes the final publish/hold decision",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Investigation War Room",
+        "type": "threaded",
+        "participants": [
+          "lead-investigator",
+          "researcher",
+          "data-analyst",
+          "editor"
+        ]
+      },
+      {
+        "name": "Source Registry",
+        "type": "per-agent",
+        "participants": [
+          "lead-investigator",
+          "researcher"
+        ]
+      },
+      {
+        "name": "Evidence Board",
+        "type": "document",
+        "participants": [
+          "lead-investigator",
+          "researcher",
+          "data-analyst"
+        ]
+      },
+      {
+        "name": "Legal Review",
+        "type": "advisory",
+        "participants": [
+          "legal-reviewer",
+          "lead-investigator",
+          "editor"
+        ]
+      },
+      {
+        "name": "Editorial Decision",
+        "type": "decision",
+        "participants": [
+          "editor",
+          "lead-investigator",
+          "legal-reviewer"
+        ]
+      },
+      {
+        "name": "Publication Retrospective",
+        "type": "retrospective",
+        "participants": [
+          "lead-investigator",
+          "researcher",
+          "data-analyst",
+          "editor",
+          "legal-reviewer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "evidence board (documents, timelines, connections)",
+        "investigation thesis and progress",
+        "published stories and public record"
+      ],
+      "private": [
+        "confidential source identities (per reporter only)",
+        "encrypted source communications",
+        "legal strategy and risk assessment",
+        "draft stories before editorial approval"
+      ],
+      "description": "The evidence board is the shared workspace where all team members can view documents, timelines, and relationship maps -- but source identities are redacted. Only the reporter who developed a source knows their identity (even the editor may know them only by a pseudonym). The data analyst maintains versioned datasets and analysis notebooks. Legal review documents are private between the legal reviewer and the parties who need them. Draft stories go through sequential editorial review with tracked revisions. After publication, the investigation record is archived but source-identifying materials are permanently sealed."
+    },
+    "diagram": "graph TD\n    ED[Senior Editor] --> LI[Lead Investigator]\n    LI --> RES[Researcher]\n    LI --> DA[Data Analyst]\n    LR[Legal Reviewer] -.->|review| LI\n    LR -.->|approval| ED\n    RES --> SRC[Confidential Sources]\n    DA --> DATA[Datasets]\n    RES --> EB[Evidence Board]\n    DA --> EB\n    LI --> EB\n    ED -->|publish decision| PUB[Publication]",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "mesh"
+    ]
+  }
+]

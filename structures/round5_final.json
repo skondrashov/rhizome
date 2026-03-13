@@ -1,0 +1,1298 @@
+[
+  {
+    "id": "open-source-bazaar",
+    "name": "Open Source Bazaar",
+    "category": "Agile & Software",
+    "tags": [
+      "bazaar-model",
+      "many-eyeballs",
+      "release-early",
+      "self-selection"
+    ],
+    "summary": "Loosely coupled contributors self-select tasks, release early and often, with maintainers curating quality.",
+    "description": "Inspired by Eric Raymond's 'The Cathedral and the Bazaar', this pattern replaces top-down planning with a noisy marketplace of contributions. A small core of maintainers owns the canonical artifact (the trunk), but any contributor can fork, patch, and submit changes. The key insight is Linus's Law: given enough eyeballs, all bugs are shallow. Rather than assigning work, the system publishes an open issue tracker and contributors gravitate toward problems matching their expertise. Releases happen frequently to tighten feedback loops. Quality emerges not from gatekeeping but from volume: many independent reviewers each catch different classes of defects. A benevolent dictator or rotating release manager makes final merge decisions when consensus stalls.",
+    "realWorldExample": "The Linux kernel development process: Linus Torvalds acts as benevolent dictator over a tree of lieutenant maintainers (networking, filesystems, drivers). Thousands of contributors worldwide submit patches via mailing lists. Any developer can review any patch. Releases happen every 9-10 weeks. A patch may be reviewed by 5-15 people before merging, each catching different issues -- a buffer overflow here, a race condition there. The result is the most widely deployed operating system kernel in history.",
+    "whenToUse": "When the problem space is large enough that no single team can explore it all, contributors have diverse expertise, the artifact is modular enough for independent work, and you value broad coverage of edge cases over rigid architectural coherence.",
+    "strengths": [
+      "Scales to thousands of contributors without centralized task assignment",
+      "Many-eyeballs effect catches subtle bugs that any single reviewer would miss",
+      "Self-selection means contributors work on what they understand best",
+      "Frequent releases create tight feedback loops that catch regressions early"
+    ],
+    "weaknesses": [
+      "Architectural coherence suffers without strong maintainer vision",
+      "Benevolent dictator is a bus-factor-one bottleneck for merge decisions",
+      "Drive-by contributors may submit low-quality patches that waste reviewer time",
+      "Coordination overhead grows superlinearly as contributor count increases"
+    ],
+    "agents": [
+      {
+        "role": "benevolent-dictator",
+        "name": "Benevolent Dictator",
+        "description": "Makes final merge/reject decisions on contested patches, sets project direction, and resolves disputes that lieutenants cannot",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "lieutenant-maintainer",
+        "name": "Lieutenant Maintainer",
+        "description": "Owns a subsystem (e.g., networking, storage), reviews patches in their domain, and forwards approved patches upstream to the dictator",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "contributor",
+        "name": "Contributor",
+        "description": "Self-selects issues from the tracker, writes patches, submits them for review, and iterates based on feedback",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reviewer",
+        "name": "Reviewer",
+        "description": "Independently examines submitted patches for correctness, style, performance, and security, leaving inline comments",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "release-manager",
+        "name": "Release Manager",
+        "description": "Cuts releases on a fixed cadence, runs integration tests, writes changelogs, and gates what enters each release",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "bug-reporter",
+        "name": "Bug Reporter",
+        "description": "Files detailed bug reports and feature requests in the public tracker, providing reproduction steps that contributors use to self-select work",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Issue Tracker",
+        "type": "threaded",
+        "participants": [
+          "bug-reporter",
+          "contributor",
+          "lieutenant-maintainer",
+          "benevolent-dictator"
+        ]
+      },
+      {
+        "name": "Patch Review",
+        "type": "peer-to-peer",
+        "participants": [
+          "contributor",
+          "reviewer",
+          "lieutenant-maintainer"
+        ]
+      },
+      {
+        "name": "Merge Queue",
+        "type": "queue",
+        "participants": [
+          "lieutenant-maintainer",
+          "benevolent-dictator",
+          "release-manager"
+        ]
+      },
+      {
+        "name": "Release Announcements",
+        "type": "broadcast",
+        "participants": [
+          "release-manager",
+          "contributor",
+          "reviewer",
+          "bug-reporter"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "canonical trunk (versioned source of truth)",
+        "public issue tracker",
+        "release history and changelogs"
+      ],
+      "private": [
+        "each lieutenant's subsystem review queue",
+        "contributor's local fork and work-in-progress branches"
+      ],
+      "description": "The canonical trunk is the shared persistent artifact that all agents read from and contribute to. Each lieutenant maintains a private staging area for their subsystem. Contributors work on ephemeral forks that are discarded after merge. The issue tracker serves as append-only collective memory of known problems and desired features."
+    },
+    "diagram": "graph TD\n    BR[Bug Reporter] -->|files issues| IT[Issue Tracker]\n    IT -->|self-select| C1[Contributor 1]\n    IT -->|self-select| C2[Contributor 2]\n    IT -->|self-select| C3[Contributor 3]\n    C1 -->|submit patch| PR[Patch Review]\n    C2 -->|submit patch| PR\n    C3 -->|submit patch| PR\n    R[Reviewer] -->|review| PR\n    PR -->|approved| LM[Lieutenant Maintainer]\n    LM -->|forward| BD[Benevolent Dictator]\n    BD -->|merge| TRUNK[Canonical Trunk]\n    TRUNK -->|cut release| RM[Release Manager]",
+    "hierarchyTypes": [
+      "mesh",
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "auction-house-bidding",
+    "name": "Auction House",
+    "category": "Corporate & Business",
+    "tags": [
+      "competitive-allocation",
+      "price-discovery",
+      "authentication",
+      "bidding-war"
+    ],
+    "summary": "Resources are allocated through competitive bidding, with authentication and reserve prices ensuring quality.",
+    "description": "Modeled on major auction houses like Christie's and Sotheby's, this pattern allocates scarce resources (tasks, compute, priority) through competitive bidding rather than central assignment. A consigner submits an item (task or resource) with provenance documentation. Authenticators verify the item's legitimacy and estimate its value. The auctioneer sets a reserve price (minimum acceptable bid) and runs the auction. Bidders compete by offering escalating bids, revealing through their behavior how much they value the resource. The pattern excels at price discovery -- surfacing the true value of ambiguous items that resist top-down valuation. A post-sale settlement process handles payment, transfer, and dispute resolution.",
+    "realWorldExample": "At Christie's evening sale in New York, a recently discovered painting attributed to Caravaggio enters the auction. The provenance team has spent six months tracing ownership history. Three independent authenticators have examined pigment samples, canvas weave, and X-ray imaging. The reserve is set at $8M. Bidding opens at $5M and quickly escalates as two museum agents and a private collector compete. Phone bidders from London and Hong Kong join. The hammer falls at $23M, revealing market value that no single appraiser could have predicted.",
+    "whenToUse": "When multiple agents compete for scarce resources whose true value is uncertain, and you want the allocation mechanism itself to discover value rather than relying on a central planner's estimate.",
+    "strengths": [
+      "Price discovery reveals true resource value through competitive behavior",
+      "Authentication layer prevents fraudulent or low-quality items from entering the system",
+      "Reserve prices protect against undervaluation of critical resources",
+      "Transparent bidding creates an auditable record of how allocation decisions were made"
+    ],
+    "weaknesses": [
+      "Winner's curse: the highest bidder may systematically overpay for resources",
+      "Collusion between bidders can suppress prices and subvert fair allocation",
+      "Authentication bottleneck slows throughput for high-volume item flows",
+      "Rich-get-richer dynamic: agents with larger budgets dominate all auctions"
+    ],
+    "agents": [
+      {
+        "role": "auctioneer",
+        "name": "Auctioneer",
+        "description": "Runs the bidding process, sets opening prices, recognizes bids, enforces rules, and declares winners",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "consigner",
+        "name": "Consigner",
+        "description": "Submits items for sale with provenance documentation and works with authenticators to establish legitimacy",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "authenticator",
+        "name": "Authenticator",
+        "description": "Independently examines items for authenticity, quality, and provenance, issuing a confidence rating and estimated value",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "bidder",
+        "name": "Bidder",
+        "description": "Evaluates items against private valuation models, sets maximum bid thresholds, and competes in live auctions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "phone-bidder-proxy",
+        "name": "Phone Bidder Proxy",
+        "description": "Represents remote bidders who cannot attend, relaying bids in real-time and providing live updates on competing offers",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "settlement-clerk",
+        "name": "Settlement Clerk",
+        "description": "Handles post-auction transfer of ownership, payment processing, dispute resolution, and delivery logistics",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Catalog Publication",
+        "type": "broadcast",
+        "participants": [
+          "auctioneer",
+          "consigner",
+          "authenticator",
+          "bidder",
+          "phone-bidder-proxy"
+        ]
+      },
+      {
+        "name": "Authentication Reports",
+        "type": "advisory",
+        "participants": [
+          "authenticator",
+          "auctioneer",
+          "consigner"
+        ]
+      },
+      {
+        "name": "Live Auction Floor",
+        "type": "round-robin",
+        "participants": [
+          "auctioneer",
+          "bidder",
+          "phone-bidder-proxy"
+        ]
+      },
+      {
+        "name": "Settlement Ledger",
+        "type": "log",
+        "participants": [
+          "settlement-clerk",
+          "auctioneer",
+          "bidder",
+          "consigner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "auction catalog with lot descriptions and estimates",
+        "bid history log for every lot",
+        "settlement records"
+      ],
+      "private": [
+        "each bidder's private valuation model and maximum bid limits",
+        "authenticator's examination notes and confidence scores",
+        "consigner's reserve price and provenance files"
+      ],
+      "description": "The auction catalog and bid history are shared and append-only, providing full transparency of the process. Each bidder maintains private valuations that are never revealed -- only their bids are public. Authenticators keep private examination notes but publish summary ratings. The settlement ledger is an immutable log of all completed transactions."
+    },
+    "diagram": "graph TD\n    CON[Consigner] -->|submit item| AUTH[Authenticator]\n    AUTH -->|verify & rate| CAT[Auction Catalog]\n    CAT -->|publish| AUC[Auctioneer]\n    AUC -->|open bidding| FLOOR[Auction Floor]\n    B1[Bidder 1] -->|bid| FLOOR\n    B2[Bidder 2] -->|bid| FLOOR\n    PBP[Phone Bidder Proxy] -->|relay bid| FLOOR\n    FLOOR -->|hammer falls| AUC\n    AUC -->|declare winner| SC[Settlement Clerk]\n    SC -->|transfer & payment| LEDGER[Settlement Ledger]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "diplomatic-summit-protocol",
+    "name": "Diplomatic Summit",
+    "category": "Government & Political",
+    "tags": [
+      "bilateral-meetings",
+      "plenary-session",
+      "sherpa-negotiation",
+      "communique-drafting"
+    ],
+    "summary": "Multi-party negotiation through sherpas, bilateral side meetings, plenary sessions, and joint communiques.",
+    "description": "Modeled on G7/G20 summits and UN General Assembly sessions, this pattern handles complex multi-party negotiations where each party has different interests and red lines. The real work happens before the summit: sherpas (senior negotiators) pre-negotiate text line-by-line over weeks, identifying points of agreement and flagging unresolvable disputes for leader-level decisions. During the summit, bilateral meetings between pairs of delegations resolve specific disputes. Plenary sessions bring all parties together for formal statements and voting. The final output is a communique -- a carefully worded joint statement where every word has been negotiated. The pattern excels when the goal is not to find the optimal solution but to find the solution all parties can live with.",
+    "realWorldExample": "At the 2015 Paris Climate Conference (COP21), 196 parties negotiated the Paris Agreement. French sherpa Laurence Tubiana spent months pre-negotiating draft text. During the two-week summit, bilateral meetings between the US and China resolved the binding-vs-voluntary dispute. The Alliance of Small Island States held bloc caucuses to coordinate positions. Plenary sessions nearly collapsed over the word 'shall' vs 'should' in Article 4. French Foreign Minister Fabius gaveled the final agreement through in a carefully orchestrated plenary, producing a communique that all 196 parties adopted.",
+    "whenToUse": "When multiple autonomous agents with conflicting interests must reach a joint agreement, no single agent has authority to impose outcomes, and the final artifact must reflect genuine consensus rather than majority rule.",
+    "strengths": [
+      "Pre-negotiation by sherpas resolves 90% of issues before leaders engage, respecting their limited attention",
+      "Bilateral side-meetings allow private concessions that would be impossible in public plenary sessions",
+      "Bloc caucuses allow smaller parties to coordinate and amplify their collective bargaining power",
+      "Communique drafting forces precision -- every word is deliberate, reducing ambiguity in the final agreement"
+    ],
+    "weaknesses": [
+      "Extremely slow: weeks of pre-negotiation for a single agreement",
+      "Lowest-common-denominator outcomes -- the communique reflects what all can accept, not what is optimal",
+      "Powerful parties can bully smaller ones in private bilateral meetings without transparency",
+      "A single holdout can block consensus, giving veto power to the most intransigent party"
+    ],
+    "agents": [
+      {
+        "role": "summit-chair",
+        "name": "Summit Chair",
+        "description": "Presides over plenary sessions, sets the agenda, manages speaking order, and drives toward consensus by proposing compromise language",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "sherpa",
+        "name": "Sherpa",
+        "description": "Senior negotiator who pre-negotiates draft text line-by-line before the summit, identifying agreed language and bracketing disputes for leaders",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "delegation-head",
+        "name": "Delegation Head",
+        "description": "Represents their party in plenary sessions and bilateral meetings, makes binding commitments within their mandate, and escalates beyond-mandate issues",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "bloc-coordinator",
+        "name": "Bloc Coordinator",
+        "description": "Coordinates positions among a group of aligned parties (e.g., small island states, emerging economies) to present unified demands",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "communique-drafter",
+        "name": "Communique Drafter",
+        "description": "Maintains the living draft text, incorporates agreed language from bilateral and plenary sessions, and flags unresolved brackets",
+        "memory": "versioned"
+      },
+      {
+        "role": "protocol-officer",
+        "name": "Protocol Officer",
+        "description": "Manages logistics, seating arrangements, translation services, and ensures procedural rules are followed",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Sherpa Pre-Negotiation",
+        "type": "peer-to-peer",
+        "participants": [
+          "sherpa",
+          "communique-drafter"
+        ]
+      },
+      {
+        "name": "Bilateral Meeting Room",
+        "type": "peer-to-peer",
+        "participants": [
+          "delegation-head",
+          "sherpa"
+        ]
+      },
+      {
+        "name": "Bloc Caucus",
+        "type": "threaded",
+        "participants": [
+          "bloc-coordinator",
+          "delegation-head"
+        ]
+      },
+      {
+        "name": "Plenary Session",
+        "type": "round-robin",
+        "participants": [
+          "summit-chair",
+          "delegation-head",
+          "bloc-coordinator"
+        ]
+      },
+      {
+        "name": "Draft Communique",
+        "type": "document",
+        "participants": [
+          "communique-drafter",
+          "sherpa",
+          "summit-chair"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "summit agenda and schedule",
+        "draft communique with versioned history of every word change",
+        "plenary session transcripts"
+      ],
+      "private": [
+        "each delegation's red lines and negotiation mandate",
+        "sherpa's private concession space and fallback positions",
+        "bloc internal strategy documents"
+      ],
+      "description": "The communique draft is the central versioned artifact, with every change tracked. Sherpas maintain private notes on each party's true flexibility vs stated positions. Delegation heads have private mandates from their governments defining what they can and cannot agree to. The plenary transcript is shared but bilateral meeting notes are private to the participants."
+    },
+    "diagram": "graph TD\n    S1[Sherpa A] <-->|pre-negotiate| S2[Sherpa B]\n    S1 <-->|pre-negotiate| S3[Sherpa C]\n    S2 <-->|pre-negotiate| S3\n    S1 --> DH1[Delegation Head A]\n    S2 --> DH2[Delegation Head B]\n    S3 --> DH3[Delegation Head C]\n    BC[Bloc Coordinator] --> DH2\n    BC --> DH3\n    DH1 -->|bilateral| DH2\n    DH1 --> PL[Plenary Session]\n    DH2 --> PL\n    DH3 --> PL\n    SC[Summit Chair] -->|preside| PL\n    PL --> CD[Communique Drafter]\n    CD --> FINAL[Final Communique]",
+    "hierarchyTypes": [
+      "mesh",
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "witness-protection-program",
+    "name": "Witness Protection Program",
+    "category": "Legal & Judicial",
+    "tags": [
+      "compartmentalization",
+      "identity-management",
+      "safe-house",
+      "handler-network"
+    ],
+    "summary": "Compartmented protection of high-value assets through identity transformation and need-to-know isolation.",
+    "description": "Modeled on the US Marshals Service WITSEC program, this pattern protects critical assets (data, agents, processes) by severing all connections to their original identity and creating new ones in isolated environments. A handler is the single point of contact between the protected asset and the outside world. Safe houses are compartmented -- no safe house knows the location of any other. Identity creators fabricate complete new backgrounds that withstand scrutiny. The threat assessment team continuously monitors for compromise. The pattern's core principle is that the best security comes not from stronger walls but from ensuring attackers don't know which wall to attack. Information flows through strict need-to-know channels where no single agent has the full picture.",
+    "realWorldExample": "Henry Hill, a Lucchini crime family associate, enters WITSEC in 1980 after testifying in the Lufthansa heist trial. Deputy Marshal Shur assigns him a handler who relocates Hill to Redmond, Washington under the name Martin Lewis. A documents team creates a complete identity: Social Security number, driver's license, employment history, credit record. Hill's handler is the only person who knows both identities. When Hill is spotted by a former associate in 1987, the threat assessment team triggers an emergency relocation to a new city with a new identity within 48 hours.",
+    "whenToUse": "When an agent system processes sensitive information that could be compromised by adversaries, and security depends on compartmentalization -- ensuring that compromise of any single component does not expose the whole system.",
+    "strengths": [
+      "Compartmentalization means compromise of one safe house does not reveal others",
+      "Single handler bottleneck is a weakness but also a security feature -- minimal attack surface",
+      "Identity transformation makes it impossible to trace the protected asset to its origin",
+      "Emergency relocation protocol provides resilience against discovered compromises"
+    ],
+    "weaknesses": [
+      "Handler is a critical single point of failure -- if compromised, the entire protection collapses",
+      "Complete identity severance is expensive and may break useful connections",
+      "The protected witness may inadvertently reveal their identity through behavior patterns",
+      "Long-term maintenance is costly -- every interaction with the outside world requires handler mediation"
+    ],
+    "agents": [
+      {
+        "role": "program-director",
+        "name": "Program Director",
+        "description": "Oversees the entire protection operation, approves new admissions, allocates resources, and makes final decisions on threat escalations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "handler",
+        "name": "Handler",
+        "description": "The sole point of contact between the protected witness and the system. Manages day-to-day needs, relays intelligence, and is the only agent who knows both the old and new identity",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "protected-witness",
+        "name": "Protected Witness",
+        "description": "The high-value asset being protected. Follows handler instructions, maintains cover identity, and provides testimony or intelligence when called upon",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "identity-creator",
+        "name": "Identity Creator",
+        "description": "Fabricates complete new identities including documentation, background histories, and cover stories that withstand investigation",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "threat-assessor",
+        "name": "Threat Assessor",
+        "description": "Continuously monitors for signs of compromise, analyzes intelligence on adversary capabilities, and triggers emergency relocation when threats are detected",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "safe-house-manager",
+        "name": "Safe House Manager",
+        "description": "Maintains isolated safe locations, ensures they are provisioned and secure, and knows only the address of their own safe house -- never others",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Admission Review",
+        "type": "decision",
+        "participants": [
+          "program-director",
+          "threat-assessor",
+          "handler"
+        ]
+      },
+      {
+        "name": "Handler-Witness Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "handler",
+          "protected-witness"
+        ]
+      },
+      {
+        "name": "Threat Alerts",
+        "type": "emergency",
+        "participants": [
+          "threat-assessor",
+          "handler",
+          "program-director"
+        ]
+      },
+      {
+        "name": "Identity Workshop",
+        "type": "peer-to-peer",
+        "participants": [
+          "identity-creator",
+          "handler"
+        ]
+      },
+      {
+        "name": "Program Audit Log",
+        "type": "log",
+        "participants": [
+          "program-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "program policies and procedures (no operational details)",
+        "anonymized statistics on program outcomes"
+      ],
+      "private": [
+        "handler's mapping of old identity to new identity (most sensitive data in the system)",
+        "threat assessor's intelligence on adversary capabilities",
+        "each safe house manager's location and provisioning status",
+        "witness's testimony and debriefing transcripts"
+      ],
+      "description": "This is the most compartmented memory architecture possible. No shared memory contains operational details. The handler's private memory is the crown jewel -- the only place where old and new identities are linked. The threat assessor knows threats but not safe house locations. Safe house managers know their location but not the witness's identity. The program director sees aggregate status but not specific operational details. The audit log is write-only and encrypted."
+    },
+    "diagram": "graph TD\n    PD[Program Director] -->|approve| AR[Admission Review]\n    AR -->|assign| H[Handler]\n    H <-->|sole contact| PW[Protected Witness]\n    IC[Identity Creator] -->|new identity| H\n    H -->|relocate to| SH1[Safe House 1]\n    H -.->|emergency move| SH2[Safe House 2]\n    TA[Threat Assessor] -->|monitor| INTEL[Intelligence Feeds]\n    TA -->|alert| H\n    TA -->|escalate| PD\n    SH1 -.-|no connection| SH2",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "search-and-rescue-ops",
+    "name": "Search and Rescue",
+    "category": "Medical & Emergency",
+    "tags": [
+      "grid-search",
+      "hasty-team",
+      "incident-command",
+      "helicopter-coordination"
+    ],
+    "summary": "Systematic area search using hasty teams for quick coverage, grid teams for thoroughness, and air support.",
+    "description": "Modeled on wilderness search and rescue operations (NASAR/FEMA protocols), this pattern systematically searches a large problem space for a critical target under time pressure. The incident commander establishes a base camp and divides the search area into segments based on probability-of-detection maps. Hasty teams deploy first along high-probability corridors (trails, waterways, ridgelines) for quick coverage. If hasty search fails, grid teams methodically sweep assigned segments with shoulder-to-shoulder thoroughness. Air support provides broad surveillance and can rapidly reposition to areas of interest. A planning section continuously updates probability maps based on search results -- areas that have been searched without findings have their probability reduced, concentrating future effort. The pattern balances speed (hasty) with thoroughness (grid) under a unified command.",
+    "realWorldExample": "A missing hiker in Olympic National Park triggers a SAR callout. The incident commander establishes base camp at the trailhead. The planning section maps probability based on the hiker's intended route, weather, terrain, and physical condition. Three hasty teams deploy along the trail, the nearest river drainage, and a ridge the hiker might have used as a navigation reference. When hasty teams report negative results, probability shifts to off-trail areas. A helicopter with FLIR does thermal sweeps at dawn. Grid teams of 20 searchers line up at arm's length and sweep a ravine. On day two, a grid team finds the hiker's jacket, causing the planning section to concentrate all resources on a 500-meter radius.",
+    "whenToUse": "When agents must search a large solution space for a specific target under time pressure, and the search strategy should adapt dynamically based on what each search attempt reveals or rules out.",
+    "strengths": [
+      "Dual-speed approach: hasty teams provide fast coverage while grid teams ensure nothing is missed",
+      "Probability-of-detection maps focus resources on the most promising areas and update in real-time",
+      "Incident command structure provides clear authority and prevents duplicated or missed effort",
+      "Clue integration dynamically redirects the entire search when new evidence is found"
+    ],
+    "weaknesses": [
+      "Requires significant upfront effort to build accurate probability maps before deployment",
+      "Grid search is extremely resource-intensive and does not scale to very large areas",
+      "False clues can divert the entire operation to unproductive areas",
+      "Fatigue management is critical -- exhausted searchers miss things, creating false negatives"
+    ],
+    "agents": [
+      {
+        "role": "incident-commander",
+        "name": "Incident Commander",
+        "description": "Has overall authority for the search operation, allocates resources, approves the search plan, and makes go/no-go decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "planning-section",
+        "name": "Planning Section Chief",
+        "description": "Builds and continuously updates probability-of-detection maps, assigns search segments, and integrates clues into the search strategy",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "hasty-team-lead",
+        "name": "Hasty Team Lead",
+        "description": "Leads a small fast-moving team along high-probability corridors, reports findings and negative results, and marks searched areas",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "grid-team-lead",
+        "name": "Grid Team Lead",
+        "description": "Leads a large team in methodical shoulder-to-shoulder sweeps of assigned segments, ensuring near-100% coverage of each grid cell",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "air-ops",
+        "name": "Air Operations Coordinator",
+        "description": "Directs helicopter and drone assets for broad-area surveillance, thermal imaging, and rapid transport of ground teams",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "base-camp-manager",
+        "name": "Base Camp Manager",
+        "description": "Manages logistics at base camp: team check-in/out, equipment, meals, medical, and fatigue rotation",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Search Briefing",
+        "type": "top-down",
+        "participants": [
+          "incident-commander",
+          "planning-section",
+          "hasty-team-lead",
+          "grid-team-lead",
+          "air-ops"
+        ]
+      },
+      {
+        "name": "Field Reports",
+        "type": "bottom-up",
+        "participants": [
+          "hasty-team-lead",
+          "grid-team-lead",
+          "air-ops",
+          "planning-section"
+        ]
+      },
+      {
+        "name": "Clue Integration",
+        "type": "threaded",
+        "participants": [
+          "planning-section",
+          "incident-commander",
+          "hasty-team-lead",
+          "grid-team-lead"
+        ]
+      },
+      {
+        "name": "Resource Requests",
+        "type": "bottom-up",
+        "participants": [
+          "hasty-team-lead",
+          "grid-team-lead",
+          "base-camp-manager",
+          "incident-commander"
+        ]
+      },
+      {
+        "name": "Operations Log",
+        "type": "log",
+        "participants": [
+          "incident-commander",
+          "planning-section",
+          "base-camp-manager"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "probability-of-detection map (continuously updated)",
+        "master clue log with all findings georeferenced",
+        "search segment assignments and completion status"
+      ],
+      "private": [
+        "each team lead's field notes and GPS tracks",
+        "base camp's personnel status and fatigue tracking",
+        "air ops flight plans and imagery"
+      ],
+      "description": "The probability map is the central shared artifact that drives all decisions. It is updated every time a team reports results -- negative results lower probability in searched areas, positive clues spike probability nearby. The clue log is append-only and shared. Team leads maintain ephemeral field notes that are debriefed into the shared map at the end of each operational period."
+    },
+    "diagram": "graph TD\n    IC[Incident Commander] -->|approve plan| PS[Planning Section]\n    PS -->|assign segments| HT1[Hasty Team 1]\n    PS -->|assign segments| HT2[Hasty Team 2]\n    PS -->|assign grids| GT1[Grid Team 1]\n    PS -->|assign grids| GT2[Grid Team 2]\n    PS -->|direct| AO[Air Ops]\n    HT1 -->|field report| PS\n    HT2 -->|field report| PS\n    GT1 -->|field report| PS\n    GT2 -->|field report| PS\n    AO -->|imagery & sightings| PS\n    PS -->|update probability map| PMAP[Probability Map]\n    BCM[Base Camp Manager] -->|logistics| HT1\n    BCM -->|logistics| GT1",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "dj-collective-sound-system",
+    "name": "DJ Collective / Sound System",
+    "category": "Creative & Arts",
+    "tags": [
+      "selector",
+      "back-to-back",
+      "crowd-reading",
+      "sonic-narrative"
+    ],
+    "summary": "Selectors take turns reading the crowd and shaping energy arcs, with engineers maintaining sonic quality.",
+    "description": "Rooted in Jamaican sound system culture and evolved through UK rave, Berlin techno, and Brooklyn house scenes, this pattern treats collective output as a continuous sonic narrative shaped by multiple contributors in sequence. Selectors (DJs) take turns at the decks, each reading the crowd's energy and adjusting in real-time. In back-to-back (B2B) sets, two selectors alternate tracks, each responding to the other's choice and the crowd simultaneously -- a high-bandwidth creative dialogue. The MC (Master of Ceremonies) provides vocal energy, calls attention to transitions, and bridges the gap between selectors and crowd. The sound engineer ensures the physical medium (the sound system) faithfully represents the selectors' intentions. A promoter curates the lineup order to create a macro energy arc across the entire night -- warm-up, peak, cool-down. The crowd is not passive; their energy feedback (dancing, shouting, leaving) is the primary signal that drives selector decisions.",
+    "realWorldExample": "At Fabric London on a Saturday night, the Hessle Audio crew runs a sound system night. Ben UFO opens at midnight with deep, abstract selections to warm the room. At 2am, Pangaea goes B2B with him for an hour -- Ben plays a dubstep track, Pangaea responds with a techno track that matches the energy but shifts the texture. The crowd surges forward. At 3am, Pearson Sound takes over solo for the peak slot, reading a crowd of 800 and holding them at maximum intensity for two hours. The sound engineer adjusts the subwoofer at 1am when bass frequencies start rattling a wall panel. By 5am, a guest selector brings the energy down for the cool-down, and dancers drift to the bar.",
+    "whenToUse": "When multiple agents must contribute to a continuous shared output in real-time, quality depends on reading audience feedback, and the overall arc matters more than any individual contribution.",
+    "strengths": [
+      "Real-time crowd feedback creates a tight loop between output and audience response",
+      "B2B format enables creative dialogue that neither participant could achieve alone",
+      "Macro arc planning (warm-up to peak to cool-down) gives structure to emergent creativity",
+      "Sound engineer layer ensures technical quality regardless of creative decisions"
+    ],
+    "weaknesses": [
+      "Selector ego clashes in B2B sets can produce incoherent transitions",
+      "Crowd reading is subjective -- selectors may misinterpret energy signals",
+      "Single sound system is a catastrophic point of failure for the entire event",
+      "Lineup order disputes can fracture the collective when peak slots carry status"
+    ],
+    "agents": [
+      {
+        "role": "promoter-curator",
+        "name": "Promoter / Curator",
+        "description": "Designs the overall lineup order to create a macro energy arc, books selectors, and manages the event's brand and audience expectations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "selector",
+        "name": "Selector (DJ)",
+        "description": "Reads the crowd and selects tracks in real-time to maintain or shift energy. In B2B mode, responds to the other selector's choices as well as the crowd",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mc",
+        "name": "MC (Master of Ceremonies)",
+        "description": "Provides vocal energy, hypes transitions, bridges communication between selectors and crowd, and fills gaps during changeovers",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "sound-engineer",
+        "name": "Sound Engineer",
+        "description": "Operates the mixing desk and sound system, adjusts levels for each selector's style, prevents distortion, and ensures bass and treble balance",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "crowd",
+        "name": "Crowd (Feedback Signal)",
+        "description": "The audience provides continuous non-verbal feedback through dancing intensity, positioning on the floor, vocal reactions, and attrition -- this is the primary signal selectors respond to",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "lighting-vj",
+        "name": "Lighting / VJ",
+        "description": "Provides visual accompaniment synchronized to the music, enhancing peaks and softening cool-downs to reinforce the energy arc",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Lineup Planning",
+        "type": "decision",
+        "participants": [
+          "promoter-curator",
+          "selector"
+        ]
+      },
+      {
+        "name": "Live Mix (Decks)",
+        "type": "round-robin",
+        "participants": [
+          "selector",
+          "mc"
+        ]
+      },
+      {
+        "name": "Crowd Feedback Loop",
+        "type": "bottom-up",
+        "participants": [
+          "crowd",
+          "selector",
+          "mc"
+        ]
+      },
+      {
+        "name": "Sound Check",
+        "type": "peer-to-peer",
+        "participants": [
+          "sound-engineer",
+          "selector"
+        ]
+      },
+      {
+        "name": "Visual Sync",
+        "type": "peer-to-peer",
+        "participants": [
+          "lighting-vj",
+          "selector",
+          "sound-engineer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "lineup order and time slots",
+        "the live audio output (the shared artifact everyone hears)",
+        "event energy arc plan"
+      ],
+      "private": [
+        "each selector's record collection and preparation notes",
+        "sound engineer's system calibration settings and room acoustics profile",
+        "promoter's booking contacts and audience demographic data"
+      ],
+      "description": "The live audio output is the shared ephemeral artifact -- it exists only in the moment. Each selector has a private music library that represents years of curation. The sound engineer maintains persistent knowledge of the room's acoustics. The crowd's feedback is ephemeral and non-verbal -- it must be interpreted in real-time and cannot be reviewed later. The promoter maintains persistent knowledge of what lineup orders have worked in the past."
+    },
+    "diagram": "graph LR\n    PC[Promoter/Curator] -->|lineup order| S1[Selector 1 - Warm Up]\n    S1 -->|handoff| S2[Selector 2 - Build]\n    S2 <-->|B2B| S3[Selector 3 - Peak]\n    S3 -->|handoff| S4[Selector 4 - Cool Down]\n    MC[MC] -->|hype| S2\n    MC -->|hype| S3\n    CR[Crowd] -->|energy feedback| S1\n    CR -->|energy feedback| S2\n    CR -->|energy feedback| S3\n    SE[Sound Engineer] -->|levels| SYSTEM[Sound System]\n    LV[Lighting/VJ] -->|visuals| SYSTEM",
+    "hierarchyTypes": [
+      "mesh",
+      "consensus",
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "fantasy-sports-league",
+    "name": "Fantasy Sports League",
+    "category": "Sports & Competition",
+    "tags": [
+      "draft-selection",
+      "trade-negotiation",
+      "scoring-disputes",
+      "commissioner-authority"
+    ],
+    "summary": "Agents draft, trade, and manage virtual rosters while a commissioner enforces rules and resolves disputes.",
+    "description": "Modeled on fantasy football/baseball leagues with millions of participants, this pattern distributes a shared resource pool (players/capabilities) among competing managers through a draft, then allows ongoing trades and roster management throughout a season. The commissioner establishes rules, mediates disputes, and can veto trades that undermine competitive balance. Each manager privately evaluates resources according to their own strategy and scoring projections, creating information asymmetry that drives trade negotiations. A scoring engine objectively evaluates performance each period. Waiver wire claims allow managers to pick up unclaimed resources in priority order. The pattern creates a metagame where success depends not just on initial resource selection but on ongoing evaluation, negotiation, and adaptation.",
+    "realWorldExample": "A 12-team fantasy football league conducts a snake draft in August. Team manager 'StatGuru' uses analytics models to identify undervalued running backs. Manager 'GutFeelGuy' drafts based on name recognition and overpays for declining stars. By week 4, GutFeelGuy's team is 1-3 and desperate. StatGuru proposes a trade: a bench receiver for GutFeelGuy's backup quarterback. The commissioner reviews it for fairness. Week 8 brings a controversy: a stat correction changes the outcome of a matchup. The commissioner reviews the scoring rules and upholds the correction, reversing the win. The waiver wire becomes crucial in week 10 when injuries create must-start replacements.",
+    "whenToUse": "When multiple agents must allocate shared resources competitively, ongoing trading and adaptation are as important as initial allocation, and a neutral authority is needed to enforce fairness.",
+    "strengths": [
+      "Draft mechanism ensures fair initial distribution of resources across all participants",
+      "Trade system allows ongoing reallocation as agent strategies and resource values evolve",
+      "Commissioner role prevents collusion and maintains competitive balance",
+      "Scoring engine provides objective, transparent evaluation that all parties accept"
+    ],
+    "weaknesses": [
+      "Early draft position creates unavoidable advantage that skill cannot fully overcome",
+      "Trade vetoes by the commissioner can feel arbitrary and breed resentment",
+      "Eliminated or losing managers may stop participating, degrading the system (tanking problem)",
+      "Scoring rules inevitably fail to capture some real-world nuance, creating edge-case disputes"
+    ],
+    "agents": [
+      {
+        "role": "commissioner",
+        "name": "Commissioner",
+        "description": "Establishes and enforces league rules, mediates disputes, reviews trades for fairness, and can impose penalties for rule violations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "team-manager",
+        "name": "Team Manager",
+        "description": "Drafts players, sets weekly lineups, proposes and evaluates trades, claims waiver wire pickups, and optimizes roster for scoring",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "scoring-engine",
+        "name": "Scoring Engine",
+        "description": "Objectively calculates points for each team based on real-world performance data and the league's scoring rules, with no discretion or bias",
+        "memory": "append-only"
+      },
+      {
+        "role": "trade-reviewer",
+        "name": "Trade Reviewer",
+        "description": "Analyzes proposed trades for fairness using value models, flags lopsided deals, and provides advisory opinions to the commissioner",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "waiver-wire-manager",
+        "name": "Waiver Wire Manager",
+        "description": "Processes claims for unclaimed resources in priority order (reverse standings), ensuring fair access to the free agent pool",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "stats-analyst",
+        "name": "Stats Analyst",
+        "description": "Provides projections, rankings, and trend analysis that managers use to make draft, trade, and lineup decisions",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Draft Room",
+        "type": "round-robin",
+        "participants": [
+          "commissioner",
+          "team-manager"
+        ]
+      },
+      {
+        "name": "Trade Block",
+        "type": "peer-to-peer",
+        "participants": [
+          "team-manager",
+          "trade-reviewer"
+        ]
+      },
+      {
+        "name": "Commissioner Rulings",
+        "type": "top-down",
+        "participants": [
+          "commissioner",
+          "team-manager"
+        ]
+      },
+      {
+        "name": "Scoreboard",
+        "type": "broadcast",
+        "participants": [
+          "scoring-engine",
+          "team-manager",
+          "commissioner"
+        ]
+      },
+      {
+        "name": "Waiver Claims",
+        "type": "queue",
+        "participants": [
+          "team-manager",
+          "waiver-wire-manager"
+        ]
+      },
+      {
+        "name": "Trash Talk / League Chat",
+        "type": "threaded",
+        "participants": [
+          "team-manager",
+          "commissioner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "league rules and scoring settings",
+        "draft results and roster compositions",
+        "weekly scores and standings",
+        "trade history"
+      ],
+      "private": [
+        "each manager's draft board rankings and strategy",
+        "trade reviewer's value models",
+        "stats analyst's projections and proprietary data sources"
+      ],
+      "description": "League rules and standings are fully shared and transparent. Each manager's strategy, valuation models, and trade targets are private -- information asymmetry is what makes trades possible. The scoring engine's output is append-only and authoritative. The draft order and results become permanent shared history that constrains all future roster decisions."
+    },
+    "diagram": "graph TD\n    COM[Commissioner] -->|set rules| RULES[League Rules]\n    RULES --> DR[Draft Room]\n    DR -->|pick players| TM1[Team Manager 1]\n    DR -->|pick players| TM2[Team Manager 2]\n    DR -->|pick players| TM3[Team Manager 3]\n    TM1 <-->|propose trade| TM2\n    TM2 <-->|propose trade| TM3\n    TR[Trade Reviewer] -->|advisory| COM\n    COM -->|approve/veto| TRADES[Trade Log]\n    SE[Scoring Engine] -->|weekly scores| SB[Scoreboard]\n    TM1 -->|claim| WW[Waiver Wire]\n    SA[Stats Analyst] -->|projections| TM1",
+    "hierarchyTypes": [
+      "mesh",
+      "chain-of-command",
+      "orchestrated",
+      "consensus",
+      "federated",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "nomadic-caravan-route",
+    "name": "Nomadic Caravan",
+    "category": "Historical & Traditional",
+    "tags": [
+      "wayfinding",
+      "trade-route",
+      "camp-logistics",
+      "distributed-knowledge"
+    ],
+    "summary": "A mobile community traverses hostile terrain with pathfinders scouting ahead and traders managing exchanges.",
+    "description": "Modeled on Silk Road caravans, Bedouin migrations, and Romani traveling communities, this pattern organizes a mobile group traversing an extended and potentially hostile environment. The pathfinder scouts ahead, reading terrain and weather signs to choose the route. Outriders guard the flanks and rear against threats. The caravan master manages the column's pace, rest stops, and load distribution -- a slow camel delays the entire caravan. Traders negotiate at each stop, exchanging goods and gathering intelligence about conditions ahead. The camp master establishes and breaks camp efficiently at each overnight stop. Crucially, navigational knowledge is distributed: the pathfinder knows star navigation, the elder remembers which wells are seasonal, the trader knows which settlements are friendly. No single agent holds all the information needed to complete the journey.",
+    "realWorldExample": "A 12th-century Silk Road caravan departs Samarkand bound for Chang'an carrying silk, spices, and lapis lazuli. The pathfinder, a Sogdian who has made the journey nine times, leads the column through the Taklamakan Desert's northern edge. At Kashgar, the trader negotiates resupply -- fresh camels for jade. An outrider spots tracks of a bandit party and the caravan master diverts south, adding two days but avoiding ambush. The elder recalls that a well at Yarkand dried up three years ago, saving a potentially fatal detour. At each caravanserai, the trader gathers intelligence: snow in the Pamir passes means they must wait or find an alternate route. The caravan arrives in Chang'an four months later, having adapted its route six times based on distributed knowledge.",
+    "whenToUse": "When an agent system must traverse a long, multi-stage process through uncertain environments, critical knowledge is distributed across specialists, and the group must adapt its route based on conditions discovered along the way.",
+    "strengths": [
+      "Distributed knowledge across specialists means no single failure point for navigation or decision-making",
+      "Pathfinder-ahead pattern provides early warning of obstacles, enabling proactive rerouting",
+      "Trading at waypoints provides both resources and intelligence about future conditions",
+      "Camp logistics discipline ensures the group can sustain multi-stage journeys without exhaustion"
+    ],
+    "weaknesses": [
+      "Entire caravan moves at the speed of its slowest member, creating bottleneck sensitivity",
+      "Pathfinder scouting ahead is isolated and vulnerable -- losing them is catastrophic",
+      "Route knowledge held by the elder is irreplaceable and dies with them if not transmitted",
+      "Hostile environments mean a single bad decision (wrong well, wrong pass) can be fatal to the entire group"
+    ],
+    "agents": [
+      {
+        "role": "pathfinder",
+        "name": "Pathfinder",
+        "description": "Scouts ahead of the main column, reads terrain, weather, and tracks to choose the safest and most efficient route. Reports back conditions and hazards",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "caravan-master",
+        "name": "Caravan Master",
+        "description": "Manages the column's pace, load balancing, rest schedule, and makes final decisions on route changes when the pathfinder reports obstacles",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "outrider",
+        "name": "Outrider",
+        "description": "Guards the caravan's flanks and rear, watches for threats (bandits, storms, wildlife), and provides perimeter security at camp",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "trader",
+        "name": "Trader",
+        "description": "Negotiates exchanges at waypoint settlements -- goods for supplies, information for goodwill -- and gathers intelligence about conditions on the route ahead",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "elder",
+        "name": "Elder / Route Keeper",
+        "description": "Carries generational knowledge of the route: which wells are reliable, which passes are seasonal, which settlements have changed allegiance. The living memory of past journeys",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "camp-master",
+        "name": "Camp Master",
+        "description": "Efficiently establishes and breaks camp at each stop: tent placement, fire management, water rationing, animal care, and departure preparation",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Scout Report",
+        "type": "bottom-up",
+        "participants": [
+          "pathfinder",
+          "caravan-master",
+          "elder"
+        ]
+      },
+      {
+        "name": "Route Council",
+        "type": "decision",
+        "participants": [
+          "caravan-master",
+          "pathfinder",
+          "elder",
+          "trader"
+        ]
+      },
+      {
+        "name": "Threat Alerts",
+        "type": "emergency",
+        "participants": [
+          "outrider",
+          "caravan-master",
+          "pathfinder"
+        ]
+      },
+      {
+        "name": "Trade Negotiations",
+        "type": "peer-to-peer",
+        "participants": [
+          "trader",
+          "caravan-master"
+        ]
+      },
+      {
+        "name": "Camp Orders",
+        "type": "top-down",
+        "participants": [
+          "camp-master",
+          "outrider"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current route plan and waypoints",
+        "inventory of goods and supplies",
+        "elder's accumulated route lore (the most valuable shared knowledge)"
+      ],
+      "private": [
+        "pathfinder's terrain-reading skills and star navigation knowledge",
+        "trader's contacts and price knowledge at each settlement",
+        "camp master's logistical optimizations for different terrain types"
+      ],
+      "description": "The route plan is shared but constantly revised. The elder's route lore is the most precious shared memory -- accumulated over decades and irreplaceable if lost. The pathfinder's navigation skills are private expertise that cannot easily be transferred. The trader's relationship network at settlements is private capital. Each waypoint adds new shared intelligence from the trader's negotiations and the pathfinder's observations."
+    },
+    "diagram": "graph LR\n    PF[Pathfinder] -->|scout report| CM[Caravan Master]\n    EL[Elder] -->|route lore| CM\n    CM -->|route decision| COLUMN[Caravan Column]\n    OR1[Outrider Left] -->|threat alert| CM\n    OR2[Outrider Right] -->|threat alert| CM\n    COLUMN -->|arrive at| WP[Waypoint Settlement]\n    TR[Trader] -->|negotiate| WP\n    TR -->|intel & supplies| CM\n    WP -->|depart| PF\n    CMP[Camp Master] -->|make/break camp| COLUMN",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "mycelium-wood-wide-web",
+    "name": "Mycelium Internet (Wood Wide Web)",
+    "category": "Nature-Inspired",
+    "tags": [
+      "nutrient-exchange",
+      "hub-tree",
+      "chemical-signaling",
+      "underground-network"
+    ],
+    "summary": "Hub nodes redistribute resources and chemical signals through underground connections to sustain the network.",
+    "description": "Based on mycorrhizal fungal networks discovered by forest ecologist Suzanne Simard, this pattern models how forests share resources through underground fungal connections. Hub trees (called 'mother trees') are highly connected nodes that redistribute nutrients to seedlings and stressed neighbors. The mycelial network itself is not a passive pipe -- the fungus is an active intermediary that takes a percentage of transferred nutrients for its own metabolism. Chemical signaling allows trees under attack to warn neighbors, who preemptively activate defenses. The pattern is not altruistic: it is mutualistic. The fungal network benefits from keeping its host trees alive, and hub trees benefit from supporting kin that share their genes. Resource flows are not equal -- they follow gradients from surplus to deficit, with the fungal network routing nutrients where they are most needed. When a hub tree dies, the network degrades significantly, but redundant connections prevent total collapse.",
+    "realWorldExample": "In a British Columbia Douglas fir forest studied by Simard, a mother tree with 47 fungal connections detects a bark beetle attack via terpene signaling. The mycelial network transmits defense chemicals to neighboring trees within 6 hours. Meanwhile, a shaded seedling 30 meters away receives carbon subsidies through the network from the mother tree -- photosynthate flows from the light-rich canopy tree to the light-starved understory seedling. When the mother tree is fatally wounded, it dumps its remaining carbon and nitrogen reserves into the network in a 'death pulse', redistributing stored resources to its offspring. The fungal network takes approximately 30% of all transferred carbon as its metabolic fee.",
+    "whenToUse": "When a system of agents has unequal resource levels and the collective benefits from redistribution, an intermediary network can facilitate transfers for a fee, and chemical-like signaling needs to propagate warnings across the network.",
+    "strengths": [
+      "Resource redistribution from surplus to deficit nodes keeps the entire network healthier than isolated operation",
+      "Chemical signaling propagates threat warnings faster than any individual node could detect threats alone",
+      "Hub trees provide resilience by maintaining many connections, so losing peripheral nodes does not fragment the network",
+      "The fungal intermediary is incentive-aligned: it profits from keeping host nodes alive and productive"
+    ],
+    "weaknesses": [
+      "Hub tree death causes disproportionate network degradation -- high-connectivity nodes are critical vulnerabilities",
+      "The fungal intermediary extracts a significant tax (up to 30%) on all resource transfers",
+      "Parasitic plants can exploit the network to steal resources without contributing (cheater problem)",
+      "Network growth is slow -- establishing new fungal connections takes months to years"
+    ],
+    "agents": [
+      {
+        "role": "mother-tree",
+        "name": "Mother Tree (Hub Node)",
+        "description": "Highly connected node that redistributes surplus resources to seedlings and stressed neighbors through the fungal network. Maintains the most connections and has the highest throughput",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "seedling",
+        "name": "Seedling (Receiver Node)",
+        "description": "Young, resource-poor node that receives carbon and nutrient subsidies from hub trees through the network. Gradually builds its own connections as it grows",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mature-tree",
+        "name": "Mature Tree (Peer Node)",
+        "description": "Self-sufficient node that both sends and receives resources depending on conditions. Sends surplus in good times, receives support under stress",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mycelial-network",
+        "name": "Mycelial Network (Intermediary)",
+        "description": "The fungal infrastructure that routes resources between trees, taking a metabolic fee from every transfer. Actively manages routing, not a passive pipe",
+        "memory": "hierarchical"
+      },
+      {
+        "role": "stressed-tree",
+        "name": "Stressed Tree (Distress Node)",
+        "description": "A tree under attack or resource-deprived that emits chemical distress signals and becomes a priority recipient of network resources",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "sentinel-tree",
+        "name": "Sentinel Tree (Edge Detector)",
+        "description": "Perimeter tree that first detects threats (insects, disease, drought) and emits chemical signals that propagate through the network to interior nodes",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Nutrient Exchange",
+        "type": "peer-to-peer",
+        "participants": [
+          "mother-tree",
+          "seedling",
+          "mature-tree",
+          "mycelial-network"
+        ]
+      },
+      {
+        "name": "Chemical Alarm Signal",
+        "type": "broadcast",
+        "participants": [
+          "sentinel-tree",
+          "stressed-tree",
+          "mother-tree",
+          "mature-tree"
+        ]
+      },
+      {
+        "name": "Death Pulse",
+        "type": "broadcast",
+        "participants": [
+          "mother-tree",
+          "mycelial-network",
+          "seedling"
+        ]
+      },
+      {
+        "name": "Growth Registry",
+        "type": "pub-sub",
+        "participants": [
+          "seedling",
+          "mycelial-network",
+          "mother-tree"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "network topology map (which nodes are connected to which)",
+        "aggregate resource levels across the forest",
+        "active threat alerts and their propagation status"
+      ],
+      "private": [
+        "each tree's individual resource reserves and stress level",
+        "mycelial network's routing tables and fee history",
+        "sentinel tree's threat detection thresholds calibrated to local conditions"
+      ],
+      "description": "The network topology is shared knowledge embedded in the physical connections. Each tree maintains private awareness of its own resource state. The mycelial network maintains hierarchical memory of routing efficiency -- which paths transfer nutrients fastest. Chemical alarm signals are ephemeral broadcasts that decay over time. The death pulse is a one-time dump of a dying hub tree's accumulated memory and resources into the shared network."
+    },
+    "diagram": "graph TD\n    MT[Mother Tree Hub] <-->|nutrients via mycelia| S1[Seedling 1]\n    MT <-->|nutrients via mycelia| S2[Seedling 2]\n    MT <-->|nutrients via mycelia| MAT1[Mature Tree 1]\n    MAT1 <-->|nutrients via mycelia| MAT2[Mature Tree 2]\n    MN[Mycelial Network] -->|routes & taxes| MT\n    MN -->|routes & taxes| MAT1\n    SENT[Sentinel Tree] -->|chemical alarm| MN\n    MN -->|propagate warning| MT\n    MN -->|propagate warning| MAT1\n    MN -->|propagate warning| MAT2\n    ST[Stressed Tree] -->|distress signal| MN\n    MN -->|priority resources| ST",
+    "hierarchyTypes": [
+      "swarm",
+      "orchestrated",
+      "mesh",
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "swarm-debugging",
+    "name": "Swarm Debugging",
+    "category": "Technology & Engineering",
+    "tags": [
+      "parallel-investigation",
+      "hypothesis-convergence",
+      "fault-isolation",
+      "diverse-perspectives"
+    ],
+    "summary": "Multiple agents independently investigate the same bug, then converge to compare findings and isolate the root cause.",
+    "description": "Inspired by pair programming taken to its logical extreme, swarm debugging launches multiple independent agents at the same problem with deliberately different investigation strategies. One agent traces execution flow forward from the trigger. Another works backward from the failure symptom. A third examines recent changes (git bisect approach). A fourth fuzzes inputs to find boundary conditions. They work in isolation to prevent groupthink -- the same cognitive bias that causes traditional debugging teams to converge prematurely on wrong hypotheses. After a time-boxed investigation phase, all agents present their findings to a synthesizer who looks for convergence: if three agents independently point to the same module, that is high-confidence localization. Disagreement is also valuable -- it indicates the bug may have multiple contributing causes or that the problem is more subtle than any single investigation revealed.",
+    "realWorldExample": "A production outage at a fintech company causes intermittent payment failures. The incident commander launches four debugging agents. Agent A traces a failing request through the service mesh and finds a 50ms timeout in the payment gateway client. Agent B examines the last 24 hours of deploys and finds a configuration change to connection pool sizes. Agent C analyzes metrics dashboards and notices database query latency spiked at the same time. Agent D fuzzes the payment API and discovers that amounts with more than 2 decimal places trigger a different code path. The synthesizer notes that Agents A, B, and C all point to resource exhaustion -- the connection pool change (B) caused database latency (C) which triggered timeouts (A). Agent D's finding is filed as a separate bug. Root cause is identified in 35 minutes instead of the usual 2-hour mean-time-to-resolution.",
+    "whenToUse": "When debugging a complex issue where the root cause is unclear, multiple hypotheses are plausible, and you want to avoid groupthink by having independent parallel investigations that converge on the answer.",
+    "strengths": [
+      "Independent parallel investigation avoids groupthink and premature convergence on wrong hypotheses",
+      "Convergence from multiple strategies provides high-confidence fault localization",
+      "Divergent findings reveal multi-cause bugs that single-track debugging would miss",
+      "Time-boxing prevents any single investigation rabbit hole from consuming all resources"
+    ],
+    "weaknesses": [
+      "Resource-intensive: running 4-5 parallel investigations costs 4-5x a single debugger",
+      "Synthesizer must be highly skilled to integrate diverse findings -- a weak synthesizer wastes the swarm's work",
+      "Independent agents may duplicate effort (e.g., both read the same logs) without realizing it",
+      "Only effective for bugs complex enough to justify the overhead; overkill for simple issues"
+    ],
+    "agents": [
+      {
+        "role": "incident-commander",
+        "name": "Incident Commander",
+        "description": "Defines the problem statement, launches the swarm, enforces time-boxes, and makes the final call on which root cause to pursue",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "forward-tracer",
+        "name": "Forward Tracer",
+        "description": "Starts from the trigger condition and traces execution flow forward through the system, noting every deviation from expected behavior",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "backward-tracer",
+        "name": "Backward Tracer",
+        "description": "Starts from the failure symptom and works backward through logs, stack traces, and data flow to identify where the corruption or error originated",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "change-analyst",
+        "name": "Change Analyst",
+        "description": "Examines recent changes (commits, deploys, config changes, dependency updates) that correlate temporally with the bug's first appearance",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "fuzzer",
+        "name": "Fuzzer / Boundary Tester",
+        "description": "Generates diverse inputs and edge cases to find the exact conditions that trigger the bug, mapping the failure boundary",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "synthesizer",
+        "name": "Synthesizer",
+        "description": "Receives all agents' findings after the time-boxed investigation, identifies convergence and divergence, and produces a unified root cause hypothesis",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Problem Statement",
+        "type": "top-down",
+        "participants": [
+          "incident-commander",
+          "forward-tracer",
+          "backward-tracer",
+          "change-analyst",
+          "fuzzer"
+        ]
+      },
+      {
+        "name": "Investigation Phase (Isolated)",
+        "type": "per-agent",
+        "participants": [
+          "forward-tracer",
+          "backward-tracer",
+          "change-analyst",
+          "fuzzer"
+        ]
+      },
+      {
+        "name": "Findings Presentation",
+        "type": "round-robin",
+        "participants": [
+          "forward-tracer",
+          "backward-tracer",
+          "change-analyst",
+          "fuzzer",
+          "synthesizer"
+        ]
+      },
+      {
+        "name": "Synthesis & Convergence",
+        "type": "decision",
+        "participants": [
+          "synthesizer",
+          "incident-commander"
+        ]
+      },
+      {
+        "name": "Incident Log",
+        "type": "log",
+        "participants": [
+          "incident-commander",
+          "synthesizer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "problem statement and symptom description",
+        "synthesized root cause report",
+        "incident timeline and resolution log"
+      ],
+      "private": [
+        "each investigator's notes, hypotheses, and evidence (deliberately isolated during investigation phase)",
+        "fuzzer's input corpus and failure boundary map",
+        "change analyst's diff analysis and correlation data"
+      ],
+      "description": "During the investigation phase, agents are deliberately isolated -- they cannot see each other's findings. This prevents groupthink and ensures independent convergence. After the time-box expires, all private findings are presented to the synthesizer who creates a shared root cause report. The incident log is append-only and captures the full timeline from symptom to resolution for post-incident learning."
+    },
+    "diagram": "graph TD\n    IC[Incident Commander] -->|problem statement| FT[Forward Tracer]\n    IC -->|problem statement| BT[Backward Tracer]\n    IC -->|problem statement| CA[Change Analyst]\n    IC -->|problem statement| FZ[Fuzzer]\n    FT -->|findings| SYN[Synthesizer]\n    BT -->|findings| SYN\n    CA -->|findings| SYN\n    FZ -->|findings| SYN\n    FT -.-|isolated| BT\n    BT -.-|isolated| CA\n    CA -.-|isolated| FZ\n    SYN -->|root cause| IC\n    IC -->|resolution| LOG[Incident Log]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command"
+    ]
+  }
+]

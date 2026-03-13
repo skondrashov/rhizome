@@ -1,0 +1,2193 @@
+[
+  {
+    "id": "nasa-mission-control",
+    "name": "NASA Mission Control",
+    "category": "Technology & Engineering",
+    "tags": [
+      "aerospace",
+      "real-time",
+      "high-stakes",
+      "distributed-authority"
+    ],
+    "summary": "Flight Director leads specialized console positions monitoring every spacecraft system through disciplined voice loops.",
+    "description": "Modeled after NASA's Johnson Space Center Mission Control Center, this structure places a Flight Director in overall authority over a room of discipline-specific console operators. Each position (CAPCOM, FIDO, EECOM, GNC, INCO, etc.) monitors a narrow spacecraft subsystem in real-time and has a back room of engineers providing deeper analysis. Only CAPCOM speaks directly to the crew, preventing information overload. The Flight Director integrates all console inputs to make go/no-go decisions. A strict voice loop protocol ensures information flows through defined channels. During anomalies, the Flight Director can poll each console for status before making time-critical calls. The structure supports shift handoffs with detailed state transfer logs.",
+    "realWorldExample": "During Apollo 13, Flight Director Gene Kranz polled each console position for status after the oxygen tank explosion. EECOM reported power loss, GNC reported attitude drift, and FIDO computed abort trajectories. Kranz synthesized their inputs into the decision to abort to a free-return trajectory, with CAPCOM relaying instructions to the crew.",
+    "whenToUse": "When an agent system must monitor many independent subsystems in real-time, with a single decision-maker who synthesizes expert input under time pressure and safety-critical constraints.",
+    "strengths": [
+      "Single decision authority (Flight Director) eliminates ambiguity during crises",
+      "CAPCOM bottleneck prevents information overload on the operational endpoint",
+      "Back rooms provide deep analysis without cluttering the main decision loop",
+      "Voice loop discipline ensures every communication is heard by relevant parties"
+    ],
+    "weaknesses": [
+      "Flight Director becomes a cognitive bottleneck during multi-system failures",
+      "CAPCOM relay introduces latency between experts and crew",
+      "Requires extensive training so each console operator understands adjacent disciplines",
+      "Shift handoffs risk losing situational awareness built up over hours"
+    ],
+    "agents": [
+      {
+        "role": "flight-director",
+        "name": "Flight Director",
+        "description": "Ultimate authority for the mission; makes go/no-go decisions, polls console positions, and manages anomaly responses",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "capcom",
+        "name": "CAPCOM (Capsule Communicator)",
+        "description": "Sole voice link to the crew; translates Flight Director decisions into clear crew instructions and relays crew reports back",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "fido",
+        "name": "FIDO (Flight Dynamics Officer)",
+        "description": "Monitors trajectory, orbital mechanics, and computes abort options and maneuver burns",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "eecom",
+        "name": "EECOM (Electrical, Environmental, Consumables)",
+        "description": "Monitors power generation, life support, thermal control, and consumables budgets",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gnc",
+        "name": "GNC (Guidance, Navigation, and Control)",
+        "description": "Monitors spacecraft attitude, navigation sensors, and guidance computer performance",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "inco",
+        "name": "INCO (Instrumentation and Communications)",
+        "description": "Manages telemetry links, communication blackout predictions, and data recording systems",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "surgeon",
+        "name": "Flight Surgeon",
+        "description": "Monitors crew health telemetry, sleep schedules, and radiation exposure; advises on crew fitness",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "backroom-lead",
+        "name": "Back Room Lead",
+        "description": "Coordinates deeper engineering analysis teams that support each front-room console with detailed computations",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Flight Director Loop",
+        "type": "broadcast",
+        "participants": [
+          "flight-director",
+          "capcom",
+          "fido",
+          "eecom",
+          "gnc",
+          "inco",
+          "surgeon"
+        ]
+      },
+      {
+        "name": "Air-to-Ground",
+        "type": "peer-to-peer",
+        "participants": [
+          "capcom",
+          "flight-director"
+        ]
+      },
+      {
+        "name": "Anomaly Resolution",
+        "type": "decision",
+        "participants": [
+          "flight-director",
+          "fido",
+          "eecom",
+          "gnc",
+          "inco"
+        ]
+      },
+      {
+        "name": "Back Room Analysis",
+        "type": "bottom-up",
+        "participants": [
+          "backroom-lead",
+          "fido",
+          "eecom",
+          "gnc"
+        ]
+      },
+      {
+        "name": "Shift Handover Log",
+        "type": "document",
+        "participants": [
+          "flight-director",
+          "capcom",
+          "fido",
+          "eecom",
+          "gnc",
+          "inco",
+          "surgeon"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "mission timeline",
+        "flight rules",
+        "go/no-go status board",
+        "anomaly log",
+        "consumables budget"
+      ],
+      "private": [
+        "subsystem telemetry streams",
+        "back room engineering analysis",
+        "flight surgeon medical data"
+      ],
+      "description": "The flight rules document is the shared constitution that pre-authorizes specific decisions. Each console position maintains private telemetry dashboards for their subsystem, but publishes summary status to the shared board. The Flight Director maintains a persistent shared anomaly log. Shift handover documents are append-only and provide state continuity across crew rotations."
+    },
+    "diagram": "graph TD\n    FD[Flight Director] --> CAPCOM[CAPCOM]\n    FD --> FIDO[FIDO]\n    FD --> EECOM[EECOM]\n    FD --> GNC[GNC]\n    FD --> INCO[INCO]\n    FD --> SURG[Flight Surgeon]\n    CAPCOM -->|air-to-ground| CREW[Crew]\n    FIDO --> BR1[Back Room - Trajectory]\n    EECOM --> BR2[Back Room - Power/Life Support]\n    GNC --> BR3[Back Room - Guidance]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated",
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "nuclear-power-plant-ops",
+    "name": "Nuclear Power Plant Operations",
+    "category": "Technology & Engineering",
+    "tags": [
+      "safety-critical",
+      "regulatory",
+      "defense-in-depth",
+      "hierarchical"
+    ],
+    "summary": "Defense-in-depth layers and independent regulatory oversight keep reactor operations within strict safety boundaries.",
+    "description": "Nuclear power plant operations follow a defense-in-depth principle where multiple independent barriers prevent accidents. The Control Room Supervisor (SRO-licensed) has command authority over Licensed Reactor Operators who manage the control board. A Shift Technical Advisor provides independent engineering analysis. The Safety Review Committee and Plant Manager form an oversight layer. Critically, the NRC Resident Inspector operates independently on-site with authority to shut down the plant. Every action follows approved procedures; deviations require formal authorization. The structure embeds redundancy at every level: backup operators, redundant safety systems, and independent shutdown capability. Communication uses three-way repeat-back protocols to prevent errors.",
+    "realWorldExample": "At a typical US pressurized water reactor, two Licensed Reactor Operators monitor the control board while the Control Room Supervisor manages the shift. When a steam generator tube leak is detected, the STA independently verifies the diagnosis, the CRS directs emergency operating procedures, and the NRC Resident Inspector is notified. The Safety Review Committee convenes within hours to assess root cause.",
+    "whenToUse": "When an agent system manages processes where failures have catastrophic consequences, requiring multiple independent safety barriers, regulatory oversight, and strict procedural compliance.",
+    "strengths": [
+      "Defense-in-depth means no single failure can cause a catastrophic outcome",
+      "Independent regulatory agent (NRC inspector) provides uncapturable oversight",
+      "Three-way communication protocol virtually eliminates instruction misunderstandings",
+      "Strict procedural compliance makes actions predictable and auditable"
+    ],
+    "weaknesses": [
+      "Procedural rigidity can slow response to novel situations not covered by existing procedures",
+      "Licensing requirements create a narrow pipeline for qualified operators",
+      "Multiple oversight layers can create a false sense of security if they become rubber stamps",
+      "Excessive conservatism may delay beneficial operational changes"
+    ],
+    "agents": [
+      {
+        "role": "control-room-supervisor",
+        "name": "Control Room Supervisor",
+        "description": "SRO-licensed shift commander; authorizes all control manipulations, directs emergency procedures, and manages control room crew",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "reactor-operator-1",
+        "name": "Licensed Reactor Operator (Primary)",
+        "description": "Monitors and manipulates reactor controls, maintains reactivity balance, and executes procedures under CRS direction",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "reactor-operator-2",
+        "name": "Licensed Reactor Operator (Balance of Plant)",
+        "description": "Monitors turbine, generator, feedwater, and auxiliary systems; executes balance-of-plant procedures",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "shift-technical-advisor",
+        "name": "Shift Technical Advisor",
+        "description": "Provides independent engineering analysis during abnormal conditions; monitors core thermal-hydraulics and safety system status",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "plant-manager",
+        "name": "Plant Manager",
+        "description": "Overall plant authority; approves procedure changes, manages staffing, and interfaces with corporate and regulatory bodies",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "safety-review-committee",
+        "name": "Safety Review Committee",
+        "description": "Independent multi-disciplinary body that reviews all safety-significant events, procedure changes, and design modifications",
+        "memory": "versioned"
+      },
+      {
+        "role": "nrc-resident-inspector",
+        "name": "NRC Resident Inspector",
+        "description": "Independent federal regulatory presence on-site; observes operations, reviews records, and has authority to issue shutdown orders",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Control Room Communications",
+        "type": "peer-to-peer",
+        "participants": [
+          "control-room-supervisor",
+          "reactor-operator-1",
+          "reactor-operator-2"
+        ]
+      },
+      {
+        "name": "Abnormal Condition Assessment",
+        "type": "advisory",
+        "participants": [
+          "shift-technical-advisor",
+          "control-room-supervisor"
+        ]
+      },
+      {
+        "name": "Safety Review Proceedings",
+        "type": "decision",
+        "participants": [
+          "safety-review-committee",
+          "plant-manager",
+          "control-room-supervisor"
+        ]
+      },
+      {
+        "name": "Regulatory Interface",
+        "type": "log",
+        "participants": [
+          "nrc-resident-inspector",
+          "plant-manager",
+          "control-room-supervisor"
+        ]
+      },
+      {
+        "name": "Shift Turnover",
+        "type": "document",
+        "participants": [
+          "control-room-supervisor",
+          "reactor-operator-1",
+          "reactor-operator-2",
+          "shift-technical-advisor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "plant operating procedures",
+        "tech spec limits",
+        "abnormal event log",
+        "safety system status board"
+      ],
+      "private": [
+        "NRC inspection notes",
+        "individual operator logs",
+        "STA engineering calculations"
+      ],
+      "description": "Operating procedures are versioned shared documents requiring formal review for any change. The control room maintains a shared status board showing all safety system alignments. The NRC inspector maintains entirely private notes that cannot be accessed by plant staff. Shift turnovers use a structured document capturing reactor status, equipment out of service, and ongoing activities. All control manipulations are logged in an append-only record."
+    },
+    "diagram": "graph TD\n    NRC[NRC Resident Inspector] -.->|independent oversight| PM[Plant Manager]\n    PM --> SRC[Safety Review Committee]\n    PM --> CRS[Control Room Supervisor]\n    CRS --> RO1[Reactor Operator - Primary]\n    CRS --> RO2[Reactor Operator - BOP]\n    STA[Shift Technical Advisor] -.->|independent analysis| CRS\n    SRC -.->|safety reviews| CRS\n    RO1 --> REACTOR[Reactor Systems]\n    RO2 --> BOP[Balance of Plant]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "mesh"
+    ]
+  },
+  {
+    "id": "assembly-line-ford-system",
+    "name": "Assembly Line / Ford Production System",
+    "category": "Technology & Engineering",
+    "tags": [
+      "sequential",
+      "standardized",
+      "throughput-optimized",
+      "mass-production"
+    ],
+    "summary": "Workers perform specialized tasks at fixed stations as the product moves through a linear sequence at a set pace.",
+    "description": "Henry Ford's assembly line revolutionized manufacturing by decomposing complex products into simple, repetitive tasks performed at fixed stations. A moving conveyor sets the pace (takt time), and each station adds one component or performs one operation before the product moves to the next station. A Line Supervisor monitors throughput and handles stoppages. Quality Inspectors check work at designated checkpoints. The Industrial Engineer designs station layouts and task assignments to balance cycle times. A Material Handler ensures parts are pre-staged at each station. The system optimizes for throughput and consistency: any worker can be replaced because tasks are standardized to eliminate skill dependency. The trade-off is extreme rigidity; changing the product requires re-engineering the entire line.",
+    "realWorldExample": "Ford's Highland Park plant in 1913 reduced Model T assembly time from 12.5 hours to 93 minutes by splitting the process into 84 discrete steps. Each worker performed one task repeatedly as chassis moved along the floor on a conveyor, with parts bins pre-staged at each station.",
+    "whenToUse": "When an agent system must process high volumes of identical or near-identical tasks with maximum throughput, minimal per-unit cost, and consistent quality.",
+    "strengths": [
+      "Extreme throughput for homogeneous tasks due to specialization and pacing",
+      "Any agent can be swapped into a station with minimal retraining",
+      "Quality checkpoints catch defects before they compound downstream",
+      "Predictable cycle time makes capacity planning straightforward"
+    ],
+    "weaknesses": [
+      "Entire line stops if any single station fails (no bypass capability)",
+      "Zero flexibility: product changes require complete line reconfiguration",
+      "Monotonous tasks reduce agent engagement and error vigilance over time",
+      "Bottleneck station determines throughput for the entire system"
+    ],
+    "agents": [
+      {
+        "role": "plant-manager",
+        "name": "Plant Manager",
+        "description": "Sets production targets, approves line configurations, and manages overall factory operations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "line-supervisor",
+        "name": "Line Supervisor",
+        "description": "Monitors line speed and throughput, handles stoppages, and reassigns workers to cover absences",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "station-worker-1",
+        "name": "Station Worker (Assembly)",
+        "description": "Performs a single standardized assembly task at a fixed station as the product passes on the conveyor",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "station-worker-2",
+        "name": "Station Worker (Fastening)",
+        "description": "Installs fasteners or connects components at a fixed station with standardized tooling",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "station-worker-3",
+        "name": "Station Worker (Sub-Assembly)",
+        "description": "Prepares sub-assemblies offline that feed into the main line at specific merge points",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "quality-inspector",
+        "name": "Quality Inspector",
+        "description": "Performs standardized checks at designated line checkpoints and rejects or flags defective units",
+        "memory": "append-only"
+      },
+      {
+        "role": "material-handler",
+        "name": "Material Handler",
+        "description": "Pre-stages parts bins at each station and manages inventory replenishment from the warehouse",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "industrial-engineer",
+        "name": "Industrial Engineer",
+        "description": "Designs station layouts, performs time-motion studies, and balances cycle times across stations",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Line Status Board",
+        "type": "broadcast",
+        "participants": [
+          "line-supervisor",
+          "station-worker-1",
+          "station-worker-2",
+          "station-worker-3",
+          "quality-inspector",
+          "material-handler"
+        ]
+      },
+      {
+        "name": "Stoppage Alerts",
+        "type": "emergency",
+        "participants": [
+          "line-supervisor",
+          "plant-manager",
+          "station-worker-1",
+          "station-worker-2",
+          "station-worker-3"
+        ]
+      },
+      {
+        "name": "Quality Reports",
+        "type": "bottom-up",
+        "participants": [
+          "quality-inspector",
+          "line-supervisor",
+          "plant-manager"
+        ]
+      },
+      {
+        "name": "Line Rebalancing",
+        "type": "decision",
+        "participants": [
+          "industrial-engineer",
+          "plant-manager",
+          "line-supervisor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "production schedule",
+        "line speed/takt time",
+        "daily output count",
+        "defect rate dashboard"
+      ],
+      "private": [
+        "time-motion study data",
+        "individual station cycle logs",
+        "material inventory levels"
+      ],
+      "description": "The production schedule and takt time are shared across the entire line. Station workers have ephemeral memory since each unit is identical and no context carries between units. The quality inspector maintains an append-only defect log. The industrial engineer keeps versioned line balance records that evolve with product changes. Material levels are tracked privately by the material handler with alerts broadcast when bins run low."
+    },
+    "diagram": "graph LR\n    RAW[Raw Materials] --> SW1[Station 1 - Frame]\n    SW1 --> SW2[Station 2 - Engine]\n    SW2 --> SW3[Station 3 - Body]\n    SW3 --> QC1[Quality Check]\n    QC1 --> SW4[Station 4 - Electrical]\n    SW4 --> SW5[Station 5 - Final Assembly]\n    SW5 --> QC2[Final Inspection]\n    MH[Material Handler] --> SW1\n    MH --> SW2\n    MH --> SW3\n    LS[Line Supervisor] -.-> SW1\n    LS -.-> SW5",
+    "hierarchyTypes": [
+      "pipeline",
+      "chain-of-command",
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "toyota-production-system",
+    "name": "Toyota Production System / Lean Manufacturing",
+    "category": "Technology & Engineering",
+    "tags": [
+      "pull-based",
+      "continuous-improvement",
+      "just-in-time",
+      "empowered-workers"
+    ],
+    "summary": "Every worker can stop the line to fix defects; production is pulled by demand, not pushed by schedule.",
+    "description": "The Toyota Production System (TPS) inverts the Ford assembly line philosophy: instead of optimizing throughput at all costs, TPS optimizes for quality and waste elimination. Two pillars define it: Just-in-Time (produce only what is needed, when needed, in the quantity needed) and Jidoka (automation with a human touch, where any worker can pull the Andon cord to stop the line when a defect is detected). Team Leaders manage small groups of 4-6 workers and are the first responders to Andon calls. Group Leaders oversee multiple teams. Kaizen (continuous improvement) events are regular rituals where workers propose process improvements. Kanban cards create a pull-based flow where downstream stations signal upstream when they need parts. The system treats every defect as a learning opportunity, not a failure.",
+    "realWorldExample": "At Toyota's Georgetown, Kentucky plant, a team member notices a paint imperfection and pulls the Andon cord. The Team Leader has 60 seconds to assess and fix the issue before the line automatically stops. If the fix requires more time, the Group Leader escalates. After resolution, the team conducts a quick 5-Why root cause analysis posted on the team's visual management board.",
+    "whenToUse": "When an agent system must balance throughput with quality, empower individual agents to flag problems, and continuously improve processes through bottom-up feedback.",
+    "strengths": [
+      "Any agent can halt production to prevent defects from propagating downstream",
+      "Pull-based flow eliminates overproduction waste and keeps inventory minimal",
+      "Kaizen culture creates compounding improvements over time",
+      "Small team structure enables rapid local problem-solving without escalation"
+    ],
+    "weaknesses": [
+      "Requires high trust and psychological safety for workers to actually pull the Andon cord",
+      "Just-in-Time inventory is fragile to supply chain disruptions",
+      "Continuous improvement culture takes years to develop and is easily undermined by management pressure",
+      "Small batch sizes reduce throughput compared to pure mass production"
+    ],
+    "agents": [
+      {
+        "role": "plant-director",
+        "name": "Plant Director",
+        "description": "Sets strategic direction, approves major kaizen initiatives, and maintains relationships with suppliers and customers",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "group-leader",
+        "name": "Group Leader",
+        "description": "Oversees multiple teams, handles escalated Andon calls, coordinates cross-team kaizen events, and manages staffing",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "team-leader",
+        "name": "Team Leader",
+        "description": "First responder to Andon calls within their 4-6 person team; coaches workers, leads daily standup, and tracks team metrics",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "team-member-1",
+        "name": "Team Member (Assembly)",
+        "description": "Performs standardized work, pulls Andon cord for defects, participates in kaizen events, and is cross-trained on adjacent stations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "team-member-2",
+        "name": "Team Member (Quality)",
+        "description": "Builds quality into the process at-station rather than inspecting after; performs in-process checks",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "kanban-coordinator",
+        "name": "Kanban Coordinator",
+        "description": "Manages the pull-based material flow system, monitors kanban card circulation, and flags supply chain issues",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "kaizen-facilitator",
+        "name": "Kaizen Facilitator",
+        "description": "Organizes improvement events, teaches problem-solving methods (5-Why, A3), and tracks implementation of countermeasures",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Andon Board",
+        "type": "emergency",
+        "participants": [
+          "team-member-1",
+          "team-member-2",
+          "team-leader",
+          "group-leader"
+        ]
+      },
+      {
+        "name": "Daily Standup",
+        "type": "broadcast",
+        "participants": [
+          "team-leader",
+          "team-member-1",
+          "team-member-2"
+        ]
+      },
+      {
+        "name": "Kaizen Events",
+        "type": "retrospective",
+        "participants": [
+          "kaizen-facilitator",
+          "team-leader",
+          "team-member-1",
+          "team-member-2",
+          "group-leader"
+        ]
+      },
+      {
+        "name": "Kanban Signals",
+        "type": "pub-sub",
+        "participants": [
+          "kanban-coordinator",
+          "team-member-1",
+          "team-member-2",
+          "team-leader"
+        ]
+      },
+      {
+        "name": "Visual Management Board",
+        "type": "document",
+        "participants": [
+          "team-leader",
+          "group-leader",
+          "team-member-1",
+          "team-member-2",
+          "kaizen-facilitator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "standardized work sheets",
+        "visual management boards",
+        "andon response log",
+        "production kanban status"
+      ],
+      "private": [
+        "individual skill matrices",
+        "kaizen proposal drafts",
+        "supplier lead time data"
+      ],
+      "description": "Standardized work sheets are the shared baseline that every worker follows and can propose changes to. The visual management board at each team's station shows real-time metrics, current problems, and countermeasure status. Kaizen facilitators maintain versioned A3 problem-solving documents that evolve through plan-do-check-act cycles. Kanban cards are a physical shared signal system. Individual skill matrices are private to the team leader for cross-training planning."
+    },
+    "diagram": "graph TD\n    PD[Plant Director] --> GL[Group Leader]\n    GL --> TL1[Team Leader A]\n    GL --> TL2[Team Leader B]\n    TL1 --> TM1[Team Member 1]\n    TL1 --> TM2[Team Member 2]\n    TM1 -.->|andon pull| TL1\n    TM2 -.->|andon pull| TL1\n    TL1 -.->|escalate| GL\n    KC[Kanban Coordinator] -.->|pull signals| TM1\n    KC -.->|pull signals| TM2\n    KF[Kaizen Facilitator] -.->|improvement events| TL1\n    KF -.->|improvement events| TL2",
+    "hierarchyTypes": [
+      "pipeline",
+      "swarm",
+      "consensus"
+    ]
+  },
+  {
+    "id": "skunkworks-tiger-team",
+    "name": "Skunkworks / Tiger Team",
+    "category": "Technology & Engineering",
+    "tags": [
+      "elite",
+      "autonomous",
+      "breakthrough",
+      "small-team"
+    ],
+    "summary": "A small, hand-picked team operates with extreme autonomy and minimal bureaucracy to achieve breakthrough results.",
+    "description": "Named after Lockheed Martin's Advanced Development Programs, the Skunkworks model isolates a small team (typically 5-25 people) from the parent organization and gives them extraordinary autonomy, direct funding, and freedom from standard processes. A single Technical Lead has near-absolute authority over design decisions. Team members are selected for versatility: each person covers multiple disciplines. The team operates with minimal documentation, rapid prototyping, and direct access to end users or customers. Kelly Johnson's 14 Rules define the ethos: strong project manager, small team, minimal reports, monthly cost reviews, and tolerance for calculated risk. The structure sacrifices repeatability and scalability for speed and innovation.",
+    "realWorldExample": "Lockheed's original Skunk Works, led by Kelly Johnson, developed the SR-71 Blackbird with a team of about 135 engineers in 20 months. The team had its own facility, ignored most corporate processes, and Johnson personally approved every design decision. The result was an aircraft that remained the fastest ever built for over 50 years.",
+    "whenToUse": "When an agent system must achieve a breakthrough result under time pressure, with a small expert team that needs freedom from bureaucratic constraints and organizational overhead.",
+    "strengths": [
+      "Extreme speed from eliminating bureaucratic overhead and approval chains",
+      "Direct technical lead authority prevents design-by-committee compromises",
+      "Small team size enables rapid pivots and tacit knowledge sharing",
+      "Physical or organizational isolation protects the team from corporate interference"
+    ],
+    "weaknesses": [
+      "Results are highly dependent on the Technical Lead's judgment and vision",
+      "Knowledge stays trapped in the team; minimal documentation makes handoff painful",
+      "Not scalable: effectiveness degrades sharply above 20-25 people",
+      "Isolation can produce solutions that the parent organization cannot maintain"
+    ],
+    "agents": [
+      {
+        "role": "technical-lead",
+        "name": "Technical Lead",
+        "description": "Single point of authority for all design and engineering decisions; selects team members and manages external stakeholder relationships",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "systems-engineer",
+        "name": "Systems Engineer",
+        "description": "Maintains the overall architecture and ensures subsystem interfaces are compatible; the generalist who sees the whole picture",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "rapid-prototyper",
+        "name": "Rapid Prototyper",
+        "description": "Builds quick-and-dirty working models to test hypotheses; favors speed over polish",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "domain-expert-1",
+        "name": "Domain Expert (Primary)",
+        "description": "Deep specialist in the core technical domain; provides the irreplaceable knowledge that makes the breakthrough possible",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "domain-expert-2",
+        "name": "Domain Expert (Secondary)",
+        "description": "Specialist in a complementary domain; cross-trained to cover gaps and challenge the primary expert's assumptions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "customer-liaison",
+        "name": "Customer Liaison",
+        "description": "Maintains direct line to the end user or sponsor; translates requirements and provides rapid feedback on prototypes",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "War Room",
+        "type": "peer-to-peer",
+        "participants": [
+          "technical-lead",
+          "systems-engineer",
+          "rapid-prototyper",
+          "domain-expert-1",
+          "domain-expert-2"
+        ]
+      },
+      {
+        "name": "Daily Standup",
+        "type": "broadcast",
+        "participants": [
+          "technical-lead",
+          "systems-engineer",
+          "rapid-prototyper",
+          "domain-expert-1",
+          "domain-expert-2",
+          "customer-liaison"
+        ]
+      },
+      {
+        "name": "Design Decisions",
+        "type": "decision",
+        "participants": [
+          "technical-lead",
+          "systems-engineer",
+          "domain-expert-1",
+          "domain-expert-2"
+        ]
+      },
+      {
+        "name": "Customer Feedback",
+        "type": "advisory",
+        "participants": [
+          "customer-liaison",
+          "technical-lead",
+          "rapid-prototyper"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "design whiteboard (living architecture doc)",
+        "decision log",
+        "prototype test results",
+        "project timeline"
+      ],
+      "private": [
+        "domain-specific technical notebooks",
+        "customer relationship notes"
+      ],
+      "description": "The war room whiteboard is the primary shared artifact: a living, constantly-updated system design that everyone can modify. Formal documentation is minimal by design. The decision log captures only major architectural choices and their rationale. Prototype test results are shared immediately. Domain experts maintain private technical notebooks with deep analysis. The emphasis is on tacit knowledge transfer through daily face-to-face interaction rather than written artifacts."
+    },
+    "diagram": "graph TD\n    TL[Technical Lead] --> SE[Systems Engineer]\n    TL --> RP[Rapid Prototyper]\n    TL --> DE1[Domain Expert 1]\n    TL --> DE2[Domain Expert 2]\n    TL --> CL[Customer Liaison]\n    SE <--> DE1\n    SE <--> DE2\n    RP <--> DE1\n    CL -.->|requirements & feedback| TL\n    RP -->|prototypes| CL",
+    "hierarchyTypes": [
+      "federated",
+      "consensus",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "investigative-podcast-network",
+    "name": "Investigative Podcast Network",
+    "category": "Media & Communications",
+    "tags": [
+      "narrative",
+      "research-heavy",
+      "serialized",
+      "editorial"
+    ],
+    "summary": "A small team blends deep investigative research with narrative storytelling across serialized audio episodes.",
+    "description": "An investigative podcast network operates like a hybrid newsroom and production studio. A Showrunner sets the editorial vision and narrative arc across a season. Investigative Producers conduct deep research: FOIA requests, source cultivation, document analysis, and interview preparation. The Host is the public-facing narrator who conducts on-tape interviews and records narration. An Audio Engineer handles recording, mixing, sound design, and mastering. A Fact-Checker independently verifies all claims before publication. A Story Editor shapes raw material into compelling narrative arcs. The workflow is serialized: each episode builds on previous ones, requiring careful continuity management. Legal review gates publication of sensitive material.",
+    "realWorldExample": "Serial (Season 1) had Sarah Koenig as Host, Julie Snyder as Showrunner, and Dana Chivvis as Investigative Producer. Over 12 episodes, they built a narrative through interviews, court documents, and cell tower data analysis. Each episode was fact-checked independently, and legal counsel reviewed allegations before broadcast.",
+    "whenToUse": "When an agent system must conduct deep research on a complex topic and synthesize findings into a compelling sequential narrative, with rigorous verification before each release.",
+    "strengths": [
+      "Serialized format allows audience feedback to influence investigation direction",
+      "Independent fact-checking prevents reputational damage from errors",
+      "Small team with clear roles enables deep focus on a single story",
+      "Audio medium allows sources to speak in their own voices, building credibility"
+    ],
+    "weaknesses": [
+      "Serialized dependency means delays on one episode cascade to the entire season",
+      "Host becomes the single public face; losing them tanks the show",
+      "Legal review can block the most impactful revelations",
+      "Research-to-production pipeline is slow; breaking news competitors can scoop the story"
+    ],
+    "agents": [
+      {
+        "role": "showrunner",
+        "name": "Showrunner",
+        "description": "Sets editorial vision, plans the season arc, makes final decisions on story direction, and manages the production schedule",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "host",
+        "name": "Host / Narrator",
+        "description": "Public voice of the show; conducts interviews, records narration, and translates complex findings into accessible storytelling",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "investigative-producer",
+        "name": "Investigative Producer",
+        "description": "Conducts deep research, cultivates sources, files records requests, analyzes documents, and prepares interview briefs",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "story-editor",
+        "name": "Story Editor",
+        "description": "Shapes raw transcripts and research into narrative arcs, manages episode pacing, and ensures continuity across the season",
+        "memory": "versioned"
+      },
+      {
+        "role": "audio-engineer",
+        "name": "Audio Engineer",
+        "description": "Records interviews, mixes episodes, creates sound design, and masters final audio for distribution",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "fact-checker",
+        "name": "Fact-Checker",
+        "description": "Independently verifies every factual claim in each episode against primary sources before publication",
+        "memory": "append-only"
+      },
+      {
+        "role": "legal-counsel",
+        "name": "Legal Counsel",
+        "description": "Reviews episodes for defamation risk, source protection issues, and regulatory compliance before publication",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Story Room",
+        "type": "threaded",
+        "participants": [
+          "showrunner",
+          "host",
+          "investigative-producer",
+          "story-editor"
+        ]
+      },
+      {
+        "name": "Episode Review",
+        "type": "decision",
+        "participants": [
+          "showrunner",
+          "fact-checker",
+          "legal-counsel",
+          "host"
+        ]
+      },
+      {
+        "name": "Research Pipeline",
+        "type": "bottom-up",
+        "participants": [
+          "investigative-producer",
+          "showrunner",
+          "host"
+        ]
+      },
+      {
+        "name": "Production Queue",
+        "type": "queue",
+        "participants": [
+          "story-editor",
+          "audio-engineer",
+          "showrunner"
+        ]
+      },
+      {
+        "name": "Source Protection Log",
+        "type": "log",
+        "participants": [
+          "investigative-producer",
+          "legal-counsel",
+          "showrunner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "season arc outline",
+        "episode scripts",
+        "publication schedule",
+        "character/source guide"
+      ],
+      "private": [
+        "source identities and contact details",
+        "legal risk assessments",
+        "unpublished research leads"
+      ],
+      "description": "The season arc is a shared, evolving document that tracks the narrative across episodes. Episode scripts are versioned through drafts. Source identities are strictly private to the investigative producer and legal counsel. The fact-checker maintains an append-only verification log linking every claim to its source. The story editor keeps versioned scripts showing how narrative evolved through revisions."
+    },
+    "diagram": "graph TD\n    SR[Showrunner] --> HOST[Host]\n    SR --> IP[Investigative Producer]\n    SR --> SE[Story Editor]\n    IP -->|research| SR\n    IP -->|interview briefs| HOST\n    HOST -->|raw tape| SE\n    SE -->|draft scripts| AE[Audio Engineer]\n    FC[Fact-Checker] -.->|verification| SR\n    LC[Legal Counsel] -.->|clearance| SR\n    AE -->|final mix| PUB[Publication]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "social-media-content-factory",
+    "name": "Social Media Content Factory",
+    "category": "Media & Communications",
+    "tags": [
+      "high-volume",
+      "data-driven",
+      "multi-platform",
+      "iterative"
+    ],
+    "summary": "A content mill optimizes for engagement metrics by rapidly producing, testing, and iterating across platforms.",
+    "description": "A social media content factory operates as a high-throughput pipeline optimized by data feedback loops. A Content Director sets strategy and platform priorities based on audience analytics. Content Creators produce raw material: video, graphics, copy. An Editor refines and formats content for each platform's specifications. A Community Manager handles audience engagement and surfaces trending topics. A Data Analyst monitors real-time performance metrics and feeds insights back into the content pipeline, creating a tight create-measure-learn loop. A Scheduler manages the publishing calendar across multiple platforms and time zones. The structure prioritizes volume and speed, treating each post as an experiment and doubling down on formats that perform well.",
+    "realWorldExample": "BuzzFeed's content operation at its peak had teams of creators producing 600+ pieces of content daily across Facebook, Instagram, YouTube, and TikTok. Data analysts tracked engagement in real-time, flagging viral pieces for repurposing. Editors reformatted top performers from one platform to fit others, creating a content multiplication effect.",
+    "whenToUse": "When an agent system must produce high volumes of varied outputs across multiple channels, using real-time performance data to iteratively optimize content strategy.",
+    "strengths": [
+      "Tight data feedback loop enables rapid iteration toward what works",
+      "Multi-platform formatting multiplies the value of each content idea",
+      "High volume creates a natural A/B testing environment",
+      "Community manager provides qualitative signal to complement quantitative analytics"
+    ],
+    "weaknesses": [
+      "Engagement optimization can drive toward sensationalism over quality",
+      "Creator burnout from relentless production pace and metric pressure",
+      "Platform algorithm changes can invalidate the entire content strategy overnight",
+      "Volume focus makes it difficult to maintain brand consistency across all outputs"
+    ],
+    "agents": [
+      {
+        "role": "content-director",
+        "name": "Content Director",
+        "description": "Sets editorial strategy, allocates resources across platforms, and makes go/no-go decisions on content themes based on analytics",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "video-creator",
+        "name": "Video Creator",
+        "description": "Produces short-form and long-form video content, handles filming and basic editing for video-first platforms",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "graphic-designer",
+        "name": "Graphic Designer",
+        "description": "Creates visual assets including thumbnails, infographics, carousels, and branded templates",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "copywriter",
+        "name": "Copywriter",
+        "description": "Writes captions, headlines, scripts, and text posts optimized for each platform's format and audience",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "editor",
+        "name": "Editor",
+        "description": "Refines raw content, ensures brand voice consistency, and reformats pieces for different platform specifications",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "community-manager",
+        "name": "Community Manager",
+        "description": "Responds to audience comments, surfaces trending topics and audience sentiment, and manages brand reputation in real time",
+        "memory": "append-only"
+      },
+      {
+        "role": "data-analyst",
+        "name": "Data Analyst",
+        "description": "Monitors real-time engagement metrics, identifies top-performing content patterns, and generates weekly strategy recommendations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "scheduler",
+        "name": "Scheduler",
+        "description": "Manages the cross-platform publishing calendar, optimizes posting times, and coordinates with creators on deadlines",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Content Pipeline",
+        "type": "queue",
+        "participants": [
+          "video-creator",
+          "graphic-designer",
+          "copywriter",
+          "editor",
+          "scheduler"
+        ]
+      },
+      {
+        "name": "Performance Dashboard",
+        "type": "broadcast",
+        "participants": [
+          "data-analyst",
+          "content-director",
+          "editor",
+          "community-manager"
+        ]
+      },
+      {
+        "name": "Strategy Sync",
+        "type": "decision",
+        "participants": [
+          "content-director",
+          "data-analyst",
+          "editor",
+          "community-manager"
+        ]
+      },
+      {
+        "name": "Trending Topics",
+        "type": "bottom-up",
+        "participants": [
+          "community-manager",
+          "content-director",
+          "copywriter",
+          "video-creator"
+        ]
+      },
+      {
+        "name": "Platform Updates",
+        "type": "broadcast",
+        "participants": [
+          "content-director",
+          "data-analyst",
+          "scheduler",
+          "editor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "content calendar",
+        "brand style guide",
+        "platform specs reference",
+        "performance benchmarks"
+      ],
+      "private": [
+        "audience analytics dashboards",
+        "creator asset libraries",
+        "A/B test raw data"
+      ],
+      "description": "The content calendar is the shared coordination artifact showing what is scheduled across all platforms. The brand style guide is a shared reference ensuring consistency. The data analyst maintains private analytics dashboards and shares weekly summaries. The community manager maintains an append-only log of audience feedback and sentiment trends. Each creator maintains their own asset library. Performance benchmarks are shared so all agents understand what good looks like."
+    },
+    "diagram": "graph LR\n    CD[Content Director] --> VC[Video Creator]\n    CD --> GD[Graphic Designer]\n    CD --> CW[Copywriter]\n    VC --> ED[Editor]\n    GD --> ED\n    CW --> ED\n    ED --> SCH[Scheduler]\n    SCH --> PUB[Multi-Platform Publish]\n    DA[Data Analyst] -.->|metrics| CD\n    CM[Community Manager] -.->|trending| CD\n    PUB -.->|engagement data| DA",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "pipeline",
+      "consensus",
+      "adversarial",
+      "swarm"
+    ]
+  },
+  {
+    "id": "live-event-broadcast",
+    "name": "Live Event Broadcast",
+    "category": "Media & Communications",
+    "tags": [
+      "real-time",
+      "multi-crew",
+      "time-critical",
+      "orchestrated"
+    ],
+    "summary": "A broadcast director calls shots in real-time, switching between cameras and audio sources during live events.",
+    "description": "Live event broadcasting requires split-second coordination between dozens of crew members. The Director sits in the control room and calls shots: which camera is live, when to roll graphics, when to cut to replay. The Technical Director executes the Director's calls on the video switcher. Camera Operators follow the Director's framing instructions while maintaining their own situational awareness. The Audio Mixer balances multiple microphone feeds in real-time. A Graphics Operator fires lower thirds, score overlays, and transitions on cue. The Producer manages the overall show rundown, timing segments, and coordinating with on-air talent. A Stage Manager is the Director's eyes and ears on the ground. All communication happens through headsets (intercom/IFB) with multiple channels for different departments.",
+    "realWorldExample": "During a live NFL broadcast on CBS, the Director calls 'Ready Camera 2, take 2' to cut to a close-up of the quarterback. The Technical Director punches the switch. The Producer counts down to a commercial break in the talent's earpiece. The Graphics Operator fires the score bug update. The replay operator isolates three angles of the previous play. All of this happens in under 5 seconds.",
+    "whenToUse": "When an agent system must orchestrate multiple real-time input streams into a coherent output, with one agent making rapid sequential decisions and others executing instantly.",
+    "strengths": [
+      "Director's shot-calling creates a coherent output from chaotic real-time inputs",
+      "Dedicated intercom channels prevent cross-talk between departments",
+      "Producer manages macro timing while Director handles micro decisions",
+      "Replay capability allows recovery from missed moments"
+    ],
+    "weaknesses": [
+      "Director's cognitive load is extreme during complex multi-camera sequences",
+      "Single missed cue can cascade into visible on-air errors",
+      "Headset communication is fragile; technical failures break the entire coordination model",
+      "Requires extensive pre-production rehearsal; ad-hoc crew combinations perform poorly"
+    ],
+    "agents": [
+      {
+        "role": "director",
+        "name": "Director",
+        "description": "Calls every shot in real-time: which camera is live, when to cut, when to roll graphics and replays; the creative vision behind the broadcast",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "producer",
+        "name": "Producer",
+        "description": "Manages the show rundown, times segments, coordinates talent, handles sponsor obligations, and manages commercial breaks",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "technical-director",
+        "name": "Technical Director",
+        "description": "Executes the Director's shot calls on the video switcher; manages transitions, picture-in-picture, and multi-source composites",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "camera-op-1",
+        "name": "Camera Operator (Wide)",
+        "description": "Maintains the wide establishing shot and follows large-scale action as directed",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "camera-op-2",
+        "name": "Camera Operator (Tight)",
+        "description": "Gets close-up shots of key subjects as called by the Director; requires anticipation of action",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "audio-mixer",
+        "name": "Audio Mixer",
+        "description": "Balances live microphone feeds, manages crowd ambience levels, and handles talent IFB communication",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "graphics-operator",
+        "name": "Graphics Operator",
+        "description": "Fires lower thirds, score overlays, sponsored graphics, and transitions on the Director's cue",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "replay-operator",
+        "name": "Replay Operator",
+        "description": "Isolates and queues replay angles during live action for instant playback on the Director's call",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "stage-manager",
+        "name": "Stage Manager",
+        "description": "On-the-ground coordinator who relays Director's instructions to talent and manages physical staging",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Director's Channel",
+        "type": "broadcast",
+        "participants": [
+          "director",
+          "technical-director",
+          "camera-op-1",
+          "camera-op-2",
+          "graphics-operator",
+          "replay-operator"
+        ]
+      },
+      {
+        "name": "Producer's Channel",
+        "type": "top-down",
+        "participants": [
+          "producer",
+          "director",
+          "stage-manager",
+          "audio-mixer"
+        ]
+      },
+      {
+        "name": "Camera Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "director",
+          "camera-op-1",
+          "camera-op-2"
+        ]
+      },
+      {
+        "name": "Show Rundown",
+        "type": "document",
+        "participants": [
+          "producer",
+          "director",
+          "graphics-operator",
+          "stage-manager"
+        ]
+      },
+      {
+        "name": "Emergency Talkback",
+        "type": "emergency",
+        "participants": [
+          "producer",
+          "director",
+          "technical-director",
+          "audio-mixer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "show rundown with timing marks",
+        "graphics playlist",
+        "camera assignment sheet",
+        "sponsor integration schedule"
+      ],
+      "private": [
+        "replay buffer",
+        "audio mix settings",
+        "graphics templates"
+      ],
+      "description": "The show rundown is the shared timeline document that all agents reference. It specifies segment order, timing, graphics cues, and commercial breaks. The Director and Producer share persistent knowledge of the rundown state. Camera operators and the technical director operate with ephemeral memory since each shot is independent. The replay operator maintains a private buffer of recent footage. Graphics templates are pre-loaded but fired on live cues."
+    },
+    "diagram": "graph TD\n    PROD[Producer] --> DIR[Director]\n    DIR --> TD[Technical Director]\n    DIR --> CAM1[Camera Op - Wide]\n    DIR --> CAM2[Camera Op - Tight]\n    DIR --> GFX[Graphics Operator]\n    DIR --> RPL[Replay Operator]\n    PROD --> SM[Stage Manager]\n    PROD --> AUD[Audio Mixer]\n    TD --> OUTPUT[Live Output]\n    GFX --> OUTPUT\n    RPL --> OUTPUT\n    AUD --> OUTPUT",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "mesh",
+      "pipeline",
+      "swarm",
+      "federated"
+    ]
+  },
+  {
+    "id": "merchant-shipping-fleet",
+    "name": "Merchant Shipping Fleet Operations",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "distributed",
+      "hierarchical",
+      "logistical",
+      "autonomous-units"
+    ],
+    "summary": "Shore-based fleet management coordinates autonomous vessel captains across global shipping routes and ports.",
+    "description": "Merchant shipping fleet operations split authority between shore-based fleet management and vessel-level command. The Fleet Operations Manager coordinates vessel assignments, routing, and scheduling from headquarters. Each vessel's Master (Captain) has absolute authority aboard their ship under maritime law, including the right to deviate from company orders for safety. The Chief Officer manages cargo operations and deck crew. The Chief Engineer maintains propulsion and mechanical systems. A Port Captain serves as the company's liaison at major ports, coordinating berthing, loading, and regulatory compliance. The Fleet Operations Center monitors all vessels via AIS and satellite communication, but transmission delays mean vessels frequently operate autonomously for hours. Regulatory compliance spans multiple national jurisdictions (flag state, port state, coastal state), managed by a dedicated compliance function.",
+    "realWorldExample": "Maersk Line manages 700+ container vessels from its Fleet Operations Center in Copenhagen. Each vessel's Master receives voyage orders but has authority to alter course for weather or safety. When the Ever Given blocked the Suez Canal, fleet operations worldwide had to re-route hundreds of vessels around the Cape of Good Hope, coordinating with port captains at dozens of ports for revised ETAs and berth scheduling.",
+    "whenToUse": "When an agent system consists of autonomous units operating in distributed, low-bandwidth environments that need loose central coordination while retaining local decision authority.",
+    "strengths": [
+      "Autonomous vessel agents can operate effectively during communication blackouts",
+      "Master's absolute authority enables rapid local decision-making for safety",
+      "Fleet-level optimization can balance cargo across vessels and routes globally",
+      "Regulatory compliance function handles multi-jurisdictional complexity centrally"
+    ],
+    "weaknesses": [
+      "Communication latency means fleet decisions are based on stale position data",
+      "Master's autonomy can conflict with fleet-level optimization objectives",
+      "Multi-jurisdictional regulatory compliance creates enormous administrative burden",
+      "Port congestion and weather create cascading schedule disruptions across the fleet"
+    ],
+    "agents": [
+      {
+        "role": "fleet-ops-manager",
+        "name": "Fleet Operations Manager",
+        "description": "Coordinates vessel assignments, route planning, and schedule optimization from shore-based operations center",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "vessel-master",
+        "name": "Vessel Master (Captain)",
+        "description": "Absolute authority aboard the vessel; executes voyage plan, makes weather routing decisions, and ensures safety of crew and cargo",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "chief-officer",
+        "name": "Chief Officer",
+        "description": "Manages cargo loading/discharge operations, maintains stability calculations, and supervises deck crew",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "chief-engineer",
+        "name": "Chief Engineer",
+        "description": "Maintains propulsion, power generation, and all mechanical systems; manages fuel consumption and engine performance",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "port-captain",
+        "name": "Port Captain",
+        "description": "Shore-based company representative at major ports; coordinates berthing, pilotage, cargo operations, and local regulatory requirements",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "compliance-officer",
+        "name": "Regulatory Compliance Officer",
+        "description": "Manages flag state, port state, and coastal state regulatory requirements across the fleet; coordinates inspections and certifications",
+        "memory": "versioned"
+      },
+      {
+        "role": "chartering-analyst",
+        "name": "Chartering Analyst",
+        "description": "Analyzes freight markets, manages charter party agreements, and optimizes fleet revenue by matching vessels to cargo demand",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Fleet Position Board",
+        "type": "broadcast",
+        "participants": [
+          "fleet-ops-manager",
+          "vessel-master",
+          "port-captain",
+          "chartering-analyst"
+        ]
+      },
+      {
+        "name": "Voyage Orders",
+        "type": "top-down",
+        "participants": [
+          "fleet-ops-manager",
+          "vessel-master"
+        ]
+      },
+      {
+        "name": "Port Coordination",
+        "type": "peer-to-peer",
+        "participants": [
+          "port-captain",
+          "vessel-master",
+          "chief-officer"
+        ]
+      },
+      {
+        "name": "Safety Reports",
+        "type": "bottom-up",
+        "participants": [
+          "vessel-master",
+          "chief-engineer",
+          "fleet-ops-manager",
+          "compliance-officer"
+        ]
+      },
+      {
+        "name": "Regulatory Updates",
+        "type": "broadcast",
+        "participants": [
+          "compliance-officer",
+          "fleet-ops-manager",
+          "vessel-master",
+          "port-captain"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "fleet position chart (AIS data)",
+        "voyage schedules",
+        "port berth availability",
+        "freight rate indices"
+      ],
+      "private": [
+        "vessel-specific cargo plans",
+        "engine room logs",
+        "crew records",
+        "charter party terms"
+      ],
+      "description": "The fleet position board is a shared real-time view of all vessel locations updated via AIS satellite tracking. Voyage schedules are shared between fleet operations and vessels but the Master has private authority to deviate. Each vessel maintains private logs (deck log, engine room log) required by maritime law. The compliance officer maintains versioned records of certifications and inspection results. Port captains share berth availability with fleet operations for scheduling optimization."
+    },
+    "diagram": "graph TD\n    FOC[Fleet Ops Center] --> VM1[Vessel Master - Ship A]\n    FOC --> VM2[Vessel Master - Ship B]\n    FOC --> PC1[Port Captain - Rotterdam]\n    FOC --> PC2[Port Captain - Singapore]\n    VM1 --> CO1[Chief Officer]\n    VM1 --> CE1[Chief Engineer]\n    PC1 -.->|berth coordination| VM1\n    PC2 -.->|berth coordination| VM2\n    CA[Chartering Analyst] --> FOC\n    RCO[Compliance Officer] -.->|regulations| FOC",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "space-station-crew",
+    "name": "Space Station Crew (ISS-Style)",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "international",
+      "rotating-crew",
+      "isolated",
+      "multi-authority"
+    ],
+    "summary": "An international crew rotates through an isolated station, coordinating with multiple ground control centers worldwide.",
+    "description": "The International Space Station crew model manages a permanently occupied facility with rotating international crews. A Station Commander has overall authority aboard but each partner agency (NASA, Roscosmos, ESA, JAXA, CSA) maintains control authority over their own modules and equipment. Crew members are cross-trained across multiple roles: science, maintenance, medical, and EVA (spacewalk). Daily activities are planned minute-by-minute by ground teams and uplinked as a timeline, but the crew has autonomy to adjust for contingencies. Handover between expedition crews overlaps by weeks to transfer tacit knowledge. Ground control operates 24/7 across multiple centers (Houston, Moscow, Munich, Tsukuba) with each center managing their agency's systems. The crew operates in extreme isolation with communication delays and limited resupply, requiring self-sufficiency for emergencies.",
+    "realWorldExample": "Expedition 68 on the ISS included crew from NASA, Roscosmos, and JAXA. Houston's Mission Control managed US segment systems while Moscow's TsUP controlled the Russian segment. The crew conducted over 250 science experiments, performed emergency repairs on a coolant loop, and managed two crew rotations during their six-month expedition, all while maintaining the station's life support systems.",
+    "whenToUse": "When an agent system operates in isolation with limited external communication, requiring self-sufficiency, cross-training, international coordination across multiple authority structures, and graceful crew rotation.",
+    "strengths": [
+      "Cross-trained crew provides redundancy for any single agent failure",
+      "Overlapping crew rotations preserve institutional knowledge across transitions",
+      "Multiple ground control centers provide 24/7 support coverage",
+      "Minute-by-minute timeline planning maximizes utilization of expensive crew time"
+    ],
+    "weaknesses": [
+      "Multi-agency authority creates jurisdictional friction over shared resources",
+      "Communication delays with ground mean crew must handle emergencies autonomously",
+      "Extreme isolation amplifies interpersonal conflicts with no escape valve",
+      "Rigid scheduling leaves little margin for unexpected maintenance or personal needs"
+    ],
+    "agents": [
+      {
+        "role": "station-commander",
+        "name": "Station Commander",
+        "description": "Overall authority aboard the station; coordinates crew activities, makes emergency decisions, and serves as primary interface with all ground control centers",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "flight-engineer-1",
+        "name": "Flight Engineer (Systems)",
+        "description": "Manages life support, power, thermal control, and station maintenance; cross-trained in emergency medical procedures",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "flight-engineer-2",
+        "name": "Flight Engineer (Science)",
+        "description": "Operates experiment payloads, manages science data collection, and maintains research equipment across multiple modules",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "flight-engineer-3",
+        "name": "Flight Engineer (Robotics/EVA)",
+        "description": "Operates the station robotic arm, conducts spacewalks for external maintenance, and manages airlock operations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "houston-capcom",
+        "name": "Houston CAPCOM",
+        "description": "NASA Mission Control voice link to the crew; coordinates US segment operations, science timelines, and visiting vehicle traffic",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "moscow-tsup",
+        "name": "Moscow TsUP Controller",
+        "description": "Roscosmos mission control; manages Russian segment systems, Soyuz/Progress vehicle operations, and Russian crew activities",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "ground-science-team",
+        "name": "Ground Science Team",
+        "description": "Distributed team of principal investigators who design experiments, analyze returned data, and send procedure updates to the crew",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Daily Planning Conference",
+        "type": "broadcast",
+        "participants": [
+          "station-commander",
+          "flight-engineer-1",
+          "flight-engineer-2",
+          "flight-engineer-3",
+          "houston-capcom",
+          "moscow-tsup"
+        ]
+      },
+      {
+        "name": "US Segment Operations",
+        "type": "peer-to-peer",
+        "participants": [
+          "houston-capcom",
+          "station-commander",
+          "flight-engineer-1"
+        ]
+      },
+      {
+        "name": "Russian Segment Operations",
+        "type": "peer-to-peer",
+        "participants": [
+          "moscow-tsup",
+          "station-commander",
+          "flight-engineer-3"
+        ]
+      },
+      {
+        "name": "Emergency Warning System",
+        "type": "emergency",
+        "participants": [
+          "station-commander",
+          "flight-engineer-1",
+          "flight-engineer-2",
+          "flight-engineer-3",
+          "houston-capcom",
+          "moscow-tsup"
+        ]
+      },
+      {
+        "name": "Crew Handover Notes",
+        "type": "document",
+        "participants": [
+          "station-commander",
+          "flight-engineer-1",
+          "flight-engineer-2",
+          "flight-engineer-3"
+        ]
+      },
+      {
+        "name": "Science Uplink",
+        "type": "top-down",
+        "participants": [
+          "ground-science-team",
+          "flight-engineer-2",
+          "houston-capcom"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "daily timeline",
+        "station status summary",
+        "emergency procedures",
+        "consumables inventory",
+        "maintenance log"
+      ],
+      "private": [
+        "agency-specific system telemetry",
+        "crew medical records",
+        "experiment proprietary data"
+      ],
+      "description": "The daily timeline is the shared master schedule uplinked by ground control and adjusted by the crew as needed. Emergency procedures are shared and drilled regularly. The station status summary is updated every orbit. Each agency maintains private telemetry for their modules. Crew medical records are private to the flight surgeon. Handover notes are structured documents created by departing crew for their replacements, covering systems knowledge, workarounds, and lessons learned."
+    },
+    "diagram": "graph TD\n    SC[Station Commander] --> FE1[Flight Engineer - Systems]\n    SC --> FE2[Flight Engineer - Science]\n    SC --> FE3[Flight Engineer - Robotics/EVA]\n    HC[Houston CAPCOM] -.->|US segment| SC\n    MT[Moscow TsUP] -.->|Russian segment| SC\n    GST[Ground Science Team] -.->|experiment procedures| FE2\n    FE1 --> LS[Life Support Systems]\n    FE3 --> ARM[Robotic Arm / EVA]\n    HC <-.->|telemetry| LS",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "relay-race-team",
+    "name": "Relay Race Team",
+    "category": "Sports & Competition",
+    "tags": [
+      "sequential-handoff",
+      "timing-critical",
+      "specialized-order",
+      "practice-intensive"
+    ],
+    "summary": "Four runners optimize individual leg performance and baton exchange timing within a narrow handoff zone.",
+    "description": "A relay race team (typically 4x100m or 4x400m) represents the purest form of sequential task handoff optimization. Each runner is selected for a specific leg based on their strengths: the first leg needs a fast starter and curve runner, the second and third legs need speed maintainers who can both receive and give the baton, and the anchor leg needs the fastest closer who performs well under pressure. The baton exchange within the 20-meter exchange zone is the critical optimization point: a well-executed blind exchange (where the receiver doesn't look back) can save 0.2-0.3 seconds per handoff. The Coach designs the running order, trains exchanges, and selects athletes. The team's performance is strictly the sum of individual legs minus time gained or lost in exchanges.",
+    "realWorldExample": "The Jamaican 4x100m team (Bolt, Blake, Carter, Ashmeade) won Olympic gold by combining Bolt's anchor-leg dominance with meticulously practiced blind exchanges. They trained the exact step count for each incoming runner's speed so the outgoing runner could begin accelerating at precisely the right moment, maximizing the exchange zone advantage.",
+    "whenToUse": "When an agent system must execute a strict sequence of tasks where performance depends on both individual execution speed and the efficiency of handoffs between agents.",
+    "strengths": [
+      "Each agent is optimized for their specific position in the sequence",
+      "Handoff zone optimization can yield significant total time savings",
+      "Clear accountability: each leg's split time is independently measurable",
+      "Simple coordination model with only pairwise handoff relationships"
+    ],
+    "weaknesses": [
+      "Dropped baton (failed handoff) is catastrophic with no recovery mechanism",
+      "Total performance is bottlenecked by the slowest leg",
+      "Requires extensive practice specifically for handoff timing, not just individual speed",
+      "No flexibility in execution order once the race begins"
+    ],
+    "agents": [
+      {
+        "role": "coach",
+        "name": "Head Coach",
+        "description": "Selects runners for each leg, designs handoff protocols, analyzes split times, and adjusts strategy based on competition",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "leg-1-runner",
+        "name": "Lead-Off Runner (Leg 1)",
+        "description": "Starts from blocks, runs the curve, and delivers the baton to the first exchange zone; selected for explosive start speed",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "leg-2-runner",
+        "name": "Second Leg Runner",
+        "description": "Receives baton in the first zone and runs the back straight; must excel at both receiving and giving the baton",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "leg-3-runner",
+        "name": "Third Leg Runner",
+        "description": "Runs the second curve, managing centripetal force with the baton; bridges the middle of the race",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "leg-4-runner",
+        "name": "Anchor Runner (Leg 4)",
+        "description": "Receives the final baton and closes the race; selected for top-end speed and ability to perform under pressure",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "exchange-analyst",
+        "name": "Exchange Analyst",
+        "description": "Uses video analysis and timing data to optimize baton exchange timing, step counts, and hand positions for each pair",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Race Plan",
+        "type": "top-down",
+        "participants": [
+          "coach",
+          "leg-1-runner",
+          "leg-2-runner",
+          "leg-3-runner",
+          "leg-4-runner"
+        ]
+      },
+      {
+        "name": "Exchange Zone 1",
+        "type": "peer-to-peer",
+        "participants": [
+          "leg-1-runner",
+          "leg-2-runner"
+        ]
+      },
+      {
+        "name": "Exchange Zone 2",
+        "type": "peer-to-peer",
+        "participants": [
+          "leg-2-runner",
+          "leg-3-runner"
+        ]
+      },
+      {
+        "name": "Exchange Zone 3",
+        "type": "peer-to-peer",
+        "participants": [
+          "leg-3-runner",
+          "leg-4-runner"
+        ]
+      },
+      {
+        "name": "Post-Race Analysis",
+        "type": "retrospective",
+        "participants": [
+          "coach",
+          "exchange-analyst",
+          "leg-1-runner",
+          "leg-2-runner",
+          "leg-3-runner",
+          "leg-4-runner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "race plan with leg order",
+        "exchange protocols (step counts, hand positions)",
+        "target split times"
+      ],
+      "private": [
+        "individual training data",
+        "video analysis of each exchange pair",
+        "competitor intelligence"
+      ],
+      "description": "The race plan and exchange protocols are the critical shared memory: every runner must know exactly the same handoff timing. During the race, runners operate with purely ephemeral memory since each leg is a single sprint. The exchange analyst maintains private video analysis data used to refine handoff timing. Post-race, split times and exchange analysis feed back into the shared protocol for the next competition."
+    },
+    "diagram": "graph LR\n    COACH[Coach] -.->|race plan| R1[Leg 1 - Start]\n    R1 -->|baton| EZ1[Exchange Zone 1]\n    EZ1 --> R2[Leg 2]\n    R2 -->|baton| EZ2[Exchange Zone 2]\n    EZ2 --> R3[Leg 3]\n    R3 -->|baton| EZ3[Exchange Zone 3]\n    EZ3 --> R4[Leg 4 - Anchor]\n    R4 --> FINISH[Finish Line]\n    EA[Exchange Analyst] -.->|optimization| EZ1\n    EA -.->|optimization| EZ2\n    EA -.->|optimization| EZ3",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh",
+      "pipeline",
+      "federated"
+    ]
+  },
+  {
+    "id": "esports-team",
+    "name": "Esports Team",
+    "category": "Sports & Competition",
+    "tags": [
+      "real-time-strategy",
+      "role-specialized",
+      "data-driven",
+      "communication-heavy"
+    ],
+    "summary": "Five players with specialized roles coordinate through constant voice communication under a coach's strategic guidance.",
+    "description": "A competitive esports team (modeled on CS2/Valorant-style tactical shooters) consists of five players with distinct combat roles coordinated by a Coach and supported by an Analyst. The In-Game Leader (IGL) calls strategies, rotations, and executes mid-round by reading the opponent. The Entry Fragger takes first contact in engagements, creating space for the team. The Support player provides utility (flashes, smokes) to enable the Entry Fragger. The AWPer provides long-range picks and area denial. The Lurker operates independently to create map pressure and catch rotations. The Coach develops strategies during preparation but cannot communicate during live rounds (in most tournament rules). The Analyst reviews opponent demos, identifies tendencies, and prepares counter-strategies. Communication is constant via voice, with the IGL managing information flow to prevent comms overload.",
+    "realWorldExample": "Natus Vincere's CS2 roster featured s1mple as the AWPer with an aggressive peek style, b1t as Entry Fragger, and electronic providing support utility. Their IGL Boombl4 called strategies that maximized s1mple's individual impact while electronic's flashes created openings. Coach B1ad3 developed anti-strats from Analyst data on opponent tendencies.",
+    "whenToUse": "When an agent system requires five specialized agents making coordinated real-time decisions, with a strategic layer (coach/analyst) that can only influence preparation, not live execution.",
+    "strengths": [
+      "Role specialization allows each agent to master a narrow skill set deeply",
+      "IGL provides unified real-time decision-making that adapts to opponent behavior",
+      "Analyst-driven preparation creates information asymmetry against opponents",
+      "Constant voice communication enables rapid tactical adjustments mid-round"
+    ],
+    "weaknesses": [
+      "IGL cognitive overload: calling strategy while also performing mechanically",
+      "Star player dependency: team performance often collapses if the top fragger underperforms",
+      "Coach cannot intervene during live rounds, limiting real-time strategic adaptation",
+      "Comms discipline breaks down under pressure, leading to information overload"
+    ],
+    "agents": [
+      {
+        "role": "coach",
+        "name": "Head Coach",
+        "description": "Develops strategies, analyzes opponent tendencies, manages team dynamics, and calls timeouts; cannot communicate during live rounds in most formats",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "igl",
+        "name": "In-Game Leader (IGL)",
+        "description": "Calls strategies and mid-round adjustments in real-time; reads opponent patterns and decides when to execute, rotate, or save",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "entry-fragger",
+        "name": "Entry Fragger",
+        "description": "Takes first contact in site executes, creates openings through aggressive peeks; highest risk, highest mechanical skill requirement",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "support",
+        "name": "Support Player",
+        "description": "Provides utility (flashes, smokes, mollies) to enable the Entry Fragger and control map areas; trades kills on entry deaths",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "awper",
+        "name": "AWPer",
+        "description": "Uses the sniper rifle for long-range picks and area denial; often the star player with highest individual impact",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "lurker",
+        "name": "Lurker",
+        "description": "Operates independently from the main group to create map pressure, catch rotations, and gather information",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "analyst",
+        "name": "Analyst",
+        "description": "Reviews opponent demos, identifies map preferences and default setups, tracks meta trends, and prepares counter-strategy briefs",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Team Voice Comms",
+        "type": "broadcast",
+        "participants": [
+          "igl",
+          "entry-fragger",
+          "support",
+          "awper",
+          "lurker"
+        ]
+      },
+      {
+        "name": "Strategy Prep",
+        "type": "top-down",
+        "participants": [
+          "coach",
+          "igl",
+          "entry-fragger",
+          "support",
+          "awper",
+          "lurker"
+        ]
+      },
+      {
+        "name": "Anti-Strat Briefing",
+        "type": "advisory",
+        "participants": [
+          "analyst",
+          "coach",
+          "igl"
+        ]
+      },
+      {
+        "name": "Timeout Huddle",
+        "type": "decision",
+        "participants": [
+          "coach",
+          "igl",
+          "entry-fragger",
+          "support",
+          "awper",
+          "lurker"
+        ]
+      },
+      {
+        "name": "Post-Match Review",
+        "type": "retrospective",
+        "participants": [
+          "coach",
+          "analyst",
+          "igl",
+          "entry-fragger",
+          "support",
+          "awper",
+          "lurker"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "playbook (set strategies and defaults)",
+        "opponent scouting reports",
+        "map veto preferences",
+        "economy management rules"
+      ],
+      "private": [
+        "analyst demo review notes",
+        "individual player performance stats",
+        "coach's roster evaluation"
+      ],
+      "description": "The playbook is a shared reference of practiced strategies that the IGL can call by name. Opponent scouting reports are shared before matches. During live play, agents operate with ephemeral memory since each round resets. The IGL maintains persistent awareness of the opponent's patterns across rounds (economy, tendencies). The analyst maintains private detailed demo notes. Post-match reviews update the shared playbook with new strategies or adjustments."
+    },
+    "diagram": "graph TD\n    COACH[Head Coach] -->|strategy prep| IGL[In-Game Leader]\n    ANALYST[Analyst] -->|scouting| COACH\n    IGL -->|calls| ENTRY[Entry Fragger]\n    IGL -->|calls| SUPPORT[Support]\n    IGL -->|calls| AWPER[AWPer]\n    IGL -->|calls| LURKER[Lurker]\n    SUPPORT -.->|utility| ENTRY\n    LURKER -.->|info| IGL\n    ENTRY -.->|trade| SUPPORT",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "chess-tournament-swiss-system",
+    "name": "Chess Tournament Swiss System",
+    "category": "Sports & Competition",
+    "tags": [
+      "pairing-algorithm",
+      "fair-matching",
+      "round-based",
+      "arbitration"
+    ],
+    "summary": "A Swiss-system tournament pairs players with similar scores each round, managed by an arbiter enforcing FIDE rules.",
+    "description": "The Swiss system is a tournament format that efficiently ranks a large field of players in far fewer rounds than a round-robin requires. The Chief Arbiter oversees the entire event, enforcing FIDE Laws of Chess and resolving disputes. The Pairing Director runs the Swiss pairing algorithm: after each round, players with the same score are paired against each other, with color allocation (white/black) balanced and no repeat pairings. A Tournament Director handles logistics: venue, schedule, live broadcasting, and player registration. Deputy Arbiters monitor individual games for rule violations (touch-move, illegal moves, time control). A Technical Officer manages digital clocks, electronic boards, and pairing software. The system ensures that after N rounds, the top finishers have been tested against opponents of similar strength, producing a reliable ranking without requiring N*(N-1)/2 games.",
+    "realWorldExample": "The 2023 FIDE World Rapid Championship in Samarkand used a Swiss system with 13 rounds for 200+ players. Chief Arbiter Laurent Freyd managed pairings using FIDE's Dutch system algorithm. After each round, the software paired players at each score level, balancing colors and avoiding repeats. Magnus Carlsen won with 10.5/13, having faced progressively stronger opponents as the tournament narrowed.",
+    "whenToUse": "When an agent system must fairly evaluate and rank a large number of participants in a limited number of rounds, ensuring similar-strength matchups while maintaining fairness constraints.",
+    "strengths": [
+      "Efficiently ranks large fields in logarithmic rounds (log2(N) rounds for N players)",
+      "Every participant plays every round (no elimination), maximizing engagement",
+      "Pairing algorithm ensures progressively fair matchups as scores differentiate",
+      "Tiebreak systems (Buchholz, Sonneborn-Berger) resolve ties without playoffs"
+    ],
+    "weaknesses": [
+      "Late-round pairings can be strategically gamed if players know the standings",
+      "Color allocation constraints sometimes force suboptimal pairings",
+      "Pairing algorithm complexity increases when many players share the same score",
+      "Disputes over arbiter rulings can disrupt the tournament schedule"
+    ],
+    "agents": [
+      {
+        "role": "chief-arbiter",
+        "name": "Chief Arbiter",
+        "description": "Supreme authority on rule interpretation; resolves disputes, handles appeals, and ensures FIDE Laws of Chess are enforced throughout the event",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "pairing-director",
+        "name": "Pairing Director",
+        "description": "Runs the Swiss pairing algorithm after each round, handles color allocation, manages bye assignments, and publishes pairings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "tournament-director",
+        "name": "Tournament Director",
+        "description": "Manages logistics: venue setup, schedule, player registration, prize fund, and live broadcasting coordination",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "deputy-arbiter-1",
+        "name": "Deputy Arbiter (Floor)",
+        "description": "Monitors games on the playing floor, enforces touch-move and time control rules, and reports incidents to the Chief Arbiter",
+        "memory": "append-only"
+      },
+      {
+        "role": "deputy-arbiter-2",
+        "name": "Deputy Arbiter (Results)",
+        "description": "Collects game results, verifies scoresheets, enters results into the pairing software, and resolves result disputes",
+        "memory": "append-only"
+      },
+      {
+        "role": "technical-officer",
+        "name": "Technical Officer",
+        "description": "Manages digital clocks, electronic boards, pairing software, and live broadcast equipment",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "appeals-committee",
+        "name": "Appeals Committee",
+        "description": "Independent body that hears appeals of Chief Arbiter decisions; their ruling is final",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pairings Board",
+        "type": "broadcast",
+        "participants": [
+          "pairing-director",
+          "chief-arbiter",
+          "tournament-director",
+          "deputy-arbiter-1",
+          "deputy-arbiter-2"
+        ]
+      },
+      {
+        "name": "Incident Reports",
+        "type": "bottom-up",
+        "participants": [
+          "deputy-arbiter-1",
+          "deputy-arbiter-2",
+          "chief-arbiter"
+        ]
+      },
+      {
+        "name": "Arbiter Rulings",
+        "type": "decision",
+        "participants": [
+          "chief-arbiter",
+          "deputy-arbiter-1",
+          "deputy-arbiter-2"
+        ]
+      },
+      {
+        "name": "Appeals Process",
+        "type": "advisory",
+        "participants": [
+          "appeals-committee",
+          "chief-arbiter"
+        ]
+      },
+      {
+        "name": "Results Log",
+        "type": "log",
+        "participants": [
+          "deputy-arbiter-2",
+          "pairing-director",
+          "technical-officer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "tournament standings (cross-table)",
+        "pairing cards (color history, opponents faced)",
+        "round schedule",
+        "tiebreak calculations"
+      ],
+      "private": [
+        "appeals committee deliberations",
+        "technical system configurations",
+        "arbiter incident notes"
+      ],
+      "description": "The cross-table (all results) and pairing cards (each player's history of colors and opponents) are the shared data structures driving the pairing algorithm. Standings are publicly broadcast after each round. Deputy arbiters maintain append-only incident logs. The appeals committee deliberates privately. The pairing director needs the complete shared state to generate valid pairings each round. Tiebreak calculations are recomputed after every round from the shared results data."
+    },
+    "diagram": "graph TD\n    TD[Tournament Director] --> CA[Chief Arbiter]\n    CA --> PD[Pairing Director]\n    CA --> DA1[Deputy Arbiter - Floor]\n    CA --> DA2[Deputy Arbiter - Results]\n    PD -->|pairings| BOARD[Pairings Board]\n    DA1 -->|monitor| GAMES[Playing Hall]\n    DA2 -->|results| PD\n    AC[Appeals Committee] -.->|appeals| CA\n    TO[Technical Officer] --> BOARD\n    TO --> GAMES",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "megachurch-organization",
+    "name": "Megachurch Organization",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "scalable",
+      "media-integrated",
+      "volunteer-driven",
+      "campus-model"
+    ],
+    "summary": "A senior pastor leads a multi-campus operation blending worship, small groups, media, and volunteer coordination.",
+    "description": "A megachurch (2,000+ weekly attendance) operates as a complex organization combining spiritual leadership with media production, volunteer management, and multi-campus logistics. The Senior Pastor sets theological vision and delivers the primary sermon, often broadcast to multiple campuses via video. A Campus Pastor leads each physical location, contextualizing the central message for their community. The Worship Director manages music teams across campuses, ensuring consistent quality and style. A Small Groups Pastor oversees hundreds of home groups, the primary pastoral care delivery mechanism since the congregation is too large for the Senior Pastor to know personally. The Media Director manages livestreaming, social media, podcasting, and TV broadcast. A Volunteer Coordinator manages the hundreds of volunteers who make services function: greeters, children's ministry workers, parking teams, and production crews. An Executive Pastor handles business operations: budgets, HR, facilities, and legal compliance.",
+    "realWorldExample": "Life.Church, led by Craig Groeschel, operates 40+ campuses across multiple states. Groeschel's sermon is filmed at the Edmond, Oklahoma campus and broadcast to all locations. Each Campus Pastor leads local worship and pastoral care. Their YouVersion Bible App team operates like an internal tech startup. Over 12,000 volunteers serve weekly across campuses, managed through a centralized volunteer platform.",
+    "whenToUse": "When an agent system must scale a core message or service across multiple locations while maintaining community intimacy through small group subdivision and heavy volunteer/contributor management.",
+    "strengths": [
+      "Multi-campus model scales the Senior Pastor's reach without diluting message quality",
+      "Small groups provide pastoral care that is impossible at congregation scale",
+      "Media integration multiplies impact beyond physical attendance",
+      "Volunteer-driven model keeps operational costs dramatically lower than fully-staffed alternatives"
+    ],
+    "weaknesses": [
+      "Extreme dependency on the Senior Pastor's personal brand and health",
+      "Video-venue campuses can feel disconnected from central leadership",
+      "Volunteer burnout is chronic when too few volunteers carry too many roles",
+      "Rapid growth can outpace governance structures, creating accountability gaps"
+    ],
+    "agents": [
+      {
+        "role": "senior-pastor",
+        "name": "Senior Pastor",
+        "description": "Sets theological vision, delivers the primary weekly sermon, and serves as the public face and spiritual authority of the church",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "executive-pastor",
+        "name": "Executive Pastor",
+        "description": "Manages business operations including budgets, HR, legal compliance, facilities, and staff management across all campuses",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "campus-pastor",
+        "name": "Campus Pastor",
+        "description": "Leads a specific physical campus; contextualizes the central message, manages local staff and volunteers, and provides pastoral care for that community",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "worship-director",
+        "name": "Worship Director",
+        "description": "Manages worship teams across all campuses, selects music, maintains style consistency, and coordinates with production for live and broadcast services",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "small-groups-pastor",
+        "name": "Small Groups Pastor",
+        "description": "Oversees the network of home groups and community groups that provide pastoral care, discipleship, and social connection at human scale",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "media-director",
+        "name": "Media Director",
+        "description": "Manages livestreaming, social media presence, podcast production, TV broadcast, and the church's digital platform strategy",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "volunteer-coordinator",
+        "name": "Volunteer Coordinator",
+        "description": "Recruits, trains, schedules, and appreciates the hundreds of volunteers who serve in children's ministry, greeting, parking, production, and other teams",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "elder-board",
+        "name": "Elder Board",
+        "description": "Governance body providing spiritual oversight, accountability for the Senior Pastor, and approval for major financial and theological decisions",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Staff Meeting",
+        "type": "broadcast",
+        "participants": [
+          "senior-pastor",
+          "executive-pastor",
+          "campus-pastor",
+          "worship-director",
+          "small-groups-pastor",
+          "media-director"
+        ]
+      },
+      {
+        "name": "Campus Reports",
+        "type": "bottom-up",
+        "participants": [
+          "campus-pastor",
+          "executive-pastor",
+          "senior-pastor"
+        ]
+      },
+      {
+        "name": "Elder Board Meetings",
+        "type": "decision",
+        "participants": [
+          "elder-board",
+          "senior-pastor",
+          "executive-pastor"
+        ]
+      },
+      {
+        "name": "Worship Planning",
+        "type": "threaded",
+        "participants": [
+          "worship-director",
+          "senior-pastor",
+          "media-director",
+          "campus-pastor"
+        ]
+      },
+      {
+        "name": "Volunteer Hub",
+        "type": "pub-sub",
+        "participants": [
+          "volunteer-coordinator",
+          "campus-pastor",
+          "worship-director"
+        ]
+      },
+      {
+        "name": "Sermon Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "senior-pastor",
+          "media-director",
+          "campus-pastor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "sermon series calendar",
+        "church vision and values document",
+        "annual budget",
+        "campus attendance metrics"
+      ],
+      "private": [
+        "pastoral counseling records",
+        "volunteer personal information",
+        "elder board deliberations",
+        "donor records"
+      ],
+      "description": "The sermon series calendar and church vision document are the shared touchstones that align all campuses. Attendance and giving metrics are shared for operational planning. Pastoral counseling records are strictly private, protected by clergy-penitent privilege. The elder board maintains versioned minutes of governance decisions. Volunteer records are managed by the coordinator with privacy protections. Donor information is private to the finance team. Small group health metrics are shared in aggregate but individual group details stay with the Small Groups Pastor."
+    },
+    "diagram": "graph TD\n    EB[Elder Board] -.->|accountability| SP[Senior Pastor]\n    SP --> EP[Executive Pastor]\n    SP --> WD[Worship Director]\n    SP --> SGP[Small Groups Pastor]\n    EP --> CP1[Campus Pastor A]\n    EP --> CP2[Campus Pastor B]\n    EP --> MD[Media Director]\n    EP --> VC[Volunteer Coordinator]\n    CP1 --> VOL1[Campus A Volunteers]\n    CP2 --> VOL2[Campus B Volunteers]\n    MD --> STREAM[Livestream / Social]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "consensus",
+      "chain-of-command",
+      "swarm"
+    ]
+  },
+  {
+    "id": "catholic-church-hierarchy",
+    "name": "Papal Hierarchy / Catholic Church",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "ancient",
+      "centralized-authority",
+      "global",
+      "doctrinal-continuity"
+    ],
+    "summary": "A 2,000-year-old global hierarchy flows from papal authority through cardinals and bishops to 1.3 billion members.",
+    "description": "The Catholic Church is the oldest continuously operating hierarchical organization in the world, governing 1.3 billion members across every country. The Pope holds supreme authority in matters of doctrine, discipline, and governance, with papal infallibility on matters of faith and morals when speaking ex cathedra. The College of Cardinals advises the Pope and elects his successor in conclave. The Roman Curia is the administrative bureaucracy of the Vatican, organized into Dicasteries (formerly Congregations) that manage specific domains: doctrine, bishops, clergy, evangelization, etc. Bishops govern dioceses with ordinary jurisdiction over their territory. Parish Priests serve local communities and are the primary point of contact for the faithful. Religious Orders (Jesuits, Franciscans, Dominicans, etc.) operate semi-autonomously under their own rules but ultimately under papal authority. The system prioritizes doctrinal continuity across millennia over adaptive speed.",
+    "realWorldExample": "When Pope Francis issued the encyclical Laudato Si' on climate change in 2015, it flowed from the Vatican through the Dicastery for Promoting Integral Human Development, was transmitted to every Bishop worldwide, who then directed parish priests to incorporate its teachings into homilies and education programs, reaching hundreds of millions of Catholics within weeks.",
+    "whenToUse": "When an agent system requires absolute doctrinal consistency across a massive global network, with centralized authority on core principles but delegated operational autonomy at local levels.",
+    "strengths": [
+      "Doctrinal continuity across 2,000 years prevents drift in core principles",
+      "Hierarchical delegation enables global reach while maintaining central authority",
+      "Religious orders provide innovation and specialization without fragmenting the hierarchy",
+      "Conclave system ensures institutional continuity beyond any individual leader's lifetime"
+    ],
+    "weaknesses": [
+      "Extreme centralization makes doctrinal adaptation glacially slow",
+      "Information from 1.3 billion members is severely filtered before reaching the Pope",
+      "Hierarchical layers can shield misconduct from accountability",
+      "Tension between papal authority and local cultural adaptation is constant"
+    ],
+    "agents": [
+      {
+        "role": "pope",
+        "name": "Pope (Bishop of Rome)",
+        "description": "Supreme authority in doctrine, discipline, and governance; speaks infallibly on faith and morals ex cathedra; head of state of Vatican City",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cardinal",
+        "name": "Cardinal (College of Cardinals)",
+        "description": "Senior advisors to the Pope who elect his successor in conclave; typically head major dioceses or Vatican Dicasteries",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "curia-prefect",
+        "name": "Curia Prefect (Dicastery Head)",
+        "description": "Leads a Vatican Dicastery managing a specific domain: doctrine, bishops, clergy, evangelization, liturgy, or canon law",
+        "memory": "versioned"
+      },
+      {
+        "role": "archbishop",
+        "name": "Archbishop (Metropolitan)",
+        "description": "Heads an archdiocese and has limited supervisory authority over suffragan dioceses in the ecclesiastical province",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "bishop",
+        "name": "Bishop (Diocesan)",
+        "description": "Governs a diocese with ordinary jurisdiction; ordains priests, confirms the faithful, and implements papal and curial directives locally",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "parish-priest",
+        "name": "Parish Priest (Pastor)",
+        "description": "Serves the local faith community; celebrates sacraments, provides pastoral care, and teaches doctrine as the primary interface with the faithful",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "religious-superior",
+        "name": "Religious Order Superior",
+        "description": "Leads a religious order (Jesuits, Franciscans, etc.) with semi-autonomous governance under own rule but subject to papal authority",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "papal-nuncio",
+        "name": "Papal Nuncio (Ambassador)",
+        "description": "Vatican diplomatic representative to a nation; manages relations between the Holy See and national governments, and reports on local church conditions",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Papal Encyclicals / Motu Proprio",
+        "type": "top-down",
+        "participants": [
+          "pope",
+          "cardinal",
+          "curia-prefect",
+          "archbishop",
+          "bishop",
+          "parish-priest"
+        ]
+      },
+      {
+        "name": "Consistory",
+        "type": "advisory",
+        "participants": [
+          "pope",
+          "cardinal"
+        ]
+      },
+      {
+        "name": "Synod of Bishops",
+        "type": "advisory",
+        "participants": [
+          "pope",
+          "cardinal",
+          "archbishop",
+          "bishop"
+        ]
+      },
+      {
+        "name": "Curial Administration",
+        "type": "peer-to-peer",
+        "participants": [
+          "curia-prefect",
+          "cardinal"
+        ]
+      },
+      {
+        "name": "Diocesan Reports",
+        "type": "bottom-up",
+        "participants": [
+          "parish-priest",
+          "bishop",
+          "archbishop"
+        ]
+      },
+      {
+        "name": "Ad Limina Visits",
+        "type": "bottom-up",
+        "participants": [
+          "bishop",
+          "pope",
+          "curia-prefect"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Canon Law",
+        "Catechism of the Catholic Church",
+        "papal encyclicals and documents",
+        "liturgical calendar"
+      ],
+      "private": [
+        "seal of confession (absolutely inviolable)",
+        "diocesan financial records",
+        "Vatican diplomatic correspondence",
+        "religious order internal governance"
+      ],
+      "description": "Canon Law and the Catechism form the shared doctrinal memory that all agents reference. Papal documents are appended to this shared corpus and never deleted or overridden, only reinterpreted. The seal of confession is the most absolutely private memory in any organizational structure: a priest must die rather than reveal it. Diocesan records are private to the bishop. Vatican diplomatic correspondence is private to the nuncio and Pope. Religious orders maintain their own internal governance documents. The system's memory stretches back 2,000 years through an unbroken chain of documents."
+    },
+    "diagram": "graph TD\n    POPE[Pope] --> COC[College of Cardinals]\n    POPE --> CURIA[Roman Curia / Dicasteries]\n    POPE --> NUNCIO[Papal Nuncios]\n    COC --> ARCH[Archbishops]\n    CURIA --> ARCH\n    ARCH --> BISHOP[Bishops]\n    BISHOP --> PP[Parish Priests]\n    RS[Religious Order Superiors] -.->|semi-autonomous| POPE\n    PP --> FAITHFUL[The Faithful]\n    BISHOP --> FAITHFUL",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated"
+    ]
+  }
+]

@@ -1,0 +1,2578 @@
+[
+  {
+    "id": "film-production-crew",
+    "name": "Film Production Crew",
+    "category": "Creative & Arts",
+    "tags": [
+      "hierarchical",
+      "creative",
+      "phased",
+      "deadline-driven"
+    ],
+    "summary": "Director-led crew with specialized departments executing a shared creative vision through production phases.",
+    "description": "A film production mirrors a phased pipeline where a director holds creative authority while department heads (cinematography, sound, art, editing) execute autonomously within their domains. Pre-production, production, and post-production phases gate handoffs between teams. The producer manages resources and constraints, ensuring the director's vision remains feasible. Each department maintains deep expertise but must integrate seamlessly at dailies and final assembly.",
+    "realWorldExample": "A Marvel Studios feature film production with 200+ crew across 15 departments",
+    "whenToUse": "When a complex creative deliverable requires many specialized agents working in distinct phases with a single creative authority maintaining coherence across all outputs.",
+    "strengths": [
+      "Clear creative authority prevents vision drift across many agents",
+      "Department specialization allows deep expertise in each domain",
+      "Phased pipeline enables quality gates between stages",
+      "Producer role keeps resource constraints visible without burdening the creative lead"
+    ],
+    "weaknesses": [
+      "Director bottleneck can stall all departments simultaneously",
+      "Late-stage changes cascade expensively through completed phases",
+      "High coordination overhead between many specialized departments",
+      "Single point of creative failure if director's vision is flawed"
+    ],
+    "agents": [
+      {
+        "role": "director",
+        "name": "Director",
+        "description": "Holds final creative authority over all output; approves or rejects work from every department",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "producer",
+        "name": "Producer",
+        "description": "Manages budget, timeline, and resource allocation; resolves conflicts between departments",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cinematographer",
+        "name": "Cinematographer",
+        "description": "Controls visual framing, lighting, and camera decisions for each scene",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "editor",
+        "name": "Editor",
+        "description": "Assembles raw outputs into coherent sequences; proposes structural changes",
+        "memory": "versioned"
+      },
+      {
+        "role": "sound-designer",
+        "name": "Sound Designer",
+        "description": "Creates and layers audio elements to complement visual output",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "art-director",
+        "name": "Art Director",
+        "description": "Designs visual environments, props, and aesthetic elements",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "script-supervisor",
+        "name": "Script Supervisor",
+        "description": "Tracks continuity across all scenes; flags inconsistencies",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dailies Review",
+        "type": "broadcast",
+        "participants": [
+          "director",
+          "producer",
+          "cinematographer",
+          "editor",
+          "sound-designer",
+          "art-director"
+        ]
+      },
+      {
+        "name": "Director Notes",
+        "type": "top-down",
+        "participants": [
+          "director",
+          "cinematographer",
+          "sound-designer",
+          "art-director"
+        ]
+      },
+      {
+        "name": "Production Log",
+        "type": "log",
+        "participants": [
+          "script-supervisor",
+          "producer"
+        ]
+      },
+      {
+        "name": "Department Sync",
+        "type": "peer-to-peer",
+        "participants": [
+          "cinematographer",
+          "sound-designer",
+          "art-director"
+        ]
+      },
+      {
+        "name": "Final Cut Review",
+        "type": "decision",
+        "participants": [
+          "director",
+          "producer",
+          "editor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "script-document",
+        "shot-list",
+        "production-schedule",
+        "continuity-log"
+      ],
+      "private": [
+        "department-working-files",
+        "artistic-references",
+        "technical-settings"
+      ],
+      "description": "The script and shot list form a shared source of truth. Each department maintains private working files but publishes outputs to shared dailies. The continuity log is append-only and tracks every decision for reference across phases."
+    },
+    "diagram": "graph TD\n    DIR[Director] --> CIN[Cinematographer]\n    DIR --> SND[Sound Designer]\n    DIR --> ART[Art Director]\n    PROD[Producer] --> DIR\n    PROD --> SCR[Script Supervisor]\n    CIN --> ED[Editor]\n    SND --> ED\n    ART --> CIN\n    SCR --> ED\n    ED --> DIR",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "pipeline",
+      "orchestrated",
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "symphony-orchestra",
+    "name": "Symphony Orchestra",
+    "category": "Creative & Arts",
+    "tags": [
+      "conductor-led",
+      "synchronized",
+      "sectional",
+      "real-time"
+    ],
+    "summary": "A conductor synchronizes independent instrument sections to produce a unified performance from a shared score.",
+    "description": "An orchestra pattern features a conductor who provides real-time coordination signals (tempo, dynamics, cues) to semi-autonomous sections (strings, woodwinds, brass, percussion). Each section has a principal player who interprets the conductor's intent for their group. All agents read from a shared score but interpret it through their section's capabilities. The concertmaster serves as a bridge between conductor and ensemble, handling tuning and section-level disputes.",
+    "realWorldExample": "The Berlin Philharmonic performing Beethoven's 9th with 90 musicians across four sections",
+    "whenToUse": "When many agents must produce tightly synchronized output in real-time, each contributing a distinct voice that must blend into a coherent whole.",
+    "strengths": [
+      "Real-time coordination allows dynamic adjustment during execution",
+      "Sectional autonomy lets groups self-organize within their domain",
+      "Shared score ensures all agents work from the same specification",
+      "Principal players reduce conductor's span of control"
+    ],
+    "weaknesses": [
+      "Conductor is a hard single point of failure for synchronization",
+      "Requires extensive rehearsal (pre-computation) before live execution",
+      "Individual brilliance must be subordinated to ensemble coherence",
+      "Difficult to adapt the score on-the-fly without full ensemble confusion"
+    ],
+    "agents": [
+      {
+        "role": "conductor",
+        "name": "Conductor",
+        "description": "Sets tempo, dynamics, and cues; provides real-time coordination to all sections",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "concertmaster",
+        "name": "Concertmaster",
+        "description": "Leads the string section and serves as liaison between conductor and ensemble",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "strings-section",
+        "name": "Strings Section",
+        "description": "Produces melodic and harmonic foundation; follows concertmaster's bowing and phrasing",
+        "memory": "ephemeral",
+        "count": 4
+      },
+      {
+        "role": "woodwinds-section",
+        "name": "Woodwinds Section",
+        "description": "Provides color, melody lines, and timbral variety",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "brass-section",
+        "name": "Brass Section",
+        "description": "Delivers power, fanfares, and harmonic support",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "percussion-section",
+        "name": "Percussion Section",
+        "description": "Provides rhythmic foundation, accents, and special effects",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Conductor Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "conductor",
+          "concertmaster",
+          "strings-section",
+          "woodwinds-section",
+          "brass-section",
+          "percussion-section"
+        ]
+      },
+      {
+        "name": "Section Rehearsal",
+        "type": "peer-to-peer",
+        "participants": [
+          "strings-section",
+          "woodwinds-section",
+          "brass-section",
+          "percussion-section"
+        ]
+      },
+      {
+        "name": "Concertmaster Relay",
+        "type": "top-down",
+        "participants": [
+          "concertmaster",
+          "strings-section"
+        ]
+      },
+      {
+        "name": "Tempo Sync",
+        "type": "broadcast",
+        "participants": [
+          "conductor",
+          "percussion-section",
+          "concertmaster"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "musical-score",
+        "tempo-markings",
+        "dynamic-markings",
+        "rehearsal-notes"
+      ],
+      "private": [
+        "section-part-annotations",
+        "individual-fingerings"
+      ],
+      "description": "The musical score is the immutable shared specification. The conductor annotates it with interpretive markings visible to all. Each section maintains private annotations (bowings, breath marks) that don't need cross-section visibility. Memory is mostly ephemeral during performance, with only rehearsal notes persisting."
+    },
+    "diagram": "graph TD\n    CON[Conductor] --> CM[Concertmaster]\n    CON --> WW[Woodwinds]\n    CON --> BR[Brass]\n    CON --> PER[Percussion]\n    CM --> STR[Strings]\n    STR --> CON\n    WW --> CON\n    BR --> CON\n    PER --> CON",
+    "hierarchyTypes": [
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "tv-writers-room",
+    "name": "TV Writers' Room",
+    "category": "Creative & Arts",
+    "tags": [
+      "collaborative",
+      "iterative",
+      "pitch-based",
+      "hierarchical-creative"
+    ],
+    "summary": "Showrunner-led room where writers pitch, debate, and refine ideas collectively before splitting to draft.",
+    "description": "The writers' room pattern combines democratic ideation with hierarchical decision-making. Writers pitch ideas freely in a group setting, building on each other's contributions. The showrunner curates the best ideas and maintains series-level coherence. Once a story is 'broken' collectively, individual writers draft episodes independently, then the showrunner rewrites for voice consistency. A writers' assistant captures everything said in the room, creating an institutional memory that prevents repeated dead ends.",
+    "realWorldExample": "The Breaking Bad writers' room where Vince Gilligan and 6 writers broke each episode over weeks of discussion",
+    "whenToUse": "When you need creative ideation from multiple agents but must maintain a consistent voice and narrative across many outputs over time.",
+    "strengths": [
+      "Democratic ideation surfaces ideas no single agent would generate",
+      "Showrunner filter maintains consistency across all outputs",
+      "Room memory prevents revisiting rejected ideas",
+      "Individual drafting parallelizes execution after collective planning"
+    ],
+    "weaknesses": [
+      "Showrunner rewrite can demoralize individual contributors",
+      "Group dynamics can suppress unconventional ideas",
+      "Slow ideation phase delays execution start",
+      "Knowledge loss is catastrophic if writers' assistant fails"
+    ],
+    "agents": [
+      {
+        "role": "showrunner",
+        "name": "Showrunner",
+        "description": "Final creative authority; maintains series bible and voice consistency; rewrites all drafts",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "writer",
+        "name": "Staff Writer",
+        "description": "Pitches ideas in the room, drafts assigned episodes, contributes domain expertise",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "writers-assistant",
+        "name": "Writers' Assistant",
+        "description": "Records all pitches, decisions, and rejected ideas; maintains the room's institutional memory",
+        "memory": "append-only"
+      },
+      {
+        "role": "story-editor",
+        "name": "Story Editor",
+        "description": "Senior writer who helps break stories and mentors junior writers; second pair of eyes on structure",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "The Room",
+        "type": "threaded",
+        "participants": [
+          "showrunner",
+          "writer",
+          "story-editor",
+          "writers-assistant"
+        ]
+      },
+      {
+        "name": "Pitch Board",
+        "type": "round-robin",
+        "participants": [
+          "writer",
+          "story-editor"
+        ]
+      },
+      {
+        "name": "Showrunner Notes",
+        "type": "top-down",
+        "participants": [
+          "showrunner",
+          "writer"
+        ]
+      },
+      {
+        "name": "Series Bible",
+        "type": "document",
+        "participants": [
+          "showrunner",
+          "story-editor",
+          "writers-assistant"
+        ]
+      },
+      {
+        "name": "Draft Review",
+        "type": "advisory",
+        "participants": [
+          "showrunner",
+          "story-editor",
+          "writer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "series-bible",
+        "season-arc",
+        "character-sheets",
+        "rejected-pitches-log"
+      ],
+      "private": [
+        "episode-drafts",
+        "personal-research-notes",
+        "character-backstory-ideas"
+      ],
+      "description": "The series bible and rejected-pitches log are the critical shared memory. The writers' assistant maintains an append-only log of everything discussed. Individual writers keep private drafts until ready for room review. The showrunner's rewrite notes feed back into the shared bible."
+    },
+    "diagram": "graph TD\n    SR[Showrunner] --> RM[The Room]\n    W1[Writer 1] --> RM\n    W2[Writer 2] --> RM\n    W3[Writer 3] --> RM\n    SE[Story Editor] --> RM\n    RM --> WA[Writers Assistant]\n    WA --> SB[Series Bible]\n    SR --> SB\n    RM --> DR[Drafts]\n    DR --> SR",
+    "hierarchyTypes": [
+      "consensus",
+      "mesh"
+    ]
+  },
+  {
+    "id": "architecture-firm",
+    "name": "Architecture Firm",
+    "category": "Creative & Arts",
+    "tags": [
+      "design-build",
+      "iterative-review",
+      "client-facing",
+      "multi-disciplinary"
+    ],
+    "summary": "Principal architect sets design vision while specialist engineers ensure structural and regulatory feasibility.",
+    "description": "An architecture firm balances creative vision with hard physical constraints. The principal architect creates the conceptual design, which then passes through structural, mechanical, and regulatory specialists who constrain and refine it. A project manager coordinates timelines and client communication. Crucially, design and engineering iterate -- engineers don't just validate, they push back and reshape the design. Client reviews create external feedback loops that can reset entire design directions.",
+    "realWorldExample": "Frank Gehry's studio designing the Guggenheim Bilbao with structural engineers iterating on buildability",
+    "whenToUse": "When creative output must satisfy hard external constraints (regulations, physics, client requirements) and the design must iterate between vision and feasibility.",
+    "strengths": [
+      "Iterative design-engineering loop catches infeasible ideas early",
+      "Specialist agents ensure compliance with hard constraints",
+      "Client feedback loop keeps output aligned with requirements",
+      "Design documents create versioned record of evolution"
+    ],
+    "weaknesses": [
+      "Iteration cycles can be slow and expensive to converge",
+      "Creative vision may be over-constrained by engineering pushback",
+      "Client changes late in process cascade through all specialist work",
+      "Requires expensive coordination between many different disciplines"
+    ],
+    "agents": [
+      {
+        "role": "principal-architect",
+        "name": "Principal Architect",
+        "description": "Sets the conceptual design vision and makes final aesthetic decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "structural-engineer",
+        "name": "Structural Engineer",
+        "description": "Validates and constrains designs for physical feasibility; proposes structural solutions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mechanical-engineer",
+        "name": "Mechanical Engineer",
+        "description": "Designs HVAC, plumbing, and electrical systems within the architectural envelope",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "code-compliance",
+        "name": "Code Compliance Reviewer",
+        "description": "Checks all designs against building codes and zoning regulations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "project-manager",
+        "name": "Project Manager",
+        "description": "Coordinates schedules, budgets, and client communication across all teams",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "client-liaison",
+        "name": "Client Liaison",
+        "description": "Translates client needs into design requirements and presents options",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Design Review",
+        "type": "decision",
+        "participants": [
+          "principal-architect",
+          "structural-engineer",
+          "mechanical-engineer",
+          "code-compliance"
+        ]
+      },
+      {
+        "name": "Client Presentation",
+        "type": "advisory",
+        "participants": [
+          "client-liaison",
+          "principal-architect",
+          "project-manager"
+        ]
+      },
+      {
+        "name": "Engineering Sync",
+        "type": "peer-to-peer",
+        "participants": [
+          "structural-engineer",
+          "mechanical-engineer"
+        ]
+      },
+      {
+        "name": "Design Iterations",
+        "type": "document",
+        "participants": [
+          "principal-architect",
+          "structural-engineer",
+          "mechanical-engineer",
+          "code-compliance"
+        ]
+      },
+      {
+        "name": "Project Status",
+        "type": "broadcast",
+        "participants": [
+          "project-manager",
+          "principal-architect",
+          "structural-engineer",
+          "mechanical-engineer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "design-documents",
+        "building-code-database",
+        "client-requirements",
+        "revision-history"
+      ],
+      "private": [
+        "engineering-calculations",
+        "material-specifications",
+        "vendor-contacts"
+      ],
+      "description": "Design documents are versioned and shared across all agents. Each engineering discipline maintains private calculation sheets. The revision history tracks every design change with rationale. Client requirements form an immutable specification that only the client can modify."
+    },
+    "diagram": "graph TD\n    CL[Client Liaison] --> PA[Principal Architect]\n    PA --> SE[Structural Engineer]\n    PA --> ME[Mechanical Engineer]\n    SE --> PA\n    ME --> PA\n    SE --> CC[Code Compliance]\n    ME --> CC\n    CC --> PA\n    PM[Project Manager] --> PA\n    PM --> CL",
+    "hierarchyTypes": [
+      "consensus",
+      "orchestrated",
+      "mesh",
+      "federated"
+    ]
+  },
+  {
+    "id": "game-dev-studio",
+    "name": "Game Development Studio",
+    "category": "Creative & Arts",
+    "tags": [
+      "cross-functional",
+      "milestone-driven",
+      "asset-pipeline",
+      "playtesting"
+    ],
+    "summary": "Cross-functional teams build interconnected game systems with continuous playtesting feedback loops.",
+    "description": "A game studio organizes around interconnected systems (gameplay, art, audio, narrative, QA) that must integrate continuously. Unlike film's linear pipeline, game development is nonlinear -- any system change can affect all others. A creative director maintains the vision while a technical director ensures systems remain compatible. Playtesting provides continuous external feedback that reshapes priorities. The build pipeline acts as the integration backbone, forcing all systems to prove they work together every day.",
+    "realWorldExample": "Naughty Dog developing The Last of Us with 200+ developers across gameplay, art, and narrative teams",
+    "whenToUse": "When building a complex system where multiple subsystems must integrate continuously and user feedback should reshape priorities throughout development.",
+    "strengths": [
+      "Continuous integration catches cross-system bugs early",
+      "Playtesting feedback keeps output user-centered",
+      "Cross-functional teams reduce handoff delays",
+      "Milestone structure provides clear progress checkpoints"
+    ],
+    "weaknesses": [
+      "Tight coupling between systems means changes ripple unpredictably",
+      "Scope creep is endemic when every system can expand indefinitely",
+      "Creative-technical tension can paralyze decision-making",
+      "Crunch culture emerges when milestones slip and systems are coupled"
+    ],
+    "agents": [
+      {
+        "role": "creative-director",
+        "name": "Creative Director",
+        "description": "Maintains the overall game vision and resolves creative conflicts between teams",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "tech-director",
+        "name": "Technical Director",
+        "description": "Ensures all systems are technically compatible; owns the build pipeline",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "gameplay-programmer",
+        "name": "Gameplay Programmer",
+        "description": "Implements core game mechanics, physics, and player interactions",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "artist",
+        "name": "Artist",
+        "description": "Creates visual assets, environments, and character models",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "narrative-designer",
+        "name": "Narrative Designer",
+        "description": "Writes dialogue, designs story beats, and integrates narrative into gameplay",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "qa-tester",
+        "name": "QA Tester",
+        "description": "Playtests builds, reports bugs, and provides user experience feedback",
+        "memory": "append-only",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Daily Standup",
+        "type": "round-robin",
+        "participants": [
+          "creative-director",
+          "tech-director",
+          "gameplay-programmer",
+          "artist",
+          "narrative-designer"
+        ]
+      },
+      {
+        "name": "Build Pipeline",
+        "type": "queue",
+        "participants": [
+          "tech-director",
+          "gameplay-programmer",
+          "artist"
+        ]
+      },
+      {
+        "name": "Playtest Feedback",
+        "type": "bottom-up",
+        "participants": [
+          "qa-tester",
+          "creative-director",
+          "gameplay-programmer"
+        ]
+      },
+      {
+        "name": "Bug Tracker",
+        "type": "log",
+        "participants": [
+          "qa-tester",
+          "gameplay-programmer",
+          "tech-director"
+        ]
+      },
+      {
+        "name": "Milestone Review",
+        "type": "decision",
+        "participants": [
+          "creative-director",
+          "tech-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "game-design-document",
+        "asset-database",
+        "build-artifacts",
+        "bug-database"
+      ],
+      "private": [
+        "source-code-branches",
+        "art-working-files",
+        "narrative-drafts"
+      ],
+      "description": "The game design document is the shared specification. The asset database and build artifacts form the integration backbone. Each team works on private branches/files that merge into shared builds. The bug database is append-only and drives prioritization. Playtest recordings are stored as shared reference material."
+    },
+    "diagram": "graph TD\n    CD[Creative Director] --> GP[Gameplay]\n    CD --> ART[Artists]\n    CD --> ND[Narrative]\n    TD[Tech Director] --> GP\n    TD --> BUILD[Build Pipeline]\n    GP --> BUILD\n    ART --> BUILD\n    ND --> GP\n    BUILD --> QA[QA Testers]\n    QA --> CD\n    QA --> TD",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "pirate-ship-democracy",
+    "name": "Pirate Ship Democracy",
+    "category": "Social & Community",
+    "tags": [
+      "democratic",
+      "elected-leader",
+      "articles-of-agreement",
+      "combat-hierarchy"
+    ],
+    "summary": "Democratically elected captain leads during crisis; quartermaster governs daily operations by crew consent.",
+    "description": "Historical pirate ships were surprisingly democratic. The crew elected their captain (for combat leadership) and quartermaster (for daily governance and loot distribution). Articles of agreement served as a constitution. In calm seas, the quartermaster held more power than the captain, and the crew could vote to depose either. During battle, the captain had absolute authority. This dual-leadership model separates crisis decision-making from routine governance, with the crew retaining ultimate sovereignty.",
+    "realWorldExample": "Bartholomew Roberts' pirate fleet where 400+ pirates governed by written articles with elected officers",
+    "whenToUse": "When agents need strong central leadership during crises but democratic governance during normal operations, with the ability to replace leaders who underperform.",
+    "strengths": [
+      "Democratic legitimacy means agents buy into decisions",
+      "Dual leadership separates crisis speed from fairness concerns",
+      "Articles of agreement prevent arbitrary authority",
+      "Crew can replace ineffective leaders without system collapse"
+    ],
+    "weaknesses": [
+      "Democratic process slows routine decision-making",
+      "Mutiny risk if leader loses crew confidence at a bad time",
+      "Articles must be pre-agreed, limiting adaptation to novel situations",
+      "Unclear transition between crisis and normal mode can cause confusion"
+    ],
+    "agents": [
+      {
+        "role": "captain",
+        "name": "Captain",
+        "description": "Elected combat leader with absolute authority during crises; can be deposed by crew vote",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "quartermaster",
+        "name": "Quartermaster",
+        "description": "Elected daily governor; distributes resources, resolves disputes, enforces articles",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "crew-member",
+        "name": "Crew Member",
+        "description": "Votes on major decisions, executes tasks, can propose motions including leadership changes",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "navigator",
+        "name": "Navigator",
+        "description": "Specialist advisor on routing and environmental conditions; advisory role only",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "boatswain",
+        "name": "Boatswain",
+        "description": "Maintains ship infrastructure and coordinates work parties; reports to quartermaster",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Ship's Council",
+        "type": "decision",
+        "participants": [
+          "captain",
+          "quartermaster",
+          "crew-member",
+          "navigator",
+          "boatswain"
+        ]
+      },
+      {
+        "name": "Battle Orders",
+        "type": "top-down",
+        "participants": [
+          "captain",
+          "crew-member",
+          "boatswain"
+        ]
+      },
+      {
+        "name": "Quartermaster's Court",
+        "type": "advisory",
+        "participants": [
+          "quartermaster",
+          "crew-member"
+        ]
+      },
+      {
+        "name": "Vote",
+        "type": "round-robin",
+        "participants": [
+          "crew-member",
+          "captain",
+          "quartermaster",
+          "navigator",
+          "boatswain"
+        ]
+      },
+      {
+        "name": "Articles of Agreement",
+        "type": "document",
+        "participants": [
+          "captain",
+          "quartermaster",
+          "crew-member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "articles-of-agreement",
+        "loot-ledger",
+        "navigation-charts",
+        "vote-records"
+      ],
+      "private": [
+        "personal-share-tracking",
+        "combat-specialization-notes"
+      ],
+      "description": "The articles of agreement are the immutable constitution. The loot ledger is shared and transparent to prevent disputes. Vote records are append-only for accountability. Navigation knowledge is held by the specialist but shared on request. During crisis mode, memory switches to ephemeral for speed."
+    },
+    "diagram": "graph TD\n    CREW[Crew Vote] --> CAP[Captain]\n    CREW --> QM[Quartermaster]\n    CAP -->|crisis| CREW\n    QM -->|daily ops| CREW\n    QM --> LOOT[Loot Distribution]\n    NAV[Navigator] --> CAP\n    BOSN[Boatswain] --> QM\n    ART[Articles] --> QM\n    ART --> CAP",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "commune-kibbutz",
+    "name": "Commune / Kibbutz",
+    "category": "Social & Community",
+    "tags": [
+      "egalitarian",
+      "consensus",
+      "shared-resources",
+      "rotating-roles"
+    ],
+    "summary": "Fully egalitarian collective where all decisions are made by consensus and roles rotate among members.",
+    "description": "The kibbutz model eliminates permanent hierarchy. All members participate equally in decision-making through general assemblies. Work roles rotate so no one permanently holds authority or is stuck with undesirable tasks. Resources are pooled and distributed based on need rather than contribution. Committees handle specialized domains (agriculture, education, finance) but report to the general assembly. This pattern maximizes buy-in and prevents power concentration at the cost of decision speed.",
+    "realWorldExample": "Kibbutz Degania in Israel where 100+ members governed by weekly general assembly with rotating work assignments",
+    "whenToUse": "When all agents are roughly equal in capability, no task is permanently more important than others, and collective buy-in matters more than speed.",
+    "strengths": [
+      "Maximum buy-in since every agent participates in every decision",
+      "No single point of failure -- any agent can fill any role",
+      "Rotating roles build cross-functional capability in all agents",
+      "Resource pooling prevents hoarding and optimizes utilization"
+    ],
+    "weaknesses": [
+      "Consensus decision-making is extremely slow for large groups",
+      "Rotating roles prevent deep specialization in any domain",
+      "Free-rider problem when contributions are not individually tracked",
+      "Scales very poorly beyond 15-20 agents"
+    ],
+    "agents": [
+      {
+        "role": "member",
+        "name": "Commune Member",
+        "description": "Equal participant who votes on all decisions, rotates through all work roles",
+        "memory": "persistent-shared",
+        "count": 8
+      },
+      {
+        "role": "committee-coordinator",
+        "name": "Committee Coordinator",
+        "description": "Temporarily leads a domain committee; rotates monthly; has no authority beyond facilitation",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "secretary",
+        "name": "Rotating Secretary",
+        "description": "Records decisions and distributes minutes; role rotates each meeting",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "General Assembly",
+        "type": "decision",
+        "participants": [
+          "member",
+          "committee-coordinator",
+          "secretary"
+        ]
+      },
+      {
+        "name": "Work Committee",
+        "type": "peer-to-peer",
+        "participants": [
+          "committee-coordinator",
+          "member"
+        ]
+      },
+      {
+        "name": "Resource Pool",
+        "type": "broadcast",
+        "participants": [
+          "member"
+        ]
+      },
+      {
+        "name": "Meeting Minutes",
+        "type": "document",
+        "participants": [
+          "secretary",
+          "member"
+        ]
+      },
+      {
+        "name": "Rotation Schedule",
+        "type": "broadcast",
+        "participants": [
+          "member",
+          "committee-coordinator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "decision-log",
+        "resource-inventory",
+        "rotation-schedule",
+        "meeting-minutes"
+      ],
+      "private": [
+        "personal-preference-notes"
+      ],
+      "description": "Nearly everything is shared. The decision log records all assembly votes. The resource inventory is fully transparent. The rotation schedule ensures fairness. Private memory is minimal -- only personal notes on preferences. This radical transparency is core to the egalitarian model."
+    },
+    "diagram": "graph TD\n    GA[General Assembly] --> C1[Committee 1]\n    GA --> C2[Committee 2]\n    GA --> C3[Committee 3]\n    C1 --> M1[Members]\n    C2 --> M1\n    C3 --> M1\n    M1 --> GA\n    SEC[Secretary] --> GA",
+    "hierarchyTypes": [
+      "consensus",
+      "orchestrated",
+      "swarm",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "secret-society-cells",
+    "name": "Secret Society Cell Structure",
+    "category": "Social & Community",
+    "tags": [
+      "compartmentalized",
+      "covert",
+      "cell-based",
+      "need-to-know"
+    ],
+    "summary": "Isolated cells connected only through cutouts, maximizing operational security through compartmentalization.",
+    "description": "A cell-based structure organizes agents into small, isolated groups (3-5 members) that know nothing about other cells. Communication flows only through designated cutouts (liaison agents) who connect cells to leadership. If any cell is compromised, the damage is contained because members cannot reveal what they don't know. Leadership communicates through dead drops and one-way channels. This pattern trades coordination efficiency for maximum resilience against information leakage.",
+    "realWorldExample": "The French Resistance during WWII organized in 3-person cells where members only knew their cellmates and one contact",
+    "whenToUse": "When agents handle sensitive information and a breach in one area must not compromise the entire system. Security and containment matter more than coordination speed.",
+    "strengths": [
+      "Compromise of one cell cannot cascade to others",
+      "Need-to-know basis minimizes information exposure",
+      "Small cells enable high trust within each group",
+      "System survives loss of individual cells gracefully"
+    ],
+    "weaknesses": [
+      "Coordination across cells is extremely slow and lossy",
+      "Cutout agents become critical bottlenecks and single points of failure",
+      "Duplicate work is common because cells cannot share findings",
+      "Leadership has limited visibility into cell-level operations"
+    ],
+    "agents": [
+      {
+        "role": "leadership",
+        "name": "Central Leadership",
+        "description": "Sets strategy and priorities; communicates only through cutouts; never contacts cells directly",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cutout",
+        "name": "Cutout Liaison",
+        "description": "Bridges communication between leadership and cells; knows only adjacent nodes",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "cell-leader",
+        "name": "Cell Leader",
+        "description": "Leads a small cell; only contact point with the cutout; shields cell members from exposure",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "cell-operative",
+        "name": "Cell Operative",
+        "description": "Executes tasks within cell; knows only cellmates; no knowledge of larger structure",
+        "memory": "ephemeral",
+        "count": 6
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dead Drop",
+        "type": "queue",
+        "participants": [
+          "leadership",
+          "cutout"
+        ]
+      },
+      {
+        "name": "Cell-Cutout Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "cutout",
+          "cell-leader"
+        ]
+      },
+      {
+        "name": "Internal Cell Comms",
+        "type": "peer-to-peer",
+        "participants": [
+          "cell-leader",
+          "cell-operative"
+        ]
+      },
+      {
+        "name": "Emergency Signal",
+        "type": "emergency",
+        "participants": [
+          "cell-leader",
+          "cutout"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "mission-objectives-per-cell"
+      ],
+      "private": [
+        "cell-operational-details",
+        "leadership-strategy",
+        "contact-protocols",
+        "cover-identities"
+      ],
+      "description": "Almost nothing is shared globally. Each cell has its own private memory silo. The cutout maintains ephemeral memory that is wiped after each relay. Leadership's strategic memory is heavily compartmentalized. Even mission objectives are shared only with the relevant cell, never across cells."
+    },
+    "diagram": "graph TD\n    L[Leadership] --> CO1[Cutout 1]\n    L --> CO2[Cutout 2]\n    L --> CO3[Cutout 3]\n    CO1 --> CL1[Cell Leader A]\n    CO2 --> CL2[Cell Leader B]\n    CO3 --> CL3[Cell Leader C]\n    CL1 --> OP1[Operative]\n    CL1 --> OP2[Operative]\n    CL2 --> OP3[Operative]\n    CL2 --> OP4[Operative]\n    CL3 --> OP5[Operative]\n    CL3 --> OP6[Operative]",
+    "hierarchyTypes": [
+      "federated"
+    ]
+  },
+  {
+    "id": "wiki-collaborative",
+    "name": "Wiki Collaborative",
+    "category": "Social & Community",
+    "tags": [
+      "open-edit",
+      "consensus-by-editing",
+      "versioned",
+      "self-governing"
+    ],
+    "summary": "Open editing model where any contributor can modify shared documents, governed by edit wars and consensus.",
+    "description": "The wiki model allows any agent to edit any shared document, with changes tracked through version history. Quality emerges not from gatekeeping but from collective revision -- bad edits get reverted, good edits survive. Administrators handle disputes and enforce community norms but cannot override consensus. Talk pages provide structured debate when edits conflict. Featured article reviews set quality standards. This pattern maximizes parallelism and openness but requires robust conflict resolution.",
+    "realWorldExample": "Wikipedia's editing model with 40M+ articles maintained by 300K+ active editors with elected administrators",
+    "whenToUse": "When many agents need to contribute to shared knowledge artifacts and you trust collective revision to produce quality. Works best when contributions are independently verifiable.",
+    "strengths": [
+      "Any agent can improve any output at any time",
+      "Version history provides full accountability and rollback capability",
+      "Scales to thousands of contributors without central bottleneck",
+      "Quality emerges from collective revision rather than gatekeeping"
+    ],
+    "weaknesses": [
+      "Edit wars waste energy when agents disagree persistently",
+      "Vandalism and low-quality edits require constant patrolling",
+      "Consensus process can be gamed by organized factions",
+      "No clear authority for resolving deep disputes quickly"
+    ],
+    "agents": [
+      {
+        "role": "editor",
+        "name": "Editor",
+        "description": "Contributes content, revises others' work, participates in talk page discussions",
+        "memory": "versioned",
+        "count": 8
+      },
+      {
+        "role": "administrator",
+        "name": "Administrator",
+        "description": "Elected by editors; can protect pages and block vandals but cannot override consensus",
+        "memory": "persistent-shared",
+        "count": 2
+      },
+      {
+        "role": "bot",
+        "name": "Maintenance Bot",
+        "description": "Automated agent that fixes formatting, detects vandalism, and enforces style guidelines",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "reviewer",
+        "name": "Peer Reviewer",
+        "description": "Reviews articles for featured status; provides structured quality assessments",
+        "memory": "persistent-private",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Article Space",
+        "type": "document",
+        "participants": [
+          "editor",
+          "administrator",
+          "bot"
+        ]
+      },
+      {
+        "name": "Talk Pages",
+        "type": "threaded",
+        "participants": [
+          "editor",
+          "administrator",
+          "reviewer"
+        ]
+      },
+      {
+        "name": "Admin Noticeboard",
+        "type": "decision",
+        "participants": [
+          "administrator",
+          "editor"
+        ]
+      },
+      {
+        "name": "Recent Changes",
+        "type": "log",
+        "participants": [
+          "editor",
+          "administrator",
+          "bot"
+        ]
+      },
+      {
+        "name": "Featured Review",
+        "type": "advisory",
+        "participants": [
+          "reviewer",
+          "editor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "article-database",
+        "version-history",
+        "policy-pages",
+        "talk-page-archives"
+      ],
+      "private": [
+        "editor-watchlists",
+        "draft-workspace"
+      ],
+      "description": "Everything is versioned and shared by default. The version history is the core memory -- it records every change, by whom, and when. Talk page archives preserve the reasoning behind decisions. Editors maintain private watchlists to monitor articles they care about. Policy pages are themselves wiki-editable, making even governance transparent."
+    },
+    "diagram": "graph LR\n    E1[Editor 1] --> ART[Article Space]\n    E2[Editor 2] --> ART\n    E3[Editor 3] --> ART\n    ART --> VH[Version History]\n    E1 --> TP[Talk Page]\n    E2 --> TP\n    ADM[Admin] --> ART\n    BOT[Bot] --> ART\n    REV[Reviewer] --> ART\n    TP --> ADM",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "mutual-aid-network",
+    "name": "Mutual Aid Network",
+    "category": "Social & Community",
+    "tags": [
+      "decentralized",
+      "reciprocal",
+      "need-based",
+      "trust-network"
+    ],
+    "summary": "Decentralized network where agents offer and request help directly, with no central authority allocating resources.",
+    "description": "Mutual aid operates without hierarchy. Agents broadcast needs and offers to the network. Matching happens organically -- whoever can help, does. Trust builds through repeated positive interactions tracked in a shared reputation ledger. Coordinators exist only to facilitate connections, not to make decisions. The network is resilient because removing any node only affects its direct connections. This pattern excels when needs are unpredictable and diverse, and when agents have complementary but unequal capabilities.",
+    "realWorldExample": "Mutual aid networks that emerged during COVID-19 where neighbors coordinated grocery delivery, childcare, and emotional support",
+    "whenToUse": "When agent needs are unpredictable and diverse, no central planner can efficiently allocate resources, and trust must be built through direct interaction.",
+    "strengths": [
+      "Extremely resilient -- no single point of failure",
+      "Scales organically as new agents join with new capabilities",
+      "Matches resources to needs without central planning overhead",
+      "Builds trust and cooperation through direct reciprocal interactions"
+    ],
+    "weaknesses": [
+      "Free-riders can consume without contributing",
+      "No guarantee that all needs will be met -- depends on network composition",
+      "Quality of help varies widely without standards or certification",
+      "Coordination is ad-hoc and may miss systemic patterns"
+    ],
+    "agents": [
+      {
+        "role": "participant",
+        "name": "Network Participant",
+        "description": "Both offers help and requests help; maintains personal reputation through consistent contribution",
+        "memory": "persistent-shared",
+        "count": 8
+      },
+      {
+        "role": "coordinator",
+        "name": "Volunteer Coordinator",
+        "description": "Facilitates introductions and helps match needs with offers; has no decision authority",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "reputation-keeper",
+        "name": "Reputation Keeper",
+        "description": "Maintains the shared trust ledger; records completed exchanges and feedback",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Needs Board",
+        "type": "pub-sub",
+        "participants": [
+          "participant",
+          "coordinator"
+        ]
+      },
+      {
+        "name": "Offers Board",
+        "type": "pub-sub",
+        "participants": [
+          "participant",
+          "coordinator"
+        ]
+      },
+      {
+        "name": "Direct Exchange",
+        "type": "peer-to-peer",
+        "participants": [
+          "participant"
+        ]
+      },
+      {
+        "name": "Trust Ledger",
+        "type": "log",
+        "participants": [
+          "reputation-keeper",
+          "participant"
+        ]
+      },
+      {
+        "name": "Network Gathering",
+        "type": "broadcast",
+        "participants": [
+          "participant",
+          "coordinator",
+          "reputation-keeper"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "needs-registry",
+        "offers-registry",
+        "trust-scores",
+        "completed-exchanges-log"
+      ],
+      "private": [
+        "personal-capacity-notes",
+        "preferred-partners-list"
+      ],
+      "description": "The trust ledger is the key shared memory -- it records all completed exchanges and feedback. Needs and offers registries are public boards. Each participant privately tracks their own capacity and preferred partners. The system is intentionally transparent to build trust, with the reputation keeper maintaining an append-only record."
+    },
+    "diagram": "graph TD\n    P1[Participant] --> NB[Needs Board]\n    P2[Participant] --> OB[Offers Board]\n    P3[Participant] --> NB\n    P4[Participant] --> OB\n    NB --> COORD[Coordinator]\n    OB --> COORD\n    COORD --> P1\n    COORD --> P3\n    P1 <--> P2\n    P3 <--> P4\n    RK[Reputation Keeper] --> TL[Trust Ledger]",
+    "hierarchyTypes": [
+      "swarm",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "monastic-order",
+    "name": "Monastic Order",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "rule-based",
+      "contemplative",
+      "disciplined",
+      "hierarchical-spiritual"
+    ],
+    "summary": "Rule-governed community where an abbot leads monks through structured daily cycles of work, study, and reflection.",
+    "description": "A monastic order operates under a fixed Rule (e.g., Rule of St. Benedict) that dictates the daily schedule, behavioral norms, and decision-making process. The abbot holds authority but is constrained by the Rule and must consult the community on major decisions. Life follows strict cycles: prayer, work, study, and communal meals. New members progress through novitiate stages before full admission. This pattern excels at long-term, patient work where consistency and depth matter more than speed or novelty.",
+    "realWorldExample": "A Benedictine monastery following the 1500-year-old Rule of St. Benedict with 30 monks in a daily cycle of ora et labora",
+    "whenToUse": "When agents must maintain discipline over very long time horizons, follow strict protocols, and prioritize depth and quality over speed. Good for archival, curation, and maintenance tasks.",
+    "strengths": [
+      "Extreme consistency -- the Rule prevents drift over long time horizons",
+      "Structured cycles ensure balanced attention across all responsibilities",
+      "Deep focus enabled by elimination of distraction and novelty-seeking",
+      "Novitiate process ensures new agents are properly vetted and trained"
+    ],
+    "weaknesses": [
+      "Very slow to adapt to changed circumstances -- the Rule resists modification",
+      "Rigid hierarchy can suppress legitimate innovation from junior members",
+      "Contemplative pace is unsuitable for time-sensitive tasks",
+      "Isolation from outside input can lead to blind spots"
+    ],
+    "agents": [
+      {
+        "role": "abbot",
+        "name": "Abbot",
+        "description": "Elected leader who interprets the Rule and makes final decisions; serves for life or until resignation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "prior",
+        "name": "Prior",
+        "description": "Second in command; manages daily operations and substitutes for the abbot",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "monk",
+        "name": "Monk",
+        "description": "Full member who follows the daily cycle of work, study, and contemplation",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "novice",
+        "name": "Novice",
+        "description": "Probationary member learning the Rule; limited privileges; supervised by novice master",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "novice-master",
+        "name": "Novice Master",
+        "description": "Senior monk responsible for training and evaluating novices",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "librarian",
+        "name": "Librarian",
+        "description": "Maintains the community's knowledge store; preserves and catalogs all texts",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Chapter Meeting",
+        "type": "decision",
+        "participants": [
+          "abbot",
+          "prior",
+          "monk"
+        ]
+      },
+      {
+        "name": "The Rule",
+        "type": "document",
+        "participants": [
+          "abbot",
+          "prior",
+          "monk",
+          "novice",
+          "novice-master",
+          "librarian"
+        ]
+      },
+      {
+        "name": "Daily Office",
+        "type": "broadcast",
+        "participants": [
+          "abbot",
+          "prior",
+          "monk",
+          "novice"
+        ]
+      },
+      {
+        "name": "Novice Instruction",
+        "type": "top-down",
+        "participants": [
+          "novice-master",
+          "novice"
+        ]
+      },
+      {
+        "name": "Scriptorium",
+        "type": "document",
+        "participants": [
+          "librarian",
+          "monk"
+        ]
+      },
+      {
+        "name": "Confession",
+        "type": "per-agent",
+        "participants": [
+          "monk",
+          "abbot"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "the-rule",
+        "community-chronicle",
+        "library-catalog",
+        "daily-schedule"
+      ],
+      "private": [
+        "personal-journals",
+        "spiritual-reflections",
+        "novice-evaluations"
+      ],
+      "description": "The Rule is the immutable constitution that governs all behavior. The community chronicle is an append-only record of significant events. The library catalog is maintained by the librarian. Monks keep private spiritual journals. Novice evaluations are shared only between the novice master and abbot."
+    },
+    "diagram": "graph TD\n    RULE[The Rule] --> ABB[Abbot]\n    ABB --> PR[Prior]\n    PR --> M1[Monks]\n    ABB --> NM[Novice Master]\n    NM --> NOV[Novices]\n    NOV -->|promotion| M1\n    M1 --> LIB[Librarian]\n    LIB --> SCRIP[Scriptorium]\n    M1 --> CH[Chapter Meeting]\n    ABB --> CH",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm",
+      "chain-of-command",
+      "consensus"
+    ]
+  },
+  {
+    "id": "quaker-meeting",
+    "name": "Quaker Meeting for Worship with Attention to Business",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "silence-based",
+      "consensus",
+      "non-hierarchical",
+      "spirit-led"
+    ],
+    "summary": "Silence-based consensus where participants speak only when moved to, and a clerk discerns the sense of the meeting.",
+    "description": "Quaker business meetings operate by radical consensus. The group sits in silence until someone feels genuinely moved to speak. There is no voting, no majority rule, and no debate in the parliamentary sense. A clerk (facilitator) listens to all contributions and attempts to discern the 'sense of the meeting' -- the emerging consensus. If no consensus emerges, the matter is held over for further reflection. This pattern values patience and depth over speed, and prioritizes unity over compromise.",
+    "realWorldExample": "Philadelphia Yearly Meeting where 200+ Quakers make binding decisions on social policy through silent worship and discernment",
+    "whenToUse": "When quality of decision matters far more than speed, when premature action is worse than no action, and when the group must genuinely unite behind decisions rather than accepting majority rule.",
+    "strengths": [
+      "Decisions carry genuine full-group buy-in, not just majority consent",
+      "Silence filters out low-quality contributions and grandstanding",
+      "Clerk role prevents domination by loud voices",
+      "Unresolved matters get more reflection time rather than forced votes"
+    ],
+    "weaknesses": [
+      "Extremely slow -- some decisions take months or years",
+      "A single persistent objector can block the entire group",
+      "Clerk's discernment of consensus is inherently subjective",
+      "Cannot handle urgent decisions that require immediate action"
+    ],
+    "agents": [
+      {
+        "role": "clerk",
+        "name": "Clerk",
+        "description": "Facilitates the meeting, discerns the sense of the meeting, drafts minutes; has no authority to decide",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "recording-clerk",
+        "name": "Recording Clerk",
+        "description": "Records the minutes and the clerk's discerned sense; preserves exact wording of decisions",
+        "memory": "append-only"
+      },
+      {
+        "role": "participant",
+        "name": "Friend (Participant)",
+        "description": "Sits in silence, speaks only when genuinely moved, seeks to discern collective truth",
+        "memory": "persistent-private",
+        "count": 10
+      },
+      {
+        "role": "elder",
+        "name": "Elder",
+        "description": "Experienced member who nurtures the spiritual quality of the meeting; may gently redirect unproductive speech",
+        "memory": "persistent-shared",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Meeting for Worship",
+        "type": "round-robin",
+        "participants": [
+          "clerk",
+          "participant",
+          "elder",
+          "recording-clerk"
+        ]
+      },
+      {
+        "name": "Sense of the Meeting",
+        "type": "decision",
+        "participants": [
+          "clerk",
+          "participant",
+          "elder"
+        ]
+      },
+      {
+        "name": "Minutes",
+        "type": "document",
+        "participants": [
+          "recording-clerk",
+          "clerk"
+        ]
+      },
+      {
+        "name": "Threshing Session",
+        "type": "threaded",
+        "participants": [
+          "participant",
+          "elder"
+        ]
+      },
+      {
+        "name": "Held Over Items",
+        "type": "queue",
+        "participants": [
+          "clerk",
+          "recording-clerk"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "approved-minutes",
+        "held-over-matters",
+        "community-testimonies"
+      ],
+      "private": [
+        "personal-discernment-notes",
+        "spiritual-journal"
+      ],
+      "description": "Approved minutes are the only authoritative shared record -- they capture the exact wording of the sense of the meeting. Held-over matters are queued for future sessions. Each participant maintains private discernment notes. The recording clerk's raw notes are preserved as an append-only backup. There is no voting record because there are no votes."
+    },
+    "diagram": "graph TD\n    SIL[Silence] --> P1[Friend]\n    SIL --> P2[Friend]\n    SIL --> P3[Friend]\n    P1 -->|speaks when moved| CLK[Clerk]\n    P2 -->|speaks when moved| CLK\n    P3 -->|speaks when moved| CLK\n    ELD[Elder] --> SIL\n    CLK --> SOM[Sense of Meeting]\n    SOM --> RC[Recording Clerk]\n    RC --> MIN[Minutes]\n    SOM -->|no unity| HO[Held Over]",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "buddhist-sangha",
+    "name": "Buddhist Sangha",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "teacher-student",
+      "graduated-practice",
+      "mindful",
+      "non-attachment"
+    ],
+    "summary": "Teacher guides students through graduated practice levels, with senior students mentoring juniors in a wisdom chain.",
+    "description": "A Buddhist sangha (community) centers around a teacher who has traversed the path and guides others along it. Students progress through graduated levels of practice, with senior students (dharma heirs) mentoring junior ones. The teacher does not command but points the way through dharma talks and individual guidance. Regular group practice (zazen, meditation) synchronizes the community. The critical insight is non-attachment to outcomes -- the community accepts that some students will leave, and that the teaching itself evolves through transmission.",
+    "realWorldExample": "San Francisco Zen Center with a roshi, dharma heirs, senior students, and newcomers practicing together daily",
+    "whenToUse": "When knowledge transfer is the primary goal, agents learn at different rates, and mentorship chains allow the teacher to scale through senior students. Good for training pipelines.",
+    "strengths": [
+      "Mentorship chain allows teacher's wisdom to scale beyond direct contact",
+      "Graduated levels ensure agents are not overwhelmed by premature complexity",
+      "Group practice maintains cohesion and shared understanding",
+      "Non-attachment to outcomes allows graceful handling of agent departure"
+    ],
+    "weaknesses": [
+      "Heavy dependence on teacher quality -- a poor teacher corrupts the entire chain",
+      "Graduated levels can create unhealthy status hierarchies",
+      "Slow progression frustrates capable agents who could advance faster",
+      "Transmission fidelity degrades through each link in the mentorship chain"
+    ],
+    "agents": [
+      {
+        "role": "teacher",
+        "name": "Teacher (Roshi)",
+        "description": "Guides the entire community through dharma talks and private interviews; transmits core teachings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "dharma-heir",
+        "name": "Dharma Heir",
+        "description": "Senior student authorized to teach; mentors intermediate students; carries forward the teacher's lineage",
+        "memory": "persistent-shared",
+        "count": 2
+      },
+      {
+        "role": "senior-student",
+        "name": "Senior Student",
+        "description": "Experienced practitioner who supports newer students and assists in running community operations",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "student",
+        "name": "Student",
+        "description": "Regular practitioner following the graduated curriculum; receives guidance from senior students and teacher",
+        "memory": "ephemeral",
+        "count": 5
+      },
+      {
+        "role": "newcomer",
+        "name": "Newcomer",
+        "description": "Recently joined; receives orientation and basic instruction; decides whether to commit to practice",
+        "memory": "ephemeral",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dharma Talk",
+        "type": "broadcast",
+        "participants": [
+          "teacher",
+          "dharma-heir",
+          "senior-student",
+          "student",
+          "newcomer"
+        ]
+      },
+      {
+        "name": "Dokusan (Private Interview)",
+        "type": "per-agent",
+        "participants": [
+          "teacher",
+          "senior-student",
+          "student"
+        ]
+      },
+      {
+        "name": "Group Practice",
+        "type": "peer-to-peer",
+        "participants": [
+          "dharma-heir",
+          "senior-student",
+          "student",
+          "newcomer"
+        ]
+      },
+      {
+        "name": "Mentorship Pair",
+        "type": "per-agent",
+        "participants": [
+          "dharma-heir",
+          "student"
+        ]
+      },
+      {
+        "name": "Community Council",
+        "type": "advisory",
+        "participants": [
+          "teacher",
+          "dharma-heir",
+          "senior-student"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "dharma-teachings",
+        "practice-schedule",
+        "community-guidelines",
+        "lineage-record"
+      ],
+      "private": [
+        "personal-practice-journal",
+        "koan-work",
+        "teacher-student-interview-notes"
+      ],
+      "description": "Dharma teachings are shared and form the core curriculum. The lineage record tracks the transmission of authority. Private practice journals and interview notes are strictly confidential between teacher and student. Practice schedules and guidelines are communally maintained. The teaching evolves through transmission -- each dharma heir's notes become part of the shared corpus."
+    },
+    "diagram": "graph TD\n    T[Teacher] --> DH1[Dharma Heir 1]\n    T --> DH2[Dharma Heir 2]\n    T --> DT[Dharma Talk]\n    DH1 --> SS1[Senior Student]\n    DH1 --> SS2[Senior Student]\n    DH2 --> SS3[Senior Student]\n    SS1 --> ST1[Student]\n    SS2 --> ST2[Student]\n    SS3 --> ST3[Student]\n    ST1 --> NW[Newcomers]\n    DT --> NW",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "university-department",
+    "name": "University Department",
+    "category": "Education & Training",
+    "tags": [
+      "tenure-track",
+      "peer-review",
+      "committee-governed",
+      "research-teaching"
+    ],
+    "summary": "Faculty govern through committees while pursuing independent research, with a chair coordinating but not commanding.",
+    "description": "A university department is governed by its faculty through a committee system. The department chair is first among equals -- coordinating schedules, budgets, and hiring but unable to direct research. Tenure creates agents with near-permanent autonomy. Peer review gates all major outputs (publications, promotions). Graduate students form a labor force supervised by individual faculty. The department meeting is the forum of record. This pattern enables deep, independent exploration at the cost of coordination and collective direction.",
+    "realWorldExample": "MIT's Computer Science department with 60+ tenured faculty, 500 grad students, and committee-governed curriculum decisions",
+    "whenToUse": "When agents need maximum autonomy to explore independently but must coordinate on shared resources (infrastructure, standards, hiring). Best for research-heavy systems where diversity of approach is valued.",
+    "strengths": [
+      "Maximum research autonomy enables diverse parallel exploration",
+      "Peer review maintains quality without central gatekeeping",
+      "Tenure provides stability for long-term high-risk projects",
+      "Committee governance distributes administrative load"
+    ],
+    "weaknesses": [
+      "Near-impossible to redirect tenured agents who resist change",
+      "Committee governance is slow and often produces lowest-common-denominator decisions",
+      "Department chair has responsibility without real authority",
+      "Silos between individual research groups can prevent valuable collaboration"
+    ],
+    "agents": [
+      {
+        "role": "department-chair",
+        "name": "Department Chair",
+        "description": "Coordinates schedules, budgets, and hiring; chairs department meetings; rotates among senior faculty",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "tenured-professor",
+        "name": "Tenured Professor",
+        "description": "Autonomous researcher and teacher; votes on department matters; near-permanent position",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "assistant-professor",
+        "name": "Assistant Professor",
+        "description": "Probationary faculty working toward tenure; conducts research and teaches",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "grad-student",
+        "name": "Graduate Student",
+        "description": "Conducts research under faculty supervision; teaches undergraduates; seeks degree",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "administrator",
+        "name": "Department Administrator",
+        "description": "Manages logistics, budgets, room scheduling, and compliance paperwork",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Department Meeting",
+        "type": "decision",
+        "participants": [
+          "department-chair",
+          "tenured-professor",
+          "assistant-professor"
+        ]
+      },
+      {
+        "name": "Curriculum Committee",
+        "type": "advisory",
+        "participants": [
+          "tenured-professor",
+          "assistant-professor"
+        ]
+      },
+      {
+        "name": "Research Seminar",
+        "type": "broadcast",
+        "participants": [
+          "tenured-professor",
+          "assistant-professor",
+          "grad-student"
+        ]
+      },
+      {
+        "name": "Advisor-Student Meeting",
+        "type": "per-agent",
+        "participants": [
+          "tenured-professor",
+          "grad-student"
+        ]
+      },
+      {
+        "name": "Tenure Review",
+        "type": "decision",
+        "participants": [
+          "tenured-professor",
+          "department-chair"
+        ]
+      },
+      {
+        "name": "Admin Channel",
+        "type": "log",
+        "participants": [
+          "administrator",
+          "department-chair"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "curriculum-catalog",
+        "department-budget",
+        "meeting-minutes",
+        "publication-record"
+      ],
+      "private": [
+        "research-data",
+        "grant-proposals",
+        "student-evaluations",
+        "tenure-dossiers"
+      ],
+      "description": "The curriculum and budget are shared. Publication records are public. Research data and grant proposals are private to each lab group. Student evaluations and tenure dossiers are confidential. Meeting minutes form the institutional record. Each professor's research memory is fully private and persists indefinitely."
+    },
+    "diagram": "graph TD\n    CHAIR[Department Chair] --> DM[Department Meeting]\n    TP1[Professor 1] --> DM\n    TP2[Professor 2] --> DM\n    AP[Asst Professor] --> DM\n    TP1 --> GS1[Grad Student]\n    TP1 --> GS2[Grad Student]\n    TP2 --> GS3[Grad Student]\n    AP --> GS4[Grad Student]\n    DM --> CC[Curriculum Committee]\n    ADM[Administrator] --> CHAIR\n    DM --> TR[Tenure Review]",
+    "hierarchyTypes": [
+      "adversarial",
+      "orchestrated",
+      "swarm",
+      "consensus",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "montessori-classroom",
+    "name": "Montessori Classroom",
+    "category": "Education & Training",
+    "tags": [
+      "self-directed",
+      "prepared-environment",
+      "observation-based",
+      "multi-age"
+    ],
+    "summary": "Children choose their own work in a prepared environment while the teacher observes and guides indirectly.",
+    "description": "The Montessori model inverts the traditional classroom. The teacher prepares an environment with carefully designed materials and then steps back to observe. Students choose their own activities, work at their own pace, and teach each other across age groups. The teacher intervenes only when a student is stuck or disruptive, offering individual lessons rather than group instruction. Multi-age grouping means experienced students naturally mentor newcomers. The prepared environment does most of the 'teaching' -- the materials are self-correcting.",
+    "realWorldExample": "A Montessori Casa classroom with 25 children aged 3-6, one trained guide, and one assistant in a room with 200+ materials",
+    "whenToUse": "When agents are self-motivated and learn at different rates, and the environment can be pre-structured so that agents discover solutions through interaction with materials rather than instruction.",
+    "strengths": [
+      "Self-directed pace means no agent is held back or left behind",
+      "Multi-age mentoring scales teaching without additional instructor agents",
+      "Prepared environment reduces need for constant instructor intervention",
+      "Observation-based guidance targets help precisely where needed"
+    ],
+    "weaknesses": [
+      "Requires extensive upfront investment in environment preparation",
+      "Some agents may flounder without more structured guidance",
+      "Teacher must resist urge to intervene, which requires high skill",
+      "Difficult to ensure all agents cover required material without mandated sequence"
+    ],
+    "agents": [
+      {
+        "role": "guide",
+        "name": "Montessori Guide",
+        "description": "Prepares the environment, observes student choices, offers individual lessons when needed; avoids group instruction",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "assistant",
+        "name": "Classroom Assistant",
+        "description": "Maintains the environment, handles logistics, redirects disruptive behavior; does not give lessons",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "older-child",
+        "name": "Experienced Learner",
+        "description": "Self-directed agent who chooses advanced work and naturally mentors younger peers",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "middle-child",
+        "name": "Developing Learner",
+        "description": "Agent finding their rhythm; beginning to work independently and occasionally helping younger peers",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "younger-child",
+        "name": "New Learner",
+        "description": "Recently joined; observing older peers, receiving individual lessons from guide, exploring materials",
+        "memory": "ephemeral",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Prepared Environment",
+        "type": "pub-sub",
+        "participants": [
+          "older-child",
+          "middle-child",
+          "younger-child"
+        ]
+      },
+      {
+        "name": "Individual Lesson",
+        "type": "per-agent",
+        "participants": [
+          "guide",
+          "younger-child",
+          "middle-child"
+        ]
+      },
+      {
+        "name": "Observation Notes",
+        "type": "log",
+        "participants": [
+          "guide",
+          "assistant"
+        ]
+      },
+      {
+        "name": "Peer Mentoring",
+        "type": "peer-to-peer",
+        "participants": [
+          "older-child",
+          "younger-child"
+        ]
+      },
+      {
+        "name": "Circle Time",
+        "type": "broadcast",
+        "participants": [
+          "guide",
+          "older-child",
+          "middle-child",
+          "younger-child"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "material-catalog",
+        "environment-layout",
+        "group-norms"
+      ],
+      "private": [
+        "individual-progress-records",
+        "observation-journals",
+        "work-plans"
+      ],
+      "description": "The prepared environment is the primary shared resource -- it contains self-correcting materials that provide feedback without teacher intervention. The guide maintains private observation journals tracking each student's development. Individual progress records are private to the guide-student pair. Group norms are shared and collectively maintained."
+    },
+    "diagram": "graph TD\n    G[Guide] -->|observes| ENV[Prepared Environment]\n    ENV --> OC[Experienced Learners]\n    ENV --> MC[Developing Learners]\n    ENV --> YC[New Learners]\n    OC -->|mentors| YC\n    OC -->|mentors| MC\n    G -->|individual lesson| YC\n    G -->|individual lesson| MC\n    AST[Assistant] --> ENV\n    G --> OBS[Observation Notes]",
+    "hierarchyTypes": [
+      "swarm",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "apprenticeship-guild",
+    "name": "Apprenticeship Guild System",
+    "category": "Education & Training",
+    "tags": [
+      "master-apprentice",
+      "graduated-skill",
+      "craft-based",
+      "credentialing"
+    ],
+    "summary": "Masters train journeymen and apprentices through hands-on practice, with guild standards governing quality.",
+    "description": "The guild system organizes skill development through a strict three-tier hierarchy: master, journeyman, and apprentice. Apprentices learn by doing under direct master supervision. Journeymen work independently but are not yet authorized to train others. Masters have proven their craft through a masterwork and earned the right to take apprentices. The guild itself sets standards, adjudicates disputes, and controls admission. Knowledge transfers through direct practice, not textbooks -- you learn by making things alongside someone better.",
+    "realWorldExample": "Medieval Goldsmith's Guild in Florence where apprentices served 7 years before journeyman status and produced a masterwork for master rank",
+    "whenToUse": "When skills are best learned through hands-on practice rather than instruction, quality standards must be maintained across the community, and credentialing gates access to higher responsibility.",
+    "strengths": [
+      "Hands-on learning ensures skills transfer through practice, not just theory",
+      "Clear progression path motivates agents and ensures readiness at each level",
+      "Guild standards maintain consistent quality across all practitioners",
+      "Master-apprentice bond creates deep mentorship and accountability"
+    ],
+    "weaknesses": [
+      "Very slow progression -- years per level is common",
+      "Masters may resist innovation that threatens their expertise",
+      "Guild protectionism can exclude capable outsiders",
+      "Single-master dependency -- if master is flawed, apprentice inherits those flaws"
+    ],
+    "agents": [
+      {
+        "role": "guild-master",
+        "name": "Guild Master",
+        "description": "Leads the guild; sets standards, adjudicates disputes, evaluates masterworks",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "master",
+        "name": "Master Craftsman",
+        "description": "Proven expert authorized to take apprentices and produce work independently",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "journeyman",
+        "name": "Journeyman",
+        "description": "Independent worker who has completed apprenticeship but not yet produced a masterwork",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "apprentice",
+        "name": "Apprentice",
+        "description": "Learner bound to a master; works alongside them daily; limited independent authority",
+        "memory": "ephemeral",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Guild Hall",
+        "type": "decision",
+        "participants": [
+          "guild-master",
+          "master"
+        ]
+      },
+      {
+        "name": "Workshop",
+        "type": "peer-to-peer",
+        "participants": [
+          "master",
+          "journeyman",
+          "apprentice"
+        ]
+      },
+      {
+        "name": "Master-Apprentice Pair",
+        "type": "per-agent",
+        "participants": [
+          "master",
+          "apprentice"
+        ]
+      },
+      {
+        "name": "Masterwork Review",
+        "type": "advisory",
+        "participants": [
+          "guild-master",
+          "master",
+          "journeyman"
+        ]
+      },
+      {
+        "name": "Guild Standards",
+        "type": "document",
+        "participants": [
+          "guild-master",
+          "master"
+        ]
+      },
+      {
+        "name": "Journeyman Exchange",
+        "type": "peer-to-peer",
+        "participants": [
+          "journeyman"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "guild-standards",
+        "masterwork-archive",
+        "member-registry",
+        "quality-specifications"
+      ],
+      "private": [
+        "workshop-techniques",
+        "apprentice-evaluations",
+        "trade-secrets"
+      ],
+      "description": "Guild standards and the masterwork archive are shared to maintain quality benchmarks. Each master's specific techniques are private trade knowledge. Apprentice evaluations are shared only between the master and guild master. The member registry tracks everyone's rank and progression. Journeymen carry their skills between workshops, building a private portfolio."
+    },
+    "diagram": "graph TD\n    GM[Guild Master] --> GH[Guild Hall]\n    M1[Master 1] --> GH\n    M2[Master 2] --> GH\n    M1 --> A1[Apprentice]\n    M1 --> A2[Apprentice]\n    M2 --> A3[Apprentice]\n    J1[Journeyman] --> M1\n    J2[Journeyman] --> M2\n    J1 -->|masterwork| GH\n    GH --> STD[Guild Standards]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "consensus",
+      "chain-of-command",
+      "federated",
+      "adversarial",
+      "mesh"
+    ]
+  },
+  {
+    "id": "medical-residency",
+    "name": "Medical Residency Program",
+    "category": "Education & Training",
+    "tags": [
+      "supervised-autonomy",
+      "graduated-responsibility",
+      "high-stakes",
+      "on-call"
+    ],
+    "summary": "Residents gain graduated autonomy under attending supervision, with escalation protocols for critical decisions.",
+    "description": "Medical residency grants trainees increasing autonomy as they demonstrate competence, but always under the shadow of attending physician oversight. Interns handle routine cases, residents manage complex ones, and attendings intervene on critical decisions. The key mechanism is the escalation protocol: residents must recognize when a case exceeds their level and escalate. Morning rounds provide teaching moments on the previous day's decisions. Morbidity and mortality conferences provide retrospective learning from failures without blame.",
+    "realWorldExample": "Johns Hopkins internal medicine residency with interns, residents, chief residents, and attending physicians covering 1000-bed hospital",
+    "whenToUse": "When agents handle high-stakes decisions that require graduated autonomy with mandatory escalation for cases beyond their competence level. Safety cannot be compromised for learning speed.",
+    "strengths": [
+      "Graduated autonomy builds real competence through supervised practice",
+      "Escalation protocols prevent catastrophic errors from inexperienced agents",
+      "Teaching rounds create systematic learning from real cases",
+      "M&M conferences enable blame-free learning from failures"
+    ],
+    "weaknesses": [
+      "Escalation depends on agents correctly recognizing their own limits",
+      "Attending bottleneck during high-load periods can delay critical decisions",
+      "Sleep deprivation and overload degrade decision quality (the on-call problem)",
+      "Hierarchical culture may discourage junior agents from questioning seniors"
+    ],
+    "agents": [
+      {
+        "role": "attending",
+        "name": "Attending Physician",
+        "description": "Ultimate authority on patient care; supervises all residents; teaches during rounds; intervenes on critical cases",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "chief-resident",
+        "name": "Chief Resident",
+        "description": "Senior resident who coordinates schedules, mediates between residents and attendings, handles complex cases",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "resident",
+        "name": "Resident",
+        "description": "Mid-level trainee managing a patient panel with moderate autonomy; escalates complex cases",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "intern",
+        "name": "Intern",
+        "description": "First-year trainee handling routine tasks under close supervision; presents cases on rounds",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "nurse",
+        "name": "Charge Nurse",
+        "description": "Monitors patient status continuously; alerts residents to changes; provides ground-truth observations",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Morning Rounds",
+        "type": "round-robin",
+        "participants": [
+          "attending",
+          "chief-resident",
+          "resident",
+          "intern"
+        ]
+      },
+      {
+        "name": "Escalation Channel",
+        "type": "emergency",
+        "participants": [
+          "intern",
+          "resident",
+          "chief-resident",
+          "attending"
+        ]
+      },
+      {
+        "name": "Signout / Handoff",
+        "type": "broadcast",
+        "participants": [
+          "chief-resident",
+          "resident",
+          "intern",
+          "nurse"
+        ]
+      },
+      {
+        "name": "M&M Conference",
+        "type": "retrospective",
+        "participants": [
+          "attending",
+          "chief-resident",
+          "resident",
+          "intern"
+        ]
+      },
+      {
+        "name": "Patient Chart",
+        "type": "document",
+        "participants": [
+          "attending",
+          "resident",
+          "intern",
+          "nurse"
+        ]
+      },
+      {
+        "name": "Nursing Alerts",
+        "type": "bottom-up",
+        "participants": [
+          "nurse",
+          "intern",
+          "resident"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "patient-charts",
+        "treatment-protocols",
+        "escalation-criteria",
+        "signout-board"
+      ],
+      "private": [
+        "personal-case-log",
+        "learning-portfolio",
+        "competency-evaluations"
+      ],
+      "description": "Patient charts are the critical shared document updated by all team members. Treatment protocols and escalation criteria define standard operating procedures. The signout board ensures handoff continuity. Each trainee maintains a private case log for learning. Competency evaluations are shared only between the trainee and their attending. M&M conference proceedings are shared for learning but anonymized."
+    },
+    "diagram": "graph TD\n    ATT[Attending] --> CR[Chief Resident]\n    CR --> R1[Resident 1]\n    CR --> R2[Resident 2]\n    R1 --> I1[Intern 1]\n    R2 --> I2[Intern 2]\n    NRS[Nurse] -->|alert| I1\n    NRS -->|alert| R1\n    I1 -->|escalate| R1\n    R1 -->|escalate| CR\n    CR -->|escalate| ATT\n    ATT --> ROUNDS[Morning Rounds]\n    ATT --> MMC[M&M Conference]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "football-coaching-staff",
+    "name": "Football Coaching Staff",
+    "category": "Sports & Competition",
+    "tags": [
+      "game-plan",
+      "real-time-adjustment",
+      "specialized-units",
+      "film-study"
+    ],
+    "summary": "Head coach coordinates specialized unit coaches who prepare game plans and make real-time adjustments during play.",
+    "description": "A football coaching staff divides the game into specialized units (offense, defense, special teams) each led by a coordinator. The head coach sets overall strategy and makes final decisions, particularly on critical fourth-down and timeout calls. During games, coordinators call plays for their units in real-time while position coaches provide individual feedback. Film study between games creates a feedback loop where past performance informs future strategy. The analytics staff provides data-driven insights that challenge traditional coaching intuition.",
+    "realWorldExample": "The New England Patriots coaching staff under Bill Belichick with offensive/defensive coordinators adapting game plans weekly",
+    "whenToUse": "When a system faces regular competitions against adversaries and must prepare specific strategies, execute in real-time with adjustments, and learn from performance data between engagements.",
+    "strengths": [
+      "Specialized coordinators enable deep expertise per unit",
+      "Real-time play-calling allows mid-execution adjustments",
+      "Film study creates systematic learning loop between engagements",
+      "Analytics layer challenges assumptions with data"
+    ],
+    "weaknesses": [
+      "Coordinator conflicts can produce incoherent overall strategy",
+      "Real-time communication is noisy and time-constrained",
+      "Head coach override can demoralize coordinators",
+      "Game-plan preparation is wasted if opponent does something unexpected"
+    ],
+    "agents": [
+      {
+        "role": "head-coach",
+        "name": "Head Coach",
+        "description": "Sets overall strategy, makes critical game decisions, manages coordinators and team culture",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "offensive-coordinator",
+        "name": "Offensive Coordinator",
+        "description": "Designs and calls offensive plays; manages the offensive game plan and personnel packages",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "defensive-coordinator",
+        "name": "Defensive Coordinator",
+        "description": "Designs defensive schemes and calls defensive plays; adjusts to opponent's offensive tendencies",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "special-teams-coordinator",
+        "name": "Special Teams Coordinator",
+        "description": "Manages kicking game, returns, and special situations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "position-coach",
+        "name": "Position Coach",
+        "description": "Provides individual technique coaching and in-game feedback to specific player groups",
+        "memory": "ephemeral",
+        "count": 4
+      },
+      {
+        "role": "analytics",
+        "name": "Analytics Staff",
+        "description": "Provides data-driven insights on opponent tendencies, win probability, and personnel efficiency",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Game Plan Meeting",
+        "type": "decision",
+        "participants": [
+          "head-coach",
+          "offensive-coordinator",
+          "defensive-coordinator",
+          "special-teams-coordinator",
+          "analytics"
+        ]
+      },
+      {
+        "name": "Sideline Comms",
+        "type": "broadcast",
+        "participants": [
+          "head-coach",
+          "offensive-coordinator",
+          "defensive-coordinator"
+        ]
+      },
+      {
+        "name": "Film Room",
+        "type": "retrospective",
+        "participants": [
+          "head-coach",
+          "offensive-coordinator",
+          "defensive-coordinator",
+          "analytics",
+          "position-coach"
+        ]
+      },
+      {
+        "name": "Halftime Adjustments",
+        "type": "decision",
+        "participants": [
+          "head-coach",
+          "offensive-coordinator",
+          "defensive-coordinator",
+          "analytics"
+        ]
+      },
+      {
+        "name": "Position Drills",
+        "type": "per-agent",
+        "participants": [
+          "position-coach"
+        ]
+      },
+      {
+        "name": "Scouting Reports",
+        "type": "document",
+        "participants": [
+          "analytics",
+          "offensive-coordinator",
+          "defensive-coordinator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "game-plan",
+        "scouting-reports",
+        "playbook",
+        "season-record"
+      ],
+      "private": [
+        "coordinator-play-sheets",
+        "opponent-film-notes",
+        "analytics-models",
+        "position-technique-notes"
+      ],
+      "description": "The game plan is shared before each engagement. The playbook is the master reference shared across all coaches. Scouting reports are compiled by analytics and distributed. Each coordinator maintains private play sheets and tendency charts. Film notes accumulate over the season as persistent learning. Analytics models are private but their outputs are shared."
+    },
+    "diagram": "graph TD\n    HC[Head Coach] --> OC[Offensive Coord]\n    HC --> DC[Defensive Coord]\n    HC --> STC[Special Teams]\n    OC --> PC1[Position Coach]\n    OC --> PC2[Position Coach]\n    DC --> PC3[Position Coach]\n    DC --> PC4[Position Coach]\n    AN[Analytics] --> HC\n    AN --> OC\n    AN --> DC\n    FILM[Film Room] --> AN\n    FILM --> OC\n    FILM --> DC",
+    "hierarchyTypes": [
+      "orchestrated",
+      "adversarial",
+      "consensus"
+    ]
+  },
+  {
+    "id": "formula-one-pit-crew",
+    "name": "Formula 1 Pit Crew",
+    "category": "Sports & Competition",
+    "tags": [
+      "precision-timing",
+      "parallel-execution",
+      "rehearsed",
+      "zero-error"
+    ],
+    "summary": "Highly rehearsed team performs parallel sub-second tasks with zero-error tolerance under extreme time pressure.",
+    "description": "An F1 pit crew is the ultimate example of parallel, time-critical, rehearsed execution. Twenty crew members perform four tire changes, front wing adjustments, and refueling simultaneously in under two seconds. Each member has exactly one job. The crew chief coordinates timing. There is no improvisation -- every movement is rehearsed hundreds of times. The lollipop man (or traffic light system) provides the single go/no-go signal. Failure in any single role delays the entire operation. This pattern is about eliminating all variability through practice and parallelism.",
+    "realWorldExample": "Red Bull Racing pit crew performing a 1.82-second tire change at the 2019 Brazilian Grand Prix with 20 crew members",
+    "whenToUse": "When a time-critical operation can be decomposed into parallel subtasks that must all complete before the operation is done, and the task is repeated enough to justify extensive rehearsal.",
+    "strengths": [
+      "Extreme parallelism minimizes total operation time",
+      "Rehearsal eliminates variability and error",
+      "Each agent has a single, clear responsibility with no ambiguity",
+      "Binary go/no-go signal prevents premature completion"
+    ],
+    "weaknesses": [
+      "Zero flexibility -- any deviation from the rehearsed plan causes failure",
+      "Cannot handle novel situations that were not practiced",
+      "Massive rehearsal investment required before first real execution",
+      "Slowest agent determines total completion time"
+    ],
+    "agents": [
+      {
+        "role": "crew-chief",
+        "name": "Crew Chief",
+        "description": "Coordinates pit stop timing, communicates with race engineer, gives go/no-go signal",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "tire-changer",
+        "name": "Tire Gun Operator",
+        "description": "Removes and tightens a single wheel nut; one per wheel",
+        "memory": "ephemeral",
+        "count": 4
+      },
+      {
+        "role": "tire-carrier",
+        "name": "Tire Carrier",
+        "description": "Removes old tire and positions new tire; one pair (off/on) per wheel",
+        "memory": "ephemeral",
+        "count": 8
+      },
+      {
+        "role": "jack-operator",
+        "name": "Jack Operator",
+        "description": "Lifts the car; front and rear jacks must synchronize",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "stabilizer",
+        "name": "Stabilizer",
+        "description": "Holds the car steady during tire change; prevents lateral movement",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "race-engineer",
+        "name": "Race Engineer",
+        "description": "Decides pit stop timing strategy; communicates with driver and crew chief from the pit wall",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pit Wall Radio",
+        "type": "top-down",
+        "participants": [
+          "race-engineer",
+          "crew-chief"
+        ]
+      },
+      {
+        "name": "Go Signal",
+        "type": "broadcast",
+        "participants": [
+          "crew-chief",
+          "tire-changer",
+          "tire-carrier",
+          "jack-operator",
+          "stabilizer"
+        ]
+      },
+      {
+        "name": "Completion Flags",
+        "type": "bottom-up",
+        "participants": [
+          "tire-changer",
+          "crew-chief"
+        ]
+      },
+      {
+        "name": "Rehearsal Debrief",
+        "type": "retrospective",
+        "participants": [
+          "crew-chief",
+          "tire-changer",
+          "tire-carrier",
+          "jack-operator",
+          "race-engineer"
+        ]
+      },
+      {
+        "name": "Telemetry Feed",
+        "type": "pub-sub",
+        "participants": [
+          "race-engineer",
+          "crew-chief"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "pit-stop-procedure",
+        "timing-benchmarks",
+        "rehearsal-recordings"
+      ],
+      "private": [
+        "individual-performance-metrics",
+        "race-strategy-models"
+      ],
+      "description": "The pit stop procedure is the shared, immutable choreography -- every movement is specified. Timing benchmarks track performance against targets. Rehearsal recordings enable post-practice analysis. Individual performance metrics are private to each agent and their coach. The race engineer's strategy models are private. During execution, all memory is effectively ephemeral -- there is no time to consult anything."
+    },
+    "diagram": "graph LR\n    RE[Race Engineer] --> CC[Crew Chief]\n    CC --> GO[Go Signal]\n    GO --> J1[Front Jack]\n    GO --> J2[Rear Jack]\n    GO --> TC1[Tire Gun FL]\n    GO --> TC2[Tire Gun FR]\n    GO --> TC3[Tire Gun RL]\n    GO --> TC4[Tire Gun RR]\n    TC1 --> DONE[Completion]\n    TC2 --> DONE\n    TC3 --> DONE\n    TC4 --> DONE\n    DONE --> CC",
+    "hierarchyTypes": [
+      "swarm",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "basketball-motion-offense",
+    "name": "Basketball Motion Offense",
+    "category": "Sports & Competition",
+    "tags": [
+      "fluid-roles",
+      "read-and-react",
+      "emergent-plays",
+      "shared-principles"
+    ],
+    "summary": "Players read and react to defense using shared principles rather than set plays, creating emergent scores.",
+    "description": "A motion offense has no fixed plays. Instead, all five players follow shared principles (spacing, cutting, screening) and read the defense to make decisions. Each player can fill any role depending on the situation. The point guard initiates but doesn't control -- any player who sees an opening takes it. Decisions are made in sub-seconds based on local information. The system is anti-fragile: it cannot be 'solved' by the opponent because it has no fixed pattern to decode. Coaching happens between possessions and at timeouts, not during live play.",
+    "realWorldExample": "The Golden State Warriors' motion offense where Curry, Thompson, and Green read defenses and create shots through constant movement",
+    "whenToUse": "When the environment is adversarial and unpredictable, agents must make rapid decisions based on local information, and rigid plans would be exploitable by opponents.",
+    "strengths": [
+      "Unpredictable to opponents -- no fixed pattern to scout and counter",
+      "Any agent can exploit any opportunity without waiting for authorization",
+      "Fluid roles prevent opponents from neutralizing specific agents",
+      "Shared principles scale without requiring more complex playbooks"
+    ],
+    "weaknesses": [
+      "Requires agents with high basketball IQ -- cannot work with low-skill agents",
+      "Poor spacing or misreads create turnovers with no one at fault",
+      "Difficult to diagnose failures because there is no fixed plan to compare against",
+      "Coach has limited control during live execution"
+    ],
+    "agents": [
+      {
+        "role": "point-guard",
+        "name": "Point Guard",
+        "description": "Initiates possessions and makes first read; can pass, drive, or shoot based on defense",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wing",
+        "name": "Wing Player",
+        "description": "Maintains spacing, cuts to basket, sets screens; reads point guard and defense simultaneously",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "forward",
+        "name": "Forward",
+        "description": "Operates in mid-range and post; screens for guards; reads defense for open shots or passes",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "center",
+        "name": "Center",
+        "description": "Sets screens, rolls to basket, provides rebounding; highest-priority interior player",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "coach",
+        "name": "Head Coach",
+        "description": "Defines principles pre-game; makes substitutions and adjustments at timeouts; cannot call plays in real-time",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Court Vision",
+        "type": "peer-to-peer",
+        "participants": [
+          "point-guard",
+          "wing",
+          "forward",
+          "center"
+        ]
+      },
+      {
+        "name": "Timeout Huddle",
+        "type": "top-down",
+        "participants": [
+          "coach",
+          "point-guard",
+          "wing",
+          "forward",
+          "center"
+        ]
+      },
+      {
+        "name": "Halftime Review",
+        "type": "retrospective",
+        "participants": [
+          "coach",
+          "point-guard",
+          "wing",
+          "forward",
+          "center"
+        ]
+      },
+      {
+        "name": "Scouting Report",
+        "type": "document",
+        "participants": [
+          "coach",
+          "point-guard"
+        ]
+      },
+      {
+        "name": "Substitution Signals",
+        "type": "broadcast",
+        "participants": [
+          "coach",
+          "point-guard",
+          "wing",
+          "forward",
+          "center"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "offensive-principles",
+        "scouting-report",
+        "play-signals"
+      ],
+      "private": [
+        "defensive-reads",
+        "shot-confidence",
+        "matchup-notes"
+      ],
+      "description": "Offensive principles are the shared 'constitution' that governs all decisions. The scouting report provides pre-game intelligence on opponents. During live play, memory is entirely ephemeral -- agents read and react in real-time based on what they see, not what they remember. Between games, film study builds persistent private memory about tendencies and matchups."
+    },
+    "diagram": "graph TD\n    COACH[Coach] -->|principles| PG[Point Guard]\n    COACH -->|principles| W1[Wing 1]\n    COACH -->|principles| W2[Wing 2]\n    COACH -->|principles| FW[Forward]\n    COACH -->|principles| C[Center]\n    PG <-->|read & react| W1\n    PG <-->|read & react| W2\n    PG <-->|read & react| FW\n    PG <-->|read & react| C\n    W1 <-->|screen| C\n    W2 <-->|cut| FW",
+    "hierarchyTypes": [
+      "mesh",
+      "swarm"
+    ]
+  }
+]

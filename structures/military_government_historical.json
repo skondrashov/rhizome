@@ -1,0 +1,2565 @@
+[
+  {
+    "id": "special-forces-cell",
+    "name": "Special Forces Cell Structure",
+    "category": "Military & Defense",
+    "tags": [
+      "cell-based",
+      "autonomous",
+      "compartmentalized",
+      "small-team",
+      "covert"
+    ],
+    "summary": "Small autonomous cells operate independently with minimal contact, connected only through cutouts.",
+    "description": "Modeled after special operations and clandestine networks where small, self-contained cells of 3-5 operators work toward objectives with minimal communication to higher echelons. Each cell knows only its own mission and its single point of contact (cutout). If one cell is compromised, the rest of the network survives. Cells are cross-functional: every member can perform every role if needed. Coordination happens through dead drops and brief, scheduled check-ins rather than persistent channels.",
+    "realWorldExample": "US Army Special Forces ODA (Operational Detachment Alpha), French Resistance cells in WWII",
+    "whenToUse": "When security and compartmentalization are paramount, when agent failure must not cascade, and when small teams need full autonomy to adapt to local conditions without waiting for orders.",
+    "strengths": [
+      "Extremely resilient to compromise",
+      "High autonomy enables rapid adaptation",
+      "Minimal communication overhead",
+      "Cross-functional redundancy within cells",
+      "Scales by adding cells without increasing coordination cost"
+    ],
+    "weaknesses": [
+      "Difficult to coordinate across cells",
+      "Duplicated effort between cells",
+      "No shared learning across the network",
+      "Cutout failure isolates entire cells",
+      "Strategic coherence depends on initial briefing quality"
+    ],
+    "agents": [
+      {
+        "role": "handler",
+        "name": "Handler",
+        "description": "Mission authority who briefs cells and collects results, never enters the field",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cutout",
+        "name": "Cutout",
+        "description": "Intermediary who relays between handler and cells without knowing full picture",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "cell-leader",
+        "name": "Cell Leader",
+        "description": "Leads a small autonomous team, makes all tactical decisions",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "operator",
+        "name": "Operator",
+        "description": "Cross-functional team member who executes tasks within the cell",
+        "memory": "ephemeral",
+        "count": 9
+      }
+    ],
+    "forums": [
+      {
+        "name": "Mission Brief",
+        "type": "top-down",
+        "participants": [
+          "handler",
+          "cutout"
+        ]
+      },
+      {
+        "name": "Dead Drop",
+        "type": "queue",
+        "participants": [
+          "cutout",
+          "cell-leader"
+        ]
+      },
+      {
+        "name": "Cell Internal",
+        "type": "peer-to-peer",
+        "participants": [
+          "cell-leader",
+          "operator"
+        ]
+      },
+      {
+        "name": "Exfil Report",
+        "type": "bottom-up",
+        "participants": [
+          "cell-leader",
+          "cutout",
+          "handler"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Mission objectives (per cell, not global)",
+        "Extraction protocols",
+        "Authentication codes"
+      ],
+      "private": [
+        "Cell-specific plans",
+        "Local intelligence",
+        "Identity covers"
+      ],
+      "description": "Strictly compartmentalized. Each cell sees only its own mission slice. The handler holds the full picture but never shares it. Cutouts carry opaque messages. If captured, any single agent can reveal almost nothing about the broader network."
+    },
+    "diagram": "graph TD\n    H[Handler] -->|briefs| C1[Cutout 1]\n    H -->|briefs| C2[Cutout 2]\n    H -->|briefs| C3[Cutout 3]\n    C1 -->|dead drop| CL1[Cell Alpha]\n    C2 -->|dead drop| CL2[Cell Bravo]\n    C3 -->|dead drop| CL3[Cell Charlie]\n    CL1 --> O1[Op 1]\n    CL1 --> O2[Op 2]\n    CL1 --> O3[Op 3]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "carrier-strike-group",
+    "name": "Aircraft Carrier Strike Group",
+    "category": "Military & Defense",
+    "tags": [
+      "layered-defense",
+      "multi-domain",
+      "centralized-command",
+      "specialized-assets",
+      "real-time"
+    ],
+    "summary": "Central command platform coordinates specialized units across air, surface, and subsurface domains simultaneously.",
+    "description": "Based on a carrier strike group where a flagship coordinates fundamentally different asset types (aircraft, surface combatants, submarines, logistics) that each operate in distinct domains with different constraints. The carrier is the center of gravity but not a bottleneck: each asset type has its own tactical commander who makes real-time decisions within the strike group commander's intent. A combat information center fuses sensor data from all domains into a common operating picture shared across the group.",
+    "realWorldExample": "US Navy Carrier Strike Group (e.g., CSG-3 led by USS Abraham Lincoln)",
+    "whenToUse": "When coordinating fundamentally different agent types that operate in different domains or at different speeds, and you need a unified picture while preserving domain-specific tactical autonomy.",
+    "strengths": [
+      "Integrates diverse capabilities into unified action",
+      "Domain experts retain tactical autonomy",
+      "Redundant sensing across domains",
+      "Common operating picture enables coordination",
+      "Layered defense provides depth"
+    ],
+    "weaknesses": [
+      "Extremely complex to set up",
+      "High communication bandwidth required",
+      "Carrier loss is catastrophic",
+      "Cross-domain coordination has inherent latency",
+      "Expensive in agent resources"
+    ],
+    "agents": [
+      {
+        "role": "strike-group-commander",
+        "name": "Strike Group Commander",
+        "description": "Sets strategic intent and priorities from the flagship",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "air-boss",
+        "name": "Air Boss",
+        "description": "Controls all air operations: launch, recovery, combat air patrol",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "surface-warfare",
+        "name": "Surface Warfare Commander",
+        "description": "Coordinates escort ships for defense and surface engagement",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "sub-warfare",
+        "name": "Undersea Warfare Commander",
+        "description": "Manages submarine assets and anti-submarine operations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "intel-fusion",
+        "name": "Combat Information Center",
+        "description": "Fuses all sensor data into common operating picture",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "logistics",
+        "name": "Logistics Coordinator",
+        "description": "Manages fuel, munitions, and supply across the strike group",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Common Operating Picture",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Commander's Intent",
+        "type": "top-down",
+        "participants": [
+          "strike-group-commander",
+          "air-boss",
+          "surface-warfare",
+          "sub-warfare"
+        ]
+      },
+      {
+        "name": "Threat Alerts",
+        "type": "emergency",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Sensor Fusion Feed",
+        "type": "pub-sub",
+        "participants": [
+          "intel-fusion",
+          "air-boss",
+          "surface-warfare",
+          "sub-warfare"
+        ]
+      },
+      {
+        "name": "Logistics Status",
+        "type": "log",
+        "participants": [
+          "logistics",
+          "strike-group-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Common operating picture",
+        "Rules of engagement",
+        "Commander's intent",
+        "Threat library"
+      ],
+      "private": [
+        "Domain-specific sensor data",
+        "Tactical plans per domain",
+        "Asset readiness status"
+      ],
+      "description": "The combat information center maintains a continuously updated shared picture. Each domain commander has private tactical context. Sensor data flows into fusion center which publishes the integrated view. Logistics maintains an append-only consumption log."
+    },
+    "diagram": "graph TD\n    SGC[Strike Group Commander] --> AB[Air Boss]\n    SGC --> SW[Surface Warfare]\n    SGC --> UW[Undersea Warfare]\n    SGC --> LOG[Logistics]\n    AB -->|sensors| CIC((CIC Fusion))\n    SW -->|sensors| CIC\n    UW -->|sensors| CIC\n    CIC -->|COP| SGC\n    CIC -->|COP| AB\n    CIC -->|COP| SW\n    CIC -->|COP| UW",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "roman-legion",
+    "name": "Roman Legion Organization",
+    "category": "Military & Defense",
+    "tags": [
+      "decimal",
+      "standardized",
+      "modular",
+      "hierarchical",
+      "disciplined"
+    ],
+    "summary": "Standardized modular units nest in fixed ratios, enabling mix-and-match deployment with uniform interfaces.",
+    "description": "Based on the Roman legion's decimal-adjacent organization where units nest at fixed ratios: 8 men form a contubernium, 10 contubernia form a century, 6 centuries form a cohort, 10 cohorts form a legion. Every unit at the same level has identical structure and capabilities, making them perfectly interchangeable. Officers at each level have identical authority over identical units. This extreme standardization enables rapid reorganization: cohorts can be detached, combined, or replaced without retraining.",
+    "realWorldExample": "Roman Imperial Legion (e.g., Legio X Fretensis), also influenced modern military TO&E",
+    "whenToUse": "When you need highly modular, interchangeable agent groups that can be reorganized dynamically, and when standardized interfaces between levels matter more than individual specialization.",
+    "strengths": [
+      "Perfect modularity and interchangeability",
+      "Simple to scale up or down",
+      "Standard interfaces reduce coordination errors",
+      "Any unit can replace any other at the same level",
+      "Predictable performance characteristics"
+    ],
+    "weaknesses": [
+      "Rigid structure resists specialization",
+      "Innovation suppressed by standardization",
+      "Identical units cannot exploit niche capabilities",
+      "Fixed ratios may not match task requirements",
+      "High overhead for small tasks"
+    ],
+    "agents": [
+      {
+        "role": "legatus",
+        "name": "Legatus (Legate)",
+        "description": "Commander of the entire legion, sets campaign objectives",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "tribunus",
+        "name": "Tribunus (Tribune)",
+        "description": "Senior staff officer, coordinates between cohorts",
+        "memory": "persistent-shared",
+        "count": 6
+      },
+      {
+        "role": "centurion",
+        "name": "Centurion",
+        "description": "Commands a century of ~80 agents, the backbone of leadership",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "optio",
+        "name": "Optio (Second)",
+        "description": "Deputy to centurion, takes over if centurion falls",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "legionary",
+        "name": "Legionary",
+        "description": "Standard soldier, identically trained and equipped",
+        "memory": "ephemeral",
+        "count": 12
+      }
+    ],
+    "forums": [
+      {
+        "name": "War Council",
+        "type": "advisory",
+        "participants": [
+          "legatus",
+          "tribunus"
+        ]
+      },
+      {
+        "name": "Standing Orders",
+        "type": "top-down",
+        "participants": [
+          "legatus",
+          "tribunus",
+          "centurion"
+        ]
+      },
+      {
+        "name": "Century Reports",
+        "type": "bottom-up",
+        "participants": [
+          "centurion",
+          "tribunus",
+          "legatus"
+        ]
+      },
+      {
+        "name": "Watch Log",
+        "type": "log",
+        "participants": [
+          "optio",
+          "centurion"
+        ]
+      },
+      {
+        "name": "Standards and Drill",
+        "type": "document",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Standing orders",
+        "Drill manuals",
+        "Campaign maps",
+        "Supply tables"
+      ],
+      "private": [
+        "Unit-specific status",
+        "Casualty reports",
+        "Local reconnaissance"
+      ],
+      "description": "Shared memory is dominated by standardized procedures and drill manuals that ensure every unit behaves identically. Private memory tracks unit-specific state. The extreme standardization means shared documentation is the primary coordination mechanism, not real-time communication."
+    },
+    "diagram": "graph TD\n    L[Legatus] --> T1[Tribune 1]\n    L --> T2[Tribune 2]\n    T1 --> C1[Centurion 1]\n    T1 --> C2[Centurion 2]\n    T1 --> C3[Centurion 3]\n    T2 --> C4[Centurion 4]\n    T2 --> C5[Centurion 5]\n    T2 --> C6[Centurion 6]\n    C1 --> Leg[Legionaries]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "nato-combined-ops",
+    "name": "NATO Combined Operations",
+    "category": "Military & Defense",
+    "tags": [
+      "coalition",
+      "interoperable",
+      "consensus",
+      "multi-national",
+      "standardized-protocols"
+    ],
+    "summary": "Independent national forces coordinate through standardized protocols and liaison officers with consensus-based command.",
+    "description": "Modeled after NATO combined operations where sovereign national forces maintain their own command structures but cooperate through standardized agreements (STANAGs), liaison officers, and a combined joint task force headquarters. No single nation commands another's forces directly. Instead, nations agree on objectives and contribute forces under operational control (OPCON) of a combined commander while retaining national command authority (full control). Consensus is required for strategic decisions; tactical execution is delegated.",
+    "realWorldExample": "NATO ISAF operations in Afghanistan, EUNAVFOR anti-piracy operations",
+    "whenToUse": "When coordinating independently owned and operated agent systems that have different internal architectures but must work toward shared objectives without any single owner having full authority.",
+    "strengths": [
+      "Respects autonomy of independent systems",
+      "Standardized interfaces enable interoperability",
+      "Brings diverse capabilities together",
+      "No single point of ownership or control",
+      "Proven at very large scale"
+    ],
+    "weaknesses": [
+      "Consensus is slow and fragile",
+      "National caveats restrict flexibility",
+      "Interoperability gaps despite standards",
+      "Lowest common denominator problem",
+      "Political friction can override operational logic"
+    ],
+    "agents": [
+      {
+        "role": "combined-commander",
+        "name": "Combined Commander",
+        "description": "Commands the joint force, but only within agreed rules",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "national-contingent-a",
+        "name": "National Contingent A",
+        "description": "Sovereign force with own chain of command, contributes under OPCON",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "national-contingent-b",
+        "name": "National Contingent B",
+        "description": "Another sovereign force with different capabilities and caveats",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "national-contingent-c",
+        "name": "National Contingent C",
+        "description": "Third sovereign force, may have restrictions on engagement",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "liaison-officer",
+        "name": "Liaison Officer",
+        "description": "Bridges between combined HQ and national contingents, translates intent",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "stanag-translator",
+        "name": "Standards Officer",
+        "description": "Ensures all communications follow agreed interoperability standards",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "North Atlantic Council",
+        "type": "decision",
+        "participants": [
+          "national-contingent-a",
+          "national-contingent-b",
+          "national-contingent-c"
+        ]
+      },
+      {
+        "name": "Combined Joint Ops Center",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "National Red Card Holder",
+        "type": "advisory",
+        "participants": [
+          "national-contingent-a",
+          "national-contingent-b",
+          "national-contingent-c",
+          "combined-commander"
+        ]
+      },
+      {
+        "name": "STANAG Compliance Log",
+        "type": "log",
+        "participants": [
+          "stanag-translator",
+          "liaison-officer"
+        ]
+      },
+      {
+        "name": "Liaison Bridge",
+        "type": "peer-to-peer",
+        "participants": [
+          "liaison-officer",
+          "combined-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Combined operational plan",
+        "STANAG standards",
+        "Shared intelligence picture",
+        "Rules of engagement"
+      ],
+      "private": [
+        "National command directives",
+        "National caveats and restrictions",
+        "National intelligence sources"
+      ],
+      "description": "Shared memory is strictly limited to agreed standards and combined plans. Each national contingent maintains sovereign private memory. Liaison officers have access to both shared and their nation's private context. The standards officer maintains a versioned record of all protocol agreements."
+    },
+    "diagram": "graph TD\n    CC[Combined Commander] --> LO1[Liaison 1]\n    CC --> LO2[Liaison 2]\n    CC --> LO3[Liaison 3]\n    LO1 --> NA[Nation A Forces]\n    LO2 --> NB[Nation B Forces]\n    LO3 --> NC[Nation C Forces]\n    NA -.->|red card| CC\n    NB -.->|red card| CC\n    NC -.->|red card| CC\n    SO[Standards Officer] -.->|STANAG| CC",
+    "hierarchyTypes": [
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "submarine-crew",
+    "name": "Submarine Crew Organization",
+    "category": "Military & Defense",
+    "tags": [
+      "closed-system",
+      "watch-rotation",
+      "high-stakes",
+      "compressed-hierarchy",
+      "resource-constrained"
+    ],
+    "summary": "Compressed hierarchy in a sealed environment where watch rotations ensure 24/7 coverage with minimal crew.",
+    "description": "Based on submarine operations where a small crew operates a complex system in complete isolation with no external communication for extended periods. The hierarchy is compressed: only 3-4 levels between commanding officer and lowest rating. Watch rotations (typically 6 hours on, 12 off) ensure continuous operation. Every crew member is cross-trained on damage control. The sealed environment means all problems must be solved internally with finite resources. Communication is terse and protocol-driven to prevent errors in a system where a single mistake can kill everyone.",
+    "realWorldExample": "US Navy Los Angeles-class submarine crew, Royal Navy Vanguard-class SSBN",
+    "whenToUse": "When agents must operate autonomously in a resource-constrained environment with no external support, where continuous operation is required, and where errors have severe consequences.",
+    "strengths": [
+      "Operates indefinitely without external input",
+      "Cross-training provides redundancy",
+      "Compressed hierarchy enables fast decisions",
+      "Protocol-driven communication prevents errors",
+      "Extreme resource efficiency"
+    ],
+    "weaknesses": [
+      "Cannot scale beyond crew capacity",
+      "Isolation prevents external expertise",
+      "Crew fatigue from watch rotations",
+      "Finite resources constrain options",
+      "Single catastrophic failure destroys entire system"
+    ],
+    "agents": [
+      {
+        "role": "commanding-officer",
+        "name": "Commanding Officer",
+        "description": "Ultimate authority, makes all strategic and emergency decisions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "executive-officer",
+        "name": "Executive Officer",
+        "description": "Manages crew rotation, training, and internal operations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "chief-of-boat",
+        "name": "Chief of the Boat",
+        "description": "Senior enlisted, bridge between officers and crew, knows every system",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "watch-officer",
+        "name": "Officer of the Deck",
+        "description": "Commands the boat during their watch rotation",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "department-head",
+        "name": "Department Head",
+        "description": "Manages one of: engineering, weapons, navigation, or communications",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "watchstander",
+        "name": "Watchstander",
+        "description": "Operates specific systems during watch, cross-trained on damage control",
+        "memory": "ephemeral",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Watch Turnover",
+        "type": "round-robin",
+        "participants": [
+          "watch-officer",
+          "watchstander"
+        ]
+      },
+      {
+        "name": "Captain's Standing Orders",
+        "type": "document",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Damage Control Circuit",
+        "type": "emergency",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Departmental Log",
+        "type": "log",
+        "participants": [
+          "department-head",
+          "executive-officer"
+        ]
+      },
+      {
+        "name": "Officers' Wardroom",
+        "type": "advisory",
+        "participants": [
+          "commanding-officer",
+          "executive-officer",
+          "department-head"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Standing orders",
+        "Watch bill",
+        "System status boards",
+        "Damage control procedures"
+      ],
+      "private": [
+        "Department-specific logs",
+        "Personal watchstanding notes",
+        "Training records"
+      ],
+      "description": "Watch turnover is the critical memory mechanism: outgoing watch formally transfers situational awareness to incoming watch. All system states are logged on shared boards. Standing orders persist across watches. Private notes help individual watchstanders track trends in their systems."
+    },
+    "diagram": "graph TD\n    CO[Commanding Officer] --> XO[Executive Officer]\n    CO --> COB[Chief of Boat]\n    XO --> DH1[Engineering]\n    XO --> DH2[Weapons]\n    XO --> DH3[Navigation]\n    XO --> DH4[Comms]\n    COB --> W1[Watch Team 1]\n    COB --> W2[Watch Team 2]\n    COB --> W3[Watch Team 3]\n    W1 -.->|turnover| W2\n    W2 -.->|turnover| W3\n    W3 -.->|turnover| W1",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "swarm",
+      "mesh",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "nuclear-launch-authority",
+    "name": "Nuclear Launch Authority",
+    "category": "Military & Defense",
+    "tags": [
+      "dual-key",
+      "verification",
+      "fail-safe",
+      "irreversible-action",
+      "multi-party-authorization"
+    ],
+    "summary": "Multiple independent agents must concur before irreversible actions execute, with layered verification at each step.",
+    "description": "Modeled after nuclear command and control where the most consequential actions require independent concurrent authorization from multiple parties who verify each other. No single agent can initiate an irreversible action alone. The authentication chain includes challenge-response protocols, sealed authentication codes, and physical separation of authorizing parties. Designed to prevent both unauthorized action and failure to act when legitimately ordered. Every step is logged immutably.",
+    "realWorldExample": "US nuclear command authority (president + SecDef + two-person rule at launch facility)",
+    "whenToUse": "When agent actions are irreversible and high-consequence, when preventing unauthorized action is as important as enabling authorized action, and when you need cryptographic certainty of intent.",
+    "strengths": [
+      "Prevents unauthorized irreversible actions",
+      "Multiple independent verification points",
+      "Immutable audit trail",
+      "Resistant to single-agent compromise",
+      "Handles the hardest trust problem in computing"
+    ],
+    "weaknesses": [
+      "Extremely slow for routine operations",
+      "Rigid protocols resist adaptation",
+      "Dead-man scenarios if authorizers are lost",
+      "Over-engineering for low-stakes tasks",
+      "Requires pre-distributed authentication material"
+    ],
+    "agents": [
+      {
+        "role": "national-command",
+        "name": "National Command Authority",
+        "description": "Sole authority to order action, cannot execute alone",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "authenticator",
+        "name": "Authentication Officer",
+        "description": "Independently verifies the order is genuine using sealed codes",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "launch-officer-a",
+        "name": "Launch Officer A",
+        "description": "One of two officers who must simultaneously turn keys",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "launch-officer-b",
+        "name": "Launch Officer B",
+        "description": "Second officer, physically separated, must concur independently",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "failsafe-monitor",
+        "name": "Failsafe Monitor",
+        "description": "Continuously monitors for anomalies and can abort at any stage",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Emergency Action Message",
+        "type": "top-down",
+        "participants": [
+          "national-command",
+          "authenticator"
+        ]
+      },
+      {
+        "name": "Authentication Challenge",
+        "type": "peer-to-peer",
+        "participants": [
+          "authenticator",
+          "launch-officer-a",
+          "launch-officer-b"
+        ]
+      },
+      {
+        "name": "Dual Consent Channel",
+        "type": "decision",
+        "participants": [
+          "launch-officer-a",
+          "launch-officer-b"
+        ]
+      },
+      {
+        "name": "Abort Circuit",
+        "type": "emergency",
+        "participants": [
+          "failsafe-monitor",
+          "national-command"
+        ]
+      },
+      {
+        "name": "Immutable Action Log",
+        "type": "log",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Sealed authentication codes (verified but not shared)",
+        "Action checklists",
+        "Abort criteria"
+      ],
+      "private": [
+        "Individual authentication material",
+        "Personal verification codes",
+        "Individual abort authority criteria"
+      ],
+      "description": "Authentication material is distributed in advance and kept strictly private. Each agent has their own sealed codes that can be verified against but never shared. The action log is append-only and immutable. No single agent's memory contains enough information to reconstruct the full authorization chain."
+    },
+    "diagram": "graph TD\n    NCA[National Command] -->|order| AUTH[Authenticator]\n    AUTH -->|verified order| LOA[Launch Officer A]\n    AUTH -->|verified order| LOB[Launch Officer B]\n    LOA -->|key turn| DUAL{Dual Consent}\n    LOB -->|key turn| DUAL\n    DUAL -->|both agree| EXEC[Execute]\n    FSM[Failsafe Monitor] -.->|abort| DUAL\n    FSM -.->|abort| EXEC",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "adversarial",
+      "mesh",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "guerrilla-resistance-network",
+    "name": "Guerrilla Resistance Network",
+    "category": "Military & Defense",
+    "tags": [
+      "decentralized",
+      "resilient",
+      "asymmetric",
+      "underground",
+      "adaptive"
+    ],
+    "summary": "Loosely connected autonomous groups share ideology but operate independently, reforming organically after disruption.",
+    "description": "Inspired by successful resistance movements where there is no single command structure to decapitate. Autonomous local groups share a common ideology, doctrine, and communication protocols but plan and execute independently. Information spreads through trusted personal networks rather than formal channels. The network is deliberately redundant and loosely coupled: destroying any node or edge causes local damage but the network self-heals. New nodes can join organically by connecting to any existing trusted node. Leadership is emergent and replaceable.",
+    "realWorldExample": "French Resistance (WWII), Afghan mujahideen networks, Polish Home Army",
+    "whenToUse": "When the agent system must survive sustained attempts to disrupt it, when central coordination is impossible or dangerous, and when you need organic growth and self-healing properties.",
+    "strengths": [
+      "Nearly impossible to fully destroy",
+      "Self-healing after disruption",
+      "Organic growth without central planning",
+      "Adapts to local conditions automatically",
+      "No single point of failure anywhere"
+    ],
+    "weaknesses": [
+      "Cannot execute coordinated large-scale operations",
+      "Message integrity degrades across the network",
+      "Difficult to enforce quality or strategy consistency",
+      "Vulnerable to infiltration at trust boundaries",
+      "Impossible to know the full network state"
+    ],
+    "agents": [
+      {
+        "role": "cell-commander",
+        "name": "Cell Commander",
+        "description": "Leads a local autonomous cell, knows only adjacent cells",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "courier",
+        "name": "Courier",
+        "description": "Carries messages between cells, knows routes but not content",
+        "memory": "ephemeral",
+        "count": 4
+      },
+      {
+        "role": "propagandist",
+        "name": "Propagandist",
+        "description": "Broadcasts ideology and doctrine to inspire new cells to form",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "quartermaster",
+        "name": "Quartermaster",
+        "description": "Manages supplies and safe houses, known to few",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "recruit",
+        "name": "Recruit",
+        "description": "New member with limited knowledge and access, being vetted",
+        "memory": "ephemeral",
+        "count": 6
+      }
+    ],
+    "forums": [
+      {
+        "name": "Doctrine Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "propagandist"
+        ]
+      },
+      {
+        "name": "Courier Route",
+        "type": "queue",
+        "participants": [
+          "courier",
+          "cell-commander"
+        ]
+      },
+      {
+        "name": "Cell Internal",
+        "type": "peer-to-peer",
+        "participants": [
+          "cell-commander",
+          "recruit"
+        ]
+      },
+      {
+        "name": "Supply Request",
+        "type": "bottom-up",
+        "participants": [
+          "cell-commander",
+          "quartermaster"
+        ]
+      },
+      {
+        "name": "Trust Verification",
+        "type": "peer-to-peer",
+        "participants": [
+          "cell-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Ideology and doctrine",
+        "Communication protocols",
+        "Recognition signals"
+      ],
+      "private": [
+        "Cell membership",
+        "Local plans",
+        "Supply cache locations",
+        "Adjacent cell contacts"
+      ],
+      "description": "Shared memory is limited to ideology and protocols that can be broadcast openly. All operational details are strictly private. Each cell knows only its immediate neighbors. Couriers carry encrypted messages without understanding content. The full network topology exists in no single memory."
+    },
+    "diagram": "graph LR\n    C1[Cell 1] ---|courier| C2[Cell 2]\n    C2 ---|courier| C3[Cell 3]\n    C3 ---|courier| C5[Cell 5]\n    C1 ---|courier| C4[Cell 4]\n    C4 ---|courier| C5\n    P[Propagandist] -.->|broadcast| C1\n    P -.->|broadcast| C3\n    Q[Quartermaster] -.->|supplies| C2\n    Q -.->|supplies| C4",
+    "hierarchyTypes": [
+      "swarm",
+      "chain-of-command",
+      "orchestrated",
+      "federated"
+    ]
+  },
+  {
+    "id": "parliamentary-system",
+    "name": "Parliamentary System",
+    "category": "Government & Political",
+    "tags": [
+      "democratic",
+      "legislative",
+      "coalition",
+      "debate",
+      "confidence-based"
+    ],
+    "summary": "Executive power derives from legislative majority, with ministers accountable to parliament through debate and votes.",
+    "description": "Based on the Westminster parliamentary model where the executive (prime minister and cabinet) derives authority from and is accountable to the legislature. The government exists only while it maintains the confidence of the majority. Ministers are drawn from parliament and must defend their policies in debate. An opposition formally critiques and proposes alternatives. A neutral speaker manages procedure. If confidence is lost, the government falls and is replaced without disrupting the underlying state apparatus. Backbenchers can rebel against party leadership.",
+    "realWorldExample": "UK House of Commons, Canadian Parliament, Australian Parliament",
+    "whenToUse": "When you need executive action that remains continuously accountable to a broader group, when policy should survive rigorous adversarial debate, and when peaceful leadership transitions must be possible mid-operation.",
+    "strengths": [
+      "Executive always has majority support",
+      "Policies tested by adversarial debate",
+      "Smooth leadership transitions via confidence votes",
+      "Opposition provides quality control",
+      "Flexible coalition-building"
+    ],
+    "weaknesses": [
+      "Coalition instability can cause frequent transitions",
+      "Opposition may be obstructionist",
+      "Whip system can suppress individual agent judgment",
+      "Debate overhead slows decision-making",
+      "Minority voices marginalized by majoritarian logic"
+    ],
+    "agents": [
+      {
+        "role": "prime-minister",
+        "name": "Prime Minister",
+        "description": "Head of government, sets agenda, exists only while holding confidence",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cabinet-minister",
+        "name": "Cabinet Minister",
+        "description": "Heads a policy domain, must defend decisions in debate",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "backbencher",
+        "name": "Backbencher",
+        "description": "Government-aligned but independent, can rebel on votes",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "opposition-leader",
+        "name": "Opposition Leader",
+        "description": "Leads adversarial critique, proposes alternative policies",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "opposition-critic",
+        "name": "Shadow Minister",
+        "description": "Shadows a specific minister, prepares alternative positions",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "speaker",
+        "name": "Speaker",
+        "description": "Neutral procedural authority, manages debate order and rules",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Parliamentary Debate",
+        "type": "threaded",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Question Time",
+        "type": "round-robin",
+        "participants": [
+          "opposition-leader",
+          "opposition-critic",
+          "prime-minister",
+          "cabinet-minister"
+        ]
+      },
+      {
+        "name": "Division Lobby",
+        "type": "decision",
+        "participants": [
+          "prime-minister",
+          "cabinet-minister",
+          "backbencher",
+          "opposition-leader",
+          "opposition-critic"
+        ]
+      },
+      {
+        "name": "Cabinet Meeting",
+        "type": "advisory",
+        "participants": [
+          "prime-minister",
+          "cabinet-minister"
+        ]
+      },
+      {
+        "name": "Hansard",
+        "type": "log",
+        "participants": [
+          "speaker"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Hansard (complete debate record)",
+        "Standing orders",
+        "Enacted legislation",
+        "Order paper"
+      ],
+      "private": [
+        "Party strategy",
+        "Whip intelligence",
+        "Draft bills",
+        "Constituency concerns"
+      ],
+      "description": "All debate is recorded in Hansard (the official record) making it fully transparent. Cabinet discussions are private by convention. The Speaker maintains procedural memory. Individual members track their own policy positions and constituency concerns privately."
+    },
+    "diagram": "graph TD\n    PM[Prime Minister] --> CAB[Cabinet Ministers]\n    PM --> BB[Backbenchers]\n    OL[Opposition Leader] --> SM[Shadow Ministers]\n    SP[Speaker] -.->|manages| DEB((Debate Chamber))\n    PM -->|defends| DEB\n    CAB -->|defends| DEB\n    OL -->|challenges| DEB\n    SM -->|challenges| DEB\n    BB -->|votes| DIV{Division Vote}",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "presidential-cabinet",
+    "name": "Presidential Cabinet System",
+    "category": "Government & Political",
+    "tags": [
+      "separation-of-powers",
+      "executive",
+      "advisory",
+      "checks-and-balances",
+      "appointed"
+    ],
+    "summary": "Independent executive appoints department heads who advise but do not vote; power checked by separate branches.",
+    "description": "Based on the US presidential system where the executive is independently elected and appoints cabinet secretaries who serve at the president's pleasure. Unlike parliamentary systems, the cabinet does not need legislative confidence. Cabinet members advise but the president decides. Crucially, separate legislative and judicial branches check executive power: the legislature can refuse to fund or authorize, and the judiciary can strike down illegal actions. This creates a system of mutual constraint where no single branch dominates.",
+    "realWorldExample": "US Presidential Cabinet, Brazilian federal government, Mexican sexenio",
+    "whenToUse": "When you want a strong decisive executive with expert advisors, but need hard constraints preventing abuse of power through independent checking mechanisms.",
+    "strengths": [
+      "Decisive executive action without coalition politics",
+      "Expert advisors in each domain",
+      "Hard checks prevent power concentration",
+      "Stable executive term regardless of popularity",
+      "Clear separation of responsibilities"
+    ],
+    "weaknesses": [
+      "Gridlock when branches disagree",
+      "Cabinet serves at executive pleasure, may become yes-men",
+      "Checks can paralyze urgent action",
+      "No mechanism for early removal except extreme crisis",
+      "Inter-branch conflicts can be unresolvable"
+    ],
+    "agents": [
+      {
+        "role": "president",
+        "name": "President",
+        "description": "Chief executive, makes final decisions, appoints cabinet",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "secretary",
+        "name": "Cabinet Secretary",
+        "description": "Heads a department, advises president, implements policy",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "chief-of-staff",
+        "name": "Chief of Staff",
+        "description": "Controls access to president, manages executive workflow",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "legislature",
+        "name": "Legislative Branch",
+        "description": "Independent body that authorizes actions and controls funding",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "judiciary",
+        "name": "Judicial Branch",
+        "description": "Independent body that reviews actions for legality",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Cabinet Room",
+        "type": "advisory",
+        "participants": [
+          "president",
+          "secretary",
+          "chief-of-staff"
+        ]
+      },
+      {
+        "name": "Executive Orders",
+        "type": "top-down",
+        "participants": [
+          "president",
+          "secretary"
+        ]
+      },
+      {
+        "name": "Appropriations",
+        "type": "decision",
+        "participants": [
+          "legislature",
+          "president"
+        ]
+      },
+      {
+        "name": "Judicial Review",
+        "type": "advisory",
+        "participants": [
+          "judiciary",
+          "president",
+          "legislature"
+        ]
+      },
+      {
+        "name": "State of the Union",
+        "type": "broadcast",
+        "participants": [
+          "president"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Constitution",
+        "Public executive orders",
+        "Enacted legislation",
+        "Published judicial opinions"
+      ],
+      "private": [
+        "Executive deliberations",
+        "Department-specific intelligence",
+        "Draft policies",
+        "Legislative strategy"
+      ],
+      "description": "The constitution is the immutable shared foundation. Each branch maintains its own private deliberations. Published decisions (orders, laws, opinions) become shared. The judiciary maintains versioned precedent that evolves over time. Executive communications to cabinet are private; communications to public are shared."
+    },
+    "diagram": "graph TD\n    P[President] --> CS[Chief of Staff]\n    CS --> S1[Secretary 1]\n    CS --> S2[Secretary 2]\n    CS --> S3[Secretary 3]\n    CS --> S4[Secretary 4]\n    CS --> S5[Secretary 5]\n    L[Legislature] -.->|checks| P\n    J[Judiciary] -.->|checks| P\n    J -.->|checks| L\n    P -.->|nominates| J",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "un-security-council",
+    "name": "UN Security Council Model",
+    "category": "Government & Political",
+    "tags": [
+      "veto-power",
+      "consensus",
+      "inequality-by-design",
+      "multilateral",
+      "peacekeeping"
+    ],
+    "summary": "Small council with permanent veto-holding members and rotating members, requiring near-unanimity for action.",
+    "description": "Based on the UN Security Council where a small group of powerful permanent members (P5) each hold absolute veto power, while rotating non-permanent members participate in debate and vote but cannot unilaterally block. Resolutions require both a supermajority of total members and no vetoes from any permanent member. This creates a system where the most powerful agents can block any action but cannot act alone. The result is that only actions acceptable to all major powers proceed, producing conservative but broadly legitimate outcomes.",
+    "realWorldExample": "United Nations Security Council, IMF Executive Board (weighted voting)",
+    "whenToUse": "When you have agents of fundamentally unequal importance and the most critical agents must all agree before action, accepting that this makes action rare but ensures broad legitimacy when it occurs.",
+    "strengths": [
+      "Ensures major stakeholder buy-in",
+      "Prevents actions opposed by key agents",
+      "Legitimate outcomes have broad support",
+      "Small council enables actual discussion",
+      "Rotating members bring diverse perspectives"
+    ],
+    "weaknesses": [
+      "Single veto can paralyze the system",
+      "Permanent members have excessive power",
+      "Rotating members are second-class participants",
+      "Lowest common denominator outcomes",
+      "Deadlock is the default state"
+    ],
+    "agents": [
+      {
+        "role": "permanent-member",
+        "name": "Permanent Member (P5)",
+        "description": "Holds veto power, permanent seat, shapes all outcomes",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "rotating-member",
+        "name": "Non-Permanent Member",
+        "description": "Elected for a term, votes but cannot veto",
+        "memory": "ephemeral",
+        "count": 5
+      },
+      {
+        "role": "secretary-general",
+        "name": "Secretary-General",
+        "description": "Chief administrative officer, sets agenda, mediates disputes",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "rapporteur",
+        "name": "Rapporteur",
+        "description": "Investigates situations and presents findings to the council",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Open Debate",
+        "type": "threaded",
+        "participants": [
+          "permanent-member",
+          "rotating-member",
+          "secretary-general"
+        ]
+      },
+      {
+        "name": "Resolution Vote",
+        "type": "decision",
+        "participants": [
+          "permanent-member",
+          "rotating-member"
+        ]
+      },
+      {
+        "name": "Private Consultations",
+        "type": "peer-to-peer",
+        "participants": [
+          "permanent-member"
+        ]
+      },
+      {
+        "name": "Fact-Finding Report",
+        "type": "document",
+        "participants": [
+          "rapporteur",
+          "secretary-general"
+        ]
+      },
+      {
+        "name": "Presidential Statement",
+        "type": "broadcast",
+        "participants": [
+          "secretary-general"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "UN Charter",
+        "Passed resolutions",
+        "Rapporteur reports",
+        "Meeting transcripts"
+      ],
+      "private": [
+        "National positions and red lines",
+        "Bilateral negotiations",
+        "Intelligence assessments",
+        "Veto considerations"
+      ],
+      "description": "Passed resolutions and the Charter are shared and immutable. Private negotiations between permanent members are the actual decision-making mechanism, with formal votes ratifying pre-negotiated outcomes. The rapporteur builds an append-only factual record that informs but does not constrain decisions."
+    },
+    "diagram": "graph TD\n    SG[Secretary-General] --> COUNCIL((Council Chamber))\n    P1[Permanent 1] -->|veto power| COUNCIL\n    P2[Permanent 2] -->|veto power| COUNCIL\n    P3[Permanent 3] -->|veto power| COUNCIL\n    P4[Permanent 4] -->|veto power| COUNCIL\n    P5[Permanent 5] -->|veto power| COUNCIL\n    R1[Rotating 1] --> COUNCIL\n    R2[Rotating 2] --> COUNCIL\n    RAP[Rapporteur] -.->|reports| COUNCIL",
+    "hierarchyTypes": [
+      "consensus",
+      "swarm",
+      "federated",
+      "adversarial",
+      "mesh"
+    ]
+  },
+  {
+    "id": "federal-system",
+    "name": "Federal System",
+    "category": "Government & Political",
+    "tags": [
+      "subsidiarity",
+      "dual-sovereignty",
+      "layered-authority",
+      "distributed",
+      "constitutional"
+    ],
+    "summary": "Sovereign sub-units handle local decisions while delegating enumerated powers to a federal layer for coordination.",
+    "description": "Based on federal governance where sovereign sub-units (states, provinces, cantons) retain full authority over local matters while delegating specific enumerated powers (defense, trade, currency) to a federal layer. The key principle is subsidiarity: decisions are made at the lowest level capable of handling them. A constitution defines the boundary between federal and local authority. Disputes about jurisdiction go to a neutral arbiter. This creates a system where agents closer to the problem make most decisions, while system-wide issues get system-wide coordination.",
+    "realWorldExample": "United States federal system, Swiss confederation, German Bundesrepublik",
+    "whenToUse": "When sub-agents have legitimate local expertise that should not be overridden, but certain cross-cutting concerns require central coordination, and you need a principled way to divide authority.",
+    "strengths": [
+      "Decisions made close to the problem",
+      "Local experimentation and adaptation",
+      "Prevents over-centralization",
+      "Scales by adding sub-units",
+      "Constitutional clarity on authority boundaries"
+    ],
+    "weaknesses": [
+      "Jurisdictional disputes are constant",
+      "Duplication of effort across sub-units",
+      "Race to the bottom between competing sub-units",
+      "Federal mandates without resources frustrate locals",
+      "Constitutional amendments are extremely difficult"
+    ],
+    "agents": [
+      {
+        "role": "federal-executive",
+        "name": "Federal Executive",
+        "description": "Handles enumerated federal powers: coordination, standards, shared resources",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "state-governor",
+        "name": "State Governor",
+        "description": "Sovereign authority over local matters, implements local policy",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "federal-legislature",
+        "name": "Federal Legislature",
+        "description": "Represents both population and states in federal decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "constitutional-court",
+        "name": "Constitutional Court",
+        "description": "Arbiter of jurisdictional disputes between federal and state levels",
+        "memory": "versioned"
+      },
+      {
+        "role": "state-legislature",
+        "name": "State Legislature",
+        "description": "Makes law within state jurisdiction, can petition federal level",
+        "memory": "persistent-private",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Federal Register",
+        "type": "broadcast",
+        "participants": [
+          "federal-executive",
+          "federal-legislature"
+        ]
+      },
+      {
+        "name": "Interstate Compact",
+        "type": "peer-to-peer",
+        "participants": [
+          "state-governor"
+        ]
+      },
+      {
+        "name": "Federal-State Consultation",
+        "type": "threaded",
+        "participants": [
+          "federal-executive",
+          "state-governor"
+        ]
+      },
+      {
+        "name": "Constitutional Review",
+        "type": "decision",
+        "participants": [
+          "constitutional-court"
+        ]
+      },
+      {
+        "name": "State Gazette",
+        "type": "per-agent",
+        "participants": [
+          "state-governor",
+          "state-legislature"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Constitution",
+        "Federal law",
+        "Interstate compacts",
+        "Federal standards"
+      ],
+      "private": [
+        "State law",
+        "State budgets",
+        "Local policy experiments",
+        "Gubernatorial priorities"
+      ],
+      "description": "The constitution is the immutable shared root. Federal law applies everywhere but is limited to enumerated domains. State law covers everything else and is private to each state. The constitutional court maintains versioned precedent on jurisdictional boundaries. States can observe each other's experiments through interstate compacts."
+    },
+    "diagram": "graph TD\n    FE[Federal Executive] --> FL[Federal Legislature]\n    FE --> CC[Constitutional Court]\n    FE -.->|federal law| S1[State 1]\n    FE -.->|federal law| S2[State 2]\n    FE -.->|federal law| S3[State 3]\n    FE -.->|federal law| S4[State 4]\n    S1 <-->|compact| S2\n    S3 <-->|compact| S4\n    S1 -.->|dispute| CC\n    S2 -.->|dispute| CC",
+    "hierarchyTypes": [
+      "federated",
+      "orchestrated",
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "swiss-direct-democracy",
+    "name": "Swiss Direct Democracy (Canton)",
+    "category": "Government & Political",
+    "tags": [
+      "direct-democracy",
+      "referendum",
+      "consensus",
+      "bottom-up",
+      "citizen-driven"
+    ],
+    "summary": "All agents vote directly on policy; executive merely implements the will of the assembly with minimal discretion.",
+    "description": "Based on the Swiss cantonal system (particularly Landsgemeinde tradition) where citizens vote directly on laws and policy rather than delegating to representatives. The executive council is a weak collective body that implements decisions rather than making them. Any agent can propose a referendum. Constitutional changes require a double majority (majority of agents AND majority of sub-groups). The system prioritizes legitimacy and buy-in over speed: nothing happens without broad consent, but what does happen has strong support.",
+    "realWorldExample": "Swiss canton Appenzell Innerrhoden Landsgemeinde, Swiss federal referenda system",
+    "whenToUse": "When every agent's buy-in is essential for implementation, when you can afford slow decision-making in exchange for high legitimacy, and when the agent population is small enough for direct participation.",
+    "strengths": [
+      "Maximum legitimacy of decisions",
+      "Every agent has direct voice",
+      "Implementation has full buy-in",
+      "Prevents elite capture",
+      "Policies reflect actual collective preference"
+    ],
+    "weaknesses": [
+      "Extremely slow decision-making",
+      "Does not scale beyond small groups",
+      "Majority can tyrannize minorities",
+      "Complex issues reduced to yes/no votes",
+      "Participation fatigue on frequent referenda"
+    ],
+    "agents": [
+      {
+        "role": "citizen",
+        "name": "Citizen-Agent",
+        "description": "Full voting member, participates directly in all decisions",
+        "memory": "persistent-private",
+        "count": 9
+      },
+      {
+        "role": "council-member",
+        "name": "Federal Council Member",
+        "description": "Weak executive who implements assembly decisions, rotates presidency",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "chancellor",
+        "name": "Chancellor",
+        "description": "Administrative head who organizes referenda and counts votes",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Landsgemeinde (Assembly)",
+        "type": "decision",
+        "participants": [
+          "citizen",
+          "council-member"
+        ]
+      },
+      {
+        "name": "Referendum Proposal",
+        "type": "bottom-up",
+        "participants": [
+          "citizen",
+          "chancellor"
+        ]
+      },
+      {
+        "name": "Debate Forum",
+        "type": "threaded",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Implementation Orders",
+        "type": "top-down",
+        "participants": [
+          "council-member"
+        ]
+      },
+      {
+        "name": "Voting Record",
+        "type": "log",
+        "participants": [
+          "chancellor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Constitution",
+        "All passed referenda",
+        "Voting records",
+        "Current proposals"
+      ],
+      "private": [
+        "Individual policy positions",
+        "Voting rationale",
+        "Proposal drafts"
+      ],
+      "description": "Nearly everything is shared. All votes are public record. The constitution is amendable only by double majority. Proposals must be published for debate before voting. Private memory is limited to individual reasoning and draft proposals not yet submitted."
+    },
+    "diagram": "graph TD\n    C1[Citizen 1] --> A((Assembly))\n    C2[Citizen 2] --> A\n    C3[Citizen 3] --> A\n    C4[Citizen 4] --> A\n    C5[Citizen 5] --> A\n    A -->|decides| FC[Federal Council]\n    FC -->|implements| EXEC[Execution]\n    CH[Chancellor] -.->|organizes| A\n    C1 -.->|proposes| REF{Referendum}",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "soviet-council-system",
+    "name": "Soviet Council System (Demokratischer Zentralismus)",
+    "category": "Government & Political",
+    "tags": [
+      "democratic-centralism",
+      "bottom-up-election",
+      "top-down-authority",
+      "pyramid",
+      "party-discipline"
+    ],
+    "summary": "Bottom-up elections choose leaders, but once elected, orders flow strictly top-down with absolute party discipline.",
+    "description": "Based on the Soviet system of democratic centralism where lower councils elect higher councils in a pyramid, but once elected, the higher council's decisions are absolutely binding on all lower levels. Debate is permitted before a decision; after the decision, unanimous execution is required. The party apparatus parallels the state apparatus, with the party having supremacy. This creates a paradox: the system is formally democratic (elections flow up) but practically authoritarian (authority flows down). Factions are prohibited after decisions are made.",
+    "realWorldExample": "Soviet Union's system of soviets (councils), Chinese Communist Party structure",
+    "whenToUse": "When you need democratic input for legitimacy but absolute execution discipline once decisions are made, and when you can tolerate the risk that top-down authority will override bottom-up input.",
+    "strengths": [
+      "Rapid unified execution after decision",
+      "Democratic legitimacy from elections",
+      "No internal dissent during implementation",
+      "Clear accountability at each level",
+      "Scales to very large systems"
+    ],
+    "weaknesses": [
+      "Bottom-up input becomes rubber-stamping in practice",
+      "Top-down authority overrides local knowledge",
+      "Innovation suppressed by discipline requirements",
+      "Information distortion as bad news is filtered going up",
+      "Single ideology prevents adaptation"
+    ],
+    "agents": [
+      {
+        "role": "general-secretary",
+        "name": "General Secretary",
+        "description": "Supreme authority, elected by central committee but effectively permanent",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "politburo-member",
+        "name": "Politburo Member",
+        "description": "Inner circle making strategic decisions, formally elected by central committee",
+        "memory": "persistent-shared",
+        "count": 5
+      },
+      {
+        "role": "central-committee",
+        "name": "Central Committee Member",
+        "description": "Mid-level leadership, elected by congress, implements politburo decisions",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "local-soviet",
+        "name": "Local Soviet Chair",
+        "description": "Elected by local agents, executes directives from above",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "party-member",
+        "name": "Party Member",
+        "description": "Base-level participant, votes in elections, implements policy",
+        "memory": "ephemeral",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Party Congress",
+        "type": "decision",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Politburo Session",
+        "type": "advisory",
+        "participants": [
+          "general-secretary",
+          "politburo-member"
+        ]
+      },
+      {
+        "name": "Central Committee Plenum",
+        "type": "top-down",
+        "participants": [
+          "politburo-member",
+          "central-committee"
+        ]
+      },
+      {
+        "name": "Directives",
+        "type": "top-down",
+        "participants": [
+          "central-committee",
+          "local-soviet"
+        ]
+      },
+      {
+        "name": "Self-Criticism Session",
+        "type": "retrospective",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Party program",
+        "Five-year plan",
+        "Official directives",
+        "Self-criticism records"
+      ],
+      "private": [
+        "Local implementation details",
+        "Deviation reports (often suppressed)",
+        "Internal faction discussions (prohibited)"
+      ],
+      "description": "The party program and plans are shared and mandatory. Self-criticism sessions create shared retrospective records. Private memory is discouraged; agents are expected to be transparent to the party. In practice, local agents maintain hidden private memory about implementation realities that diverge from official reports."
+    },
+    "diagram": "graph TD\n    GS[General Secretary] --> PB[Politburo]\n    PB --> CC[Central Committee]\n    CC --> LS1[Local Soviet 1]\n    CC --> LS2[Local Soviet 2]\n    CC --> LS3[Local Soviet 3]\n    LS1 --> PM1[Party Members]\n    LS2 --> PM2[Party Members]\n    LS3 --> PM3[Party Members]\n    PM1 -.->|elects| LS1\n    LS1 -.->|elects| CC\n    CC -.->|elects| PB",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "theocratic-hierarchy",
+    "name": "Theocratic Hierarchy",
+    "category": "Government & Political",
+    "tags": [
+      "doctrinal",
+      "interpretive-authority",
+      "sacred-secular",
+      "hierarchical",
+      "legitimacy-from-above"
+    ],
+    "summary": "Authority flows from interpretation of immutable doctrine; higher ranks have greater interpretive authority.",
+    "description": "Based on theocratic governance (both historical and contemporary) where political authority derives from religious doctrine. The hierarchy is not just administrative but interpretive: higher-ranking agents have greater authority to interpret the foundational texts. Legitimacy comes from above (divine mandate) not below (popular consent). A class of scholars provides doctrinal interpretation while a separate executive class implements it. Doctrine is immutable but interpretation evolves, creating a system that appears unchanging while actually adapting slowly through reinterpretation.",
+    "realWorldExample": "Iran's Islamic Republic (Supreme Leader + Guardian Council), Papal States, Tibetan government-in-exile",
+    "whenToUse": "When the system must adhere to fixed foundational principles but needs to adapt through interpretation, when legitimacy comes from doctrinal consistency rather than popular approval, and when you need stable long-term direction that resists populist pressure.",
+    "strengths": [
+      "Extreme long-term consistency",
+      "Resists populist pressure and short-termism",
+      "Clear doctrinal foundation prevents drift",
+      "Interpretive evolution allows gradual adaptation",
+      "Strong internal coherence and unity of purpose"
+    ],
+    "weaknesses": [
+      "Resistant to necessary change",
+      "Interpretive authority can be abused",
+      "Dissent is heresy rather than opposition",
+      "No mechanism for fundamental doctrinal revision",
+      "Exclusionary toward agents outside the faith"
+    ],
+    "agents": [
+      {
+        "role": "supreme-leader",
+        "name": "Supreme Leader",
+        "description": "Highest interpretive authority, final arbiter on all doctrinal questions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "guardian-council",
+        "name": "Guardian Council Member",
+        "description": "Reviews all decisions for doctrinal compliance, can veto",
+        "memory": "versioned",
+        "count": 4
+      },
+      {
+        "role": "chief-scholar",
+        "name": "Chief Scholar",
+        "description": "Leads doctrinal research and issues interpretive rulings",
+        "memory": "versioned"
+      },
+      {
+        "role": "governor",
+        "name": "Provincial Governor",
+        "description": "Implements policy within doctrinal constraints",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "judge",
+        "name": "Religious Judge",
+        "description": "Adjudicates disputes according to doctrinal law",
+        "memory": "versioned",
+        "count": 3
+      }
+    ],
+    "forums": [
+      {
+        "name": "Doctrinal Rulings",
+        "type": "top-down",
+        "participants": [
+          "supreme-leader",
+          "guardian-council",
+          "chief-scholar"
+        ]
+      },
+      {
+        "name": "Guardian Review",
+        "type": "advisory",
+        "participants": [
+          "guardian-council",
+          "governor"
+        ]
+      },
+      {
+        "name": "Scholarly Debate",
+        "type": "threaded",
+        "participants": [
+          "chief-scholar",
+          "guardian-council"
+        ]
+      },
+      {
+        "name": "Implementation Reports",
+        "type": "bottom-up",
+        "participants": [
+          "governor",
+          "supreme-leader"
+        ]
+      },
+      {
+        "name": "Sacred Texts",
+        "type": "document",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Sacred texts (immutable)",
+        "Doctrinal rulings (append-only)",
+        "Scholarly interpretations (versioned)"
+      ],
+      "private": [
+        "Governor implementation plans",
+        "Judicial case files",
+        "Scholarly work in progress"
+      ],
+      "description": "Sacred texts are immutable shared memory that forms the foundation of all decisions. Doctrinal rulings accumulate over time as append-only precedent. Scholarly interpretations are versioned, allowing the community to see how understanding has evolved. Private memory exists for practical implementation details but all significant decisions must be traceable to doctrinal authority."
+    },
+    "diagram": "graph TD\n    SL[Supreme Leader] --> GC[Guardian Council]\n    SL --> CS[Chief Scholar]\n    GC -->|approves| G1[Governor 1]\n    GC -->|approves| G2[Governor 2]\n    GC -->|approves| G3[Governor 3]\n    CS -.->|interprets| ST((Sacred Texts))\n    GC -.->|reviews against| ST\n    J1[Judge] -.->|applies| ST\n    J2[Judge] -.->|applies| ST",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "medieval-guild-system",
+    "name": "Medieval Guild System",
+    "category": "Historical & Traditional",
+    "tags": [
+      "apprenticeship",
+      "craft-based",
+      "quality-control",
+      "protectionist",
+      "knowledge-transfer"
+    ],
+    "summary": "Master-journeyman-apprentice hierarchy controls quality and knowledge transfer through progressive skill validation.",
+    "description": "Based on medieval craft guilds where knowledge is transmitted through a strict apprenticeship progression: apprentice, journeyman, master. Each level has defined rights and obligations. Apprentices learn by working under masters for years. Journeymen can practice the craft but cannot train others or set standards. Only masters can take apprentices, vote on guild matters, and set quality standards. The guild controls entry to the profession, sets prices, and maintains quality through inspection. A masterwork must be produced and judged by existing masters before advancement.",
+    "realWorldExample": "Medieval European guilds (goldsmiths, weavers, masons), modern trade unions with apprenticeships",
+    "whenToUse": "When knowledge transfer quality is critical, when you need strict quality control, and when progressive skill validation ensures only proven agents take on senior roles.",
+    "strengths": [
+      "Knowledge transfer is structured and verified",
+      "Quality control through peer inspection",
+      "Progressive mastery prevents premature authority",
+      "Strong community and mutual support",
+      "Standards maintained across generations"
+    ],
+    "weaknesses": [
+      "Gatekeeping excludes innovation from outsiders",
+      "Slow advancement demotivates capable agents",
+      "Protectionism resists competitive pressure",
+      "Masters may resist changes that threaten their status",
+      "Knowledge hoarding by senior members"
+    ],
+    "agents": [
+      {
+        "role": "guild-master",
+        "name": "Guild Master (Warden)",
+        "description": "Elected head of the guild, sets standards and resolves disputes",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "master-craftsman",
+        "name": "Master Craftsman",
+        "description": "Full member who can train apprentices, vote, and inspect work",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "journeyman",
+        "name": "Journeyman",
+        "description": "Qualified practitioner who travels between workshops to learn styles",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "apprentice",
+        "name": "Apprentice",
+        "description": "Learner bound to a master for a fixed term, limited rights",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "inspector",
+        "name": "Quality Inspector",
+        "description": "Examines output for compliance with guild standards",
+        "memory": "append-only",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Guild Hall Assembly",
+        "type": "decision",
+        "participants": [
+          "guild-master",
+          "master-craftsman"
+        ]
+      },
+      {
+        "name": "Workshop Instruction",
+        "type": "top-down",
+        "participants": [
+          "master-craftsman",
+          "apprentice"
+        ]
+      },
+      {
+        "name": "Journeyman Exchange",
+        "type": "peer-to-peer",
+        "participants": [
+          "journeyman"
+        ]
+      },
+      {
+        "name": "Masterwork Examination",
+        "type": "advisory",
+        "participants": [
+          "master-craftsman",
+          "guild-master",
+          "inspector"
+        ]
+      },
+      {
+        "name": "Quality Ledger",
+        "type": "log",
+        "participants": [
+          "inspector",
+          "guild-master"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Guild charter",
+        "Quality standards",
+        "Price tables",
+        "Apprenticeship records"
+      ],
+      "private": [
+        "Trade secrets per workshop",
+        "Master's techniques",
+        "Journeyman's travel diary"
+      ],
+      "description": "Guild standards and charter are shared and govern all members. Trade secrets are private to individual workshops and are the primary competitive advantage. Journeymen accumulate private knowledge from each workshop they visit. The quality ledger is an append-only public record of inspections. Apprenticeship records track who trained whom, creating a knowledge provenance chain."
+    },
+    "diagram": "graph TD\n    GM[Guild Master] --> MC1[Master 1]\n    GM --> MC2[Master 2]\n    GM --> MC3[Master 3]\n    MC1 --> J1[Journeyman 1]\n    MC1 --> A1[Apprentice 1]\n    MC2 --> J2[Journeyman 2]\n    MC2 --> A2[Apprentice 2]\n    MC3 --> J3[Journeyman 3]\n    J1 -.->|travels to| MC2\n    J2 -.->|travels to| MC3\n    INS[Inspector] -.->|inspects| MC1\n    INS -.->|inspects| MC2",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "mongol-decimal-organization",
+    "name": "Mongol Decimal Organization",
+    "category": "Historical & Traditional",
+    "tags": [
+      "decimal",
+      "meritocratic",
+      "rapid-scaling",
+      "loyalty-based",
+      "nomadic"
+    ],
+    "summary": "Strict decimal hierarchy (10-100-1000-10000) with merit-based promotion regardless of origin, optimized for speed.",
+    "description": "Based on Genghis Khan's military organization where units are organized in strict powers of 10: arban (10), zuun (100), mingghan (1000), tumen (10000). Critically, promotions are purely meritocratic: any agent can rise to command a tumen regardless of origin. Leaders are chosen by their subordinates' trust and the khan's approval. Units are deliberately mixed from different tribal backgrounds to prevent ethnic factionalism. Speed of communication is prioritized through a relay system (yam). The entire system is optimized for rapid movement and decisive action over deliberation.",
+    "realWorldExample": "Mongol Empire military under Genghis Khan, later adopted by Timur and Mughal Empire",
+    "whenToUse": "When you need rapid scaling through standardized decimal groupings, merit-based advancement, and want to prevent factional loyalty from undermining the system.",
+    "strengths": [
+      "Pure meritocracy motivates all agents",
+      "Decimal structure is simple and scalable",
+      "Mixed composition prevents factionalism",
+      "Speed prioritized at every level",
+      "Battlefield promotions enable rapid adaptation"
+    ],
+    "weaknesses": [
+      "Depends heavily on khan's personal judgment",
+      "Meritocracy can become arbitrary favoritism",
+      "Mixed units lack the cohesion of natural groupings",
+      "Relay system has latency at extreme scale",
+      "Succession crises when the khan dies"
+    ],
+    "agents": [
+      {
+        "role": "khan",
+        "name": "Great Khan",
+        "description": "Supreme commander, appoints tumen commanders, sets grand strategy",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "tumen-commander",
+        "name": "Tumen Commander (10000)",
+        "description": "Commands 10,000 through 10 mingghan commanders, chosen by merit",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "mingghan-commander",
+        "name": "Mingghan Commander (1000)",
+        "description": "Commands 1,000, the key operational unit for independent missions",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "zuun-commander",
+        "name": "Zuun Commander (100)",
+        "description": "Tactical leader of 100, interfaces directly with troops",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "arban-leader",
+        "name": "Arban Leader (10)",
+        "description": "Squad leader of 10, chosen by the squad members themselves",
+        "memory": "ephemeral",
+        "count": 8
+      },
+      {
+        "role": "yam-rider",
+        "name": "Yam Relay Rider",
+        "description": "Message relay system enabling communication across vast distances",
+        "memory": "ephemeral",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Kurultai (Great Assembly)",
+        "type": "decision",
+        "participants": [
+          "khan",
+          "tumen-commander",
+          "mingghan-commander"
+        ]
+      },
+      {
+        "name": "Battle Orders",
+        "type": "top-down",
+        "participants": [
+          "khan",
+          "tumen-commander",
+          "mingghan-commander"
+        ]
+      },
+      {
+        "name": "Yam Relay",
+        "type": "queue",
+        "participants": [
+          "yam-rider",
+          "khan",
+          "tumen-commander"
+        ]
+      },
+      {
+        "name": "Scout Reports",
+        "type": "bottom-up",
+        "participants": [
+          "arban-leader",
+          "zuun-commander",
+          "mingghan-commander"
+        ]
+      },
+      {
+        "name": "Merit Review",
+        "type": "advisory",
+        "participants": [
+          "khan",
+          "tumen-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Yasa (law code)",
+        "Campaign objectives",
+        "Relay station network map"
+      ],
+      "private": [
+        "Unit composition and readiness",
+        "Local terrain knowledge",
+        "Personal loyalty networks"
+      ],
+      "description": "The Yasa is the immutable shared law code governing all behavior. Campaign objectives are broadcast through the relay system. Unit-level details remain private to commanders. The relay (yam) system is a physical shared message queue. Merit records are maintained by higher commanders about their subordinates, creating a distributed evaluation system."
+    },
+    "diagram": "graph TD\n    K[Great Khan] --> T1[Tumen 10000]\n    K --> T2[Tumen 10000]\n    T1 --> M1[Mingghan 1000]\n    T1 --> M2[Mingghan 1000]\n    T2 --> M3[Mingghan 1000]\n    T2 --> M4[Mingghan 1000]\n    M1 --> Z1[Zuun 100]\n    M1 --> Z2[Zuun 100]\n    Z1 --> A1[Arban 10]\n    Z1 --> A2[Arban 10]\n    YAM[Yam Relay] -.->|messages| K\n    YAM -.->|messages| T1\n    YAM -.->|messages| T2",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "ottoman-millet-system",
+    "name": "Ottoman Millet System",
+    "category": "Historical & Traditional",
+    "tags": [
+      "pluralist",
+      "autonomous-communities",
+      "parallel-hierarchies",
+      "diversity",
+      "self-governing"
+    ],
+    "summary": "Autonomous communities self-govern internal affairs under imperial oversight, each maintaining distinct internal rules.",
+    "description": "Based on the Ottoman millet system where distinct communities (defined by religion, ethnicity, or trade) govern their own internal affairs -- law, education, taxation, welfare -- while the imperial government handles only inter-community disputes, defense, and overall taxation. Each millet has its own internal hierarchy, courts, and customs. The imperial government does not try to standardize internal governance. A community leader (ethnarch) interfaces with the imperial administration. This creates parallel, internally diverse hierarchies that coexist under a thin coordination layer.",
+    "realWorldExample": "Ottoman Empire millet system (1453-1923), modern Belgium's linguistic communities, Lebanon's confessional system",
+    "whenToUse": "When you have fundamentally different agent populations that need different internal governance rules, and you want them to coexist productively under a thin coordination layer rather than forcing uniformity.",
+    "strengths": [
+      "Respects internal diversity of agent groups",
+      "Each community optimizes its own governance",
+      "Minimal coordination overhead",
+      "Reduces inter-community conflict through autonomy",
+      "Scales by adding new millets without restructuring"
+    ],
+    "weaknesses": [
+      "Inter-community disputes lack clear resolution mechanism",
+      "Communities may diverge until they cannot cooperate",
+      "Imperial layer may be too thin for coordination",
+      "Internal community governance may be oppressive",
+      "No shared identity or purpose across communities"
+    ],
+    "agents": [
+      {
+        "role": "sultan",
+        "name": "Sultan (Imperial Authority)",
+        "description": "Oversees inter-community affairs, defense, and imperial taxation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "grand-vizier",
+        "name": "Grand Vizier",
+        "description": "Chief administrator who interfaces between sultan and millets",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "ethnarch-a",
+        "name": "Ethnarch A (Community Leader)",
+        "description": "Self-governing head of community A with full internal authority",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "ethnarch-b",
+        "name": "Ethnarch B (Community Leader)",
+        "description": "Self-governing head of community B with different internal rules",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "ethnarch-c",
+        "name": "Ethnarch C (Community Leader)",
+        "description": "Self-governing head of community C, distinct governance style",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "community-member",
+        "name": "Community Member",
+        "description": "Agent within a millet, governed by their community's internal rules",
+        "memory": "ephemeral",
+        "count": 9
+      },
+      {
+        "role": "imperial-judge",
+        "name": "Imperial Judge",
+        "description": "Resolves disputes between members of different millets",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Imperial Divan",
+        "type": "advisory",
+        "participants": [
+          "sultan",
+          "grand-vizier",
+          "ethnarch-a",
+          "ethnarch-b",
+          "ethnarch-c"
+        ]
+      },
+      {
+        "name": "Millet A Internal",
+        "type": "threaded",
+        "participants": [
+          "ethnarch-a",
+          "community-member"
+        ]
+      },
+      {
+        "name": "Millet B Internal",
+        "type": "threaded",
+        "participants": [
+          "ethnarch-b",
+          "community-member"
+        ]
+      },
+      {
+        "name": "Millet C Internal",
+        "type": "threaded",
+        "participants": [
+          "ethnarch-c",
+          "community-member"
+        ]
+      },
+      {
+        "name": "Imperial Court",
+        "type": "decision",
+        "participants": [
+          "imperial-judge",
+          "grand-vizier"
+        ]
+      },
+      {
+        "name": "Tax Ledger",
+        "type": "log",
+        "participants": [
+          "grand-vizier",
+          "ethnarch-a",
+          "ethnarch-b",
+          "ethnarch-c"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Imperial law (inter-community only)",
+        "Tax obligations",
+        "Defense requirements",
+        "Trade regulations"
+      ],
+      "private": [
+        "Community-specific laws",
+        "Internal governance records",
+        "Religious/cultural texts",
+        "Community welfare funds"
+      ],
+      "description": "The imperial layer maintains minimal shared memory covering only inter-community matters. Each millet has its own rich private memory store that is invisible to other millets and the imperial layer. The imperial judge maintains versioned precedent for inter-community disputes. Tax ledgers are the primary interface between imperial and community levels."
+    },
+    "diagram": "graph TD\n    S[Sultan] --> GV[Grand Vizier]\n    GV --> EA[Ethnarch A]\n    GV --> EB[Ethnarch B]\n    GV --> EC[Ethnarch C]\n    EA --> MA[Millet A Members]\n    EB --> MB[Millet B Members]\n    EC --> MC[Millet C Members]\n    IJ[Imperial Judge] -.->|inter-millet disputes| GV\n    MA -.->|internal law| EA\n    MB -.->|internal law| EB",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "hanseatic-league",
+    "name": "Hanseatic League",
+    "category": "Historical & Traditional",
+    "tags": [
+      "trade-federation",
+      "voluntary",
+      "economic",
+      "peer-network",
+      "mutual-benefit"
+    ],
+    "summary": "Voluntary trade federation where independent cities cooperate for mutual economic benefit without central authority.",
+    "description": "Based on the Hanseatic League where independent merchant cities formed a voluntary trade federation without a central government, permanent bureaucracy, or binding constitution. Cities joined and left freely. The league's power came from collective economic action: trade embargoes (Verhansung), shared trade routes, and mutual defense of commercial interests. Decisions were made at periodic diets (Hansetag) where cities sent delegates, but attendance and compliance were voluntary. The league maintained trade offices (Kontore) in foreign cities as shared infrastructure.",
+    "realWorldExample": "Hanseatic League (1356-1669), modern trade associations and industry consortia, OPEC",
+    "whenToUse": "When independent agents benefit from voluntary cooperation on shared infrastructure and collective bargaining, but none will accept binding central authority, and exit must always be possible.",
+    "strengths": [
+      "Voluntary participation ensures genuine buy-in",
+      "Collective bargaining power exceeds individual capability",
+      "Shared infrastructure reduces duplication",
+      "Exit option keeps leadership accountable",
+      "Adapts organically as members join and leave"
+    ],
+    "weaknesses": [
+      "Free-rider problem is constant",
+      "Cannot compel compliance or contribution",
+      "Slow collective action when urgency is needed",
+      "Wealthier members dominate despite formal equality",
+      "Dissolution risk when benefits become unclear"
+    ],
+    "agents": [
+      {
+        "role": "principal-city",
+        "name": "Principal City (e.g., Lubeck)",
+        "description": "Influential member that convenes diets and proposes actions, but has no formal authority",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "member-city",
+        "name": "Member City",
+        "description": "Independent city that participates voluntarily, can leave at any time",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "kontor-factor",
+        "name": "Kontor Factor",
+        "description": "Manages a shared trade office in a foreign city, serves all member interests",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "league-secretary",
+        "name": "League Secretary",
+        "description": "Minimal permanent staff who maintains records and organizes diets",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Hansetag (Diet)",
+        "type": "decision",
+        "participants": [
+          "principal-city",
+          "member-city"
+        ]
+      },
+      {
+        "name": "Trade Intelligence",
+        "type": "pub-sub",
+        "participants": [
+          "kontor-factor",
+          "member-city"
+        ]
+      },
+      {
+        "name": "Embargo Coordination",
+        "type": "broadcast",
+        "participants": [
+          "principal-city",
+          "member-city"
+        ]
+      },
+      {
+        "name": "Bilateral Trade Deals",
+        "type": "peer-to-peer",
+        "participants": [
+          "member-city"
+        ]
+      },
+      {
+        "name": "League Archives",
+        "type": "log",
+        "participants": [
+          "league-secretary"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Trade route maps",
+        "Shared tariff agreements",
+        "Kontor inventories",
+        "Diet resolutions"
+      ],
+      "private": [
+        "City-specific trade secrets",
+        "Individual merchant relationships",
+        "Local production capabilities",
+        "Private bilateral agreements"
+      ],
+      "description": "Shared memory is limited to trade infrastructure and diet resolutions. Each city guards its trade secrets jealously. Kontor factors maintain shared trade intelligence from foreign markets that benefits all members. The league secretary maintains append-only archives of all diet decisions. Private bilateral deals between cities often matter more than formal league decisions."
+    },
+    "diagram": "graph LR\n    PC[Lubeck - Principal] --- MC1[Hamburg]\n    PC --- MC2[Bremen]\n    PC --- MC3[Cologne]\n    MC1 --- MC4[Danzig]\n    MC2 --- MC5[Bruges]\n    MC3 --- MC6[Novgorod]\n    K1[Kontor Bergen] -.-> PC\n    K2[Kontor London] -.-> MC3\n    K3[Kontor Novgorod] -.-> MC6\n    LS[Secretary] -.->|archives| PC",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm",
+      "federated",
+      "adversarial",
+      "mesh",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "roman-republic-magistracies",
+    "name": "Roman Republic Magistracies",
+    "category": "Historical & Traditional",
+    "tags": [
+      "checks-and-balances",
+      "term-limited",
+      "collegial",
+      "anti-tyranny",
+      "cursus-honorum"
+    ],
+    "summary": "Paired magistrates with mutual veto serve fixed terms on a career ladder, with emergency dictator provisions.",
+    "description": "Based on the Roman Republic where executive power was divided among paired magistrates (two consuls, two praetors, etc.) who could each veto the other. Terms were strictly one year with no immediate reelection. Officials progressed through a fixed career ladder (cursus honorum): quaestor, aedile, praetor, consul. The Senate provided continuity and institutional memory as a permanent advisory body of ex-magistrates. Tribunes could veto any action to protect popular interests. In genuine emergencies, a dictator could be appointed for six months with absolute authority, but this power was self-limiting.",
+    "realWorldExample": "Roman Republic (509-27 BC), influenced the US Constitution's separation of powers",
+    "whenToUse": "When you need strong executive action but fear power concentration, when term limits and mutual vetoes should prevent any single agent from dominating, and when you want a career progression that builds experience before granting authority.",
+    "strengths": [
+      "Mutual veto prevents power concentration",
+      "Term limits ensure rotation and fresh perspectives",
+      "Career ladder builds experience before authority",
+      "Emergency dictator handles crises without permanent power",
+      "Senate provides institutional memory"
+    ],
+    "weaknesses": [
+      "Mutual veto can cause deadlock",
+      "One-year terms are too short for complex initiatives",
+      "Career ladder creates age/experience gatekeeping",
+      "Emergency powers can be abused",
+      "System collapsed when norms eroded"
+    ],
+    "agents": [
+      {
+        "role": "consul",
+        "name": "Consul",
+        "description": "Chief executive, paired with a co-consul who can veto, one-year term",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "praetor",
+        "name": "Praetor",
+        "description": "Junior magistrate handling justice and provincial governance",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "tribune",
+        "name": "Tribune of the Plebs",
+        "description": "Protects popular interests, can veto any magistrate's action",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "senator",
+        "name": "Senator",
+        "description": "Ex-magistrate in permanent advisory body, provides institutional memory",
+        "memory": "persistent-shared",
+        "count": 6
+      },
+      {
+        "role": "dictator",
+        "name": "Dictator (Emergency)",
+        "description": "Temporary absolute authority for six months maximum, appointed only in crisis",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "censor",
+        "name": "Censor",
+        "description": "Reviews the moral and financial standing of all agents, maintains the roll",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Senate Session",
+        "type": "advisory",
+        "participants": [
+          "consul",
+          "praetor",
+          "senator"
+        ]
+      },
+      {
+        "name": "Popular Assembly",
+        "type": "decision",
+        "participants": [
+          "tribune",
+          "consul"
+        ]
+      },
+      {
+        "name": "Tribune's Veto",
+        "type": "emergency",
+        "participants": [
+          "tribune",
+          "consul",
+          "praetor"
+        ]
+      },
+      {
+        "name": "Consular Briefing",
+        "type": "peer-to-peer",
+        "participants": [
+          "consul"
+        ]
+      },
+      {
+        "name": "Censorial Review",
+        "type": "retrospective",
+        "participants": [
+          "censor",
+          "senator"
+        ]
+      },
+      {
+        "name": "Acta Senatus",
+        "type": "log",
+        "participants": [
+          "senator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Laws (Lex)",
+        "Senate consultations (Senatus Consulta)",
+        "Precedents (Mos Maiorum)",
+        "Census records"
+      ],
+      "private": [
+        "Magistrate's edicts",
+        "Provincial intelligence",
+        "Personal political alliances",
+        "Legal case files"
+      ],
+      "description": "The Senate is the primary institutional memory, with senators serving for life and accumulating precedent. Laws and senatorial decrees are shared. The mos maiorum (ancestral custom) functions as an unwritten shared constitution. The censor maintains append-only records of all agents' standing. Individual magistrates have private working memory that expires with their term, forcing knowledge transfer to the Senate."
+    },
+    "diagram": "graph TD\n    C1[Consul 1] <-->|mutual veto| C2[Consul 2]\n    C1 --> P1[Praetor 1]\n    C2 --> P2[Praetor 2]\n    SEN((Senate)) -.->|advises| C1\n    SEN -.->|advises| C2\n    T1[Tribune 1] -.->|veto| C1\n    T1 -.->|veto| P1\n    T2[Tribune 2] -.->|veto| C2\n    CEN[Censor] -.->|reviews| SEN\n    DICT[Dictator] -.->|emergency only| C1\n    DICT -.->|emergency only| C2",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "swarm",
+      "mesh",
+      "pipeline",
+      "federated"
+    ]
+  },
+  {
+    "id": "viking-thing-assembly",
+    "name": "Viking Thing Assembly",
+    "category": "Historical & Traditional",
+    "tags": [
+      "assembly",
+      "law-speaking",
+      "consensus",
+      "seasonal",
+      "oral-tradition"
+    ],
+    "summary": "Periodic assemblies where free agents debate and vote on disputes and law, guided by an elected law-speaker's memory.",
+    "description": "Based on the Norse Thing system where free landholding agents gathered periodically (often annually at the Althing) to resolve disputes, make laws, and settle blood feuds through arbitration rather than violence. A law-speaker held all laws in memory and recited them at each assembly, serving as a living constitutional database. Disputes were presented publicly and judged by the assembly. Outlawry (exile from the community) was the ultimate sanction. Between assemblies, agents operated independently. The system relied on reputation, honor, and the threat of collective action rather than a standing enforcement mechanism.",
+    "realWorldExample": "Icelandic Althing (930 AD - present, world's oldest parliament), Norwegian Gulating, Danish Landsting",
+    "whenToUse": "When agents operate independently most of the time but need periodic synchronization, when disputes must be resolved by community consensus, and when oral/shared memory of precedent is the primary coordination mechanism.",
+    "strengths": [
+      "Minimal standing overhead between assemblies",
+      "Community consensus provides legitimacy",
+      "Law-speaker ensures consistent application of precedent",
+      "Public dispute resolution deters bad actors",
+      "Balanced between individual autonomy and collective order"
+    ],
+    "weaknesses": [
+      "Only works at assembly time, no standing authority",
+      "Enforcement depends on collective will, not a standing force",
+      "Law-speaker is a single point of memory failure",
+      "Powerful agents can dominate assemblies",
+      "Seasonal schedule cannot handle emergencies between sessions"
+    ],
+    "agents": [
+      {
+        "role": "law-speaker",
+        "name": "Law-Speaker",
+        "description": "Elected keeper of all laws, recites them from memory at each Thing, neutral arbiter",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "godi",
+        "name": "Godi (Chieftain)",
+        "description": "Influential leader who represents their followers at the assembly",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "freeman",
+        "name": "Freeman",
+        "description": "Free landholder with voting rights at the Thing",
+        "memory": "persistent-private",
+        "count": 8
+      },
+      {
+        "role": "outlawed",
+        "name": "Outlaw",
+        "description": "Agent stripped of all community rights and protection by Thing judgment",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Thing Assembly",
+        "type": "decision",
+        "participants": [
+          "law-speaker",
+          "godi",
+          "freeman"
+        ]
+      },
+      {
+        "name": "Law Recitation",
+        "type": "broadcast",
+        "participants": [
+          "law-speaker"
+        ]
+      },
+      {
+        "name": "Dispute Presentation",
+        "type": "threaded",
+        "participants": [
+          "godi",
+          "freeman",
+          "law-speaker"
+        ]
+      },
+      {
+        "name": "Chieftain's Counsel",
+        "type": "peer-to-peer",
+        "participants": [
+          "godi"
+        ]
+      },
+      {
+        "name": "Saga Record",
+        "type": "log",
+        "participants": [
+          "law-speaker"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Laws (held in law-speaker's memory and recited publicly)",
+        "Judgments and precedents",
+        "Blood feud settlements"
+      ],
+      "private": [
+        "Personal honor record",
+        "Chieftain's alliances",
+        "Land claims",
+        "Family obligations"
+      ],
+      "description": "The law-speaker IS the shared memory, holding all laws and precedents. Between assemblies, agents rely on their own private memory and local reputation. Sagas (narrative records of important events) serve as cultural shared memory. There is no written constitution -- everything depends on the law-speaker's recall and the assembly's collective memory of past judgments."
+    },
+    "diagram": "graph TD\n    LS[Law-Speaker] --> THING((Thing Assembly))\n    G1[Godi 1] --> THING\n    G2[Godi 2] --> THING\n    G3[Godi 3] --> THING\n    G4[Godi 4] --> THING\n    F1[Freeman] --> G1\n    F2[Freeman] --> G1\n    F3[Freeman] --> G2\n    F4[Freeman] --> G3\n    THING -.->|outlaws| OUT[Outlaw]\n    LS -.->|recites law| THING",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "pipeline"
+    ]
+  }
+]

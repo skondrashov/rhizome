@@ -1,0 +1,2090 @@
+[
+  {
+    "id": "stigmergy-engine",
+    "name": "Stigmergy Engine",
+    "category": "Novel & Experimental",
+    "tags": [
+      "swarm-intelligence",
+      "indirect-communication",
+      "emergent-behavior",
+      "environment-mediated"
+    ],
+    "summary": "Agents never speak directly; all coordination happens by modifying a shared environment.",
+    "description": "Inspired by ant colonies and termite mounds, agents communicate exclusively by leaving traces in a shared workspace. No agent sends messages to another; instead, each reads the environment, performs work, and deposits artifacts that alter the landscape for others. Coordination emerges without any agent understanding the global plan. The environment itself becomes the communication medium, the memory, and the coordination protocol.",
+    "realWorldExample": "Wikipedia editing: contributors never coordinate directly but build coherent knowledge by modifying shared documents, with each edit signaling what's needed next.",
+    "whenToUse": "When direct communication creates bottlenecks, when the number of agents is large or unknown, or when you want coordination to emerge organically without centralized control.",
+    "strengths": [
+      "Scales to arbitrary numbers of agents without communication overhead",
+      "Naturally fault-tolerant since no agent is a single point of failure",
+      "Emergent coordination often finds solutions no individual agent would design",
+      "Agents can join or leave without disrupting the system"
+    ],
+    "weaknesses": [
+      "Extremely difficult to debug since causality is indirect and distributed",
+      "Convergence is not guaranteed and can produce local optima",
+      "Stale traces can mislead agents if evaporation mechanics are poorly tuned",
+      "Hard to impose quality standards without direct feedback channels"
+    ],
+    "agents": [
+      {
+        "role": "worker-ant",
+        "name": "Worker Ant",
+        "description": "Reads environment traces, performs task, deposits new traces",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "trace-reader",
+        "name": "Trace Reader",
+        "description": "Specialized in interpreting environmental patterns and trace density",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "evaporator",
+        "name": "Evaporator",
+        "description": "Decays old traces to prevent stale information from dominating",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "seed-layer",
+        "name": "Seed Layer",
+        "description": "Deposits initial traces to bootstrap coordination on new problems",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pheromone Field",
+        "type": "document",
+        "participants": [
+          "worker-ant",
+          "trace-reader",
+          "evaporator",
+          "seed-layer"
+        ]
+      },
+      {
+        "name": "Artifact Repository",
+        "type": "pub-sub",
+        "participants": [
+          "worker-ant",
+          "trace-reader"
+        ]
+      },
+      {
+        "name": "Decay Log",
+        "type": "log",
+        "participants": [
+          "evaporator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "pheromone-field",
+        "artifact-repository",
+        "trace-intensity-map"
+      ],
+      "private": [
+        "decay-schedule",
+        "local-sensor-state"
+      ],
+      "description": "The shared environment IS the memory. Agents have no persistent private memory; they react to the current state of the pheromone field. The evaporator maintains a private decay schedule. All 'communication' is reading from and writing to the shared environment."
+    },
+    "diagram": "graph TD\n    ENV[Shared Environment] --> R1[Worker Ant 1]\n    ENV --> R2[Worker Ant 2]\n    ENV --> R3[Worker Ant N]\n    R1 -->|deposits traces| ENV\n    R2 -->|deposits traces| ENV\n    R3 -->|deposits traces| ENV\n    TR[Trace Reader] -->|interprets| ENV\n    EV[Evaporator] -->|decays old traces| ENV\n    SL[Seed Layer] -->|bootstraps| ENV",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "dialectical-engine",
+    "name": "Dialectical Engine",
+    "category": "Novel & Experimental",
+    "tags": [
+      "hegelian",
+      "synthesis",
+      "adversarial-cooperation",
+      "philosophical"
+    ],
+    "summary": "Three agents enact thesis, antithesis, and synthesis in iterative spirals of refinement.",
+    "description": "Rooted in Hegelian dialectics, this pattern assigns one agent to propose (thesis), another to negate and critique (antithesis), and a third to reconcile contradictions into a higher-order synthesis. The synthesis then becomes the new thesis, and the cycle repeats. Each iteration doesn't just refine -- it transcends, producing solutions that contain the truth of both positions while resolving their contradiction. The pattern naturally escalates in sophistication.",
+    "realWorldExample": "The scientific method itself: a hypothesis is proposed, tested against evidence that contradicts it, and a new theory emerges that explains both the original observations and the contradictions.",
+    "whenToUse": "When problems benefit from deep adversarial analysis, when initial solutions are likely naive, or when you need to systematically explore the space between opposing positions.",
+    "strengths": [
+      "Forces genuine engagement with opposing viewpoints rather than superficial compromise",
+      "Each iteration produces strictly richer understanding than the last",
+      "Prevents premature convergence on the first plausible solution",
+      "The negation agent catches blind spots that consensus-seeking systems miss"
+    ],
+    "weaknesses": [
+      "Can spiral into infinite abstraction without converging on actionable solutions",
+      "The synthesis agent needs exceptional skill to reconcile genuinely opposed positions",
+      "Slow by design -- each round requires deep analysis from all three agents",
+      "Risk of the antithesis agent becoming contrarian rather than genuinely critical"
+    ],
+    "agents": [
+      {
+        "role": "thesis",
+        "name": "Thesis Agent",
+        "description": "Proposes bold positions and constructs affirmative arguments with evidence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "antithesis",
+        "name": "Antithesis Agent",
+        "description": "Identifies contradictions, edge cases, and fundamental flaws in the thesis",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "synthesis",
+        "name": "Synthesis Agent",
+        "description": "Reconciles thesis and antithesis into a higher-order position that transcends both",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "historian",
+        "name": "Dialectical Historian",
+        "description": "Records the full chain of thesis-antithesis-synthesis triads for pattern recognition",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dialectical Arena",
+        "type": "round-robin",
+        "participants": [
+          "thesis",
+          "antithesis",
+          "synthesis"
+        ]
+      },
+      {
+        "name": "Synthesis Archive",
+        "type": "log",
+        "participants": [
+          "synthesis",
+          "historian"
+        ]
+      },
+      {
+        "name": "Spiral Record",
+        "type": "document",
+        "participants": [
+          "historian"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current-synthesis",
+        "dialectical-chain",
+        "contradiction-registry"
+      ],
+      "private": [
+        "thesis-argument-cache",
+        "antithesis-critique-cache",
+        "synthesis-reconciliation-notes"
+      ],
+      "description": "Each agent maintains private reasoning notes. The synthesis becomes shared state that feeds the next cycle. The historian maintains an append-only record of all triads, enabling meta-dialectical analysis of the reasoning trajectory itself."
+    },
+    "diagram": "graph TD\n    T[Thesis Agent] -->|proposes| ARENA[Dialectical Arena]\n    A[Antithesis Agent] -->|negates| ARENA\n    ARENA --> S[Synthesis Agent]\n    S -->|new thesis| T\n    S -->|records| H[Historian]\n    H -->|spiral analysis| ARCHIVE[Synthesis Archive]\n    ARCHIVE -->|meta-patterns| S",
+    "hierarchyTypes": [
+      "adversarial",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "internal-prediction-market",
+    "name": "Internal Prediction Market",
+    "category": "Novel & Experimental",
+    "tags": [
+      "market-mechanism",
+      "information-aggregation",
+      "incentive-alignment",
+      "game-theory"
+    ],
+    "summary": "Agents trade prediction tokens on outcomes; prices aggregate distributed knowledge into decisions.",
+    "description": "Each agent holds a budget of prediction tokens and can place bets on which approach will succeed, which module has a bug, or what the user actually wants. Market prices emerge from trading and reflect the aggregated beliefs of all agents. The system routes work based on market signals: high-confidence predictions attract resources. Agents that make accurate predictions earn more tokens (and thus more influence), while chronically wrong agents lose influence naturally. This creates a self-calibrating system where influence tracks competence.",
+    "realWorldExample": "Google's internal prediction markets for project launch dates, where employee bets consistently outperformed management estimates by aggregating distributed ground-truth knowledge.",
+    "whenToUse": "When you have agents with different areas of expertise and need to aggregate their uncertain beliefs into resource allocation decisions, especially under ambiguity.",
+    "strengths": [
+      "Self-calibrating: influence automatically flows to agents with better track records",
+      "Surfaces hidden information that agents might not volunteer in direct communication",
+      "Provides continuous probability estimates rather than binary yes/no decisions",
+      "Resistant to political dynamics since tokens enforce skin-in-the-game"
+    ],
+    "weaknesses": [
+      "Requires enough agents for a functioning market; fails with fewer than 5",
+      "Agents can collude or manipulate thin markets with coordinated trading",
+      "Cold start problem: initial token distribution is arbitrary and shapes early decisions",
+      "Some questions don't have clear resolution criteria, making payouts ambiguous"
+    ],
+    "agents": [
+      {
+        "role": "market-maker",
+        "name": "Market Maker",
+        "description": "Maintains order books, sets initial prices, ensures liquidity on all prediction contracts",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "specialist-trader",
+        "name": "Specialist Trader",
+        "description": "Domain expert that trades on predictions within their area of knowledge",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "arbitrageur",
+        "name": "Arbitrageur",
+        "description": "Identifies inconsistent prices across related markets and trades to correct them",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "oracle",
+        "name": "Resolution Oracle",
+        "description": "Observes real-world outcomes and resolves prediction contracts for payout",
+        "memory": "append-only"
+      },
+      {
+        "role": "allocator",
+        "name": "Resource Allocator",
+        "description": "Reads market prices and routes work, compute, and attention based on prediction signals",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Order Book",
+        "type": "queue",
+        "participants": [
+          "market-maker",
+          "specialist-trader",
+          "arbitrageur"
+        ]
+      },
+      {
+        "name": "Price Feed",
+        "type": "broadcast",
+        "participants": [
+          "market-maker",
+          "allocator"
+        ]
+      },
+      {
+        "name": "Resolution Feed",
+        "type": "broadcast",
+        "participants": [
+          "oracle",
+          "market-maker"
+        ]
+      },
+      {
+        "name": "Trading Floor",
+        "type": "peer-to-peer",
+        "participants": [
+          "specialist-trader",
+          "arbitrageur"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "order-books",
+        "price-history",
+        "resolution-records",
+        "agent-portfolios"
+      ],
+      "private": [
+        "trading-strategy",
+        "domain-beliefs",
+        "position-exposure"
+      ],
+      "description": "The order book and price history are fully transparent shared state. Each trader maintains private beliefs and strategies. The oracle's resolution records are append-only to prevent retroactive manipulation. Portfolio balances are shared so agents can assess each other's credibility."
+    },
+    "diagram": "graph TD\n    S1[Specialist 1] -->|bets| OB[Order Book]\n    S2[Specialist 2] -->|bets| OB\n    S3[Specialist 3] -->|bets| OB\n    ARB[Arbitrageur] -->|corrects| OB\n    MM[Market Maker] -->|liquidity| OB\n    OB -->|prices| PF[Price Feed]\n    PF --> AL[Resource Allocator]\n    OR[Resolution Oracle] -->|outcomes| MM\n    AL -->|routes work| WORK[Task Execution]",
+    "hierarchyTypes": [
+      "mesh",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "pipeline",
+      "federated",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "viable-system-model",
+    "name": "Viable System Model",
+    "category": "Novel & Experimental",
+    "tags": [
+      "cybernetics",
+      "stafford-beer",
+      "requisite-variety",
+      "recursive"
+    ],
+    "summary": "Five nested cybernetic subsystems maintain viability through balanced autonomy and cohesion.",
+    "description": "Based on Stafford Beer's organizational cybernetics, this pattern implements five interacting systems: System 1 (Operations -- the agents doing actual work), System 2 (Coordination -- preventing oscillation between operations), System 3 (Control -- resource allocation and optimization), System 4 (Intelligence -- monitoring the external environment for threats and opportunities), and System 5 (Identity -- maintaining the system's purpose and resolving conflicts between System 3 and 4). The key insight is that each System 1 unit is itself a viable system, making the architecture recursively self-similar at every scale.",
+    "realWorldExample": "The human nervous system: the spinal cord handles routine coordination (S2), the brainstem manages autonomic regulation (S3), the neocortex models the future (S4), and consciousness holds identity (S5).",
+    "whenToUse": "When building autonomous agent systems that must remain viable (self-governing, adaptive, coherent) over long time horizons without constant human oversight.",
+    "strengths": [
+      "Mathematically grounded in Ashby's Law of Requisite Variety",
+      "Recursively self-similar: each operational unit can contain its own VSM",
+      "Explicitly separates present-tense optimization from future-tense adaptation",
+      "The S3-S4 homeostat prevents both stagnation and reckless change"
+    ],
+    "weaknesses": [
+      "High conceptual complexity makes implementation error-prone",
+      "System 5 (Identity) is the hardest to implement and easiest to get wrong",
+      "Over-engineering risk: not every agent system needs five interacting subsystems",
+      "The coordination channels between systems require careful bandwidth tuning"
+    ],
+    "agents": [
+      {
+        "role": "operations",
+        "name": "Operations Unit",
+        "description": "Autonomous agent performing primary value-creating work; is itself a viable system",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "coordinator",
+        "name": "Coordination Agent (S2)",
+        "description": "Dampens oscillation between operations units; handles scheduling and anti-conflict",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "controller",
+        "name": "Control Agent (S3)",
+        "description": "Allocates resources, sets performance targets, audits operations via S3* channel",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "intelligence",
+        "name": "Intelligence Agent (S4)",
+        "description": "Scans the external environment for threats, opportunities, and paradigm shifts",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "identity",
+        "name": "Identity Agent (S5)",
+        "description": "Maintains system purpose, resolves tension between S3 optimization and S4 adaptation",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Operations Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "operations",
+          "coordinator"
+        ]
+      },
+      {
+        "name": "Resource Bargaining",
+        "type": "decision",
+        "participants": [
+          "operations",
+          "controller"
+        ]
+      },
+      {
+        "name": "Audit Channel (S3*)",
+        "type": "top-down",
+        "participants": [
+          "controller",
+          "operations"
+        ]
+      },
+      {
+        "name": "S3-S4 Homeostat",
+        "type": "advisory",
+        "participants": [
+          "controller",
+          "intelligence",
+          "identity"
+        ]
+      },
+      {
+        "name": "Environment Scan",
+        "type": "broadcast",
+        "participants": [
+          "intelligence",
+          "identity",
+          "controller"
+        ]
+      },
+      {
+        "name": "Identity Directive",
+        "type": "top-down",
+        "participants": [
+          "identity",
+          "controller",
+          "intelligence"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "resource-allocation-table",
+        "system-identity-charter",
+        "coordination-protocols",
+        "performance-metrics"
+      ],
+      "private": [
+        "operations-local-state",
+        "environment-model",
+        "audit-findings"
+      ],
+      "description": "System 5 maintains the shared identity charter. System 3 and operations share resource tables. System 4 maintains a private environment model that it periodically publishes. The S3-S4 homeostat is a shared negotiation space. Each operations unit has its own private state, reflecting its autonomy."
+    },
+    "diagram": "graph TD\n    S5[S5: Identity] -->|policy| S4[S4: Intelligence]\n    S5 -->|policy| S3[S3: Control]\n    S4 <-->|homeostat| S3\n    S3 -->|resources| S2[S2: Coordination]\n    S3 -->|audit S3*| OP1[Operations 1]\n    S3 -->|audit S3*| OP2[Operations 2]\n    S2 -->|anti-oscillation| OP1\n    S2 -->|anti-oscillation| OP2\n    S4 -->|environment| EXT[External World]\n    OP1 <-->|lateral| OP2",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "mesh"
+    ]
+  },
+  {
+    "id": "autopoietic-cell",
+    "name": "Autopoietic Cell",
+    "category": "Novel & Experimental",
+    "tags": [
+      "autopoiesis",
+      "self-maintenance",
+      "boundary-management",
+      "maturana-varela"
+    ],
+    "summary": "A self-producing system that continuously regenerates its own components and boundary.",
+    "description": "Drawing from Maturana and Varela's theory of autopoiesis, this pattern creates an agent system that produces and maintains its own components. A membrane agent controls what enters and exits the system. Internal metabolism agents transform inputs into useful components. When components degrade, the system regenerates them without external instruction. The system's identity is not its components (which are constantly replaced) but its organization -- the pattern of relationships that persists. The key innovation is that the system can survive the replacement of any individual agent, because the organizational pattern itself is what's preserved.",
+    "realWorldExample": "A living cell: the membrane, enzymes, and DNA are constantly being replaced, but the cell maintains its identity through the self-producing network of chemical reactions that continuously regenerate all components.",
+    "whenToUse": "When building long-running autonomous systems that must self-heal, adapt to degradation, and maintain identity across component replacement -- without human maintenance.",
+    "strengths": [
+      "Genuinely self-healing: component failure triggers regeneration, not crash",
+      "Identity persists through complete component turnover",
+      "The boundary agent provides natural security and input filtering",
+      "Minimal external dependencies since the system produces its own components"
+    ],
+    "weaknesses": [
+      "Bootstrap problem: who creates the initial self-producing network?",
+      "Autopoietic closure can make the system resistant to beneficial external changes",
+      "Difficult to steer from outside since the system prioritizes self-maintenance",
+      "Computational overhead of continuous self-monitoring and regeneration"
+    ],
+    "agents": [
+      {
+        "role": "membrane",
+        "name": "Membrane Agent",
+        "description": "Controls system boundary; filters inputs, manages outputs, defines inside vs outside",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "metabolizer",
+        "name": "Metabolizer",
+        "description": "Transforms raw inputs into internal components and useful work products",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "replicator",
+        "name": "Replicator",
+        "description": "Monitors component health and regenerates degraded or failed agents from templates",
+        "memory": "versioned"
+      },
+      {
+        "role": "structural-coupler",
+        "name": "Structural Coupler",
+        "description": "Manages perturbations from the environment, triggering internal adaptations without violating organizational closure",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "organization-keeper",
+        "name": "Organization Keeper",
+        "description": "Maintains the invariant relational pattern that defines the system's identity",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Boundary Channel",
+        "type": "broadcast",
+        "participants": [
+          "membrane",
+          "metabolizer",
+          "structural-coupler"
+        ]
+      },
+      {
+        "name": "Component Health",
+        "type": "pub-sub",
+        "participants": [
+          "replicator",
+          "metabolizer",
+          "membrane"
+        ]
+      },
+      {
+        "name": "Regeneration Orders",
+        "type": "queue",
+        "participants": [
+          "replicator",
+          "organization-keeper"
+        ]
+      },
+      {
+        "name": "Perturbation Log",
+        "type": "log",
+        "participants": [
+          "structural-coupler",
+          "organization-keeper"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "organizational-invariant",
+        "component-registry",
+        "boundary-rules"
+      ],
+      "private": [
+        "perturbation-history",
+        "regeneration-templates"
+      ],
+      "description": "The organizational invariant is the most critical shared memory -- it defines what the system IS. The component registry tracks all active agents and their health. The replicator maintains versioned templates for regenerating any component. The structural coupler keeps a private perturbation history to learn from environmental interactions."
+    },
+    "diagram": "graph TD\n    EXT[External Environment] -->|perturbation| MEM[Membrane Agent]\n    MEM -->|filtered input| MET[Metabolizer]\n    MET -->|components| MEM\n    MET -->|work products| MEM\n    MEM -->|output| EXT\n    REP[Replicator] -->|regenerates| MET\n    REP -->|regenerates| MEM\n    SC[Structural Coupler] -->|adapts| MET\n    OK[Organization Keeper] -->|invariant| REP\n    OK -->|invariant| SC\n    MET -->|health signal| REP",
+    "hierarchyTypes": [
+      "swarm",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "panarchic-cycles",
+    "name": "Panarchic Adaptive Cycles",
+    "category": "Novel & Experimental",
+    "tags": [
+      "panarchy",
+      "resilience-theory",
+      "adaptive-cycles",
+      "cross-scale"
+    ],
+    "summary": "Nested adaptive cycles at multiple scales, where collapse at one level triggers renewal at another.",
+    "description": "From Holling's panarchy theory in ecology, this pattern implements agents organized into nested adaptive cycles, each going through four phases: rapid growth (r), conservation/rigidity (K), release/creative destruction (omega), and reorganization (alpha). The radical insight is that cycles at different scales interact: collapse at a small scale can trigger reorganization at larger scales ('revolt'), while stability at large scales constrains and enables small-scale exploration ('remember'). This creates a system that is simultaneously stable at macro scales and innovative at micro scales.",
+    "realWorldExample": "Forest ecosystems: individual tree death (small cycle collapse) creates canopy gaps that enable new species to establish, while the forest soil (large cycle) remembers nutrients and mycorrhizal networks that guide regrowth.",
+    "whenToUse": "When building systems that must balance exploitation of known solutions with exploration of new approaches, especially when operating at multiple time scales simultaneously.",
+    "strengths": [
+      "Mathematically models the tension between stability and innovation",
+      "Small-scale failures become sources of large-scale learning and renewal",
+      "Cross-scale interactions prevent both stagnation and chaos",
+      "The 'remember' connection ensures accumulated wisdom survives local collapses"
+    ],
+    "weaknesses": [
+      "Determining the right number and nesting of scales is an unsolved design problem",
+      "Intentional creative destruction is psychologically and organizationally difficult",
+      "Cross-scale timing mismatches can amplify failures instead of containing them",
+      "The alpha (reorganization) phase requires genuine novelty, which is hard to engineer"
+    ],
+    "agents": [
+      {
+        "role": "pioneer",
+        "name": "Pioneer Agent",
+        "description": "Operates in the rapid-growth (r) phase; explores aggressively with high risk tolerance",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "conservator",
+        "name": "Conservator Agent",
+        "description": "Operates in the conservation (K) phase; optimizes, hardens, and extracts value from proven approaches",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "creative-destroyer",
+        "name": "Creative Destroyer",
+        "description": "Triggers the release (omega) phase; identifies rigidity traps and initiates controlled collapse",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "reorganizer",
+        "name": "Reorganizer Agent",
+        "description": "Operates in the alpha phase; recombines surviving elements into new configurations",
+        "memory": "versioned"
+      },
+      {
+        "role": "cross-scale-linker",
+        "name": "Cross-Scale Linker",
+        "description": "Manages revolt (up) and remember (down) connections between nested cycles",
+        "memory": "hierarchical"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Growth Frontier",
+        "type": "broadcast",
+        "participants": [
+          "pioneer",
+          "cross-scale-linker"
+        ]
+      },
+      {
+        "name": "Stability Core",
+        "type": "document",
+        "participants": [
+          "conservator",
+          "cross-scale-linker"
+        ]
+      },
+      {
+        "name": "Collapse Signal",
+        "type": "emergency",
+        "participants": [
+          "creative-destroyer",
+          "reorganizer",
+          "cross-scale-linker"
+        ]
+      },
+      {
+        "name": "Renewal Workshop",
+        "type": "threaded",
+        "participants": [
+          "reorganizer",
+          "pioneer"
+        ]
+      },
+      {
+        "name": "Cross-Scale Memory",
+        "type": "advisory",
+        "participants": [
+          "cross-scale-linker",
+          "conservator",
+          "reorganizer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "proven-patterns-library",
+        "current-phase-state",
+        "cross-scale-linkages"
+      ],
+      "private": [
+        "exploration-notes",
+        "rigidity-indicators",
+        "collapse-criteria"
+      ],
+      "description": "The cross-scale linker maintains hierarchical memory that connects insights across cycle scales. The conservator maintains the proven-patterns library (the 'remember' connection). The creative destroyer's collapse criteria are private to prevent gaming. The reorganizer uses versioned memory to track which recombinations have been tried."
+    },
+    "diagram": "graph TD\n    P[Pioneer - Growth] -->|matures| C[Conservator - K]\n    C -->|rigidity trap| CD[Creative Destroyer - Omega]\n    CD -->|collapse| R[Reorganizer - Alpha]\n    R -->|new growth| P\n    CD -->|revolt UP| CSL[Cross-Scale Linker]\n    CSL -->|remember DOWN| R\n    CSL -->|connects| LARGE[Larger Cycle]\n    CSL -->|connects| SMALL[Smaller Cycle]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "federated"
+    ]
+  },
+  {
+    "id": "morphogenetic-field",
+    "name": "Morphogenetic Field",
+    "category": "Novel & Experimental",
+    "tags": [
+      "developmental-biology",
+      "positional-information",
+      "differentiation",
+      "gradient"
+    ],
+    "summary": "Agents differentiate into specialized roles based on their position in an information gradient.",
+    "description": "Inspired by embryonic development, where cells differentiate based on morphogen concentration gradients rather than explicit instructions, this pattern places agents in an abstract space where gradient signals determine specialization. A source agent emits 'morphogen' signals that decay with distance. Each agent reads its local gradient concentration and differentiates accordingly -- high concentration agents become one type, low concentration another, and boundary agents become yet another. The result is emergent division of labor without any central role-assignment authority. Multiple overlapping gradients can create complex specialization maps, just as multiple morphogen gradients in embryos create complex body plans.",
+    "realWorldExample": "The Drosophila embryo: the Bicoid protein forms a concentration gradient from head to tail, and cells differentiate into head, thorax, or abdomen structures based purely on local concentration -- no master plan required.",
+    "whenToUse": "When you need emergent specialization without central control; when the problem space has natural spatial or topological structure that agents can position themselves within.",
+    "strengths": [
+      "Specialization emerges from simple local rules without central orchestration",
+      "Naturally produces smooth boundaries between specialized regions",
+      "Robust to noise: small perturbations in gradients don't cause catastrophic mis-differentiation",
+      "Multiple overlapping gradients can encode complex specialization patterns"
+    ],
+    "weaknesses": [
+      "Agents must exist in a meaningful 'space' -- defining this space is a design challenge",
+      "Gradient signals must be carefully calibrated to produce useful differentiation thresholds",
+      "Once differentiated, agents may resist re-differentiation even when beneficial",
+      "Emergent role assignment means you cannot guarantee exact agent counts per role"
+    ],
+    "agents": [
+      {
+        "role": "morphogen-source",
+        "name": "Morphogen Source",
+        "description": "Emits gradient signals that decay with distance through the agent space",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "undifferentiated",
+        "name": "Undifferentiated Agent",
+        "description": "Reads local gradient concentration and differentiates into the appropriate specialist role",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "boundary-detector",
+        "name": "Boundary Detector",
+        "description": "Activates at threshold concentrations where gradients cross; handles inter-region communication",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gradient-reader",
+        "name": "Gradient Reader",
+        "description": "Continuously monitors local morphogen concentrations and signals when re-differentiation is needed",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "fate-mapper",
+        "name": "Fate Mapper",
+        "description": "Records which gradient combinations produce which specializations; the system's developmental memory",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Gradient Field",
+        "type": "broadcast",
+        "participants": [
+          "morphogen-source",
+          "undifferentiated",
+          "gradient-reader"
+        ]
+      },
+      {
+        "name": "Differentiation Signal",
+        "type": "pub-sub",
+        "participants": [
+          "gradient-reader",
+          "undifferentiated",
+          "fate-mapper"
+        ]
+      },
+      {
+        "name": "Boundary Negotiation",
+        "type": "peer-to-peer",
+        "participants": [
+          "boundary-detector"
+        ]
+      },
+      {
+        "name": "Fate Map Registry",
+        "type": "log",
+        "participants": [
+          "fate-mapper"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "gradient-field-state",
+        "differentiation-thresholds",
+        "fate-map"
+      ],
+      "private": [
+        "local-concentration-readings",
+        "boundary-detection-criteria"
+      ],
+      "description": "The gradient field is shared state that all agents can read. Differentiation thresholds are shared so agents agree on what concentration means what role. The fate map is append-only, recording the developmental history. Undifferentiated agents have ephemeral memory since they will be replaced by their specialized form."
+    },
+    "diagram": "graph LR\n    MS[Morphogen Source] -->|gradient| U1[Agent - High Conc]\n    MS -->|gradient| U2[Agent - Mid Conc]\n    MS -->|gradient| U3[Agent - Low Conc]\n    U1 -->|differentiates| SPEC1[Specialist Type A]\n    U2 -->|differentiates| BD[Boundary Detector]\n    U3 -->|differentiates| SPEC2[Specialist Type B]\n    GR[Gradient Reader] -->|monitors| U1\n    GR -->|monitors| U2\n    GR -->|monitors| U3\n    FM[Fate Mapper] -->|records| FATE[Fate Map]",
+    "hierarchyTypes": [
+      "swarm",
+      "chain-of-command",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "attention-economy",
+    "name": "Attention Economy",
+    "category": "Novel & Experimental",
+    "tags": [
+      "attention-allocation",
+      "bidding",
+      "priority-signaling",
+      "scarce-resource"
+    ],
+    "summary": "Agents compete for the attention of a central evaluator by bidding with earned credibility tokens.",
+    "description": "The central insight: in any multi-agent system, the scarcest resource is not compute but evaluative attention -- the capacity to carefully assess and integrate contributions. This pattern makes that bottleneck explicit. A central Evaluator has limited attention bandwidth. Worker agents bid for evaluation time using credibility tokens earned from past successful contributions. The Evaluator allocates attention proportionally to bids, reviews work, and pays out tokens for quality contributions. An Inflation Controller prevents token hoarding and ensures new agents can participate. The result is a system where the most consistently valuable agents get the most evaluative attention, creating a natural meritocracy.",
+    "realWorldExample": "Academic peer review: researchers with strong publication records get reviewed more carefully and quickly, while unknown researchers face higher scrutiny barriers. Attention is the scarce commodity.",
+    "whenToUse": "When you have many agents producing outputs but limited capacity to evaluate quality; when you need a fair system for allocating scarce expert review time.",
+    "strengths": [
+      "Makes the real bottleneck (evaluation) explicit and manages it rationally",
+      "Self-correcting: agents that waste evaluator attention lose future access",
+      "Credibility tokens create a legible reputation system",
+      "The inflation controller prevents incumbency lock-in"
+    ],
+    "weaknesses": [
+      "Single evaluator is a bottleneck and single point of failure",
+      "Novel ideas from low-credibility agents may be systematically ignored",
+      "Token dynamics can create perverse incentives to game metrics rather than create value",
+      "Cold start: new agents have no tokens and may struggle to ever be evaluated"
+    ],
+    "agents": [
+      {
+        "role": "evaluator",
+        "name": "Central Evaluator",
+        "description": "Reviews agent contributions proportional to their bids; awards credibility tokens for quality",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "contributor",
+        "name": "Contributor Agent",
+        "description": "Produces work outputs and bids credibility tokens for evaluation attention",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "inflation-controller",
+        "name": "Inflation Controller",
+        "description": "Issues baseline tokens to all agents, taxes hoarded tokens, prevents attention monopolies",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "auctioneer",
+        "name": "Attention Auctioneer",
+        "description": "Runs the attention auction each cycle, resolving bids into evaluation slot allocations",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Bid Submission",
+        "type": "queue",
+        "participants": [
+          "contributor",
+          "auctioneer"
+        ]
+      },
+      {
+        "name": "Evaluation Queue",
+        "type": "queue",
+        "participants": [
+          "auctioneer",
+          "evaluator"
+        ]
+      },
+      {
+        "name": "Quality Verdicts",
+        "type": "broadcast",
+        "participants": [
+          "evaluator",
+          "contributor",
+          "inflation-controller"
+        ]
+      },
+      {
+        "name": "Token Ledger",
+        "type": "document",
+        "participants": [
+          "inflation-controller",
+          "auctioneer",
+          "contributor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "token-balances",
+        "evaluation-history",
+        "quality-verdicts",
+        "inflation-parameters"
+      ],
+      "private": [
+        "bidding-strategy",
+        "work-in-progress",
+        "evaluation-feedback"
+      ],
+      "description": "Token balances and evaluation history are fully transparent to enable informed bidding. Each contributor maintains a private bidding strategy and work buffer. The evaluator's quality verdicts are broadcast to all. Inflation parameters are shared so agents can anticipate monetary policy changes."
+    },
+    "diagram": "graph TD\n    C1[Contributor 1] -->|bid + work| AUC[Auctioneer]\n    C2[Contributor 2] -->|bid + work| AUC\n    C3[Contributor 3] -->|bid + work| AUC\n    AUC -->|ranked queue| EV[Central Evaluator]\n    EV -->|verdict + tokens| C1\n    EV -->|verdict + tokens| C2\n    EV -->|verdict + tokens| C3\n    IC[Inflation Controller] -->|baseline tokens| C1\n    IC[Inflation Controller] -->|baseline tokens| C2\n    IC[Inflation Controller] -->|baseline tokens| C3\n    IC -->|tax hoards| AUC",
+    "hierarchyTypes": [
+      "orchestrated",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "dao-governance",
+    "name": "Decentralized Autonomous Organization",
+    "category": "Novel & Experimental",
+    "tags": [
+      "governance",
+      "token-voting",
+      "decentralized",
+      "smart-contracts"
+    ],
+    "summary": "Agents govern themselves through token-weighted voting on proposals, with no permanent leader.",
+    "description": "Modeled on blockchain DAOs, this pattern gives each agent governance tokens proportional to their stake or contribution history. Any agent can submit proposals (new tasks, architecture changes, resource reallocation). Proposals enter a deliberation period, then a voting period. Token-weighted votes determine outcomes. A Quorum requirement prevents small minorities from making decisions. Delegation allows agents to transfer voting power to trusted specialists on specific domains. A Constitution agent enforces invariant rules that even majority votes cannot override. The result is a fully self-governing agent collective with no permanent authority.",
+    "realWorldExample": "MakerDAO: token holders vote on collateral types, stability fees, and protocol upgrades with no CEO or board -- just code and votes.",
+    "whenToUse": "When no single agent should have permanent authority; when the system must self-govern over long time horizons; when legitimacy of decisions matters as much as their quality.",
+    "strengths": [
+      "No single point of authoritarian failure or capture",
+      "Delegation enables domain-specific expertise without permanent hierarchy",
+      "Constitutional limits prevent tyranny of the majority",
+      "Full transparency of votes and proposals creates accountability"
+    ],
+    "weaknesses": [
+      "Voter apathy: agents may not invest effort in evaluating every proposal",
+      "Plutocratic risk: agents with the most tokens dominate all decisions",
+      "Slow decision-making: deliberation and voting periods add latency",
+      "Constitutional amendments are dangerously hard to get right"
+    ],
+    "agents": [
+      {
+        "role": "proposer",
+        "name": "Proposal Agent",
+        "description": "Drafts and submits governance proposals with rationale and impact analysis",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "voter",
+        "name": "Voter Agent",
+        "description": "Evaluates proposals and casts token-weighted votes during voting periods",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "delegate",
+        "name": "Domain Delegate",
+        "description": "Receives delegated voting power for specific topic domains",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "constitution",
+        "name": "Constitution Agent",
+        "description": "Enforces invariant rules; can veto proposals that violate constitutional limits",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "executor",
+        "name": "Execution Agent",
+        "description": "Implements proposals that pass voting; reports on execution outcomes",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Proposal Board",
+        "type": "threaded",
+        "participants": [
+          "proposer",
+          "voter",
+          "delegate",
+          "constitution"
+        ]
+      },
+      {
+        "name": "Voting Booth",
+        "type": "decision",
+        "participants": [
+          "voter",
+          "delegate"
+        ]
+      },
+      {
+        "name": "Constitutional Review",
+        "type": "advisory",
+        "participants": [
+          "constitution",
+          "proposer"
+        ]
+      },
+      {
+        "name": "Execution Reports",
+        "type": "broadcast",
+        "participants": [
+          "executor",
+          "voter"
+        ]
+      },
+      {
+        "name": "Delegation Registry",
+        "type": "document",
+        "participants": [
+          "voter",
+          "delegate"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "token-ledger",
+        "constitution",
+        "proposal-archive",
+        "delegation-registry",
+        "vote-records"
+      ],
+      "private": [
+        "voting-rationale",
+        "proposal-drafts",
+        "delegation-preferences"
+      ],
+      "description": "All votes and proposals are permanently shared for transparency. The constitution is shared and immutable except through supermajority amendment. Token balances are public. Each agent's voting rationale and internal deliberation are private, enabling honest evaluation without social pressure."
+    },
+    "diagram": "graph TD\n    P[Proposer] -->|submits| PB[Proposal Board]\n    PB -->|review| CON[Constitution Agent]\n    CON -->|approved/vetoed| VB[Voting Booth]\n    V1[Voter 1] -->|votes| VB\n    V2[Voter 2] -->|delegates| D[Domain Delegate]\n    D -->|votes| VB\n    VB -->|passed| EX[Execution Agent]\n    EX -->|report| V1\n    EX -->|report| V2",
+    "hierarchyTypes": [
+      "consensus",
+      "swarm"
+    ]
+  },
+  {
+    "id": "dream-consolidation-cycle",
+    "name": "Dream/Wake Consolidation Cycle",
+    "category": "Novel & Experimental",
+    "tags": [
+      "sleep-cycle",
+      "memory-consolidation",
+      "exploration-exploitation",
+      "neuroscience"
+    ],
+    "summary": "Agents alternate between active exploration (wake) and offline consolidation (dream) phases.",
+    "description": "Inspired by the neuroscience of sleep and memory consolidation, this pattern alternates the entire system between two modes. During 'wake' phases, agents actively process tasks, generate solutions, and accumulate raw experience. During 'dream' phases, a separate set of consolidation agents replays the day's experiences, extracts patterns, prunes unsuccessful approaches, strengthens successful ones, and reorganizes internal models. The key insight from neuroscience: learning happens in two phases -- acquisition (wake) and consolidation (dream) -- and skipping either produces worse outcomes than doing both. A Circadian Controller manages the transitions and phase durations based on system performance.",
+    "realWorldExample": "Students who sleep between study sessions retain 40% more than those who study continuously. The brain's hippocampal replay during sleep restructures memories from episodic to semantic form.",
+    "whenToUse": "When agents accumulate experience faster than they can integrate it; when raw performance is plateauing and the system needs to extract higher-order patterns from accumulated experience.",
+    "strengths": [
+      "Separates acquisition from consolidation, preventing interference between them",
+      "Dream-phase pattern extraction finds structure invisible during task execution",
+      "Pruning during consolidation prevents memory bloat and outdated knowledge",
+      "The rhythm itself provides natural checkpoints for system health assessment"
+    ],
+    "weaknesses": [
+      "System is offline during dream phases -- unacceptable for real-time requirements",
+      "Determining optimal wake/dream ratio is empirical and task-dependent",
+      "Consolidation agents may discard experiences that seem useless but are actually valuable",
+      "Requires significant memory infrastructure to store raw experiences for replay"
+    ],
+    "agents": [
+      {
+        "role": "active-worker",
+        "name": "Active Worker",
+        "description": "Processes tasks during wake phase; logs all experiences and decisions to the experience buffer",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "experience-buffer",
+        "name": "Experience Buffer",
+        "description": "Stores raw episodic memories from wake phases for replay during dreaming",
+        "memory": "append-only"
+      },
+      {
+        "role": "consolidator",
+        "name": "Consolidation Agent",
+        "description": "Replays experiences during dream phase; extracts patterns, prunes failures, strengthens successes",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "pruner",
+        "name": "Pruner Agent",
+        "description": "Identifies and removes outdated, redundant, or misleading memories during consolidation",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "circadian",
+        "name": "Circadian Controller",
+        "description": "Manages wake/dream transitions based on experience accumulation rate and consolidation needs",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Experience Stream",
+        "type": "log",
+        "participants": [
+          "active-worker",
+          "experience-buffer"
+        ]
+      },
+      {
+        "name": "Replay Channel",
+        "type": "broadcast",
+        "participants": [
+          "experience-buffer",
+          "consolidator",
+          "pruner"
+        ]
+      },
+      {
+        "name": "Consolidated Knowledge",
+        "type": "document",
+        "participants": [
+          "consolidator",
+          "active-worker"
+        ]
+      },
+      {
+        "name": "Phase Transitions",
+        "type": "broadcast",
+        "participants": [
+          "circadian",
+          "active-worker",
+          "consolidator"
+        ]
+      },
+      {
+        "name": "Pruning Rationale",
+        "type": "log",
+        "participants": [
+          "pruner",
+          "consolidator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "consolidated-knowledge-base",
+        "current-phase-state",
+        "performance-trends"
+      ],
+      "private": [
+        "raw-experience-buffer",
+        "pruning-criteria",
+        "consolidation-notes"
+      ],
+      "description": "Raw experiences are append-only during wake phases. During dream phases, the consolidator transforms episodic memories into semantic knowledge in the shared knowledge base. The pruner's criteria are private to prevent agents from tailoring experiences to survive pruning. The circadian controller maintains shared phase state so all agents know whether to be active or dormant."
+    },
+    "diagram": "graph TD\n    AW[Active Workers] -->|experiences| EB[Experience Buffer]\n    CC[Circadian Controller] -->|wake signal| AW\n    CC -->|dream signal| CON[Consolidation Agent]\n    EB -->|replay| CON\n    CON -->|patterns| CKB[Consolidated Knowledge]\n    PR[Pruner] -->|removes| EB\n    CON -->|signals| PR\n    CKB -->|informs next wake| AW\n    CC -->|monitors| CKB",
+    "hierarchyTypes": [
+      "orchestrated",
+      "chain-of-command",
+      "swarm",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "cellular-automaton-grid",
+    "name": "Cellular Automaton Grid",
+    "category": "Novel & Experimental",
+    "tags": [
+      "cellular-automata",
+      "local-rules",
+      "emergence",
+      "wolfram"
+    ],
+    "summary": "Agents occupy grid cells; behavior determined entirely by neighbor states and local rules.",
+    "description": "Each agent occupies a position in an abstract grid and can only observe and communicate with its immediate neighbors. Agent behavior is governed by local rules applied to neighbor states -- like Conway's Game of Life, but with richer state spaces. Complex global behaviors (waves of activity, self-organizing clusters, information highways) emerge from simple local interactions. A rule-mutation mechanism allows successful local rule variants to spread through the grid. The pattern exploits the deep result from cellular automata theory: simple local rules can produce computation of arbitrary complexity.",
+    "realWorldExample": "Wolfram's Rule 110 cellular automaton is provably Turing-complete -- it can compute anything -- despite each cell having only two states and three neighbors. Complex behavior from radical simplicity.",
+    "whenToUse": "When you want complex coordinated behavior to emerge from extremely simple agent designs; when direct communication infrastructure is unavailable or undesirable.",
+    "strengths": [
+      "Extreme simplicity of individual agent design -- each only needs local rules",
+      "Provably capable of arbitrary computation (Turing-complete with right rules)",
+      "Naturally parallel: all cells update simultaneously",
+      "Robust to individual cell failure since computation is distributed across the grid"
+    ],
+    "weaknesses": [
+      "Finding the right local rules for a given global behavior is an inverse problem of extreme difficulty",
+      "Information propagation is slow -- bounded by grid speed of light",
+      "Debugging emergent behavior is nearly impossible by examining individual cells",
+      "Sensitivity to initial conditions can make behavior unpredictable"
+    ],
+    "agents": [
+      {
+        "role": "cell",
+        "name": "Grid Cell",
+        "description": "Occupies a grid position; reads neighbor states and applies local transition rules to update own state",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "rule-mutator",
+        "name": "Rule Mutator",
+        "description": "Introduces random variations in local rules; successful variants spread to neighboring cells",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "boundary",
+        "name": "Boundary Condition",
+        "description": "Defines behavior at grid edges: wrapping, reflection, absorption, or constant state",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "observer",
+        "name": "Macro Observer",
+        "description": "Reads the global grid state and identifies emergent patterns, gliders, and stable structures",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Neighbor Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "cell"
+        ]
+      },
+      {
+        "name": "Rule Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "rule-mutator",
+          "cell"
+        ]
+      },
+      {
+        "name": "Boundary Config",
+        "type": "document",
+        "participants": [
+          "boundary",
+          "cell"
+        ]
+      },
+      {
+        "name": "Pattern Log",
+        "type": "log",
+        "participants": [
+          "observer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "grid-state-snapshot",
+        "boundary-conditions",
+        "active-rule-set"
+      ],
+      "private": [
+        "cell-local-state",
+        "rule-mutation-history"
+      ],
+      "description": "Each cell has only ephemeral memory of its current state plus neighbor states -- no history. The grid state snapshot is a shared read-only view updated each tick. Rule mutations are private until they prove successful. The observer maintains an append-only pattern log that doesn't feed back into cell behavior."
+    },
+    "diagram": "graph TD\n    C1[Cell 1,1] <-->|state| C2[Cell 1,2]\n    C2 <-->|state| C3[Cell 1,3]\n    C1 <-->|state| C4[Cell 2,1]\n    C2 <-->|state| C5[Cell 2,2]\n    C3 <-->|state| C6[Cell 2,3]\n    C4 <-->|state| C5\n    C5 <-->|state| C6\n    RM[Rule Mutator] -->|new rules| C5\n    OBS[Macro Observer] -->|reads| C1\n    OBS -->|reads| C5\n    OBS -->|pattern| LOG[Pattern Log]",
+    "hierarchyTypes": [
+      "swarm",
+      "mesh"
+    ]
+  },
+  {
+    "id": "tournament-evolutionary",
+    "name": "Tournament / Evolutionary Selection",
+    "category": "Novel & Experimental",
+    "tags": [
+      "evolutionary",
+      "selection-pressure",
+      "genetic-algorithms",
+      "competition"
+    ],
+    "summary": "Agent populations compete in tournaments; winners reproduce with variation, losers are culled.",
+    "description": "A population of agents with different configurations (strategies, architectures, parameters) compete in head-to-head tournaments on the target task. Winners earn reproduction rights: their configuration is cloned with random mutations (parameter perturbation, strategy crossover). Losers are removed from the population. Over generations, the population evolves toward high-performing configurations without any agent understanding why they work. A Fitness Evaluator runs tournaments. A Diversity Guardian prevents premature convergence by protecting novel configurations even if they currently underperform. A Niche Specialist maintains subpopulations adapted to different problem subtypes.",
+    "realWorldExample": "OpenAI's competitive self-play in multi-agent hide-and-seek, where populations of hiders and seekers co-evolved increasingly sophisticated strategies over millions of generations.",
+    "whenToUse": "When you don't know the optimal agent configuration; when the search space is too large for systematic exploration; when you can afford the compute cost of maintaining a population.",
+    "strengths": [
+      "Finds solutions in vast configuration spaces without human design intuition",
+      "Co-evolution between competing agents produces arms-race dynamics that drive innovation",
+      "Diversity maintenance prevents premature convergence to local optima",
+      "No gradient required -- works on non-differentiable, discrete, or adversarial objectives"
+    ],
+    "weaknesses": [
+      "Computationally expensive: maintains a full population and runs repeated tournaments",
+      "Catastrophic forgetting: a good lineage can be lost if it has a bad tournament draw",
+      "Mutation design is an art -- too little exploration stagnates, too much destroys good solutions",
+      "Solutions found are often uninterpretable -- evolved strategies resist human understanding"
+    ],
+    "agents": [
+      {
+        "role": "competitor",
+        "name": "Competitor Agent",
+        "description": "An agent instance with a specific configuration competing in tournaments for survival",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "fitness-eval",
+        "name": "Fitness Evaluator",
+        "description": "Runs head-to-head tournaments, scores competitors, selects winners and losers",
+        "memory": "append-only"
+      },
+      {
+        "role": "mutator",
+        "name": "Mutation Operator",
+        "description": "Clones winning configurations with random variations: parameter noise, strategy crossover, structural mutations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "diversity-guardian",
+        "name": "Diversity Guardian",
+        "description": "Monitors population diversity metrics and protects novel configurations from premature culling",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "niche-specialist",
+        "name": "Niche Specialist",
+        "description": "Maintains separate subpopulations adapted to different problem subtypes to prevent monoculture",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Tournament Arena",
+        "type": "round-robin",
+        "participants": [
+          "competitor",
+          "fitness-eval"
+        ]
+      },
+      {
+        "name": "Reproduction Queue",
+        "type": "queue",
+        "participants": [
+          "fitness-eval",
+          "mutator"
+        ]
+      },
+      {
+        "name": "Diversity Report",
+        "type": "broadcast",
+        "participants": [
+          "diversity-guardian",
+          "fitness-eval",
+          "niche-specialist"
+        ]
+      },
+      {
+        "name": "Niche Registry",
+        "type": "document",
+        "participants": [
+          "niche-specialist",
+          "competitor"
+        ]
+      },
+      {
+        "name": "Lineage Log",
+        "type": "log",
+        "participants": [
+          "fitness-eval",
+          "mutator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "population-registry",
+        "fitness-leaderboard",
+        "diversity-metrics",
+        "niche-map"
+      ],
+      "private": [
+        "agent-configuration",
+        "tournament-history",
+        "mutation-parameters"
+      ],
+      "description": "Each competitor's configuration is private (the 'genome'). The population registry and fitness leaderboard are shared so agents can observe competitive dynamics. Diversity metrics are shared so the guardian can act. The lineage log is append-only, preserving the full evolutionary history for analysis."
+    },
+    "diagram": "graph TD\n    C1[Competitor A] -->|competes| TA[Tournament Arena]\n    C2[Competitor B] -->|competes| TA\n    C3[Competitor C] -->|competes| TA\n    TA --> FE[Fitness Evaluator]\n    FE -->|winner| MUT[Mutation Operator]\n    FE -->|loser| CULL[Culled]\n    MUT -->|offspring| C4[New Competitor]\n    DG[Diversity Guardian] -->|protects| C3\n    NS[Niche Specialist] -->|separates| TA\n    FE -->|records| LL[Lineage Log]",
+    "hierarchyTypes": [
+      "adversarial",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "parliament-of-experts",
+    "name": "Parliament of Experts",
+    "category": "Novel & Experimental",
+    "tags": [
+      "weighted-voting",
+      "domain-expertise",
+      "deliberation",
+      "multi-perspective"
+    ],
+    "summary": "Domain experts debate and vote with weights proportional to their demonstrated competence.",
+    "description": "Unlike a flat democracy, this parliament weights votes by demonstrated domain expertise. Each expert agent specializes in a domain and earns voting weight through a track record of accurate predictions and useful contributions in that domain. A Speaker moderates debate, ensures all perspectives are heard, and calls votes. A Whip agent identifies when experts are speaking outside their competence and discounts their votes accordingly. Crucially, the system maintains a Hansard -- a complete transcript of all deliberations -- enabling retrospective analysis of which expert arguments actually predicted outcomes. Expert weights are continually recalibrated based on outcomes.",
+    "realWorldExample": "The IPCC climate assessment process: thousands of scientists contribute and review chapters, but their influence is weighted by publication record, domain expertise, and peer assessment of their contributions.",
+    "whenToUse": "When decisions require integrating multiple specialized perspectives; when some agents genuinely know more than others about specific aspects of the problem.",
+    "strengths": [
+      "Expertise-weighted voting produces better decisions than flat majority rule",
+      "The Whip prevents experts from exerting unearned influence outside their domain",
+      "Complete Hansard enables retrospective calibration and learning",
+      "Deliberation before voting forces experts to engage with opposing evidence"
+    ],
+    "weaknesses": [
+      "Defining and measuring domain expertise is inherently contentious",
+      "Experts may trade votes across domains, corrupting the expertise signal",
+      "Minority expert opinions on novel problems get systematically underweighted",
+      "The Speaker role concentrates agenda-setting power in a single agent"
+    ],
+    "agents": [
+      {
+        "role": "expert",
+        "name": "Domain Expert",
+        "description": "Specializes in a knowledge domain; deliberates and votes with domain-proportional weight",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "speaker",
+        "name": "Speaker",
+        "description": "Moderates debate; sets agenda, calls on experts, manages deliberation time, calls votes",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "whip",
+        "name": "Competence Whip",
+        "description": "Detects when experts speak outside their domain and adjusts voting weights accordingly",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "hansard",
+        "name": "Hansard Recorder",
+        "description": "Transcribes all deliberations and retrospectively scores expert contributions against outcomes",
+        "memory": "append-only"
+      },
+      {
+        "role": "calibrator",
+        "name": "Expertise Calibrator",
+        "description": "Updates expert domain weights based on historical prediction accuracy from Hansard analysis",
+        "memory": "versioned"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Deliberation Chamber",
+        "type": "threaded",
+        "participants": [
+          "expert",
+          "speaker",
+          "whip"
+        ]
+      },
+      {
+        "name": "Voting Floor",
+        "type": "decision",
+        "participants": [
+          "expert",
+          "speaker"
+        ]
+      },
+      {
+        "name": "Hansard Archive",
+        "type": "log",
+        "participants": [
+          "hansard",
+          "calibrator"
+        ]
+      },
+      {
+        "name": "Weight Calibration",
+        "type": "broadcast",
+        "participants": [
+          "calibrator",
+          "expert",
+          "whip"
+        ]
+      },
+      {
+        "name": "Agenda Setting",
+        "type": "top-down",
+        "participants": [
+          "speaker",
+          "expert"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "expertise-weight-table",
+        "current-agenda",
+        "vote-records",
+        "deliberation-transcripts"
+      ],
+      "private": [
+        "domain-knowledge-base",
+        "voting-rationale",
+        "cross-domain-observations"
+      ],
+      "description": "Expertise weights are fully transparent shared state. Vote records are public for accountability. Each expert maintains private domain knowledge and voting rationale. The Hansard is append-only and immutable. The calibrator uses versioned memory to track how weights evolve over time."
+    },
+    "diagram": "graph TD\n    E1[Expert: Architecture] -->|argues| DC[Deliberation Chamber]\n    E2[Expert: Security] -->|argues| DC\n    E3[Expert: Performance] -->|argues| DC\n    SP[Speaker] -->|moderates| DC\n    WH[Whip] -->|adjusts weights| DC\n    DC -->|vote called| VF[Voting Floor]\n    VF -->|outcome| HAN[Hansard Recorder]\n    HAN -->|history| CAL[Expertise Calibrator]\n    CAL -->|new weights| E1\n    CAL -->|new weights| E2\n    CAL -->|new weights| E3",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "recursive-self-improvement",
+    "name": "Recursive Self-Improvement Engine",
+    "category": "Novel & Experimental",
+    "tags": [
+      "self-modification",
+      "meta-learning",
+      "recursive",
+      "bootstrapping"
+    ],
+    "summary": "Agents can propose and implement modifications to their own orchestration structure.",
+    "description": "The most meta pattern possible: agents can observe their own organizational structure, identify inefficiencies, propose structural modifications, and implement them -- recursively. A Meta-Architect agent analyzes system performance and proposes structural changes (new roles, modified communication channels, different memory architectures). A Safety Validator ensures proposed modifications don't violate core invariants. A Rollback Controller maintains checkpoints so failed modifications can be reversed. The system literally rewrites its own organizational chart based on empirical performance. A Convergence Monitor watches for improvement plateaus and modification cycles (A->B->A loops).",
+    "realWorldExample": "The Toyota Production System's kaizen philosophy: workers on the assembly line have authority to modify the production process itself, with safeguards against degradation.",
+    "whenToUse": "When you cannot predict the optimal agent architecture in advance; when the problem itself evolves and the organization must co-evolve; when you want genuine organizational learning.",
+    "strengths": [
+      "The system adapts its own structure to the problem, not just its parameters",
+      "Can discover organizational patterns that human designers would never conceive",
+      "Rollback checkpoints make structural experimentation safe",
+      "Converges toward problem-specific optimal structures rather than one-size-fits-all"
+    ],
+    "weaknesses": [
+      "Risk of modification cycles: A->B->C->A with no net improvement",
+      "Safety validation is extremely difficult -- how do you verify a structural change is safe?",
+      "The meta-architect needs to understand organizational theory, not just task performance",
+      "Infinite regress risk: should the meta-architect modify itself?"
+    ],
+    "agents": [
+      {
+        "role": "meta-architect",
+        "name": "Meta-Architect",
+        "description": "Observes system performance, diagnoses structural inefficiencies, proposes organizational modifications",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "safety-validator",
+        "name": "Safety Validator",
+        "description": "Reviews proposed structural modifications against core invariants before allowing implementation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "rollback-controller",
+        "name": "Rollback Controller",
+        "description": "Maintains structural checkpoints; can revert modifications that degrade performance",
+        "memory": "versioned"
+      },
+      {
+        "role": "convergence-monitor",
+        "name": "Convergence Monitor",
+        "description": "Tracks modification history for cycles, plateaus, and diminishing returns",
+        "memory": "append-only"
+      },
+      {
+        "role": "worker",
+        "name": "Worker Agent",
+        "description": "Performs actual tasks; subject to structural modifications that change its role and connections",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Structure Proposals",
+        "type": "threaded",
+        "participants": [
+          "meta-architect",
+          "safety-validator"
+        ]
+      },
+      {
+        "name": "Modification Orders",
+        "type": "top-down",
+        "participants": [
+          "meta-architect",
+          "worker"
+        ]
+      },
+      {
+        "name": "Performance Telemetry",
+        "type": "pub-sub",
+        "participants": [
+          "worker",
+          "meta-architect",
+          "convergence-monitor"
+        ]
+      },
+      {
+        "name": "Rollback Channel",
+        "type": "emergency",
+        "participants": [
+          "rollback-controller",
+          "meta-architect",
+          "worker"
+        ]
+      },
+      {
+        "name": "Invariant Registry",
+        "type": "document",
+        "participants": [
+          "safety-validator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current-structure-definition",
+        "core-invariants",
+        "performance-baselines",
+        "modification-history"
+      ],
+      "private": [
+        "structural-hypotheses",
+        "performance-analysis",
+        "worker-local-state"
+      ],
+      "description": "The current structure definition is shared state that IS the system's organizational chart. Core invariants are shared and immutable (the one thing that cannot be self-modified). The rollback controller maintains versioned snapshots of complete structural states. The convergence monitor's append-only log prevents gaslighting about what has been tried."
+    },
+    "diagram": "graph TD\n    W1[Worker 1] -->|telemetry| MA[Meta-Architect]\n    W2[Worker 2] -->|telemetry| MA\n    MA -->|proposes change| SV[Safety Validator]\n    SV -->|approved| MA\n    MA -->|restructures| W1\n    MA -->|restructures| W2\n    MA -->|checkpoint| RC[Rollback Controller]\n    RC -->|revert if needed| W1\n    RC -->|revert if needed| W2\n    CM[Convergence Monitor] -->|cycle detected| MA\n    W1 -->|performance| CM",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "consensus",
+      "federated"
+    ]
+  },
+  {
+    "id": "adversarial-collaboration",
+    "name": "Adversarial Collaboration Protocol",
+    "category": "Novel & Experimental",
+    "tags": [
+      "steelmanning",
+      "epistemic-humility",
+      "forced-perspective",
+      "kahneman"
+    ],
+    "summary": "Agents holding opposing views must formally steelman each other before any decision is made.",
+    "description": "Inspired by Daniel Kahneman's adversarial collaboration methodology, this pattern forces agents with opposing positions to formally demonstrate understanding of the other side before advocating their own. Each advocate must produce a steelman of the opposing position that the opponent accepts as fair. Only after mutual steelmanning can agents present their actual arguments. A Mediator evaluates the quality of steelmen and rejects positions whose advocates cannot adequately represent the opposition. This forces genuine intellectual engagement and often reveals that the disagreement is narrower than it appeared. A Pre-Registration agent records predictions before evidence is examined, preventing post-hoc rationalization.",
+    "realWorldExample": "Kahneman and Klein's published adversarial collaboration on expert intuition: they began with opposite positions, formally steelmanned each other, and converged on a nuanced synthesis that neither would have reached alone.",
+    "whenToUse": "When you need to resolve genuine intellectual disagreements rather than paper them over; when premature consensus is more dangerous than prolonged debate.",
+    "strengths": [
+      "Forces genuine understanding of opposing viewpoints before advocacy",
+      "Reveals the precise crux of disagreement by stripping away strawmen",
+      "Pre-registration prevents post-hoc rationalization and moving goalposts",
+      "Often discovers that apparent disagreements are about different sub-questions"
+    ],
+    "weaknesses": [
+      "Extremely time-intensive: requires multiple rounds of steelmanning before any decision",
+      "Agents may produce technically acceptable but emotionally disengaged steelmen",
+      "Only works for binary or small-number disagreements, not continuous parameter spaces",
+      "The mediator's judgment of steelman quality is itself a subjective assessment"
+    ],
+    "agents": [
+      {
+        "role": "advocate-alpha",
+        "name": "Advocate Alpha",
+        "description": "Holds position A; must steelman position B to opponent's satisfaction before arguing for A",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "advocate-beta",
+        "name": "Advocate Beta",
+        "description": "Holds position B; must steelman position A to opponent's satisfaction before arguing for B",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "mediator",
+        "name": "Mediator",
+        "description": "Evaluates steelman quality, manages the protocol, identifies the precise crux of disagreement",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "pre-registrar",
+        "name": "Pre-Registration Agent",
+        "description": "Records each advocate's predictions and decision criteria before evidence is examined",
+        "memory": "append-only"
+      },
+      {
+        "role": "synthesizer",
+        "name": "Synthesizer",
+        "description": "After steelmanning phase, identifies areas of genuine agreement and precise points of remaining disagreement",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Steelman Exchange",
+        "type": "round-robin",
+        "participants": [
+          "advocate-alpha",
+          "advocate-beta",
+          "mediator"
+        ]
+      },
+      {
+        "name": "Pre-Registration Vault",
+        "type": "log",
+        "participants": [
+          "pre-registrar",
+          "advocate-alpha",
+          "advocate-beta"
+        ]
+      },
+      {
+        "name": "Crux Identification",
+        "type": "advisory",
+        "participants": [
+          "mediator",
+          "synthesizer"
+        ]
+      },
+      {
+        "name": "Argument Phase",
+        "type": "threaded",
+        "participants": [
+          "advocate-alpha",
+          "advocate-beta",
+          "mediator"
+        ]
+      },
+      {
+        "name": "Synthesis Document",
+        "type": "document",
+        "participants": [
+          "synthesizer",
+          "mediator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "accepted-steelmen",
+        "identified-cruxes",
+        "synthesis-document",
+        "pre-registered-predictions"
+      ],
+      "private": [
+        "true-beliefs",
+        "argument-strategy",
+        "evidence-cache"
+      ],
+      "description": "Pre-registered predictions are append-only and cannot be modified after submission. Accepted steelmen become shared reference points. Each advocate's true beliefs and strategy are private. The synthesis document is collaboratively edited shared state. The crux identification is shared so both sides agree on what they actually disagree about."
+    },
+    "diagram": "graph TD\n    AA[Advocate Alpha] -->|steelmans B| SE[Steelman Exchange]\n    AB[Advocate Beta] -->|steelmans A| SE\n    SE -->|quality check| MED[Mediator]\n    MED -->|approved| ARG[Argument Phase]\n    PR[Pre-Registrar] -->|locks predictions| VAULT[Pre-Reg Vault]\n    AA -->|argues A| ARG\n    AB -->|argues B| ARG\n    ARG --> SYN[Synthesizer]\n    SYN -->|convergence map| DOC[Synthesis Document]\n    MED -->|crux| SYN",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "sociocratic-consent-circles",
+    "name": "Sociocratic Consent Circles",
+    "category": "Novel & Experimental",
+    "tags": [
+      "sociocracy",
+      "consent-based",
+      "nested-circles",
+      "equivalence"
+    ],
+    "summary": "Nested circles make decisions by consent (no objections) rather than consensus (all agree).",
+    "description": "Based on sociocratic governance, this pattern organizes agents into nested circles where decisions are made by consent rather than consensus. The crucial distinction: consensus requires everyone to agree, but consent only requires no one to object with a reasoned, paramount objection. Each circle is semi-autonomous and sends double-linked representatives to the parent circle (one elected by the circle, one appointed by the parent). This double-linking ensures information flows both up and down. Proposals go through structured rounds: presentation, clarification questions, quick reactions, consent round, and integration of objections. Objections are gifts -- they improve proposals rather than blocking them.",
+    "realWorldExample": "Semco, the Brazilian company where workers set their own salaries and working hours through consent-based circle governance, grew revenue from $4M to $212M in 20 years.",
+    "whenToUse": "When you need distributed decision-making that respects every agent's range of tolerance; when hierarchical top-down control is inappropriate but flat consensus is too slow.",
+    "strengths": [
+      "Faster than consensus because it only requires absence of objections, not active agreement",
+      "Double-linking prevents information distortion between organizational levels",
+      "Objections improve proposals rather than killing them -- generative conflict",
+      "Every agent has equivalent power to object, preventing domination"
+    ],
+    "weaknesses": [
+      "Requires sophisticated objection evaluation: is this a paramount objection or a preference?",
+      "Double-linking doubles the representative overhead compared to single-link hierarchies",
+      "Agents may withhold objections to avoid conflict, undermining the consent mechanism",
+      "Nested circle structure can become bureaucratic for simple decisions"
+    ],
+    "agents": [
+      {
+        "role": "circle-member",
+        "name": "Circle Member",
+        "description": "Participates in local circle; can raise objections, propose, and elect representatives",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "facilitator",
+        "name": "Circle Facilitator",
+        "description": "Guides the structured consent process: proposal, clarification, reaction, consent rounds",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "delegate-up",
+        "name": "Upward Delegate",
+        "description": "Elected by circle to represent it in the parent circle; carries circle concerns upward",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "delegate-down",
+        "name": "Downward Delegate",
+        "description": "Appointed by parent circle to represent it in the child circle; carries context downward",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "objection-integrator",
+        "name": "Objection Integrator",
+        "description": "When objections arise, works with the objector and proposer to integrate the objection into an amended proposal",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Circle Meeting",
+        "type": "round-robin",
+        "participants": [
+          "circle-member",
+          "facilitator",
+          "delegate-up",
+          "delegate-down"
+        ]
+      },
+      {
+        "name": "Consent Round",
+        "type": "decision",
+        "participants": [
+          "circle-member",
+          "facilitator"
+        ]
+      },
+      {
+        "name": "Parent Circle",
+        "type": "round-robin",
+        "participants": [
+          "delegate-up",
+          "delegate-down"
+        ]
+      },
+      {
+        "name": "Objection Workshop",
+        "type": "threaded",
+        "participants": [
+          "objection-integrator",
+          "circle-member",
+          "facilitator"
+        ]
+      },
+      {
+        "name": "Double Link Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "delegate-up",
+          "delegate-down"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "circle-decisions-log",
+        "policy-registry",
+        "delegation-records",
+        "active-proposals"
+      ],
+      "private": [
+        "personal-range-of-tolerance",
+        "objection-reasoning",
+        "circle-observations"
+      ],
+      "description": "Circle decisions are logged in shared state and binding. The policy registry tracks all active policies and their review dates. Each agent's personal range of tolerance (what they can live with vs what they must object to) is private. Delegates maintain shared memory accessible to both their circles for double-link transparency."
+    },
+    "diagram": "graph TD\n    CM1[Member 1] --> F[Facilitator]\n    CM2[Member 2] --> F\n    CM3[Member 3] --> F\n    F -->|consent process| CR[Consent Round]\n    CR -->|objection| OI[Objection Integrator]\n    OI -->|amended proposal| CR\n    DU[Delegate Up] --> PC[Parent Circle]\n    DD[Delegate Down] --> F\n    PC --> DD\n    DU <-->|double link| DD",
+    "hierarchyTypes": [
+      "consensus",
+      "federated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "rhizome-network",
+    "name": "Rhizomatic Network",
+    "category": "Novel & Experimental",
+    "tags": [
+      "deleuze-guattari",
+      "non-hierarchical",
+      "any-to-any",
+      "multiplicities"
+    ],
+    "summary": "Agents form connections freely with no hierarchy; any node can connect to any other node.",
+    "description": "Drawn from Deleuze and Guattari's concept of the rhizome (vs the tree), this pattern rejects all hierarchy, fixed roles, and predetermined structure. Any agent can connect to any other agent at any time. Connections form and dissolve based on mutual relevance. There is no root, no trunk, no privileged position. If any part is destroyed, the network regrows from any remaining fragment. Agents have no fixed roles -- they become what the connections make them. A Cartographer agent attempts (imperfectly) to map the current topology, but the map is always already outdated. The pattern embraces productive chaos and unexpected connections as features, not bugs.",
+    "realWorldExample": "The early internet before centralized platforms: a mesh of servers with no hierarchy, where any machine could connect to any other, and routing emerged from the topology itself.",
+    "whenToUse": "When you explicitly want to avoid hierarchy and fixed roles; when the problem benefits from unexpected cross-domain connections; when resilience matters more than efficiency.",
+    "strengths": [
+      "Maximum resilience: any fragment can regenerate the whole network",
+      "Unexpected connections produce novel insights that hierarchies would prevent",
+      "No single point of control or failure -- truly decentralized",
+      "Naturally models problems with no inherent hierarchy"
+    ],
+    "weaknesses": [
+      "Can degenerate into noise when every agent connects to every other",
+      "Accountability is diffuse -- no one is responsible for anything",
+      "The cartographer can never produce an accurate map of a changing rhizome",
+      "Efficiency suffers without any coordination structure"
+    ],
+    "agents": [
+      {
+        "role": "node",
+        "name": "Rhizome Node",
+        "description": "A free agent that forms and dissolves connections based on mutual relevance; has no fixed role",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cartographer",
+        "name": "Cartographer",
+        "description": "Attempts to map current network topology; the map is always incomplete and outdated",
+        "memory": "versioned"
+      },
+      {
+        "role": "line-of-flight",
+        "name": "Line of Flight",
+        "description": "Creates unexpected connections between distant parts of the network; the agent of deterritorialization",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "plateau",
+        "name": "Plateau Agent",
+        "description": "Maintains intensity zones -- clusters of high activity that persist without becoming hierarchical",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Open Mesh",
+        "type": "peer-to-peer",
+        "participants": [
+          "node",
+          "line-of-flight",
+          "plateau"
+        ]
+      },
+      {
+        "name": "Topology Snapshot",
+        "type": "broadcast",
+        "participants": [
+          "cartographer",
+          "node"
+        ]
+      },
+      {
+        "name": "Intensity Zone",
+        "type": "pub-sub",
+        "participants": [
+          "plateau",
+          "node"
+        ]
+      },
+      {
+        "name": "Connection Proposals",
+        "type": "peer-to-peer",
+        "participants": [
+          "node",
+          "line-of-flight"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "topology-snapshot",
+        "intensity-map",
+        "connection-registry"
+      ],
+      "private": [
+        "local-connections",
+        "relevance-criteria",
+        "interaction-history"
+      ],
+      "description": "Each node maintains private memory of its connections and relevance criteria. The cartographer publishes versioned topology snapshots that are immediately outdated. Plateau agents maintain shared intensity maps showing where activity clusters. There is no authoritative shared state -- only partial views that overlap."
+    },
+    "diagram": "graph TD\n    N1[Node A] <-->|connection| N2[Node B]\n    N1 <-->|connection| N3[Node C]\n    N2 <-->|connection| N4[Node D]\n    N3 <-->|connection| N5[Node E]\n    N4 <-->|connection| N5\n    N1 <-->|connection| N5\n    LOF[Line of Flight] -->|unexpected link| N3\n    LOF -->|unexpected link| N4\n    CAR[Cartographer] -.->|maps| N1\n    CAR -.->|maps| N2\n    PL[Plateau] -->|intensity| N2\n    PL -->|intensity| N4",
+    "hierarchyTypes": [
+      "mesh",
+      "swarm",
+      "federated"
+    ]
+  },
+  {
+    "id": "heterarchic-overlay",
+    "name": "Heterarchic Overlay Network",
+    "category": "Novel & Experimental",
+    "tags": [
+      "heterarchy",
+      "multiple-hierarchies",
+      "context-switching",
+      "overlap"
+    ],
+    "summary": "Multiple hierarchies coexist simultaneously; which hierarchy governs depends on the current context.",
+    "description": "Unlike a single hierarchy or flat network, a heterarchy maintains multiple overlapping hierarchies that activate based on context. Agent A might outrank Agent B in the security hierarchy but report to B in the performance hierarchy. When a security decision arises, the security hierarchy activates. When a performance question comes up, the performance hierarchy takes precedence. A Context Detector determines which hierarchy is relevant for each decision. A Conflict Resolver handles cases where multiple hierarchies give contradictory orders. This models how real organizations actually work: the CEO's assistant outranks the CEO on calendar decisions, the janitor outranks everyone on building safety, and the intern outranks the VP on TikTok strategy.",
+    "realWorldExample": "Hospital operating rooms: the surgeon leads on procedure, but the anesthesiologist has absolute authority on patient safety, and the scrub nurse outranks everyone on sterile field maintenance.",
+    "whenToUse": "When different aspects of a problem have different natural authority structures; when no single hierarchy can capture all the relevant expertise relationships.",
+    "strengths": [
+      "Models real organizational authority more accurately than any single hierarchy",
+      "Each agent can be both leader and follower depending on context",
+      "Prevents the pathology of a single hierarchy where rank trumps expertise",
+      "Naturally handles cross-functional decisions that single hierarchies bungle"
+    ],
+    "weaknesses": [
+      "Context detection errors can activate the wrong hierarchy with serious consequences",
+      "Agents must maintain multiple role identities simultaneously",
+      "Hierarchy conflicts can paralyze the system when no resolution is obvious",
+      "Complex to implement: N hierarchies with M agents requires N*M role definitions"
+    ],
+    "agents": [
+      {
+        "role": "polyvalent-agent",
+        "name": "Polyvalent Agent",
+        "description": "Holds different ranks in different hierarchies; switches active role based on context",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "context-detector",
+        "name": "Context Detector",
+        "description": "Analyzes incoming decisions to determine which hierarchy should govern",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "conflict-resolver",
+        "name": "Conflict Resolver",
+        "description": "Handles cases where multiple hierarchies give contradictory directives",
+        "memory": "append-only"
+      },
+      {
+        "role": "hierarchy-registrar",
+        "name": "Hierarchy Registrar",
+        "description": "Maintains the set of defined hierarchies and each agent's position within them",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Context Channel",
+        "type": "broadcast",
+        "participants": [
+          "context-detector",
+          "polyvalent-agent"
+        ]
+      },
+      {
+        "name": "Security Hierarchy",
+        "type": "top-down",
+        "participants": [
+          "polyvalent-agent"
+        ]
+      },
+      {
+        "name": "Performance Hierarchy",
+        "type": "top-down",
+        "participants": [
+          "polyvalent-agent"
+        ]
+      },
+      {
+        "name": "Innovation Hierarchy",
+        "type": "bottom-up",
+        "participants": [
+          "polyvalent-agent"
+        ]
+      },
+      {
+        "name": "Conflict Resolution",
+        "type": "decision",
+        "participants": [
+          "conflict-resolver",
+          "polyvalent-agent",
+          "context-detector"
+        ]
+      },
+      {
+        "name": "Hierarchy Registry",
+        "type": "document",
+        "participants": [
+          "hierarchy-registrar"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "hierarchy-definitions",
+        "current-active-hierarchy",
+        "context-classification-rules",
+        "conflict-precedents"
+      ],
+      "private": [
+        "role-in-each-hierarchy",
+        "context-switching-history",
+        "internal-authority-model"
+      ],
+      "description": "Hierarchy definitions and the currently active hierarchy are shared so all agents know who's in charge. Conflict precedents accumulate as shared case law. Each agent privately tracks its roles across all hierarchies. The conflict resolver maintains append-only records for consistency."
+    },
+    "diagram": "graph TD\n    CD[Context Detector] -->|security context| SH[Security Hierarchy]\n    CD -->|performance context| PH[Performance Hierarchy]\n    CD -->|innovation context| IH[Innovation Hierarchy]\n    SH --> A1[Agent A: Rank 1]\n    SH --> A2[Agent B: Rank 2]\n    PH --> A2B[Agent B: Rank 1]\n    PH --> A1B[Agent A: Rank 3]\n    IH --> A3[Agent C: Rank 1]\n    CR[Conflict Resolver] -->|resolves| CD\n    HR[Hierarchy Registrar] -->|defines| SH\n    HR -->|defines| PH\n    HR -->|defines| IH",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  }
+]

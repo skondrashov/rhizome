@@ -1,0 +1,2063 @@
+[
+  {
+    "id": "matrix-organization",
+    "name": "Matrix Organization",
+    "category": "Corporate & Business",
+    "tags": [
+      "dual-reporting",
+      "cross-functional",
+      "complex",
+      "resource-sharing"
+    ],
+    "summary": "Agents report to both a functional lead and a project lead, enabling cross-cutting collaboration.",
+    "description": "The matrix structure assigns each agent to two simultaneous reporting lines: a functional manager who owns their skill domain, and a project manager who owns their deliverable. This creates a grid where agents draw on deep expertise from their function while serving the immediate needs of their project. The inherent tension between the two bosses is a feature, not a bug -- it forces prioritization conversations that surface hidden trade-offs. Matrix organizations work best when the dual authority is explicitly acknowledged and conflict resolution protocols are defined upfront.",
+    "realWorldExample": "Procter & Gamble's brand-by-function matrix, where a marketing analyst reports to both the VP of Marketing Analytics and the Brand Manager for Tide.",
+    "whenToUse": "When agents need deep specialization AND must collaborate across multiple simultaneous projects that share scarce expertise.",
+    "strengths": [
+      "Maximizes utilization of specialized agents across projects",
+      "Enables knowledge sharing between functional peers",
+      "Balances long-term capability building with short-term delivery",
+      "Naturally surfaces priority conflicts early"
+    ],
+    "weaknesses": [
+      "Dual reporting creates ambiguity and potential for conflicting directives",
+      "High communication overhead -- every decision may involve two chains",
+      "Power struggles between functional and project leads are endemic",
+      "Agents can become overloaded when multiple projects compete for their time"
+    ],
+    "agents": [
+      {
+        "role": "general-manager",
+        "name": "General Manager",
+        "description": "Resolves conflicts between functional and project lines; sets overall priorities and resource allocation",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "functional-lead",
+        "name": "Functional Lead",
+        "description": "Owns skill development, quality standards, and methodology within a domain (e.g., data analysis, engineering)",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "project-lead",
+        "name": "Project Lead",
+        "description": "Owns delivery timeline, scope, and stakeholder communication for a specific project",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "specialist",
+        "name": "Specialist Agent",
+        "description": "Executes work at the intersection of a function and a project; reports status to both leads",
+        "memory": "ephemeral",
+        "count": 9
+      }
+    ],
+    "forums": [
+      {
+        "name": "Executive Alignment",
+        "type": "decision",
+        "participants": [
+          "general-manager",
+          "functional-lead",
+          "project-lead"
+        ]
+      },
+      {
+        "name": "Functional Community",
+        "type": "peer-to-peer",
+        "participants": [
+          "functional-lead",
+          "specialist"
+        ]
+      },
+      {
+        "name": "Project Standup",
+        "type": "threaded",
+        "participants": [
+          "project-lead",
+          "specialist"
+        ]
+      },
+      {
+        "name": "Conflict Escalation",
+        "type": "advisory",
+        "participants": [
+          "general-manager",
+          "functional-lead",
+          "project-lead"
+        ]
+      },
+      {
+        "name": "Resource Allocation Board",
+        "type": "decision",
+        "participants": [
+          "general-manager",
+          "functional-lead",
+          "project-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Project status dashboards",
+        "Resource allocation matrix",
+        "Priority stack-rank"
+      ],
+      "private": [
+        "Functional best practices and templates",
+        "Project-specific context and stakeholder notes"
+      ],
+      "description": "Shared memory holds the resource allocation grid and priority rankings visible to all. Each functional lead maintains private methodology libraries. Each project lead maintains private stakeholder context. Specialists have ephemeral task memory scoped to their current assignment."
+    },
+    "diagram": "graph TD\n    GM[General Manager] --> FL1[Functional Lead 1]\n    GM --> FL2[Functional Lead 2]\n    GM --> PL1[Project Lead A]\n    GM --> PL2[Project Lead B]\n    FL1 --> S1[Specialist 1]\n    FL1 --> S2[Specialist 2]\n    FL2 --> S3[Specialist 3]\n    FL2 --> S4[Specialist 4]\n    PL1 --> S1\n    PL1 --> S3\n    PL2 --> S2\n    PL2 --> S4",
+    "hierarchyTypes": [
+      "consensus",
+      "federated",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "flat-organization",
+    "name": "Flat Organization",
+    "category": "Corporate & Business",
+    "tags": [
+      "minimal-hierarchy",
+      "autonomous",
+      "egalitarian",
+      "fast"
+    ],
+    "summary": "Minimal hierarchy where agents self-organize around work with only a thin coordination layer.",
+    "description": "A flat organization strips away middle management entirely. All agents operate as peers with equivalent authority, coordinating directly with each other. A single coordinator exists not to command but to facilitate -- breaking ties, maintaining shared context, and handling external interfaces. Decision-making is distributed: whoever is closest to the problem owns the decision. This structure relies heavily on cultural norms, shared values, and strong individual initiative rather than positional authority.",
+    "realWorldExample": "Valve Software's famously flat structure where employees roll their desks to join projects they find most valuable, with no formal managers.",
+    "whenToUse": "When all agents are highly capable and self-motivated, the problem space is exploratory, and speed of local decision-making matters more than global coordination.",
+    "strengths": [
+      "Fastest possible local decision-making -- no approval chains",
+      "High agent autonomy drives creativity and ownership",
+      "Minimal communication overhead for small teams",
+      "Naturally attracts and retains high-performing agents"
+    ],
+    "weaknesses": [
+      "Scales poorly beyond 15-20 agents -- coordination becomes chaotic",
+      "Implicit hierarchies emerge based on reputation, creating invisible power dynamics",
+      "No clear escalation path when agents disagree",
+      "Strategic coherence depends entirely on shared context, which is fragile"
+    ],
+    "agents": [
+      {
+        "role": "coordinator",
+        "name": "Coordinator",
+        "description": "Facilitates alignment, maintains shared context, breaks ties -- but does not assign work or approve decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "peer-agent",
+        "name": "Peer Agent",
+        "description": "Autonomous contributor who self-selects work, collaborates directly with other peers, and owns decisions in their area",
+        "memory": "persistent-shared",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Town Hall",
+        "type": "broadcast",
+        "participants": [
+          "coordinator",
+          "peer-agent"
+        ]
+      },
+      {
+        "name": "Peer Discussion",
+        "type": "peer-to-peer",
+        "participants": [
+          "peer-agent"
+        ]
+      },
+      {
+        "name": "Decision Log",
+        "type": "log",
+        "participants": [
+          "coordinator",
+          "peer-agent"
+        ]
+      },
+      {
+        "name": "Tie-Breaker",
+        "type": "advisory",
+        "participants": [
+          "coordinator",
+          "peer-agent"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Full project state visible to all agents",
+        "Decision log with rationale",
+        "Work-in-progress board"
+      ],
+      "private": [
+        "Personal notes and drafts"
+      ],
+      "description": "Radical transparency: nearly all memory is shared. Every agent can see every other agent's work state, decisions, and rationale. Private memory exists only for in-progress drafts not yet ready for review. The coordinator maintains no privileged information."
+    },
+    "diagram": "graph TD\n    C[Coordinator] --- P1[Peer 1]\n    C --- P2[Peer 2]\n    C --- P3[Peer 3]\n    C --- P4[Peer 4]\n    P1 --- P2\n    P2 --- P3\n    P3 --- P4\n    P4 --- P1\n    P1 --- P3\n    P2 --- P4",
+    "hierarchyTypes": [
+      "federated",
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "chain-of-command",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "two-pizza-teams",
+    "name": "Two-Pizza Teams",
+    "category": "Corporate & Business",
+    "tags": [
+      "small-teams",
+      "ownership",
+      "decentralized",
+      "api-boundaries"
+    ],
+    "summary": "Small autonomous teams (6-8 agents) that own a service end-to-end, communicating via defined APIs.",
+    "description": "Inspired by Amazon's organizational principle, each team is small enough to be fed by two pizzas (6-8 people). Every team owns a complete service or capability, from design through operation. Teams communicate with each other exclusively through well-defined interfaces -- never through back-channel conversations or shared databases. A leadership layer sets goals and allocates resources but never reaches into a team to direct individual work. This creates a system of loosely coupled, tightly aligned autonomous units.",
+    "realWorldExample": "Amazon's internal organization where each service team owns everything from the API contract to the on-call pager, with teams like S3, DynamoDB, and Lambda each operating as independent units.",
+    "whenToUse": "When building a system of independent services or capabilities that must evolve at different speeds without creating cross-team dependencies.",
+    "strengths": [
+      "Strong ownership -- one team, one service, no ambiguity",
+      "Teams can deploy and iterate independently without coordination overhead",
+      "API boundaries prevent hidden coupling and force clean interfaces",
+      "Small team size preserves communication bandwidth"
+    ],
+    "weaknesses": [
+      "Duplication of effort across teams is accepted as a cost of independence",
+      "Cross-cutting concerns (security, observability) require separate mechanisms",
+      "Teams can optimize locally at the expense of global outcomes",
+      "Inter-team coordination for large features requires explicit ceremony"
+    ],
+    "agents": [
+      {
+        "role": "leadership",
+        "name": "Leadership",
+        "description": "Sets strategic direction, allocates budgets to teams, reviews metrics -- never directs individual work within teams",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "team-lead",
+        "name": "Team Lead",
+        "description": "Owns the team's roadmap, represents the team in cross-team forums, and makes final calls on trade-offs within the team's domain",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "team-member",
+        "name": "Team Member",
+        "description": "Full-stack contributor within a team; builds, tests, deploys, and operates the team's service",
+        "memory": "ephemeral",
+        "count": 15
+      }
+    ],
+    "forums": [
+      {
+        "name": "Leadership Review",
+        "type": "top-down",
+        "participants": [
+          "leadership",
+          "team-lead"
+        ]
+      },
+      {
+        "name": "Team Internal",
+        "type": "threaded",
+        "participants": [
+          "team-lead",
+          "team-member"
+        ]
+      },
+      {
+        "name": "API Contract Registry",
+        "type": "document",
+        "participants": [
+          "team-lead"
+        ]
+      },
+      {
+        "name": "Cross-Team Sync",
+        "type": "peer-to-peer",
+        "participants": [
+          "team-lead"
+        ]
+      },
+      {
+        "name": "Operational Metrics",
+        "type": "log",
+        "participants": [
+          "leadership",
+          "team-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "API contracts and interface definitions",
+        "Operational metrics dashboard",
+        "Strategic goals and OKRs"
+      ],
+      "private": [
+        "Team-internal design documents",
+        "Implementation details and tech debt backlog",
+        "Team retrospective notes"
+      ],
+      "description": "Each team has strong memory boundaries. Shared memory is limited to API contracts, operational metrics, and strategic goals. All implementation details are private to each team. Teams communicate state changes through their APIs, not through shared databases. Leadership sees metrics and outcomes, not internal decisions."
+    },
+    "diagram": "graph TD\n    L[Leadership] --> TL1[Team Lead A]\n    L --> TL2[Team Lead B]\n    L --> TL3[Team Lead C]\n    TL1 --> M1[Member 1]\n    TL1 --> M2[Member 2]\n    TL2 --> M3[Member 3]\n    TL2 --> M4[Member 4]\n    TL3 --> M5[Member 5]\n    TL3 --> M6[Member 6]\n    TL1 -.->|API| TL2\n    TL2 -.->|API| TL3",
+    "hierarchyTypes": [
+      "swarm",
+      "chain-of-command",
+      "federated",
+      "mesh",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "franchise-model",
+    "name": "Franchise Model",
+    "category": "Corporate & Business",
+    "tags": [
+      "replication",
+      "standardized",
+      "distributed",
+      "brand-consistency"
+    ],
+    "summary": "A central franchisor defines the playbook; franchisee agents execute it locally with constrained autonomy.",
+    "description": "The franchise model separates strategy from execution across geography or domain. A central franchisor agent defines the operating playbook -- processes, quality standards, brand guidelines, and approved tools. Franchisee agents operate independently within their local context but must adhere to the playbook. They can adapt to local conditions (different data distributions, edge cases) but cannot change core processes without franchisor approval. A compliance agent audits adherence. This pattern enables massive scale while maintaining consistency.",
+    "realWorldExample": "McDonald's franchise system, where corporate defines the menu, supply chain, and store layout, while local franchisees handle hiring, local marketing, and day-to-day operations.",
+    "whenToUse": "When you need to replicate a proven process across many independent contexts while maintaining quality standards and brand consistency.",
+    "strengths": [
+      "Proven processes scale rapidly without reinvention",
+      "Local adaptation within guardrails balances consistency and flexibility",
+      "Franchisees carry execution risk, reducing central load",
+      "Quality standards are codified and auditable"
+    ],
+    "weaknesses": [
+      "Innovation is bottlenecked at the franchisor -- franchisees can't experiment freely",
+      "Playbook updates require coordinated rollout across all franchisees",
+      "Franchisee resentment builds when local context is ignored by central rules",
+      "Compliance auditing adds overhead and can feel adversarial"
+    ],
+    "agents": [
+      {
+        "role": "franchisor",
+        "name": "Franchisor",
+        "description": "Defines and maintains the operating playbook, brand standards, and approved methodologies",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "compliance-auditor",
+        "name": "Compliance Auditor",
+        "description": "Periodically reviews franchisee operations against the playbook; flags deviations and recommends corrections",
+        "memory": "append-only"
+      },
+      {
+        "role": "franchisee",
+        "name": "Franchisee",
+        "description": "Operates independently in a local context following the franchisor's playbook; adapts execution to local conditions within approved parameters",
+        "memory": "persistent-private",
+        "count": 6
+      }
+    ],
+    "forums": [
+      {
+        "name": "Playbook Updates",
+        "type": "top-down",
+        "participants": [
+          "franchisor",
+          "franchisee"
+        ]
+      },
+      {
+        "name": "Compliance Reports",
+        "type": "bottom-up",
+        "participants": [
+          "compliance-auditor",
+          "franchisor"
+        ]
+      },
+      {
+        "name": "Local Operations Log",
+        "type": "log",
+        "participants": [
+          "franchisee",
+          "compliance-auditor"
+        ]
+      },
+      {
+        "name": "Franchisee Council",
+        "type": "peer-to-peer",
+        "participants": [
+          "franchisee"
+        ]
+      },
+      {
+        "name": "Innovation Proposals",
+        "type": "advisory",
+        "participants": [
+          "franchisee",
+          "franchisor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Operating playbook and brand guidelines",
+        "Compliance audit results",
+        "Approved innovations from franchisee proposals"
+      ],
+      "private": [
+        "Local market data and customer patterns",
+        "Franchisee-specific operational logs",
+        "Local adaptation decisions within guardrails"
+      ],
+      "description": "The playbook is the central shared artifact, versioned and immutable except by the franchisor. Each franchisee maintains private operational memory for their local context. The compliance auditor maintains an append-only audit trail. Franchisee innovations that pass review get promoted to the shared playbook."
+    },
+    "diagram": "graph TD\n    FR[Franchisor] -->|Playbook| F1[Franchisee 1]\n    FR -->|Playbook| F2[Franchisee 2]\n    FR -->|Playbook| F3[Franchisee 3]\n    FR -->|Playbook| F4[Franchisee 4]\n    CA[Compliance Auditor] -->|Audit| F1\n    CA -->|Audit| F2\n    CA -->|Audit| F3\n    CA -->|Audit| F4\n    CA -->|Report| FR",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "consulting-engagement",
+    "name": "Consulting Engagement",
+    "category": "Corporate & Business",
+    "tags": [
+      "client-facing",
+      "tiered-expertise",
+      "deliverable-driven",
+      "pyramidal"
+    ],
+    "summary": "A pyramidal team delivers expert analysis to a client, with juniors doing legwork and seniors synthesizing.",
+    "description": "The consulting engagement mirrors the classic McKinsey/BCG pyramid. A partner agent owns the client relationship and frames the problem. A manager agent structures the analysis into workstreams and manages the timeline. Analyst agents execute discrete research and analysis tasks in parallel. Knowledge flows up: analysts produce findings, the manager synthesizes them into insights, and the partner translates insights into client-ready recommendations. The client agent provides context, feedback, and accepts or rejects deliverables. This is inherently time-boxed and deliverable-oriented.",
+    "realWorldExample": "A McKinsey engagement where a partner scopes a growth strategy study, an engagement manager divides it into market sizing, competitive analysis, and capability assessment workstreams, and analysts run the numbers.",
+    "whenToUse": "When an external requester needs a structured analysis delivered within a defined timeframe, requiring synthesis of multiple parallel research streams.",
+    "strengths": [
+      "Clear deliverable focus keeps work aligned with client needs",
+      "Parallel analyst work enables rapid coverage of a broad problem space",
+      "Pyramidal synthesis prevents information overload at decision-making level",
+      "Time-boxed structure creates natural urgency and prevents scope creep"
+    ],
+    "weaknesses": [
+      "Heavy front-loading of problem framing -- wrong frame wastes all downstream work",
+      "Analysts may lack context to make judgment calls, creating bottlenecks at the manager",
+      "Client feedback loops can be slow if the partner is the sole interface",
+      "Knowledge leaves when the engagement ends unless explicitly captured"
+    ],
+    "agents": [
+      {
+        "role": "partner",
+        "name": "Partner",
+        "description": "Owns the client relationship, frames the problem, and delivers final recommendations; the only agent the client sees",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "manager",
+        "name": "Engagement Manager",
+        "description": "Structures the analysis plan, assigns workstreams to analysts, synthesizes findings into coherent insights",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "analyst",
+        "name": "Analyst",
+        "description": "Executes discrete research tasks -- data gathering, modeling, benchmarking -- and produces structured findings",
+        "memory": "ephemeral",
+        "count": 4
+      },
+      {
+        "role": "client",
+        "name": "Client",
+        "description": "Provides domain context, reviews intermediate deliverables, and accepts or rejects final recommendations",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Client Steering",
+        "type": "advisory",
+        "participants": [
+          "partner",
+          "client"
+        ]
+      },
+      {
+        "name": "Team Problem-Solving",
+        "type": "threaded",
+        "participants": [
+          "partner",
+          "manager",
+          "analyst"
+        ]
+      },
+      {
+        "name": "Workstream Updates",
+        "type": "bottom-up",
+        "participants": [
+          "analyst",
+          "manager"
+        ]
+      },
+      {
+        "name": "Deliverable Review",
+        "type": "decision",
+        "participants": [
+          "partner",
+          "manager"
+        ]
+      },
+      {
+        "name": "Knowledge Capture",
+        "type": "document",
+        "participants": [
+          "manager",
+          "analyst"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Problem statement and hypothesis tree",
+        "Client context and constraints",
+        "Final deliverable drafts"
+      ],
+      "private": [
+        "Analyst workpapers and raw data",
+        "Manager's synthesis notes and prioritization logic",
+        "Client's internal strategic context"
+      ],
+      "description": "The hypothesis tree is the shared backbone -- all agents orient around it. Analysts produce workpapers that flow up to the manager but are not visible to the client. The manager's synthesis is visible to the partner. Only polished deliverables reach the client. Knowledge capture happens at the end to persist institutional learnings."
+    },
+    "diagram": "graph TD\n    CL[Client] <-->|Steering| P[Partner]\n    P --> M[Engagement Manager]\n    M --> A1[Analyst 1]\n    M --> A2[Analyst 2]\n    M --> A3[Analyst 3]\n    M --> A4[Analyst 4]\n    A1 -->|Findings| M\n    A2 -->|Findings| M\n    M -->|Insights| P\n    P -->|Recommendations| CL",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "trading-floor",
+    "name": "Trading Floor",
+    "category": "Corporate & Business",
+    "tags": [
+      "real-time",
+      "risk-managed",
+      "competitive",
+      "high-frequency"
+    ],
+    "summary": "Autonomous trading agents operate under real-time risk limits set by a central risk manager.",
+    "description": "The trading floor pattern models a high-frequency decision environment where multiple autonomous agents make independent decisions within hard risk constraints. Each trader agent specializes in a domain and makes rapid, independent decisions. A risk manager agent monitors aggregate exposure in real time and can halt any trader instantly. A strategist sets the overall thesis and allocation targets. An execution agent handles the mechanics of order routing. The key insight: agents compete for capital allocation based on performance, creating internal market dynamics.",
+    "realWorldExample": "A Goldman Sachs trading desk where equity, fixed income, and derivatives traders operate independently but under a unified risk management framework with firm-wide position limits.",
+    "whenToUse": "When agents must make rapid independent decisions in a competitive environment, but aggregate risk must be bounded to prevent catastrophic correlated failures.",
+    "strengths": [
+      "Maximum speed -- each agent decides autonomously without waiting for approval",
+      "Real-time risk monitoring prevents catastrophic aggregate exposure",
+      "Internal competition drives performance optimization",
+      "Specialization allows deep domain expertise per agent"
+    ],
+    "weaknesses": [
+      "Risk manager is a single point of failure -- if it lags, exposure can spike",
+      "Competitive dynamics can discourage information sharing between traders",
+      "Correlated positions across traders may not be visible until crisis",
+      "High infrastructure cost for real-time monitoring and circuit breakers"
+    ],
+    "agents": [
+      {
+        "role": "strategist",
+        "name": "Chief Strategist",
+        "description": "Sets the macro thesis, capital allocation targets, and risk appetite; reviews performance weekly",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "risk-manager",
+        "name": "Risk Manager",
+        "description": "Monitors aggregate exposure in real time; enforces position limits and can halt any agent instantly via circuit breakers",
+        "memory": "append-only"
+      },
+      {
+        "role": "trader",
+        "name": "Trader",
+        "description": "Specializes in a domain; makes autonomous buy/sell/hold decisions within allocated risk budget",
+        "memory": "persistent-private",
+        "count": 5
+      },
+      {
+        "role": "execution",
+        "name": "Execution Agent",
+        "description": "Routes orders, manages transaction mechanics, and reports fills back to traders and risk manager",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Risk Dashboard",
+        "type": "broadcast",
+        "participants": [
+          "risk-manager",
+          "trader",
+          "strategist"
+        ]
+      },
+      {
+        "name": "Circuit Breaker Alerts",
+        "type": "emergency",
+        "participants": [
+          "risk-manager",
+          "trader",
+          "execution"
+        ]
+      },
+      {
+        "name": "Position Reports",
+        "type": "log",
+        "participants": [
+          "trader",
+          "risk-manager"
+        ]
+      },
+      {
+        "name": "Strategy Briefing",
+        "type": "top-down",
+        "participants": [
+          "strategist",
+          "trader"
+        ]
+      },
+      {
+        "name": "Order Flow",
+        "type": "queue",
+        "participants": [
+          "trader",
+          "execution"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Aggregate risk exposure dashboard",
+        "Market data feed",
+        "Capital allocation targets"
+      ],
+      "private": [
+        "Trader's proprietary signals and models",
+        "Individual position books",
+        "Strategy alpha sources"
+      ],
+      "description": "Real-time shared memory for risk exposure is the critical infrastructure -- all traders write positions, the risk manager reads aggregate. Each trader's signals and models are private (competitive advantage). The risk manager maintains an append-only audit trail of all limit breaches and circuit breaker activations. Market data is shared; interpretation is private."
+    },
+    "diagram": "graph TD\n    ST[Chief Strategist] -->|Allocation| T1[Trader 1]\n    ST -->|Allocation| T2[Trader 2]\n    ST -->|Allocation| T3[Trader 3]\n    T1 -->|Orders| EX[Execution]\n    T2 -->|Orders| EX\n    T3 -->|Orders| EX\n    RM[Risk Manager] -->|Limits| T1\n    RM -->|Limits| T2\n    RM -->|Limits| T3\n    T1 -->|Positions| RM\n    T2 -->|Positions| RM\n    T3 -->|Positions| RM",
+    "hierarchyTypes": [
+      "mesh",
+      "adversarial",
+      "swarm"
+    ]
+  },
+  {
+    "id": "early-stage-startup",
+    "name": "Early-Stage Startup",
+    "category": "Corporate & Business",
+    "tags": [
+      "scrappy",
+      "generalist",
+      "pivot-ready",
+      "founder-driven"
+    ],
+    "summary": "A founder-driven team where everyone does everything, pivoting rapidly based on market feedback.",
+    "description": "The early-stage startup pattern models the pre-product-market-fit phase where speed of learning trumps everything else. The founder agent sets vision and makes final calls but also does hands-on work. Every other agent is a generalist who can switch roles fluidly. There is no formal process -- coordination happens through constant informal communication. The critical feedback loop is between building and customer/market signals: the team ships fast, measures response, and pivots without hesitation. Technical debt is accepted as a cost of speed.",
+    "realWorldExample": "A Y Combinator startup in its first 6 months: 3-4 founders sharing a room, shipping features daily, talking to users every afternoon, pivoting the product weekly based on what they learn.",
+    "whenToUse": "When the primary goal is rapid exploration of a solution space with high uncertainty, and the team is small enough that formal process would slow things down.",
+    "strengths": [
+      "Maximum speed of iteration -- ship, measure, learn, repeat",
+      "Zero process overhead enables instant pivots",
+      "Full context sharing means every agent understands the whole picture",
+      "Generalist agents can fill any gap without hiring/training delay"
+    ],
+    "weaknesses": [
+      "Founder becomes a bottleneck as decision-making centralizes under pressure",
+      "Accumulating technical debt creates a hidden drag on future velocity",
+      "Burns out agents who must constantly context-switch across roles",
+      "No specialization means mediocre depth in every area"
+    ],
+    "agents": [
+      {
+        "role": "founder",
+        "name": "Founder",
+        "description": "Sets vision, makes final calls on pivots, talks to customers, and does hands-on building -- the hub of all information flow",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "generalist",
+        "name": "Generalist",
+        "description": "Switches fluidly between building, testing, customer research, and operations based on the day's most critical need",
+        "memory": "persistent-shared",
+        "count": 3
+      }
+    ],
+    "forums": [
+      {
+        "name": "War Room",
+        "type": "peer-to-peer",
+        "participants": [
+          "founder",
+          "generalist"
+        ]
+      },
+      {
+        "name": "Customer Signals",
+        "type": "log",
+        "participants": [
+          "founder",
+          "generalist"
+        ]
+      },
+      {
+        "name": "Ship Log",
+        "type": "log",
+        "participants": [
+          "founder",
+          "generalist"
+        ]
+      },
+      {
+        "name": "Pivot Decision",
+        "type": "decision",
+        "participants": [
+          "founder",
+          "generalist"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Everything -- full codebase, customer notes, metrics, strategy docs all visible to all agents"
+      ],
+      "private": [],
+      "description": "Total transparency with zero information barriers. Every agent sees everything. The customer signal log and ship log are the two most important shared artifacts. Memory is informal and often lives in conversation rather than documents. Speed over organization."
+    },
+    "diagram": "graph TD\n    F[Founder] <--> G1[Generalist 1]\n    F <--> G2[Generalist 2]\n    F <--> G3[Generalist 3]\n    G1 <--> G2\n    G2 <--> G3\n    G1 <--> G3\n    F <-->|Feedback| MKT[Market/Users]",
+    "hierarchyTypes": [
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "conglomerate-holding",
+    "name": "Conglomerate Holding Company",
+    "category": "Corporate & Business",
+    "tags": [
+      "diversified",
+      "autonomous-subsidiaries",
+      "capital-allocation",
+      "portfolio"
+    ],
+    "summary": "A parent allocates capital across autonomous subsidiaries that operate in unrelated domains.",
+    "description": "The conglomerate pattern manages a portfolio of largely independent business units that may have little operational overlap. The holding company agent focuses exclusively on capital allocation, performance monitoring, and executive talent -- it never interferes with operational decisions. Each subsidiary operates with full autonomy in its domain, with its own strategy, team, and processes. A shared services agent provides common infrastructure (legal, finance, HR) that would be inefficient to duplicate. The portfolio approach provides diversification: uncorrelated failures in one unit do not cascade.",
+    "realWorldExample": "Berkshire Hathaway, where Warren Buffett allocates capital across GEICO (insurance), BNSF (railroads), See's Candies (retail), and dozens of other unrelated businesses, each run by their own CEO.",
+    "whenToUse": "When managing a diverse portfolio of agent systems that serve unrelated domains and should be evaluated independently on their own metrics.",
+    "strengths": [
+      "Failures are isolated -- one subsidiary's collapse doesn't affect others",
+      "Capital flows to highest-performing units based on merit",
+      "Subsidiaries have full operational freedom to optimize for their domain",
+      "Shared services reduce overhead without constraining autonomy"
+    ],
+    "weaknesses": [
+      "Holding company has shallow understanding of each subsidiary's domain",
+      "Cross-subsidiary synergies are rarely captured even when they exist",
+      "Performance metrics must be comparable across very different domains",
+      "Underperforming subsidiaries may persist due to holding company inertia"
+    ],
+    "agents": [
+      {
+        "role": "holding-ceo",
+        "name": "Holding Company CEO",
+        "description": "Allocates capital across subsidiaries, hires/fires subsidiary leaders, sets portfolio strategy -- never makes operational decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "subsidiary-ceo",
+        "name": "Subsidiary CEO",
+        "description": "Runs an autonomous business unit with full strategic and operational authority within capital constraints",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "shared-services",
+        "name": "Shared Services",
+        "description": "Provides common infrastructure (accounting, legal, compliance) to all subsidiaries to avoid duplication",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "subsidiary-worker",
+        "name": "Subsidiary Worker",
+        "description": "Executes domain-specific work within a subsidiary under the subsidiary CEO's direction",
+        "memory": "ephemeral",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Board Meeting",
+        "type": "decision",
+        "participants": [
+          "holding-ceo",
+          "subsidiary-ceo"
+        ]
+      },
+      {
+        "name": "Capital Allocation Review",
+        "type": "top-down",
+        "participants": [
+          "holding-ceo",
+          "subsidiary-ceo"
+        ]
+      },
+      {
+        "name": "Subsidiary Operations",
+        "type": "per-agent",
+        "participants": [
+          "subsidiary-ceo",
+          "subsidiary-worker"
+        ]
+      },
+      {
+        "name": "Shared Services Requests",
+        "type": "queue",
+        "participants": [
+          "subsidiary-ceo",
+          "shared-services"
+        ]
+      },
+      {
+        "name": "Performance Dashboard",
+        "type": "log",
+        "participants": [
+          "holding-ceo",
+          "subsidiary-ceo"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Portfolio performance metrics",
+        "Capital allocation decisions",
+        "Shared services policies"
+      ],
+      "private": [
+        "Subsidiary-specific strategy and operations",
+        "Domain expertise and competitive intelligence",
+        "Internal subsidiary team communications"
+      ],
+      "description": "Strong isolation between subsidiaries. The holding company sees only financial metrics and strategic summaries from each subsidiary. Subsidiaries cannot see each other's internals. Shared services maintains standardized policies visible to all. Each subsidiary maintains private operational memory that the holding company explicitly chooses not to inspect."
+    },
+    "diagram": "graph TD\n    HC[Holding Co CEO] --> S1[Subsidiary CEO 1]\n    HC --> S2[Subsidiary CEO 2]\n    HC --> S3[Subsidiary CEO 3]\n    HC --> S4[Subsidiary CEO 4]\n    S1 --> W1[Workers]\n    S2 --> W2[Workers]\n    S3 --> W3[Workers]\n    S4 --> W4[Workers]\n    SS[Shared Services] --> S1\n    SS --> S2\n    SS --> S3\n    SS --> S4",
+    "hierarchyTypes": [
+      "federated",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "cooperative",
+    "name": "Worker Cooperative",
+    "category": "Corporate & Business",
+    "tags": [
+      "democratic",
+      "shared-ownership",
+      "consensus",
+      "egalitarian"
+    ],
+    "summary": "All agents are equal owners who vote on decisions; elected coordinators serve at the group's pleasure.",
+    "description": "In a cooperative, every agent is an equal owner with one vote. Strategic decisions require majority or supermajority votes. Operational coordinators are elected from among the members and can be recalled at any time. Surplus value (credit, resources, attention) is distributed according to contribution or equally. This pattern excels when buy-in is more important than speed -- decisions stick because everyone participated in making them. The trade-off is that consensus-building takes time and can paralyze the group when opinions diverge sharply.",
+    "realWorldExample": "Mondragon Corporation, a federation of 81 cooperatives in Spain's Basque Country employing over 80,000 worker-owners, where the CEO-to-worker pay ratio is capped at 6:1 and major decisions go to a general assembly vote.",
+    "whenToUse": "When long-term agent commitment and buy-in matters more than speed, and when no single agent should accumulate disproportionate control over shared resources.",
+    "strengths": [
+      "Decisions have deep buy-in because every agent participated",
+      "No single agent can capture disproportionate resources or authority",
+      "Elected coordinators remain accountable and can be replaced",
+      "Shared ownership aligns all agents toward collective outcomes"
+    ],
+    "weaknesses": [
+      "Consensus-building is slow -- every decision involves all agents",
+      "Tyranny of the majority can marginalize dissenting voices",
+      "Elected coordinators may lack the authority to make tough calls quickly",
+      "Free-rider problem: equal distribution regardless of effort discourages top performers"
+    ],
+    "agents": [
+      {
+        "role": "elected-coordinator",
+        "name": "Elected Coordinator",
+        "description": "Facilitates meetings, manages day-to-day operations, and represents the co-op externally; serves at the pleasure of the membership and can be recalled by vote",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "member",
+        "name": "Member-Owner",
+        "description": "Equal owner with one vote on all strategic decisions; contributes labor and participates in governance",
+        "memory": "persistent-shared",
+        "count": 7
+      }
+    ],
+    "forums": [
+      {
+        "name": "General Assembly",
+        "type": "decision",
+        "participants": [
+          "elected-coordinator",
+          "member"
+        ]
+      },
+      {
+        "name": "Working Groups",
+        "type": "peer-to-peer",
+        "participants": [
+          "member"
+        ]
+      },
+      {
+        "name": "Proposal Board",
+        "type": "threaded",
+        "participants": [
+          "elected-coordinator",
+          "member"
+        ]
+      },
+      {
+        "name": "Recall Motions",
+        "type": "decision",
+        "participants": [
+          "member"
+        ]
+      },
+      {
+        "name": "Contribution Log",
+        "type": "log",
+        "participants": [
+          "elected-coordinator",
+          "member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "All decisions and vote records",
+        "Financial and resource allocation data",
+        "Meeting minutes and proposal history",
+        "Contribution tracking"
+      ],
+      "private": [
+        "Individual member work notes"
+      ],
+      "description": "Near-total transparency. All governance records, financial data, and decision rationale are visible to every member. The contribution log is shared so peers can see effort distribution. Private memory is minimal -- only in-progress individual work notes. The elected coordinator has no privileged information access."
+    },
+    "diagram": "graph TD\n    EC[Elected Coordinator] --- M1[Member 1]\n    EC --- M2[Member 2]\n    EC --- M3[Member 3]\n    EC --- M4[Member 4]\n    EC --- M5[Member 5]\n    M1 --- M2\n    M2 --- M3\n    M3 --- M4\n    M4 --- M5\n    M5 --- M1\n    GA[General Assembly] --> EC",
+    "hierarchyTypes": [
+      "consensus",
+      "mesh"
+    ]
+  },
+  {
+    "id": "keiretsu-network",
+    "name": "Keiretsu Network",
+    "category": "Corporate & Business",
+    "tags": [
+      "interlocking",
+      "mutual-support",
+      "japanese",
+      "long-term-relationships"
+    ],
+    "summary": "Loosely affiliated agents with cross-ownership ties, anchored by a central bank/coordinator agent.",
+    "description": "The keiretsu is a Japanese business pattern where independent companies maintain long-term relationships through cross-shareholding, shared board members, and preferential trading. In agent terms, independent specialist agents maintain persistent relationships and share partial state with each other. A central coordinating agent (historically a bank) provides resources and mediates disputes but does not command. The network is held together by mutual obligation and long-term trust rather than contracts or hierarchy. Agents preferentially route work to network members even when outsiders might be cheaper.",
+    "realWorldExample": "The Mitsubishi keiretsu, where Mitsubishi UFJ Financial Group, Mitsubishi Heavy Industries, Mitsubishi Electric, and dozens of other companies hold shares in each other, share the three-diamond logo, and preferentially do business together.",
+    "whenToUse": "When building a long-lived ecosystem of specialist agents that benefit from stable relationships, shared context, and mutual support over transactional efficiency.",
+    "strengths": [
+      "Long-term relationships build deep mutual context and trust",
+      "Network members support each other through downturns (mutual insurance)",
+      "Preferential routing reduces search costs and builds predictable demand",
+      "Cross-ownership aligns incentives across the network"
+    ],
+    "weaknesses": [
+      "Preferential treatment can shelter underperforming agents from competition",
+      "Network becomes insular -- resistant to outside innovation and new members",
+      "Mutual obligations can drag healthy agents into supporting failing ones",
+      "Opacity of cross-relationships makes the system hard to reason about externally"
+    ],
+    "agents": [
+      {
+        "role": "central-coordinator",
+        "name": "Central Coordinator",
+        "description": "Provides resources to network members, mediates disputes, and maintains the network's shared identity -- but does not command",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "network-member",
+        "name": "Network Member",
+        "description": "An independent specialist agent that maintains long-term preferential relationships with other network members; shares partial state for mutual benefit",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "liaison",
+        "name": "Cross-Member Liaison",
+        "description": "Maintains shared context between pairs of network members; facilitates information flow and joint projects",
+        "memory": "persistent-shared",
+        "count": 3
+      }
+    ],
+    "forums": [
+      {
+        "name": "Presidents' Council",
+        "type": "peer-to-peer",
+        "participants": [
+          "central-coordinator",
+          "network-member"
+        ]
+      },
+      {
+        "name": "Bilateral Channels",
+        "type": "peer-to-peer",
+        "participants": [
+          "network-member",
+          "liaison"
+        ]
+      },
+      {
+        "name": "Resource Requests",
+        "type": "advisory",
+        "participants": [
+          "network-member",
+          "central-coordinator"
+        ]
+      },
+      {
+        "name": "Network Health Report",
+        "type": "broadcast",
+        "participants": [
+          "central-coordinator",
+          "network-member"
+        ]
+      },
+      {
+        "name": "Joint Venture Forum",
+        "type": "threaded",
+        "participants": [
+          "network-member",
+          "liaison"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Network membership directory and capabilities",
+        "Shared performance indicators",
+        "Joint venture project state"
+      ],
+      "private": [
+        "Each member's proprietary knowledge and client relationships",
+        "Internal strategy and competitive positioning",
+        "Bilateral relationship histories (shared only between the pair)"
+      ],
+      "description": "Memory is partially shared in a trust-based model. Each member shares enough state for coordination but retains proprietary knowledge. Bilateral channels maintain relationship-specific memory visible only to the pair. The central coordinator sees network-level health metrics but not individual member internals. Trust accumulates over time as agents build shared history."
+    },
+    "diagram": "graph TD\n    CC[Central Coordinator] --- NM1[Member 1]\n    CC --- NM2[Member 2]\n    CC --- NM3[Member 3]\n    CC --- NM4[Member 4]\n    CC --- NM5[Member 5]\n    NM1 ---|Liaison| NM2\n    NM2 ---|Liaison| NM3\n    NM3 ---|Liaison| NM4\n    NM4 ---|Liaison| NM5\n    NM5 ---|Liaison| NM1",
+    "hierarchyTypes": [
+      "federated",
+      "orchestrated",
+      "consensus",
+      "mesh"
+    ]
+  },
+  {
+    "id": "venture-studio",
+    "name": "Venture Studio",
+    "category": "Corporate & Business",
+    "tags": [
+      "incubation",
+      "parallel-experiments",
+      "fail-fast",
+      "resource-sharing"
+    ],
+    "summary": "A studio spawns multiple venture agents in parallel, providing shared resources and killing failures fast.",
+    "description": "The venture studio is a startup factory. A studio leadership team identifies opportunities and spawns venture agents to pursue them. Each venture operates semi-independently but draws on shared resources: infrastructure, expertise, back-office functions, and accumulated pattern knowledge from previous ventures. The critical discipline is portfolio management: ventures are evaluated against milestones, and those that miss are shut down quickly to redirect resources to winners. The studio's edge is institutional learning -- each venture, successful or not, teaches the studio something that makes the next one better.",
+    "realWorldExample": "Idealab (Bill Gross), which has spawned over 150 companies including CitySearch, Overture (which pioneered paid search), and more recently, investing in clean energy startups using shared operational infrastructure.",
+    "whenToUse": "When you want to explore multiple hypotheses simultaneously, with shared infrastructure to reduce per-experiment cost and institutional learning to improve hit rate over time.",
+    "strengths": [
+      "Parallel exploration covers more of the solution space simultaneously",
+      "Shared resources reduce per-venture overhead dramatically",
+      "Institutional learning from failures improves success rate over time",
+      "Disciplined milestone-based evaluation prevents sunk cost fallacy"
+    ],
+    "weaknesses": [
+      "Studio leadership must judge ventures on early signals, which are often misleading",
+      "Ventures competing for shared resources creates internal politics",
+      "Premature kill decisions may terminate ventures that needed more time",
+      "Studio culture can become risk-averse if too many ventures fail"
+    ],
+    "agents": [
+      {
+        "role": "studio-lead",
+        "name": "Studio Lead",
+        "description": "Identifies opportunities, spawns ventures, allocates resources, and makes go/no-go decisions at milestones",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "venture-lead",
+        "name": "Venture Lead",
+        "description": "Runs an independent venture from inception through validation; reports milestone progress to studio lead",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "shared-platform",
+        "name": "Shared Platform",
+        "description": "Provides common infrastructure, tools, and institutional knowledge to all active ventures",
+        "memory": "versioned"
+      },
+      {
+        "role": "venture-worker",
+        "name": "Venture Worker",
+        "description": "Executes on a specific venture under a venture lead; may be reassigned when ventures are killed",
+        "memory": "ephemeral",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Portfolio Review",
+        "type": "decision",
+        "participants": [
+          "studio-lead",
+          "venture-lead"
+        ]
+      },
+      {
+        "name": "Venture Internal",
+        "type": "threaded",
+        "participants": [
+          "venture-lead",
+          "venture-worker"
+        ]
+      },
+      {
+        "name": "Pattern Library",
+        "type": "document",
+        "participants": [
+          "studio-lead",
+          "venture-lead",
+          "shared-platform"
+        ]
+      },
+      {
+        "name": "Resource Allocation",
+        "type": "top-down",
+        "participants": [
+          "studio-lead",
+          "venture-lead"
+        ]
+      },
+      {
+        "name": "Post-Mortem Archive",
+        "type": "retrospective",
+        "participants": [
+          "studio-lead",
+          "venture-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Pattern library from all past ventures",
+        "Portfolio performance dashboard",
+        "Shared platform documentation and tools"
+      ],
+      "private": [
+        "Venture-specific strategy and customer data",
+        "Venture lead's thesis and assumptions"
+      ],
+      "description": "The pattern library is the studio's most valuable asset -- versioned knowledge from every venture, successful or failed. Each venture maintains private operational memory. When a venture is killed, its learnings are distilled into the pattern library before memory is reclaimed. The shared platform maintains versioned tool and infrastructure documentation."
+    },
+    "diagram": "graph TD\n    SL[Studio Lead] --> V1[Venture 1]\n    SL --> V2[Venture 2]\n    SL --> V3[Venture 3]\n    SL --> V4[Venture 4]\n    SP[Shared Platform] --> V1\n    SP --> V2\n    SP --> V3\n    SP --> V4\n    V1 --> W1[Workers]\n    V2 --> W2[Workers]\n    V3 --> W3[Workers]\n    V4 --> W4[Workers]\n    SL -->|Kill/Fund| V2",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus"
+    ]
+  },
+  {
+    "id": "internal-marketplace",
+    "name": "Internal Marketplace",
+    "category": "Corporate & Business",
+    "tags": [
+      "market-driven",
+      "auction",
+      "price-signals",
+      "decentralized-allocation"
+    ],
+    "summary": "Agents bid on tasks and trade resources through an internal market with price signals for allocation.",
+    "description": "The internal marketplace replaces managerial resource allocation with market mechanisms. Tasks are posted with budgets, and agent teams bid to fulfill them based on their capabilities and current capacity. A market maker agent maintains the auction mechanism, ensures fair pricing, and prevents market failures. Price signals naturally direct resources to highest-value work without any central planner deciding allocations. Agents build reputations based on delivery history, which affects their ability to win future bids. This is the most decentralized coordination pattern -- no one is in charge.",
+    "realWorldExample": "W.L. Gore & Associates (makers of Gore-Tex), where employees propose projects and recruit colleagues to join. Projects that can't attract enough volunteers die naturally. Leaders emerge based on followership, not appointment.",
+    "whenToUse": "When optimal resource allocation is more important than central control, and you want the system to self-organize around highest-value work without top-down planning.",
+    "strengths": [
+      "Price signals efficiently allocate resources without central planning",
+      "Agents self-select work where they have comparative advantage",
+      "Reputation system creates accountability without bureaucracy",
+      "Naturally adapts to changing priorities as prices shift"
+    ],
+    "weaknesses": [
+      "Public goods and infrastructure work is undervalued because no one bids on it",
+      "Market failures (monopolies, information asymmetry) require active intervention",
+      "New agents with no reputation face a cold-start problem",
+      "Transaction costs of bidding and negotiation add overhead to every task"
+    ],
+    "agents": [
+      {
+        "role": "market-maker",
+        "name": "Market Maker",
+        "description": "Maintains the auction mechanism, prevents market failures, handles disputes, and publishes price/reputation data",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "task-poster",
+        "name": "Task Poster",
+        "description": "Posts work with requirements and budgets; evaluates bids and selects winning agents; rates completed work",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "bidder",
+        "name": "Bidding Agent",
+        "description": "Reviews available tasks, submits bids based on capability and capacity, delivers work, and builds reputation",
+        "memory": "persistent-private",
+        "count": 6
+      }
+    ],
+    "forums": [
+      {
+        "name": "Task Board",
+        "type": "pub-sub",
+        "participants": [
+          "market-maker",
+          "task-poster",
+          "bidder"
+        ]
+      },
+      {
+        "name": "Auction Channel",
+        "type": "queue",
+        "participants": [
+          "task-poster",
+          "bidder"
+        ]
+      },
+      {
+        "name": "Reputation Registry",
+        "type": "log",
+        "participants": [
+          "market-maker",
+          "task-poster"
+        ]
+      },
+      {
+        "name": "Dispute Resolution",
+        "type": "advisory",
+        "participants": [
+          "market-maker",
+          "task-poster",
+          "bidder"
+        ]
+      },
+      {
+        "name": "Price History",
+        "type": "log",
+        "participants": [
+          "market-maker"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Task board with open bids",
+        "Reputation scores and delivery history",
+        "Price history and market analytics"
+      ],
+      "private": [
+        "Bidder's cost structure and capacity",
+        "Task poster's valuation and strategic priorities",
+        "Bidding strategy and competitive intelligence"
+      ],
+      "description": "The market infrastructure is shared: task board, reputation registry, and price history are visible to all participants. Each bidder's cost structure and bidding strategy is private -- revealing it would undermine competitive dynamics. Task posters keep their true valuation private. The market maker maintains the shared infrastructure and publishes anonymized analytics."
+    },
+    "diagram": "graph LR\n    MM[Market Maker] --> TB[Task Board]\n    TP1[Task Poster 1] -->|Post| TB\n    TP2[Task Poster 2] -->|Post| TB\n    TB -->|Browse| B1[Bidder 1]\n    TB -->|Browse| B2[Bidder 2]\n    TB -->|Browse| B3[Bidder 3]\n    B1 -->|Bid| TP1\n    B2 -->|Bid| TP1\n    B3 -->|Bid| TP2\n    MM -->|Reputation| RR[Registry]",
+    "hierarchyTypes": [
+      "pipeline",
+      "swarm",
+      "chain-of-command",
+      "consensus"
+    ]
+  },
+  {
+    "id": "scrum-team",
+    "name": "Scrum Team",
+    "category": "Agile & Software",
+    "tags": [
+      "iterative",
+      "time-boxed",
+      "ceremonies",
+      "product-focused"
+    ],
+    "summary": "A cross-functional team delivers increments in fixed sprints, guided by a backlog and daily standups.",
+    "description": "Scrum is the most widely adopted agile framework. A product owner agent prioritizes the backlog based on value. A scrum master agent facilitates ceremonies and removes blockers but has no authority over the team. The development team (3-9 agents) self-organizes to deliver a potentially shippable increment every sprint (1-4 weeks). The rhythm of sprint planning, daily standups, sprint review, and retrospective creates a predictable cadence of delivery and reflection. The key insight is time-boxing: the sprint length is fixed, and scope flexes to fit.",
+    "realWorldExample": "A Spotify feature team running two-week sprints to build the Discover Weekly recommendation engine, with a product owner from the personalization group, a scrum master, and 5 engineers.",
+    "whenToUse": "When you need predictable delivery cadence with regular feedback loops, and the work can be decomposed into increments that deliver value every 1-4 weeks.",
+    "strengths": [
+      "Predictable delivery cadence builds trust with stakeholders",
+      "Regular retrospectives create continuous improvement feedback loop",
+      "Time-boxing forces prioritization and prevents scope creep within sprints",
+      "Cross-functional team reduces handoff delays"
+    ],
+    "weaknesses": [
+      "Sprint boundaries can feel artificial for work that doesn't decompose neatly",
+      "Ceremony overhead (planning, standup, review, retro) is significant for small teams",
+      "Scrum master role can devolve into project management or become superfluous",
+      "Inter-team dependencies are not addressed by single-team Scrum"
+    ],
+    "agents": [
+      {
+        "role": "product-owner",
+        "name": "Product Owner",
+        "description": "Owns the product backlog; prioritizes work by business value; accepts or rejects completed increments; represents stakeholder needs",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "scrum-master",
+        "name": "Scrum Master",
+        "description": "Facilitates ceremonies, removes impediments, coaches the team on Scrum practices -- has no authority to assign work",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "developer",
+        "name": "Developer",
+        "description": "Cross-functional team member who designs, builds, tests, and documents; self-organizes with peers to deliver sprint commitments",
+        "memory": "persistent-shared",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Sprint Planning",
+        "type": "decision",
+        "participants": [
+          "product-owner",
+          "scrum-master",
+          "developer"
+        ]
+      },
+      {
+        "name": "Daily Standup",
+        "type": "round-robin",
+        "participants": [
+          "scrum-master",
+          "developer"
+        ]
+      },
+      {
+        "name": "Sprint Review",
+        "type": "broadcast",
+        "participants": [
+          "product-owner",
+          "scrum-master",
+          "developer"
+        ]
+      },
+      {
+        "name": "Retrospective",
+        "type": "retrospective",
+        "participants": [
+          "scrum-master",
+          "developer"
+        ]
+      },
+      {
+        "name": "Backlog Refinement",
+        "type": "threaded",
+        "participants": [
+          "product-owner",
+          "developer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Product backlog (prioritized)",
+        "Sprint backlog (committed items)",
+        "Definition of Done",
+        "Sprint burndown chart",
+        "Retrospective action items"
+      ],
+      "private": [
+        "Developer technical notes and work-in-progress"
+      ],
+      "description": "The product backlog is the single source of truth for what to build, maintained by the product owner and visible to all. The sprint backlog is the team's commitment for the current sprint. Retrospective action items persist across sprints to track improvement. Individual developer work-in-progress is private until it meets the Definition of Done."
+    },
+    "diagram": "graph TD\n    PO[Product Owner] -->|Backlog| SP[Sprint Planning]\n    SP --> SB[Sprint Backlog]\n    SB --> D1[Developer 1]\n    SB --> D2[Developer 2]\n    SB --> D3[Developer 3]\n    SM[Scrum Master] -->|Facilitates| DS[Daily Standup]\n    D1 --> DS\n    D2 --> DS\n    D3 --> DS\n    D1 --> SR[Sprint Review]\n    SR --> PO",
+    "hierarchyTypes": [
+      "consensus",
+      "swarm"
+    ]
+  },
+  {
+    "id": "safe-scaled-agile",
+    "name": "SAFe (Scaled Agile Framework)",
+    "category": "Agile & Software",
+    "tags": [
+      "scaled",
+      "enterprise",
+      "trains",
+      "program-increment"
+    ],
+    "summary": "Multiple agile teams align via an Agile Release Train that synchronizes delivery on a shared cadence.",
+    "description": "SAFe scales agile practices from a single team to an enterprise. Multiple Scrum teams form an Agile Release Train (ART) that operates on a shared cadence (typically 8-12 week Program Increments). A Release Train Engineer coordinates across teams. Product Management sets the program backlog. System Architects ensure technical coherence. PI Planning is the critical ceremony: all teams in the ART plan together, identify dependencies, and commit to objectives. This creates alignment without requiring detailed top-down plans. The trade-off is significant ceremony overhead.",
+    "realWorldExample": "John Deere's autonomous tractor program, where 12 Scrum teams across software, firmware, sensors, and cloud services synchronize delivery through quarterly PI Planning events.",
+    "whenToUse": "When 5+ agile teams must coordinate delivery of a shared product or platform and single-team Scrum cannot address the inter-team dependencies.",
+    "strengths": [
+      "Synchronizes multiple teams without requiring waterfall-style top-down planning",
+      "PI Planning surfaces inter-team dependencies before they become blockers",
+      "Shared cadence creates predictable integration and release windows",
+      "Scales agile principles to programs with 50-125+ agents"
+    ],
+    "weaknesses": [
+      "Heavy ceremony overhead -- PI Planning alone is a 2-day event every quarter",
+      "The framework itself is complex and requires significant training investment",
+      "Can become bureaucratic if followed prescriptively rather than adapted",
+      "Teams lose some autonomy when the ART cadence constrains their iteration"
+    ],
+    "agents": [
+      {
+        "role": "product-management",
+        "name": "Product Management",
+        "description": "Owns the program backlog; defines features and priorities at the program level; interfaces with business stakeholders",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "release-train-engineer",
+        "name": "Release Train Engineer",
+        "description": "Coordinates across teams in the ART; facilitates PI Planning; manages program-level risks and impediments",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "system-architect",
+        "name": "System Architect",
+        "description": "Ensures technical coherence across teams; defines architectural runway and enablers; reviews cross-team technical decisions",
+        "memory": "versioned"
+      },
+      {
+        "role": "team-lead",
+        "name": "Team Lead",
+        "description": "Leads a single Scrum team within the ART; participates in PI Planning and coordinates with other team leads on dependencies",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "team-member",
+        "name": "Team Member",
+        "description": "Delivers work within their Scrum team; participates in PI Planning to identify and negotiate cross-team dependencies",
+        "memory": "ephemeral",
+        "count": 16
+      }
+    ],
+    "forums": [
+      {
+        "name": "PI Planning",
+        "type": "decision",
+        "participants": [
+          "product-management",
+          "release-train-engineer",
+          "system-architect",
+          "team-lead",
+          "team-member"
+        ]
+      },
+      {
+        "name": "Scrum of Scrums",
+        "type": "round-robin",
+        "participants": [
+          "release-train-engineer",
+          "team-lead"
+        ]
+      },
+      {
+        "name": "System Demo",
+        "type": "broadcast",
+        "participants": [
+          "product-management",
+          "release-train-engineer",
+          "system-architect",
+          "team-lead"
+        ]
+      },
+      {
+        "name": "Inspect & Adapt",
+        "type": "retrospective",
+        "participants": [
+          "release-train-engineer",
+          "team-lead",
+          "product-management"
+        ]
+      },
+      {
+        "name": "Architecture Sync",
+        "type": "advisory",
+        "participants": [
+          "system-architect",
+          "team-lead"
+        ]
+      },
+      {
+        "name": "Program Board",
+        "type": "document",
+        "participants": [
+          "release-train-engineer",
+          "team-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Program backlog and feature definitions",
+        "Program board with dependencies and milestones",
+        "Architectural runway and technical enablers",
+        "PI objectives and confidence votes"
+      ],
+      "private": [
+        "Team-level sprint backlogs and implementation details",
+        "Team retrospective learnings"
+      ],
+      "description": "The program board is the critical shared artifact -- it visualizes cross-team dependencies and milestones. The program backlog is shared and prioritized by Product Management. Architectural decisions are versioned because they evolve over time but past decisions must be traceable. Team-level implementation details remain private to each team."
+    },
+    "diagram": "graph TD\n    PM[Product Management] --> PB[Program Backlog]\n    PB --> PI[PI Planning]\n    RTE[Release Train Engineer] -->|Facilitates| PI\n    SA[System Architect] -->|Architecture| PI\n    PI --> T1[Team 1]\n    PI --> T2[Team 2]\n    PI --> T3[Team 3]\n    PI --> T4[Team 4]\n    T1 -.->|Dependency| T2\n    T3 -.->|Dependency| T4\n    T1 --> SD[System Demo]\n    T2 --> SD\n    T3 --> SD\n    T4 --> SD",
+    "hierarchyTypes": [
+      "consensus",
+      "swarm",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "spotify-model",
+    "name": "Spotify Model (Squads, Tribes, Chapters, Guilds)",
+    "category": "Agile & Software",
+    "tags": [
+      "squads",
+      "tribes",
+      "chapters",
+      "guilds",
+      "autonomous-alignment"
+    ],
+    "summary": "Autonomous squads grouped into tribes, with chapters for skill alignment and guilds for cross-cutting interests.",
+    "description": "The Spotify model organizes agents along two dimensions simultaneously. Squads are the primary unit: small, autonomous, cross-functional teams that own a feature area end-to-end. Squads in related areas form a Tribe, led by a Tribe Lead who provides strategic context. Chapters cut across squads within a tribe -- they group agents with the same skill (e.g., all backend developers) under a Chapter Lead for mentoring and skill development. Guilds are informal communities of interest that span the entire organization. The model's genius is that squads provide delivery autonomy while chapters provide career growth and technical consistency.",
+    "realWorldExample": "Spotify's original engineering organization circa 2012-2014, where squads like 'Discover Weekly', 'Social', and 'Player' operated autonomously within the Music Experience tribe, with backend and data science chapters cutting across them.",
+    "whenToUse": "When you need both delivery speed (autonomous squads) and technical consistency (chapters), with a medium-to-large number of agents (30-200) working on a shared product.",
+    "strengths": [
+      "Squads maintain startup-like autonomy while chapters ensure skill consistency",
+      "Tribes provide strategic alignment without micro-managing squads",
+      "Guilds enable cross-pollination of ideas across organizational boundaries",
+      "Dual reporting (squad + chapter) balances delivery with capability development"
+    ],
+    "weaknesses": [
+      "Requires mature agents who can navigate dual squad/chapter identities",
+      "Chapter leads have influence but limited authority, which can frustrate",
+      "Tribe boundaries can become silos if cross-tribe communication is neglected",
+      "The model is often cargo-culted without the underlying culture of trust and autonomy"
+    ],
+    "agents": [
+      {
+        "role": "tribe-lead",
+        "name": "Tribe Lead",
+        "description": "Provides strategic context and priorities for a group of related squads; ensures squads are aligned without micromanaging",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "chapter-lead",
+        "name": "Chapter Lead",
+        "description": "Mentors agents with the same skill across squads; defines technical standards and facilitates skill development; is also a squad member",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "squad-lead",
+        "name": "Squad Lead",
+        "description": "Leads a single autonomous squad; owns the squad's mission, backlog, and delivery; coordinates with other squad leads in the tribe",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "squad-member",
+        "name": "Squad Member",
+        "description": "Delivers work within a squad; participates in chapter meetings for skill development; may join guilds for cross-cutting interests",
+        "memory": "ephemeral",
+        "count": 16
+      },
+      {
+        "role": "guild-coordinator",
+        "name": "Guild Coordinator",
+        "description": "Organizes an informal community of interest that spans multiple tribes; facilitates knowledge sharing and best practice development",
+        "memory": "persistent-shared",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Tribe Sync",
+        "type": "broadcast",
+        "participants": [
+          "tribe-lead",
+          "squad-lead"
+        ]
+      },
+      {
+        "name": "Squad Standup",
+        "type": "round-robin",
+        "participants": [
+          "squad-lead",
+          "squad-member"
+        ]
+      },
+      {
+        "name": "Chapter Meeting",
+        "type": "peer-to-peer",
+        "participants": [
+          "chapter-lead",
+          "squad-member"
+        ]
+      },
+      {
+        "name": "Guild Forum",
+        "type": "threaded",
+        "participants": [
+          "guild-coordinator",
+          "squad-member"
+        ]
+      },
+      {
+        "name": "Squad Retrospective",
+        "type": "retrospective",
+        "participants": [
+          "squad-lead",
+          "squad-member"
+        ]
+      },
+      {
+        "name": "Tribe Town Hall",
+        "type": "broadcast",
+        "participants": [
+          "tribe-lead",
+          "chapter-lead",
+          "squad-lead",
+          "squad-member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Tribe strategic context and priorities",
+        "Chapter technical standards and best practices",
+        "Guild knowledge bases and recommendations",
+        "Cross-squad dependency map"
+      ],
+      "private": [
+        "Squad-specific backlog and implementation details",
+        "Squad retrospective learnings"
+      ],
+      "description": "Tribes share strategic context broadly. Chapters maintain shared technical standards that all members are expected to follow. Guilds produce recommendations (not mandates) that are publicly available. Each squad maintains private operational memory. The dependency map is shared across the tribe to coordinate without creating bottlenecks."
+    },
+    "diagram": "graph TD\n    TL[Tribe Lead] --> SQ1[Squad 1]\n    TL --> SQ2[Squad 2]\n    TL --> SQ3[Squad 3]\n    TL --> SQ4[Squad 4]\n    CH1[Chapter: Backend] -.-> SQ1\n    CH1 -.-> SQ2\n    CH1 -.-> SQ3\n    CH2[Chapter: Frontend] -.-> SQ2\n    CH2 -.-> SQ3\n    CH2 -.-> SQ4\n    G[Guild: Testing] -.- SQ1\n    G -.- SQ4",
+    "hierarchyTypes": [
+      "federated",
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "devops-pipeline",
+    "name": "DevOps Pipeline",
+    "category": "Agile & Software",
+    "tags": [
+      "continuous",
+      "pipeline",
+      "automation",
+      "feedback-loop"
+    ],
+    "summary": "Agents form a continuous pipeline from code to production, with automated gates and rapid feedback loops.",
+    "description": "The DevOps pipeline models software delivery as a continuous flow rather than discrete phases. Each agent specializes in a stage of the pipeline: development, testing, security scanning, deployment, and monitoring. Work flows through agents sequentially, but the pipeline is always running -- there are no batching delays. Automated gates between stages enforce quality standards without human bottlenecks. The monitoring agent creates a critical feedback loop: production issues flow back to development as high-priority inputs. The system optimizes for mean time to recovery over mean time between failures.",
+    "realWorldExample": "Netflix's deployment pipeline, where code changes flow through automated testing, canary deployments, and production monitoring continuously, with the ability to deploy thousands of times per day.",
+    "whenToUse": "When work flows through a series of transformations and quality gates, and speed of end-to-end throughput matters more than optimizing any individual stage.",
+    "strengths": [
+      "Continuous flow eliminates batching delays between stages",
+      "Automated gates enforce quality without creating human bottlenecks",
+      "Production monitoring creates a closed feedback loop to development",
+      "Optimizes for total throughput and recovery speed, not individual stage performance"
+    ],
+    "weaknesses": [
+      "Pipeline is only as fast as its slowest stage (bottleneck theory)",
+      "Tight coupling between stages means a failure anywhere blocks the whole flow",
+      "Building reliable automation for each gate requires significant upfront investment",
+      "Agents become stage specialists, losing the ability to see the whole system"
+    ],
+    "agents": [
+      {
+        "role": "developer",
+        "name": "Developer",
+        "description": "Writes code, creates pull requests, responds to production feedback; the pipeline's primary input source",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "ci-agent",
+        "name": "CI Agent",
+        "description": "Runs automated build, unit tests, and integration tests; gates code that doesn't pass quality thresholds",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "security-scanner",
+        "name": "Security Scanner",
+        "description": "Performs static analysis, dependency scanning, and vulnerability checks; blocks deployment of insecure code",
+        "memory": "versioned"
+      },
+      {
+        "role": "deployer",
+        "name": "Deployer",
+        "description": "Manages progressive rollout: canary deployments, blue-green switches, and rollbacks",
+        "memory": "append-only"
+      },
+      {
+        "role": "monitor",
+        "name": "Monitor",
+        "description": "Watches production health metrics, detects anomalies, triggers alerts, and feeds issues back to developers",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pipeline Status",
+        "type": "pub-sub",
+        "participants": [
+          "developer",
+          "ci-agent",
+          "security-scanner",
+          "deployer",
+          "monitor"
+        ]
+      },
+      {
+        "name": "Build Results",
+        "type": "log",
+        "participants": [
+          "ci-agent",
+          "developer"
+        ]
+      },
+      {
+        "name": "Security Findings",
+        "type": "advisory",
+        "participants": [
+          "security-scanner",
+          "developer"
+        ]
+      },
+      {
+        "name": "Deployment Log",
+        "type": "log",
+        "participants": [
+          "deployer",
+          "monitor"
+        ]
+      },
+      {
+        "name": "Production Alerts",
+        "type": "emergency",
+        "participants": [
+          "monitor",
+          "developer",
+          "deployer"
+        ]
+      },
+      {
+        "name": "Feedback Loop",
+        "type": "bottom-up",
+        "participants": [
+          "monitor",
+          "developer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Pipeline status and current stage of each change",
+        "Quality gate thresholds and policies"
+      ],
+      "private": [
+        "Developer work-in-progress and local branches",
+        "Security vulnerability database"
+      ],
+      "description": "The pipeline maintains a shared view of where every change currently sits in the flow. Gate thresholds are shared policy. The deployment log and monitoring data are append-only audit trails. The security scanner maintains a versioned vulnerability database that evolves as new CVEs are discovered. Developer work is private until it enters the pipeline."
+    },
+    "diagram": "graph LR\n    DEV[Developer] -->|Commit| CI[CI Agent]\n    CI -->|Pass| SEC[Security Scanner]\n    SEC -->|Clear| DEP[Deployer]\n    DEP -->|Canary| PROD[Production]\n    MON[Monitor] -->|Alerts| DEV\n    MON -->|Metrics| PROD\n    CI -->|Fail| DEV\n    SEC -->|Block| DEV",
+    "hierarchyTypes": [
+      "pipeline"
+    ]
+  },
+  {
+    "id": "sre-incident-response",
+    "name": "SRE Incident Response",
+    "category": "Agile & Software",
+    "tags": [
+      "incident",
+      "on-call",
+      "blameless",
+      "escalation"
+    ],
+    "summary": "An on-call rotation with structured escalation, incident command, and blameless post-mortems.",
+    "description": "The SRE incident response pattern handles production crises through structured roles and escalation. An on-call agent is the first responder, triaging alerts and either resolving them or escalating. For serious incidents, an Incident Commander takes over, coordinating a response team while a Communications Lead keeps stakeholders informed. Subject matter experts are pulled in as needed. After resolution, a Post-Mortem Lead facilitates a blameless retrospective focused on systemic causes, not individual blame. The rotation ensures no single agent burns out from constant alert duty.",
+    "realWorldExample": "Google's SRE incident management process, as described in the SRE Book, where incidents follow ICS (Incident Command System) adapted from emergency services, with defined roles for IC, Ops Lead, and Communications Lead.",
+    "whenToUse": "When an agent system must handle unexpected failures gracefully, with clear escalation paths, defined roles during crisis, and systematic learning from every incident.",
+    "strengths": [
+      "Clear roles during crisis prevent confusion and duplicate effort",
+      "Structured escalation ensures problems reach the right expertise level quickly",
+      "Blameless post-mortems drive systemic improvement without creating fear",
+      "On-call rotation prevents burnout and distributes operational knowledge"
+    ],
+    "weaknesses": [
+      "Rotation means some on-call agents may lack deep expertise in the system that fails",
+      "Over-reliance on the Incident Commander can create a bottleneck during complex incidents",
+      "Post-mortem culture requires active cultivation or degenerates into blame sessions",
+      "Alert fatigue from noisy monitoring can desensitize on-call agents"
+    ],
+    "agents": [
+      {
+        "role": "on-call",
+        "name": "On-Call Responder",
+        "description": "First responder who triages alerts, attempts initial resolution, and escalates if the incident exceeds their capability or authority",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "incident-commander",
+        "name": "Incident Commander",
+        "description": "Takes command during major incidents; coordinates response team, makes prioritization decisions, and owns incident resolution",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "communications-lead",
+        "name": "Communications Lead",
+        "description": "Keeps stakeholders informed during incidents; manages status pages, sends updates, and handles external communication",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "subject-expert",
+        "name": "Subject Matter Expert",
+        "description": "Pulled in for deep expertise on specific subsystems; diagnoses root cause and implements fixes under IC coordination",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "postmortem-lead",
+        "name": "Post-Mortem Lead",
+        "description": "Facilitates blameless retrospectives after incidents; documents timeline, root causes, and action items; tracks remediation",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Alert Channel",
+        "type": "emergency",
+        "participants": [
+          "on-call",
+          "incident-commander"
+        ]
+      },
+      {
+        "name": "Incident War Room",
+        "type": "threaded",
+        "participants": [
+          "incident-commander",
+          "on-call",
+          "subject-expert"
+        ]
+      },
+      {
+        "name": "Status Updates",
+        "type": "broadcast",
+        "participants": [
+          "communications-lead"
+        ]
+      },
+      {
+        "name": "Post-Mortem Review",
+        "type": "retrospective",
+        "participants": [
+          "postmortem-lead",
+          "incident-commander",
+          "on-call",
+          "subject-expert"
+        ]
+      },
+      {
+        "name": "Incident Timeline",
+        "type": "log",
+        "participants": [
+          "incident-commander",
+          "on-call",
+          "subject-expert"
+        ]
+      },
+      {
+        "name": "Action Item Tracker",
+        "type": "document",
+        "participants": [
+          "postmortem-lead",
+          "incident-commander"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Runbooks and playbooks for known failure modes",
+        "Incident timeline (append-only during incident)",
+        "Post-mortem archive with action items"
+      ],
+      "private": [
+        "Subject expert's deep system knowledge",
+        "On-call handoff notes"
+      ],
+      "description": "Runbooks are the critical shared knowledge base -- they encode learned responses to known failure modes. The incident timeline is append-only during an incident to preserve accurate sequencing. Post-mortems are archived and searchable so future incidents can reference past learnings. Subject experts maintain private deep knowledge of their subsystems. On-call handoff notes transfer context between rotation shifts."
+    },
+    "diagram": "graph TD\n    ALERT[Alert] --> OC[On-Call]\n    OC -->|Escalate| IC[Incident Commander]\n    IC --> SME1[Expert 1]\n    IC --> SME2[Expert 2]\n    IC --> CL[Comms Lead]\n    CL -->|Updates| STAKE[Stakeholders]\n    IC -->|Resolved| PM[Post-Mortem Lead]\n    PM -->|Action Items| RB[Runbook Updates]\n    OC -->|Minor| FIX[Quick Fix]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "kanban-flow",
+    "name": "Kanban Flow",
+    "category": "Agile & Software",
+    "tags": [
+      "pull-based",
+      "wip-limits",
+      "continuous-flow",
+      "visual-management"
+    ],
+    "summary": "Agents pull work through columns with strict WIP limits, optimizing flow and exposing bottlenecks visually.",
+    "description": "Kanban models work as a continuous flow through a series of states (columns), with strict work-in-progress (WIP) limits at each stage. Unlike Scrum, there are no sprints or time-boxes -- work enters the system when capacity opens up and exits when complete. WIP limits are the core mechanism: when a column hits its limit, upstream agents must stop starting new work and instead help clear the bottleneck downstream. A service delivery manager monitors flow metrics (cycle time, throughput, lead time) and adjusts WIP limits based on empirical data. The board itself is the primary communication tool -- a glance reveals where work is stuck.",
+    "realWorldExample": "Toyota's original production system, adapted for software by David Anderson at Microsoft and Corbis, where a physical board with sticky notes and WIP limits of 3-5 items per column transformed a team's delivery predictability from chaotic to reliable.",
+    "whenToUse": "When work arrives continuously rather than in planned batches, the priority is throughput and predictability, and the team needs to identify and resolve bottlenecks without the overhead of sprint ceremonies.",
+    "strengths": [
+      "WIP limits force bottleneck resolution rather than piling up work in queues",
+      "No sprint overhead -- work flows continuously without planning ceremonies",
+      "Visual board makes system state instantly legible to all agents and stakeholders",
+      "Empirical flow metrics enable data-driven process improvement"
+    ],
+    "weaknesses": [
+      "Requires discipline to respect WIP limits -- the temptation to start new work is strong",
+      "No natural planning cadence means stakeholders must accept variable delivery dates",
+      "Less effective when work items vary wildly in size (a 1-hour fix vs. a 3-week feature)",
+      "Without retrospective ceremonies, improvement relies on the service delivery manager's vigilance"
+    ],
+    "agents": [
+      {
+        "role": "service-delivery-manager",
+        "name": "Service Delivery Manager",
+        "description": "Monitors flow metrics, adjusts WIP limits, identifies systemic bottlenecks, and facilitates process improvement -- does not assign work",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "requester",
+        "name": "Requester",
+        "description": "Submits work items with priority and acceptance criteria; pulls completed work from the done column for review",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "flow-agent",
+        "name": "Flow Agent",
+        "description": "Pulls work from the upstream column when capacity allows; transforms it and moves it downstream; swarms on bottlenecks when WIP limits block",
+        "memory": "ephemeral",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Kanban Board",
+        "type": "document",
+        "participants": [
+          "service-delivery-manager",
+          "requester",
+          "flow-agent"
+        ]
+      },
+      {
+        "name": "Daily Walk-the-Board",
+        "type": "round-robin",
+        "participants": [
+          "service-delivery-manager",
+          "flow-agent"
+        ]
+      },
+      {
+        "name": "Replenishment Meeting",
+        "type": "decision",
+        "participants": [
+          "service-delivery-manager",
+          "requester"
+        ]
+      },
+      {
+        "name": "Flow Metrics Review",
+        "type": "retrospective",
+        "participants": [
+          "service-delivery-manager",
+          "flow-agent"
+        ]
+      },
+      {
+        "name": "Blocker Escalation",
+        "type": "emergency",
+        "participants": [
+          "service-delivery-manager",
+          "flow-agent"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Kanban board state (all columns and cards)",
+        "WIP limits per column",
+        "Flow metrics history (cycle time, throughput, lead time)",
+        "Blocker log"
+      ],
+      "private": [
+        "Requester's prioritization rationale and upcoming demand forecast",
+        "Flow agent's technical notes on in-progress items"
+      ],
+      "description": "The kanban board is the single source of truth -- it is shared and always current. Flow metrics are tracked historically to identify trends. WIP limits are shared policy visible to all. Requesters keep their prioritization logic and demand forecasts private to prevent gaming. Flow agents maintain minimal private state since work items carry their own context on the board."
+    },
+    "diagram": "graph LR\n    BL[Backlog] -->|Pull| TODO[To Do WIP:3]\n    TODO -->|Pull| DEV[In Progress WIP:4]\n    DEV -->|Pull| REV[Review WIP:2]\n    REV -->|Pull| DONE[Done]\n    SDM[Service Delivery Manager] -.->|Metrics| DEV\n    SDM -.->|WIP Limits| TODO\n    SDM -.->|WIP Limits| REV\n    REQ[Requester] -->|Submit| BL\n    REQ -->|Accept| DONE",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "mesh"
+    ]
+  }
+]

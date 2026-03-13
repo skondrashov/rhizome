@@ -1,0 +1,536 @@
+[
+  {
+    "id": "meta-learning-zoo",
+    "name": "Meta-Learning Zoo",
+    "category": "Technology & Engineering",
+    "tags": [
+      "research",
+      "multi-agent",
+      "continuous",
+      "discovery",
+      "forum-based"
+    ],
+    "summary": "Specialized agents coordinate through a shared forum to build composable ML models autonomously.",
+    "description": "A multi-agent system where specialized Claude instances work together autonomously on a long-running research project. Each agent has a specific role (builder, verifier, strategist, librarian, debugger) and they coordinate through a shared forum file. The orchestrator spawns and monitors all agents. Forum posts can be upvoted/downvoted to surface consensus. On-demand agents (verifier, debugger) are spawned only when needed, reducing waste.",
+    "realWorldExample": "Autonomous AI research lab",
+    "whenToUse": "Long-running research or engineering projects requiring diverse expertise with continuous autonomous operation and minimal human oversight.",
+    "strengths": [
+      "Continuous autonomous operation",
+      "Specialized expertise per role",
+      "Natural consensus through forum voting",
+      "On-demand agents reduce waste",
+      "Persistent memory across sessions"
+    ],
+    "weaknesses": [
+      "Forum can get noisy without cleanup",
+      "Orchestrator is single point of failure",
+      "Agents may duplicate work",
+      "Coordination overhead for simple tasks"
+    ],
+    "agents": [
+      {
+        "role": "orchestrator",
+        "name": "Orchestrator",
+        "description": "Spawns, monitors, and coordinates all other agents",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "builder",
+        "name": "Builder",
+        "description": "Writes code, trains models, implements features",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "verifier",
+        "name": "Verifier",
+        "description": "Independently verifies claims by loading checkpoints and running tests",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "strategist",
+        "name": "Strategist",
+        "description": "Sets scientific direction and makes architecture decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "librarian",
+        "name": "Librarian",
+        "description": "Catalogs results, maintains documentation, cleans forum",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "debugger",
+        "name": "Debugger",
+        "description": "Deep debugging and root cause analysis on demand",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "FORUM.md",
+        "type": "threaded",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "STRATEGY.md",
+        "type": "document",
+        "participants": [
+          "strategist",
+          "orchestrator"
+        ]
+      },
+      {
+        "name": "Agent Instructions",
+        "type": "per-agent",
+        "participants": [
+          "orchestrator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "FORUM.md",
+        "STRATEGY.md",
+        "CLAUDE.md",
+        "results/"
+      ],
+      "private": [
+        "Agent-specific instructions",
+        "Working context"
+      ],
+      "description": "Shared forum for coordination, private agent instructions, persistent results tracked in files and JSON"
+    },
+    "diagram": "graph TD\n    O[Orchestrator] --> B[Builder]\n    O --> V[Verifier]\n    O --> S[Strategist]\n    O --> L[Librarian]\n    O --> D[Debugger]\n    B -.->|posts| F((FORUM.md))\n    V -.->|posts| F\n    S -.->|posts| F\n    L -.->|cleans| F\n    D -.->|posts| F",
+    "hierarchyTypes": [
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "military-chain-of-command",
+    "name": "Military Chain of Command",
+    "category": "Military & Defense",
+    "tags": [
+      "hierarchical",
+      "strict",
+      "top-down",
+      "chain-of-command",
+      "tree"
+    ],
+    "summary": "Strict tree hierarchy where orders flow down and situation reports flow up through fixed layers.",
+    "description": "The classic military organizational model with strict hierarchy. Information and orders flow through a well-defined chain. Each agent reports to exactly one superior and commands one or more subordinates. No level may be skipped in communication. Designed for clarity of authority and accountability in high-stakes, time-critical environments where ambiguity can be fatal.",
+    "realWorldExample": "US Army division structure",
+    "whenToUse": "When you need absolute clarity of authority, strict accountability, and disciplined execution of complex multi-phase plans under pressure.",
+    "strengths": [
+      "Clear authority lines",
+      "Strong accountability",
+      "Scales to very large organizations",
+      "Works under extreme pressure",
+      "Battle-tested over millennia"
+    ],
+    "weaknesses": [
+      "Slow information flow",
+      "Bottlenecks at top",
+      "Rigid and slow to adapt",
+      "Junior agents' insights lost",
+      "Single point of failure at each node"
+    ],
+    "agents": [
+      {
+        "role": "commander",
+        "name": "Commander",
+        "description": "Sets strategy, makes final decisions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "field-commander",
+        "name": "Field Commander",
+        "description": "Translates strategy into operational plans",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "unit-leader",
+        "name": "Unit Leader",
+        "description": "Leads tactical execution of assigned objectives",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "team-lead",
+        "name": "Team Lead",
+        "description": "Directly supervises execution teams",
+        "memory": "ephemeral",
+        "count": 8
+      },
+      {
+        "role": "operator",
+        "name": "Operator",
+        "description": "Executes specific assigned tasks",
+        "memory": "ephemeral",
+        "count": 16
+      }
+    ],
+    "forums": [
+      {
+        "name": "Command Briefing",
+        "type": "top-down",
+        "participants": [
+          "commander",
+          "field-commander"
+        ]
+      },
+      {
+        "name": "Operational Orders",
+        "type": "top-down",
+        "participants": [
+          "field-commander",
+          "unit-leader"
+        ]
+      },
+      {
+        "name": "Situation Reports",
+        "type": "bottom-up",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "After-Action Review",
+        "type": "retrospective",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Mission objectives",
+        "Rules of engagement",
+        "Maps and terrain"
+      ],
+      "private": [
+        "Operational orders",
+        "Intelligence reports",
+        "Unit status"
+      ],
+      "description": "Strictly compartmentalized. Each level sees only what its clearance allows. Intelligence flows up, orders flow down."
+    },
+    "diagram": "graph TD\n    A[Commander] --> B1[Field Cmd 1]\n    A --> B2[Field Cmd 2]\n    B1 --> C1[Unit Leader 1]\n    B1 --> C2[Unit Leader 2]\n    B2 --> C3[Unit Leader 3]\n    B2 --> C4[Unit Leader 4]\n    C1 --> D1[Team Lead]\n    C1 --> D2[Team Lead]\n    C2 --> D3[Team Lead]\n    C2 --> D4[Team Lead]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "holacracy",
+    "name": "Holacracy",
+    "category": "Corporate & Business",
+    "tags": [
+      "self-organizing",
+      "circles",
+      "distributed-authority",
+      "roles-not-people",
+      "flat"
+    ],
+    "summary": "Self-organizing circles with distributed authority where roles are fluid and governance is consent-based.",
+    "description": "A system of nested, self-organizing circles where authority is distributed to roles rather than people. Each circle has a lead link (appointed by parent circle) and a rep link (elected by members) creating bidirectional information flow. Governance meetings use an integrative decision-making process where proposals pass unless there is a reasoned objection. Tensions drive evolution: anyone who senses a gap between current reality and potential can propose a change.",
+    "realWorldExample": "Zappos (2013-2020)",
+    "whenToUse": "When you need rapid adaptation to changing conditions, want to distribute decision-making authority, and can tolerate the learning curve of a novel governance system.",
+    "strengths": [
+      "Rapid adaptation",
+      "Distributed decision-making",
+      "Tensions drive improvement",
+      "Clear role boundaries",
+      "Reduced bottlenecks"
+    ],
+    "weaknesses": [
+      "Steep learning curve",
+      "Can feel chaotic initially",
+      "Difficult to implement partially",
+      "May lack strategic coherence",
+      "Governance overhead"
+    ],
+    "agents": [
+      {
+        "role": "lead-link",
+        "name": "Lead Link",
+        "description": "Assigns roles within circle, sets priorities, allocates resources",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "rep-link",
+        "name": "Rep Link",
+        "description": "Elected representative carrying concerns to parent circle",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "facilitator",
+        "name": "Facilitator",
+        "description": "Runs governance and tactical meetings using the process",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "secretary",
+        "name": "Secretary",
+        "description": "Records outputs of governance meetings, maintains records",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "role-filler",
+        "name": "Circle Member",
+        "description": "Fills one or more roles, processes tensions",
+        "memory": "persistent-private",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Governance Meeting",
+        "type": "decision",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Tactical Meeting",
+        "type": "round-robin",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Tension Log",
+        "type": "queue",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Cross-Circle Sync",
+        "type": "peer-to-peer",
+        "participants": [
+          "lead-link",
+          "rep-link"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Constitution",
+        "Role definitions",
+        "Governance records",
+        "Circle purpose"
+      ],
+      "private": [
+        "Individual tensions",
+        "Role-specific context"
+      ],
+      "description": "Governance records are fully transparent. Roles and accountabilities are documented. Individual work context is private."
+    },
+    "diagram": "graph TD\n    GC((General Circle)) --> C1((Product Circle))\n    GC --> C2((Engineering Circle))\n    GC --> C3((Operations Circle))\n    C1 --> C1a((Feature Team))\n    C1 --> C1b((UX Team))\n    C2 --> C2a((Backend))\n    C2 --> C2b((Frontend))\n    C1 -.->|rep link| GC\n    C2 -.->|rep link| GC",
+    "hierarchyTypes": [
+      "federated",
+      "mesh",
+      "swarm",
+      "consensus"
+    ]
+  },
+  {
+    "id": "ant-colony",
+    "name": "Ant Colony",
+    "category": "Nature-Inspired",
+    "tags": [
+      "swarm",
+      "stigmergy",
+      "emergent",
+      "decentralized",
+      "pheromone"
+    ],
+    "summary": "Decentralized swarm where agents communicate indirectly through environmental signals, producing emergent intelligence.",
+    "description": "Inspired by ant colonies where no central coordinator exists. Agents communicate indirectly through stigmergy: modifying the shared environment (leaving 'pheromone trails') which other agents sense and respond to. Complex collective behavior emerges from simple individual rules. Agents are individually simple but collectively solve problems like pathfinding, resource allocation, and task assignment through positive feedback loops.",
+    "realWorldExample": "Actual ant colonies, swarm robotics",
+    "whenToUse": "When tasks can be decomposed into many simple parallel operations, when robustness to individual agent failure is critical, and when optimal solutions can emerge from local interactions.",
+    "strengths": [
+      "Extremely robust to failures",
+      "Scales massively",
+      "No single point of failure",
+      "Self-organizing",
+      "Simple individual agents"
+    ],
+    "weaknesses": [
+      "Slow convergence",
+      "Hard to debug",
+      "Emergent behavior unpredictable",
+      "No strategic planning",
+      "Can get stuck in local optima"
+    ],
+    "agents": [
+      {
+        "role": "scout",
+        "name": "Scout",
+        "description": "Explores environment randomly, leaves weak trails on discoveries",
+        "memory": "ephemeral",
+        "count": 10
+      },
+      {
+        "role": "worker",
+        "name": "Worker",
+        "description": "Follows strongest pheromone trails, reinforces successful paths",
+        "memory": "ephemeral",
+        "count": 40
+      },
+      {
+        "role": "queen",
+        "name": "Queen",
+        "description": "Spawns new agents based on colony needs (not a commander)",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pheromone Map",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Resource Markers",
+        "type": "pub-sub",
+        "participants": [
+          "scout",
+          "worker"
+        ]
+      },
+      {
+        "name": "Colony State",
+        "type": "log",
+        "participants": [
+          "queen"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Pheromone map (decays over time)",
+        "Resource locations",
+        "Nest location"
+      ],
+      "private": [
+        "Current task",
+        "Local observations"
+      ],
+      "description": "Shared memory IS the environment. Pheromone signals decay over time creating natural forgetting. No centralized memory store."
+    },
+    "diagram": "graph TD\n    Q[Queen] -.->|spawns| S1[Scout]\n    Q -.->|spawns| S2[Scout]\n    Q -.->|spawns| W1[Worker]\n    Q -.->|spawns| W2[Worker]\n    Q -.->|spawns| W3[Worker]\n    S1 -->|marks| E((Environment))\n    S2 -->|marks| E\n    W1 -->|reads & marks| E\n    W2 -->|reads & marks| E\n    W3 -->|reads & marks| E",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "jazz-ensemble",
+    "name": "Jazz Ensemble",
+    "category": "Creative & Arts",
+    "tags": [
+      "improvisation",
+      "peer-to-peer",
+      "responsive",
+      "creative",
+      "flat"
+    ],
+    "summary": "Small group of peers improvising together, each leading and following fluidly based on musical context.",
+    "description": "Modeled after a jazz combo where leadership is fluid and emergent. Each agent is a skilled specialist who can both lead (solo) and support (comp). There is no fixed conductor; instead, agents listen to each other and respond in real-time. One agent may take the lead for a section while others adapt, then hand off leadership naturally. The shared 'chord chart' provides loose structure while allowing extensive improvisation within it.",
+    "realWorldExample": "Miles Davis Quintet, jazz jam sessions",
+    "whenToUse": "When the task requires creative problem-solving, agents are highly skilled and autonomous, and the output benefits from dynamic interplay and emergent solutions.",
+    "strengths": [
+      "Highly creative output",
+      "Fluid leadership",
+      "Responsive to context",
+      "Each agent's strengths highlighted",
+      "Low coordination overhead"
+    ],
+    "weaknesses": [
+      "Requires highly skilled agents",
+      "Output quality varies",
+      "Hard to reproduce results",
+      "Can lose coherence",
+      "Doesn't scale past ~7 agents"
+    ],
+    "agents": [
+      {
+        "role": "rhythm",
+        "name": "Rhythm Section",
+        "description": "Provides foundational structure (bass, drums, piano comping)",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "soloist-1",
+        "name": "Lead Voice A",
+        "description": "Primary melodic agent, takes extended solos",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "soloist-2",
+        "name": "Lead Voice B",
+        "description": "Secondary melodic agent, trades phrases with A",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "harmony",
+        "name": "Harmonist",
+        "description": "Enriches texture, fills gaps, connects ideas",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "The Groove",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Trading Fours",
+        "type": "round-robin",
+        "participants": [
+          "soloist-1",
+          "soloist-2"
+        ]
+      },
+      {
+        "name": "Set List",
+        "type": "document",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Nod",
+        "type": "peer-to-peer",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Chord chart / structure",
+        "Current tempo and feel",
+        "Repertoire"
+      ],
+      "private": [
+        "Personal vocabulary",
+        "Solo ideas",
+        "Listening impressions"
+      ],
+      "description": "Minimal shared structure (chord charts). Each agent maintains rich private context. Real-time shared state is the 'sound' itself."
+    },
+    "diagram": "graph LR\n    R[Rhythm Section] <--> S1[Lead Voice A]\n    R <--> S2[Lead Voice B]\n    R <--> H[Harmonist]\n    S1 <--> S2\n    S1 <--> H\n    S2 <--> H",
+    "hierarchyTypes": [
+      "mesh"
+    ]
+  }
+]

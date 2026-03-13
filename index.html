@@ -1,0 +1,2380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhizome — Agent Orchestration Patterns</title>
+
+  <!-- Open Graph / Social Embed -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thisminute.org/rhizome">
+  <meta property="og:title" content="Rhizome — 207 Agent Orchestration Patterns">
+  <meta property="og:description" content="A taxonomy of every way to organize collaborating agents — from military hierarchies and jazz ensembles to ant colonies and AI-native architectures. Browse 207 blueprints with roles, communication channels, memory structures, and topology diagrams.">
+  <meta property="og:image" content="https://thisminute.org/rhizome/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rhizome — 207 Agent Orchestration Patterns">
+  <meta name="twitter:description" content="A taxonomy of every way to organize collaborating agents — from military hierarchies and jazz ensembles to ant colonies and AI-native architectures.">
+  <meta name="twitter:image" content="https://thisminute.org/rhizome/og-image.png">
+
+  <meta name="description" content="A browsable collection of 207 agent orchestration patterns across 20 categories. Each pattern includes agent roles, communication channels, memory architecture, and topology diagrams.">
+
+  <!-- Analytics -->
+  <script defer data-domain="thisminute.org/rhizome" src="https://plausible.io/js/script.js"></script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='none' stroke='%2322d3ee' stroke-width='4'/><circle cx='50' cy='30' r='6' fill='%2322d3ee'/><circle cx='30' cy='60' r='6' fill='%2322d3ee'/><circle cx='70' cy='60' r='6' fill='%2322d3ee'/><line x1='50' y1='30' x2='30' y2='60' stroke='%2322d3ee' stroke-width='2'/><line x1='50' y1='30' x2='70' y2='60' stroke='%2322d3ee' stroke-width='2'/><line x1='30' y1='60' x2='70' y2='60' stroke='%2322d3ee' stroke-width='2'/></svg>">
+
+  <style>
+    :root {
+      --bg-primary: #0b0d17;
+      --bg-secondary: #12141f;
+      --bg-tertiary: #1a1d2e;
+      --bg-card: #1a1d2e;
+      --bg-card-hover: #222640;
+      --bg-inset: rgba(0, 0, 0, 0.2);
+      --bg-overlay: rgba(0, 0, 0, 0.65);
+      --accent: #22d3ee;
+      --accent-dim: rgba(34, 211, 238, 0.15);
+      --accent-muted: rgba(34, 211, 238, 0.08);
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-faint: #475569;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-light: rgba(255, 255, 255, 0.14);
+      --border-focus: var(--accent);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --success: #4ade80;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --transition-fast: 0.15s ease;
+      --transition-med: 0.25s ease;
+      --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      color-scheme: dark;
+    }
+    body.light-mode {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-inset: rgba(0, 0, 0, 0.04);
+      --bg-overlay: rgba(0, 0, 0, 0.35);
+      --accent: #0891b2;
+      --accent-dim: rgba(8, 145, 178, 0.1);
+      --accent-muted: rgba(8, 145, 178, 0.05);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-faint: #cbd5e1;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-light: rgba(0, 0, 0, 0.14);
+      --border-focus: var(--accent);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+      color-scheme: light;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background var(--transition-med), color var(--transition-med);
+    }
+
+    /* ─── Header ───────────────────────────────────────────── */
+    header {
+      padding: 2.5rem 2rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(34, 211, 238, 0.03) 0%, transparent 100%);
+      position: relative;
+    }
+    body.light-mode header {
+      background: linear-gradient(180deg, rgba(8, 145, 178, 0.04) 0%, transparent 100%);
+    }
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 0.15em;
+      font-weight: 300;
+      color: var(--accent);
+    }
+    header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-top: 0.25rem;
+    }
+    header .about {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      max-width: 680px;
+      margin: 0.75rem auto 0;
+      line-height: 1.6;
+    }
+    .header-actions {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 1rem;
+    }
+    .icon-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Controls ─────────────────────────────────────────── */
+    .controls {
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition-med);
+    }
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+    }
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-muted);
+    }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+    .search-hint {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      pointer-events: none;
+      font-family: monospace;
+      transition: opacity var(--transition-fast);
+    }
+    .search-wrap input:focus ~ .search-hint { opacity: 0; }
+    .result-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    /* ─── Filter Panels (Topology + Category) ────────────── */
+    .filter-panel {
+      max-width: 1100px;
+      margin: 0 auto 0.5rem;
+    }
+    .filter-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      user-select: none;
+      transition: color var(--transition-fast);
+    }
+    .filter-panel-header:hover { color: var(--accent); }
+    .filter-panel-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .filter-panel-header:hover .filter-panel-title { color: var(--accent); }
+    .filter-panel-active-label {
+      font-size: 0.75rem;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+    }
+    .filter-panel-chevron {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      transition: transform var(--transition-fast);
+    }
+    .filter-panel.expanded .filter-panel-chevron {
+      transform: rotate(90deg);
+    }
+    .filter-panel-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--transition-med);
+    }
+    .filter-panel.expanded .filter-panel-body {
+      grid-template-rows: 1fr;
+    }
+    .filter-panel-inner {
+      overflow: hidden;
+    }
+    .filter-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.5rem;
+      padding: 0.25rem 0 0.75rem;
+    }
+    .filter-tile {
+      padding: 0.65rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+      text-align: center;
+    }
+    .filter-tile:hover {
+      border-color: var(--border-light);
+      background: var(--bg-card-hover);
+    }
+    .filter-tile.active {
+      background: color-mix(in srgb, var(--tile-color, var(--accent)) 12%, transparent);
+      border-color: var(--tile-color, var(--accent));
+    }
+    .filter-tile-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .filter-tile.active .filter-tile-name {
+      color: var(--tile-color, var(--accent));
+    }
+    .filter-tile-count {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+    .filter-tile.active .filter-tile-count {
+      color: var(--tile-color, var(--accent));
+      opacity: 0.7;
+    }
+    .filter-tile-all {
+      border-style: dashed;
+    }
+    .filter-tile-all.active {
+      border-style: solid;
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+    .filter-tile-all .filter-tile-name { color: var(--text-secondary); }
+    .filter-tile-all.active .filter-tile-name { color: var(--accent); }
+
+    .toolbar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.25rem;
+      flex-wrap: wrap;
+    }
+    .toolbar button {
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+    .toolbar button:hover {
+      border-color: var(--border-light);
+      color: var(--text-primary);
+    }
+    .toolbar button.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .sort-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      align-self: center;
+    }
+
+    /* ─── Structural Class Badge on Cards ────────────────── */
+    .card-structure-badge {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .structure-badge {
+      font-size: 0.65rem;
+      padding: 0.12rem 0.45rem;
+      border-radius: 10px;
+      border: 1px solid;
+      line-height: 1.3;
+    }
+    /* ─── Structurally Similar Chips ─────────────────────── */
+    .similar-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .similar-chip {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .similar-chip:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    /* ─── Vote Badge on Cards ──────────────────────────────── */
+    .card-vote-badge {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .card-vote-badge .vote-arrow {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .card-trending-badge {
+      font-size: 0.6rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 8px;
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .card-trending-badge.hot {
+      background: rgba(248, 113, 113, 0.15);
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.3);
+    }
+
+    /* ─── Upvote Button in Detail ──────────────────────────── */
+    .upvote-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all var(--transition-fast);
+    }
+    .upvote-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .upvote-btn.voted {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .upvote-btn .arrow { font-weight: 700; }
+
+    /* ─── Comments Section ─────────────────────────────────── */
+    .comments-section {
+      margin-top: 0.5rem;
+    }
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .comment-item {
+      padding: 0.75rem;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .comment-item.hidden-comment {
+      opacity: 0.4;
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .comment-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .comment-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .comment-body {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .comment-actions {
+      margin-top: 0.35rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .flag-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      cursor: pointer;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      transition: all var(--transition-fast);
+    }
+    .flag-btn:hover {
+      color: var(--danger);
+      background: rgba(248, 113, 113, 0.1);
+    }
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .comment-form input,
+    .comment-form textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .comment-form input:focus,
+    .comment-form textarea:focus {
+      border-color: var(--accent);
+    }
+    .comment-form textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .comment-form .hp-field {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+      height: 0;
+      width: 0;
+    }
+    .comment-submit {
+      align-self: flex-end;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .comment-submit:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+    .comment-submit:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .no-comments {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* ─── Grid ─────────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all var(--transition-med);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card.visited {
+      opacity: 0.7;
+    }
+    .card.visited:hover {
+      opacity: 1;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--cat-color, var(--accent));
+      transition: height var(--transition-fast);
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .card.visited.visible:hover {
+      transform: translateY(-2px);
+    }
+    .card:hover::before { height: 4px; }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .card-badge {
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-left: 0.75rem;
+    }
+    .card-category {
+      font-size: 0.75rem;
+      color: var(--cat-color, var(--text-muted));
+      margin-bottom: 0.5rem;
+    }
+    .card-summary {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-summary mark {
+      background: rgba(34, 211, 238, 0.2);
+      color: var(--accent);
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+    body.light-mode .card-summary mark {
+      background: rgba(8, 145, 178, 0.15);
+      color: #0e7490;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+    body.light-mode .tag {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .card-name mark {
+      background: rgba(34, 211, 238, 0.2);
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+    body.light-mode .card-name mark {
+      background: rgba(8, 145, 178, 0.15);
+    }
+
+    /* ─── Overlay & Detail Drawer ──────────────────────────── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-overlay);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+    .detail {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(720px, 92vw);
+      height: 100vh;
+      background: var(--bg-secondary);
+      z-index: 100;
+      transform: translateX(calc(100% + 16px));
+      transition: transform var(--transition-slow), opacity 0.2s ease;
+      opacity: 0;
+      overflow-y: auto;
+      border-left: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+    }
+    .detail.active { transform: translateX(0); opacity: 1; }
+    .detail-top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-top-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all var(--transition-fast);
+    }
+    .detail-top-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .detail-top-btn.copied {
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .detail-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: 32px; height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: all var(--transition-fast);
+    }
+    .detail-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-light);
+      color: var(--text-primary);
+    }
+    .detail-header {
+      padding: 1.5rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.01em;
+    }
+    .detail-meta {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .detail-body { padding: 1.5rem 2rem 3rem; }
+
+    /* ─── Collapsible Sections ──────────────────────────────── */
+    .detail-section { margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .detail-section:last-child { border-bottom: none; }
+    .section-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.85rem 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      font-family: inherit;
+      transition: color var(--transition-fast);
+    }
+    .section-toggle:hover { color: var(--text-primary); }
+    .section-chevron {
+      font-size: 0.7rem;
+      transition: transform var(--transition-fast);
+      color: var(--text-muted);
+    }
+    .detail-section.expanded .section-chevron {
+      transform: rotate(90deg);
+    }
+    .section-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--transition-med);
+    }
+    .detail-section.expanded .section-body {
+      grid-template-rows: 1fr;
+    }
+    .section-inner {
+      overflow: hidden;
+    }
+    .section-content {
+      padding-bottom: 1.25rem;
+    }
+    .section-content p,
+    .section-content li {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .section-content ul { list-style: none; padding: 0; }
+    .section-content li {
+      padding: 0.25rem 0 0.25rem 1.25rem;
+      position: relative;
+    }
+    .section-content li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.65rem;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+    .strength::before { background: var(--success); }
+    .weakness::before { background: var(--danger); }
+    .sw-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .agent-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .agent-table th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg-inset);
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    .agent-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .agent-table td:first-child {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .agent-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    body.light-mode .agent-table tr:hover td { background: rgba(0, 0, 0, 0.02); }
+    .diagram-container {
+      background: var(--bg-inset);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    .diagram-container svg { max-width: 100%; }
+    .channel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .channel {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.85rem;
+      background: var(--bg-inset);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+      transition: border-color var(--transition-fast);
+    }
+    .channel:hover { border-color: var(--border-light); }
+    .channel-type {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .channel-name {
+      color: var(--text-primary);
+      font-size: 0.85rem;
+    }
+    .channel-participants {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-left: auto;
+    }
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+    .memory-item {
+      padding: 0.75rem;
+      background: var(--bg-inset);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .memory-item h4 {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+    }
+    .memory-item p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── Detail Navigation ─────────────────────────────────── */
+    .detail-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+    .detail-nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .detail-nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .detail-nav-btn:disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* ─── Empty State ──────────────────────────────────────── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+    .empty-state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.4;
+    }
+    .empty-state-text {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .empty-state-hint {
+      font-size: 0.85rem;
+      color: var(--text-faint);
+    }
+    .empty-state-clear {
+      margin-top: 1rem;
+      padding: 0.5rem 1.25rem;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all var(--transition-fast);
+    }
+    .empty-state-clear:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    /* ─── Back to Top ──────────────────────────────────────── */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: all var(--transition-med);
+      box-shadow: var(--shadow);
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .back-to-top:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── Shortcuts Overlay ────────────────────────────────── */
+    .shortcuts-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-overlay);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .shortcuts-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .shortcuts-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      min-width: 320px;
+      box-shadow: var(--shadow-lg);
+    }
+    .shortcuts-panel h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--text-primary);
+    }
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+    }
+    .shortcut-key {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-primary);
+      min-width: 24px;
+      text-align: center;
+    }
+    .shortcut-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-left: 1.5rem;
+      flex: 1;
+    }
+    .shortcuts-close-hint {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── Scrollbar ────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+    body.light-mode ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
+    body.light-mode ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+    /* ─── Mobile ───────────────────────────────────────────── */
+    .mobile-filter-bar { display: none; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.75rem; }
+      .header-actions { top: 0.75rem; right: 0.75rem; }
+      .grid { grid-template-columns: 1fr; padding: 1rem; }
+      .detail { width: 100vw; }
+      .controls { padding: 1rem; position: static; }
+      .sw-grid { grid-template-columns: 1fr; }
+      .back-to-top { bottom: 1rem; right: 1rem; }
+      .mobile-filter-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        background: var(--bg-primary);
+        flex-direction: column;
+      }
+      .mobile-filter-bar.visible { display: flex; }
+      .mobile-filter-tab {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border);
+      }
+      .mobile-filter-handle {
+        width: 32px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--text-muted);
+        transition: background var(--transition-fast);
+      }
+      .mobile-filter-tab:hover .mobile-filter-handle,
+      .mobile-filter-bar.open .mobile-filter-handle {
+        background: var(--accent);
+      }
+      .mobile-filter-panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .mobile-filter-bar.open .mobile-filter-panel {
+        max-height: 60vh;
+        overflow-y: auto;
+        border-bottom: 1px solid var(--border);
+      }
+      .mobile-filter-panel-inner {
+        padding: 0.75rem 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
+        <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none">
+          <path d="M8 1a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1A.5.5 0 018 1zm0 11a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1A.5.5 0 018 12zm7-4a.5.5 0 01-.5.5h-1a.5.5 0 010-1h1A.5.5 0 0115 8zM4 8a.5.5 0 01-.5.5h-1a.5.5 0 010-1h1A.5.5 0 014 8zm8.95-3.54a.5.5 0 010 .71l-.71.71a.5.5 0 11-.71-.71l.71-.71a.5.5 0 01.71 0zM4.46 11.46a.5.5 0 010 .71l-.7.71a.5.5 0 11-.71-.71l.7-.71a.5.5 0 01.71 0zm8.49 1.42a.5.5 0 01-.71 0l-.71-.71a.5.5 0 01.71-.71l.71.71a.5.5 0 010 .71zM4.46 4.54a.5.5 0 01-.71 0l-.7-.71a.5.5 0 11.7-.71l.71.71a.5.5 0 010 .71zM8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" fill="currentColor"/>
+        </svg>
+        <svg id="theme-icon-light" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M6 .278a.77.77 0 01.08.858 7.2 7.2 0 00-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.79.79 0 01.81.316.73.73 0 01-.031.893A8.35 8.35 0 018.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 016 .278z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="shortcuts-btn" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+    </div>
+    <h1>RHIZOME</h1>
+    <p class="subtitle">A Taxonomy of Agent Orchestration Patterns</p>
+    <p class="about">Every organization is a way of connecting minds. This is a collection of those ways — military hierarchies, jazz ensembles, ant colonies, AI-native architectures, and everything in between — each described as a concrete blueprint of agent roles, communication channels, and memory structures.</p>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value" id="total-count">0</span>
+        <span class="stat-label">Patterns</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="category-count">0</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="structure-count">13</span>
+        <span class="stat-label">Structures</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="agent-count">0</span>
+        <span class="stat-label">Total Agents</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls" id="controls">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 110-10 5 5 0 010 10z"/></svg>
+        </span>
+        <input type="search" id="search" placeholder="Search patterns by name, category, or tag...">
+        <span class="search-hint">/</span>
+      </div>
+      <span class="result-count" id="result-count"></span>
+    </div>
+    <div class="filter-panel expanded" id="structure-panel">
+      <div class="filter-panel-header" id="structure-panel-header">
+        <span class="filter-panel-title">Structure <span class="filter-panel-active-label" id="structure-active-label"></span></span>
+        <span class="filter-panel-chevron">&#9654;</span>
+      </div>
+      <div class="filter-panel-body"><div class="filter-panel-inner">
+        <div class="filter-tiles" id="structure-tiles"></div>
+      </div></div>
+    </div>
+    <div class="filter-panel" id="category-panel">
+      <div class="filter-panel-header" id="category-panel-header">
+        <span class="filter-panel-title">Category <span class="filter-panel-active-label" id="category-active-label"></span></span>
+        <span class="filter-panel-chevron">&#9654;</span>
+      </div>
+      <div class="filter-panel-body"><div class="filter-panel-inner">
+        <div class="filter-tiles" id="category-tiles"></div>
+      </div></div>
+    </div>
+    <div class="toolbar">
+      <span class="sort-label">Sort:</span>
+      <button id="sort-name">A-Z</button>
+      <button id="sort-agents">Most Agents</button>
+      <button id="sort-category" class="active">Category</button>
+      <button id="sort-structure">Structure</button>
+      <button id="sort-votes">Most Voted</button>
+      <button id="sort-trending">Trending</button>
+      <button id="sort-random">Shuffle</button>
+    </div>
+  </div>
+
+  <div class="mobile-filter-bar" id="mobile-filter-bar">
+    <div class="mobile-filter-tab" id="mobile-filter-tab">
+      <span class="mobile-filter-handle"></span>
+    </div>
+    <div class="mobile-filter-panel"><div class="mobile-filter-panel-inner" id="mobile-filter-panel"></div></div>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="detail" id="detail"></div>
+
+  <button class="back-to-top" id="back-to-top" title="Back to top" aria-label="Back to top">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3.293l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 3.293zm0 5l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 8.293z"/></svg>
+  </button>
+
+  <div class="shortcuts-overlay" id="shortcuts-overlay">
+    <div class="shortcuts-panel">
+      <h2>Keyboard Shortcuts</h2>
+      <div class="shortcut-row"><span class="shortcut-desc">Focus search</span><span class="shortcut-key">/</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Close panel / clear</span><span class="shortcut-key">Esc</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Next pattern</span><span class="shortcut-key">j</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Previous pattern</span><span class="shortcut-key">k</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Open selected card</span><span class="shortcut-key">Enter</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Shuffle</span><span class="shortcut-key">s</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Toggle theme</span><span class="shortcut-key">t</span></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Show shortcuts</span><span class="shortcut-key">?</span></div>
+      <p class="shortcuts-close-hint">Press any key to close</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="data.js"></script>
+  <script>
+    // ─── Mermaid Init ─────────────────────────────────────
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#1a1d2e',
+          primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#22d3ee',
+          lineColor: '#64748b',
+          secondaryColor: '#222640',
+          tertiaryColor: '#0b0d17'
+        }
+      });
+    }
+
+    // ─── Constants ────────────────────────────────────────
+    const HIERARCHY_COLORS = {
+      'adversarial': '#ef4444',
+      'chain-of-command': '#f59e0b',
+      'orchestrated': '#3b82f6',
+      'swarm': '#4ade80',
+      'mesh': '#a78bfa',
+      'pipeline': '#22d3ee',
+      'consensus': '#f472b6',
+      'federated': '#fb923c'
+    };
+    const HIERARCHY_LABELS = {
+      'adversarial': 'Adversarial',
+      'chain-of-command': 'Chain of Command',
+      'orchestrated': 'Orchestrated',
+      'swarm': 'Swarm',
+      'mesh': 'Mesh',
+      'pipeline': 'Pipeline',
+      'consensus': 'Consensus',
+      'federated': 'Federated'
+    };
+
+    // Structural classes (loaded from data.js, written by build.py)
+    const SC = window.STRUCTURAL_CLASSES || {};
+    const SC_COLORS = {};
+    const SC_LABELS = {};
+    Object.entries(SC).forEach(([key, val]) => {
+      SC_COLORS[key] = val.color || '#888';
+      SC_LABELS[key] = val.label || key;
+    });
+
+    const CATEGORY_COLORS = {
+      'Military & Defense': '#ef4444',
+      'Corporate & Business': '#3b82f6',
+      'Government & Political': '#8b5cf6',
+      'Academic & Research': '#f59e0b',
+      'Creative & Arts': '#ec4899',
+      'Technology & Engineering': '#22d3ee',
+      'Medical & Emergency': '#10b981',
+      'Historical & Traditional': '#d97706',
+      'Nature-Inspired': '#4ade80',
+      'Network Topologies': '#6366f1',
+      'Agile & Software': '#06b6d4',
+      'Social & Community': '#f472b6',
+      'Novel & Experimental': '#a78bfa',
+      'Religious & Spiritual': '#fbbf24',
+      'Legal & Judicial': '#fb923c',
+      'Education & Training': '#38bdf8',
+      'Intelligence & Espionage': '#64748b',
+      'Maritime & Aviation': '#0ea5e9',
+      'Sports & Competition': '#f97316',
+      'Media & Communications': '#e879f9'
+    };
+
+    // ─── State ────────────────────────────────────────────
+    const state = {
+      structures: window.STRUCTURES || [],
+      activeCategory: null,
+      activeStructuralClass: null,
+      searchQuery: '',
+      sortBy: 'category',
+      focusedCardIndex: -1,
+      visitedPatterns: new Set(JSON.parse(localStorage.getItem('rhizome_visited') || '[]')),
+      votedPatterns: new Set(JSON.parse(localStorage.getItem('rhizome_votes') || '[]')),
+      voteData: {},       // { pattern_id: { total, recent, seriousness, rate_label } }
+      lightMode: localStorage.getItem('rhizome_theme') === 'light'
+    };
+
+    // API base URL (empty = same origin; override for local dev)
+    const API_BASE = location.hostname === 'thisminute.org' ? '' : '';
+
+    // ─── Helpers ──────────────────────────────────────────
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function totalAgentCount(s) {
+      if (!s.agents) return 0;
+      return s.agents.reduce((sum, a) => sum + (a.count || 1), 0);
+    }
+
+    function markVisited(id) {
+      state.visitedPatterns.add(id);
+      try { localStorage.setItem('rhizome_visited', JSON.stringify([...state.visitedPatterns])); } catch {}
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if (card) card.classList.add('visited');
+    }
+
+    function highlightText(text, query) {
+      if (!query) return esc(text);
+      const escaped = esc(text);
+      const qEsc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return escaped.replace(new RegExp(`(${qEsc})`, 'gi'), '<mark>$1</mark>');
+    }
+
+    // ─── Theme ────────────────────────────────────────────
+    function applyTheme() {
+      document.body.classList.toggle('light-mode', state.lightMode);
+      document.getElementById('theme-icon-dark').style.display = state.lightMode ? 'block' : 'none';
+      document.getElementById('theme-icon-light').style.display = state.lightMode ? 'none' : 'block';
+      localStorage.setItem('rhizome_theme', state.lightMode ? 'light' : 'dark');
+    }
+    applyTheme();
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      state.lightMode = !state.lightMode;
+      applyTheme();
+    });
+
+    // ─── Categories ───────────────────────────────────────
+    function getCategories() {
+      const cats = {};
+      state.structures.forEach(s => {
+        cats[s.category] = (cats[s.category] || 0) + 1;
+      });
+      return Object.entries(cats).sort((a, b) => b[1] - a[1]);
+    }
+
+    function generateAgentFile(s) {
+      const lines = [];
+      lines.push(`# ${s.name}`);
+      lines.push('');
+      lines.push(s.description || s.summary);
+      lines.push('');
+
+      if (s.category) {
+        lines.push(`**Category:** ${s.category}`);
+        lines.push('');
+      }
+
+      if (s.structuralClass) {
+        lines.push(`**Structure:** ${SC_LABELS[s.structuralClass] || s.structuralClass}`);
+        lines.push('');
+      }
+
+      if (s.hierarchyTypes && s.hierarchyTypes.length) {
+        lines.push(`**Topology:** ${s.hierarchyTypes.map(t => HIERARCHY_LABELS[t] || t).join(', ')}`);
+        lines.push('');
+      }
+
+      if (s.whenToUse) {
+        lines.push('## When to Use');
+        lines.push('');
+        lines.push(s.whenToUse);
+        lines.push('');
+      }
+
+      if (s.strengths && s.strengths.length) {
+        lines.push('## Strengths');
+        lines.push('');
+        s.strengths.forEach(x => lines.push(`- ${x}`));
+        lines.push('');
+      }
+
+      if (s.weaknesses && s.weaknesses.length) {
+        lines.push('## Weaknesses');
+        lines.push('');
+        s.weaknesses.forEach(x => lines.push(`- ${x}`));
+        lines.push('');
+      }
+
+      if (s.agents && s.agents.length) {
+        lines.push('## Agents');
+        lines.push('');
+        s.agents.forEach(a => {
+          const count = a.count && a.count > 1 ? ` (×${a.count})` : '';
+          lines.push(`### ${a.name || a.role}${count}`);
+          lines.push('');
+          lines.push(`- **Role:** ${a.role}`);
+          if (a.description) lines.push(`- **Description:** ${a.description}`);
+          if (a.memory) lines.push(`- **Memory:** ${a.memory}`);
+          lines.push('');
+        });
+      }
+
+      if (s.forums && s.forums.length) {
+        lines.push('## Communication Channels');
+        lines.push('');
+        s.forums.forEach(f => {
+          lines.push(`### ${f.name}`);
+          lines.push('');
+          lines.push(`- **Type:** ${f.type || 'general'}`);
+          const parts = f.participants ? (Array.isArray(f.participants) ? f.participants.join(', ') : f.participants) : 'all';
+          lines.push(`- **Participants:** ${parts}`);
+          lines.push('');
+        });
+      }
+
+      if (s.memoryArchitecture) {
+        lines.push('## Memory Architecture');
+        lines.push('');
+        if (s.memoryArchitecture.shared) {
+          const val = Array.isArray(s.memoryArchitecture.shared) ? s.memoryArchitecture.shared.join(', ') : s.memoryArchitecture.shared;
+          lines.push(`- **Shared:** ${val}`);
+        }
+        if (s.memoryArchitecture.private) {
+          const val = Array.isArray(s.memoryArchitecture.private) ? s.memoryArchitecture.private.join(', ') : s.memoryArchitecture.private;
+          lines.push(`- **Private:** ${val}`);
+        }
+        if (s.memoryArchitecture.description) {
+          lines.push(`- **Notes:** ${s.memoryArchitecture.description}`);
+        }
+        lines.push('');
+      }
+
+      if (s.diagram) {
+        lines.push('## Topology');
+        lines.push('');
+        lines.push('```mermaid');
+        lines.push(s.diagram);
+        lines.push('```');
+        lines.push('');
+      }
+
+      if (s.tags && s.tags.length) {
+        lines.push(`**Tags:** ${s.tags.join(', ')}`);
+        lines.push('');
+      }
+
+      lines.push('---');
+      lines.push(`*Generated from [Rhizome](https://thisminute.org/rhizome#${s.id})*`);
+      lines.push('');
+
+      return lines.join('\n');
+    }
+
+    function downloadAgentFile(s) {
+      const content = generateAgentFile(s);
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = s.id + '.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderStats() {
+      document.getElementById('total-count').textContent = state.structures.length;
+      document.getElementById('category-count').textContent = getCategories().length;
+      document.getElementById('structure-count').textContent = Object.keys(SC).length;
+      const totalAgents = state.structures.reduce((sum, s) => sum + totalAgentCount(s), 0);
+      document.getElementById('agent-count').textContent = totalAgents;
+    }
+
+    function renderCategories() {
+      const cats = getCategories();
+      const container = document.getElementById('category-tiles');
+      let html = `<div class="filter-tile filter-tile-all${!state.activeCategory ? ' active' : ''}" data-category="" style="--tile-color:var(--accent)">
+        <div class="filter-tile-name">All</div>
+        <div class="filter-tile-count">${state.structures.length}</div>
+      </div>`;
+      cats.forEach(([cat, count]) => {
+        const color = CATEGORY_COLORS[cat] || '#888';
+        html += `<div class="filter-tile${state.activeCategory === cat ? ' active' : ''}" data-category="${esc(cat)}" style="--tile-color:${color}">
+          <div class="filter-tile-name">${esc(cat)}</div>
+          <div class="filter-tile-count">${count}</div>
+        </div>`;
+      });
+      container.innerHTML = html;
+      container.querySelectorAll('.filter-tile').forEach(tile => {
+        tile.addEventListener('click', () => {
+          state.activeCategory = tile.dataset.category || null;
+          renderCategories();
+          updateCategoryLabel();
+          renderGrid();
+          syncMobileCategories();
+        });
+      });
+      updateCategoryLabel();
+    }
+
+    function updateCategoryLabel() {
+      const label = document.getElementById('category-active-label');
+      if (state.activeCategory) {
+        const color = CATEGORY_COLORS[state.activeCategory] || '#888';
+        label.textContent = state.activeCategory;
+        label.style.cssText = `background:${color}22;color:${color}`;
+      } else {
+        label.textContent = '';
+        label.style.cssText = '';
+      }
+    }
+
+    // ─── Structural Class Tiles ──────────────────────────
+    function getStructuralClassCounts() {
+      const counts = {};
+      state.structures.forEach(s => {
+        const sc = s.structuralClass;
+        if (sc) counts[sc] = (counts[sc] || 0) + 1;
+      });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    }
+
+    function renderStructureTiles() {
+      const counts = getStructuralClassCounts();
+      const container = document.getElementById('structure-tiles');
+      let html = `<div class="filter-tile filter-tile-all${!state.activeStructuralClass ? ' active' : ''}" data-sc="" style="--tile-color:var(--accent)">
+        <div class="filter-tile-name">All</div>
+        <div class="filter-tile-count">${state.structures.length}</div>
+      </div>`;
+      counts.forEach(([sc, count]) => {
+        const color = SC_COLORS[sc] || '#888';
+        const label = SC_LABELS[sc] || sc;
+        html += `<div class="filter-tile${state.activeStructuralClass === sc ? ' active' : ''}" data-sc="${sc}" style="--tile-color:${color}">
+          <div class="filter-tile-name">${esc(label)}</div>
+          <div class="filter-tile-count">${count}</div>
+        </div>`;
+      });
+      container.innerHTML = html;
+      container.querySelectorAll('.filter-tile').forEach(tile => {
+        tile.addEventListener('click', () => {
+          state.activeStructuralClass = tile.dataset.sc || null;
+          renderStructureTiles();
+          updateStructureLabel();
+          renderGrid();
+          syncMobileCategories();
+        });
+      });
+      updateStructureLabel();
+    }
+
+    function updateStructureLabel() {
+      const label = document.getElementById('structure-active-label');
+      if (state.activeStructuralClass) {
+        const color = SC_COLORS[state.activeStructuralClass] || '#888';
+        label.textContent = SC_LABELS[state.activeStructuralClass] || state.activeStructuralClass;
+        label.style.cssText = `background:${color}22;color:${color}`;
+      } else {
+        label.textContent = '';
+        label.style.cssText = '';
+      }
+    }
+
+    // Wire up panel expand/collapse
+    document.getElementById('structure-panel-header').addEventListener('click', () => {
+      document.getElementById('structure-panel').classList.toggle('expanded');
+    });
+    document.getElementById('category-panel-header').addEventListener('click', () => {
+      document.getElementById('category-panel').classList.toggle('expanded');
+    });
+
+    // ─── Vote Data Loading ──────────────────────────────────
+    async function loadVoteData() {
+      try {
+        const resp = await fetch(API_BASE + '/rhizome/api/votes');
+        if (resp.ok) {
+          state.voteData = await resp.json();
+          renderGrid(); // re-render with vote data
+        }
+      } catch (e) {
+        // API unavailable — graceful degradation
+      }
+    }
+
+    async function castVote(patternId) {
+      if (state.votedPatterns.has(patternId)) return;
+      try {
+        const resp = await fetch(API_BASE + '/rhizome/api/vote/' + patternId, { method: 'POST' });
+        if (resp.ok || resp.status === 409) {
+          state.votedPatterns.add(patternId);
+          try { localStorage.setItem('rhizome_votes', JSON.stringify([...state.votedPatterns])); } catch {}
+          // Optimistic update
+          if (!state.voteData[patternId]) state.voteData[patternId] = { total: 0, recent: 0, seriousness: 0 };
+          state.voteData[patternId].total++;
+          state.voteData[patternId].recent++;
+          state.voteData[patternId].seriousness = state.voteData[patternId].total + state.voteData[patternId].recent * 3;
+          return true;
+        }
+      } catch (e) { /* API unavailable */ }
+      return false;
+    }
+
+    async function loadComments(patternId) {
+      try {
+        const resp = await fetch(API_BASE + '/rhizome/api/comments/' + patternId);
+        if (resp.ok) return await resp.json();
+      } catch (e) { /* API unavailable */ }
+      return [];
+    }
+
+    async function postComment(patternId, displayName, body) {
+      try {
+        const resp = await fetch(API_BASE + '/rhizome/api/comments/' + patternId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ display_name: displayName || 'Anonymous', body, honeypot: '' })
+        });
+        if (resp.ok) return await resp.json();
+      } catch (e) { /* API unavailable */ }
+      return null;
+    }
+
+    async function flagComment(commentId) {
+      try {
+        const resp = await fetch(API_BASE + '/rhizome/api/comments/' + commentId + '/flag', { method: 'POST' });
+        if (resp.ok) return await resp.json();
+      } catch (e) { /* API unavailable */ }
+      return null;
+    }
+
+    // ─── Filtering & Sorting ──────────────────────────────
+    function getFiltered() {
+      let results = state.structures.filter(s => {
+        if (state.activeCategory && s.category !== state.activeCategory) return false;
+        if (state.activeStructuralClass && s.structuralClass !== state.activeStructuralClass) return false;
+        if (state.searchQuery) {
+          const q = state.searchQuery.toLowerCase();
+          const scText = (SC_LABELS[s.structuralClass] || s.structuralClass || '').toLowerCase();
+          const htText = (s.hierarchyTypes || []).map(t => HIERARCHY_LABELS[t] || t).join(' ').toLowerCase();
+          return (s.name || '').toLowerCase().includes(q) ||
+                 (s.summary || '').toLowerCase().includes(q) ||
+                 (s.category || '').toLowerCase().includes(q) ||
+                 (s.tags || []).some(t => t.toLowerCase().includes(q)) ||
+                 scText.includes(q) ||
+                 htText.includes(q);
+        }
+        return true;
+      });
+      if (state.sortBy === 'name') {
+        results.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      } else if (state.sortBy === 'agents') {
+        results.sort((a, b) => totalAgentCount(b) - totalAgentCount(a));
+      } else if (state.sortBy === 'category') {
+        results.sort((a, b) => (a.category || '').localeCompare(b.category || '') || (a.name || '').localeCompare(b.name || ''));
+      } else if (state.sortBy === 'structure') {
+        results.sort((a, b) => (a.structuralClass || '').localeCompare(b.structuralClass || '') || (a.name || '').localeCompare(b.name || ''));
+      } else if (state.sortBy === 'votes') {
+        results.sort((a, b) => ((state.voteData[b.id] || {}).total || 0) - ((state.voteData[a.id] || {}).total || 0));
+      } else if (state.sortBy === 'trending') {
+        results.sort((a, b) => ((state.voteData[b.id] || {}).seriousness || 0) - ((state.voteData[a.id] || {}).seriousness || 0));
+      } else if (state.sortBy === 'random') {
+        for (let i = results.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [results[i], results[j]] = [results[j], results[i]];
+        }
+      }
+      return results;
+    }
+
+    function setSort(by) {
+      state.sortBy = by;
+      document.querySelectorAll('.toolbar button').forEach(b => b.classList.remove('active'));
+      const btn = document.getElementById('sort-' + by);
+      if (btn) btn.classList.add('active');
+      renderGrid();
+    }
+
+    // Sort button listeners
+    document.getElementById('sort-name').addEventListener('click', () => setSort('name'));
+    document.getElementById('sort-agents').addEventListener('click', () => setSort('agents'));
+    document.getElementById('sort-category').addEventListener('click', () => setSort('category'));
+    document.getElementById('sort-structure').addEventListener('click', () => setSort('structure'));
+    document.getElementById('sort-votes').addEventListener('click', () => setSort('votes'));
+    document.getElementById('sort-trending').addEventListener('click', () => setSort('trending'));
+    document.getElementById('sort-random').addEventListener('click', () => setSort('random'));
+
+    // ─── Grid Rendering ───────────────────────────────────
+    let lastFiltered = [];
+
+    function renderGrid() {
+      const filtered = getFiltered();
+      lastFiltered = filtered;
+      const grid = document.getElementById('grid');
+      const countEl = document.getElementById('result-count');
+
+      // Update result count
+      if (state.searchQuery || state.activeCategory || state.activeStructuralClass) {
+        countEl.textContent = `${filtered.length} of ${state.structures.length}`;
+      } else {
+        countEl.textContent = '';
+      }
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state">
+          <div class="empty-state-icon">
+            <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor" opacity="0.3"><path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 110-10 5 5 0 010 10z"/></svg>
+          </div>
+          <div class="empty-state-text">No patterns match your search.</div>
+          <div class="empty-state-hint">Try a different term or category.</div>
+          <button class="empty-state-clear" id="clear-search">Clear filters</button>
+        </div>`;
+        const clearBtn = document.getElementById('clear-search');
+        if (clearBtn) clearBtn.addEventListener('click', clearFilters);
+        return;
+      }
+
+      grid.innerHTML = filtered.map((s, i) => {
+        const color = CATEGORY_COLORS[s.category] || '#888';
+        const roleCount = s.agents ? s.agents.length : 0;
+        const visited = state.visitedPatterns.has(s.id) ? ' visited' : '';
+        const name = highlightText(s.name, state.searchQuery);
+        const summary = highlightText(s.summary, state.searchQuery);
+        const sc = s.structuralClass;
+        const scColor = SC_COLORS[sc] || '#888';
+        const scLabel = SC_LABELS[sc] || sc || '';
+        const structureBadge = sc ? `<span class="structure-badge" style="color:${scColor};border-color:${scColor}33;background:${scColor}11">${esc(scLabel)}</span>` : '';
+        const vd = state.voteData[s.id];
+        let voteBadge = '';
+        let trendBadge = '';
+        if (vd && vd.total > 0) {
+          voteBadge = `<span class="card-vote-badge"><span class="vote-arrow">&#9650;</span> ${vd.total}</span>`;
+          if (vd.rate_label === 'hot') trendBadge = `<span class="card-trending-badge hot">hot</span>`;
+          else if (vd.rate_label === 'trending') trendBadge = `<span class="card-trending-badge">trending</span>`;
+        }
+        return `<div class="card${visited}" data-id="${esc(s.id)}" data-index="${i}" style="--cat-color:${color};transition-delay:${Math.min(i * 25, 400)}ms">
+          <div class="card-header">
+            <span class="card-name">${name}</span>
+            <span style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0">${trendBadge}${voteBadge}<span class="card-badge">${roleCount} roles</span></span>
+          </div>
+          <div class="card-structure-badge">${structureBadge}</div>
+          <div class="card-category">${esc(s.category)}</div>
+          <div class="card-summary">${summary}</div>
+          <div class="card-tags">${(s.tags || []).slice(0, 5).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+        </div>`;
+      }).join('');
+
+      // Attach click handlers
+      grid.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => openDetail(card.dataset.id));
+      });
+
+      // Staggered entrance animation via IntersectionObserver
+      requestAnimationFrame(() => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05 });
+        grid.querySelectorAll('.card').forEach(card => observer.observe(card));
+      });
+
+      state.focusedCardIndex = -1;
+    }
+
+    function clearFilters() {
+      state.searchQuery = '';
+      state.activeCategory = null;
+      state.activeStructuralClass = null;
+      document.getElementById('search').value = '';
+      renderCategories();
+      renderStructureTiles();
+      renderGrid();
+    }
+
+    // ─── Detail Drawer ────────────────────────────────────
+    let diagramCounter = 0;
+    let currentDetailId = null;
+
+    function buildSection(title, contentHtml, defaultOpen) {
+      const expanded = defaultOpen ? ' expanded' : '';
+      return `<div class="detail-section${expanded}">
+        <button class="section-toggle" aria-expanded="${defaultOpen}">
+          ${esc(title)}
+          <span class="section-chevron">&#9654;</span>
+        </button>
+        <div class="section-body"><div class="section-inner"><div class="section-content">${contentHtml}</div></div></div>
+      </div>`;
+    }
+
+    async function openDetail(id) {
+      const s = state.structures.find(x => x.id === id);
+      if (!s) return;
+
+      currentDetailId = id;
+      markVisited(id);
+
+      const detail = document.getElementById('detail');
+      const overlay = document.getElementById('overlay');
+      const color = CATEGORY_COLORS[s.category] || '#888';
+      const roleCount = s.agents ? s.agents.length : 0;
+      const agentTotal = totalAgentCount(s);
+
+      // Find prev/next in current filtered list
+      const idx = lastFiltered.findIndex(x => x.id === id);
+      const prevId = idx > 0 ? lastFiltered[idx - 1].id : null;
+      const nextId = idx < lastFiltered.length - 1 ? lastFiltered[idx + 1].id : null;
+
+      const detailSc = s.structuralClass;
+      const detailScColor = SC_COLORS[detailSc] || '#888';
+      const detailScLabel = SC_LABELS[detailSc] || detailSc || '';
+      const scBadge = detailSc ? `<span class="tag" style="background:${detailScColor}22;color:${detailScColor}">${esc(detailScLabel)}</span>` : '';
+      const vd = state.voteData[s.id];
+      const voteCount = vd ? vd.total : 0;
+      const isVoted = state.votedPatterns.has(s.id);
+
+      let html = `<div class="detail-top-bar">
+          <button class="upvote-btn${isVoted ? ' voted' : ''}" id="upvote-btn" title="Upvote this pattern">
+            <span class="arrow">&#9650;</span>
+            <span id="upvote-count">${voteCount}</span>
+          </button>
+          <button class="detail-top-btn" id="download-agent-btn" title="Download agent file (.md)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"/><path d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"/></svg>
+            Agent file
+          </button>
+          <button class="detail-top-btn" id="copy-link-btn" title="Copy link to this pattern">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.715 6.542L3.343 7.914a3 3 0 104.243 4.243l1.828-1.829A3 3 0 008.586 5.5L8 6.086a1 1 0 00-.154.199 2 2 0 01.861 3.337L6.88 11.45a2 2 0 11-2.83-2.83l.793-.792a4 4 0 01-.128-1.287z"/><path d="M6.586 4.672A3 3 0 007.414 9.5l.775-.776a2 2 0 01-.896-3.346L9.12 3.55a2 2 0 112.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 10-4.243-4.243L6.586 4.672z"/></svg>
+            Copy link
+          </button>
+          <button class="detail-close" id="detail-close" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="detail-header">
+          <h2>${esc(s.name)}</h2>
+          <div class="detail-meta">
+            <span class="tag" style="background:${color}22;color:${color}">${esc(s.category)}</span>
+            ${scBadge}
+            <span class="tag">${roleCount} roles${agentTotal !== roleCount ? ` (${agentTotal} agents)` : ''}</span>
+            ${s.realWorldExample ? `<span style="color:var(--text-muted);font-size:0.8rem">e.g. ${esc(s.realWorldExample)}</span>` : ''}
+          </div>
+        </div>
+        <div class="detail-body">`;
+
+      // Topology
+      if (s.diagram) {
+        html += buildSection('Topology', '<div class="diagram-container" id="diagram-container"></div>', true);
+      }
+
+      // Description
+      html += buildSection('Description', `<p>${esc(s.description || s.summary)}</p>`, true);
+
+      // Structurally Similar
+      if (detailSc) {
+        const similar = state.structures
+          .filter(x => x.id !== s.id && x.structuralClass === detailSc && x.category !== s.category)
+          .slice(0, 8);
+        if (similar.length) {
+          const chips = similar.map(x => {
+            const catColor = CATEGORY_COLORS[x.category] || '#888';
+            return `<span class="similar-chip" data-id="${esc(x.id)}" title="${esc(x.category)}">${esc(x.name)}</span>`;
+          }).join('');
+          html += buildSection('Structurally Similar', `<p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem">Different domains, same ${esc(detailScLabel)} structure</p><div class="similar-chips">${chips}</div>`, true);
+        }
+      }
+
+      // When to use
+      if (s.whenToUse) {
+        html += buildSection('When to Use', `<p>${esc(s.whenToUse)}</p>`, true);
+      }
+
+      // Strengths / Weaknesses
+      if (s.strengths || s.weaknesses) {
+        let swHtml = '<div class="sw-grid">';
+        if (s.strengths) {
+          swHtml += `<div><h3 style="font-size:0.8rem;color:var(--success);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.05em">Strengths</h3><ul>${s.strengths.map(x => `<li class="strength">${esc(x)}</li>`).join('')}</ul></div>`;
+        }
+        if (s.weaknesses) {
+          swHtml += `<div><h3 style="font-size:0.8rem;color:var(--danger);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.05em">Weaknesses</h3><ul>${s.weaknesses.map(x => `<li class="weakness">${esc(x)}</li>`).join('')}</ul></div>`;
+        }
+        swHtml += '</div>';
+        html += buildSection('Strengths & Weaknesses', swHtml, true);
+      }
+
+      // Agents
+      if (s.agents && s.agents.length) {
+        let agentHtml = `<table class="agent-table"><thead><tr><th>Role</th><th>Description</th><th>Memory</th></tr></thead><tbody>`;
+        s.agents.forEach(a => {
+          agentHtml += `<tr><td>${esc(a.name || a.role)}</td><td>${esc(a.description || '')}</td><td><span class="tag">${esc(a.memory || 'private')}</span></td></tr>`;
+        });
+        agentHtml += `</tbody></table>`;
+        html += buildSection('Agents', agentHtml, false);
+      }
+
+      // Communication Channels
+      if (s.forums && s.forums.length) {
+        let chHtml = '<div class="channel-list">';
+        s.forums.forEach(f => {
+          const parts = f.participants ? (Array.isArray(f.participants) ? f.participants.join(', ') : f.participants) : 'all';
+          chHtml += `<div class="channel">
+            <span class="channel-type">${esc(f.type || 'general')}</span>
+            <span class="channel-name">${esc(f.name)}</span>
+            <span class="channel-participants">${esc(parts)}</span>
+          </div>`;
+        });
+        chHtml += '</div>';
+        html += buildSection('Communication Channels', chHtml, false);
+      }
+
+      // Memory Architecture
+      if (s.memoryArchitecture) {
+        let memHtml = '<div class="memory-grid">';
+        if (s.memoryArchitecture.shared) {
+          const val = Array.isArray(s.memoryArchitecture.shared) ? s.memoryArchitecture.shared.join(', ') : s.memoryArchitecture.shared;
+          memHtml += `<div class="memory-item"><h4>Shared</h4><p>${esc(val)}</p></div>`;
+        }
+        if (s.memoryArchitecture.private) {
+          const val = Array.isArray(s.memoryArchitecture.private) ? s.memoryArchitecture.private.join(', ') : s.memoryArchitecture.private;
+          memHtml += `<div class="memory-item"><h4>Private</h4><p>${esc(val)}</p></div>`;
+        }
+        if (s.memoryArchitecture.description) {
+          memHtml += `<div class="memory-item"><h4>Notes</h4><p>${esc(s.memoryArchitecture.description)}</p></div>`;
+        }
+        memHtml += '</div>';
+        html += buildSection('Memory Architecture', memHtml, false);
+      }
+
+      // Community Notes (comments)
+      html += buildSection('Community Notes', `<div class="comments-section" id="comments-section">
+        <div class="comment-list" id="comment-list"><p class="no-comments">Loading...</p></div>
+        <form class="comment-form" id="comment-form">
+          <input type="text" id="comment-name" placeholder="Name (optional)" maxlength="50">
+          <textarea id="comment-body" placeholder="Share what works, what doesn't, or how you've used this pattern..." maxlength="2000"></textarea>
+          <input type="text" class="hp-field" name="website" id="comment-hp" tabindex="-1" autocomplete="off">
+          <button type="submit" class="comment-submit" id="comment-submit">Post</button>
+        </form>
+      </div>`, false);
+
+      html += `</div>`;
+
+      // Prev / Next navigation
+      html += `<div class="detail-nav">
+        <button class="detail-nav-btn" id="nav-prev" ${!prevId ? 'disabled' : ''} data-id="${prevId || ''}">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/></svg>
+          Previous
+        </button>
+        <button class="detail-nav-btn" id="nav-next" ${!nextId ? 'disabled' : ''} data-id="${nextId || ''}">
+          Next
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z"/></svg>
+        </button>
+      </div>`;
+
+      detail.innerHTML = html;
+      detail.scrollTop = 0;
+      detail.classList.add('active');
+      overlay.classList.add('active');
+      history.replaceState(null, '', '#' + s.id);
+
+      // Wire up section toggles
+      detail.querySelectorAll('.section-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const section = toggle.closest('.detail-section');
+          section.classList.toggle('expanded');
+          toggle.setAttribute('aria-expanded', section.classList.contains('expanded'));
+        });
+      });
+
+      // Wire up similar-chip clicks
+      detail.querySelectorAll('.similar-chip').forEach(chip => {
+        chip.addEventListener('click', () => openDetail(chip.dataset.id));
+      });
+
+      // Wire up close / download / copy / nav
+      document.getElementById('detail-close').addEventListener('click', closeDetail);
+
+      document.getElementById('download-agent-btn').addEventListener('click', () => downloadAgentFile(s));
+
+      document.getElementById('copy-link-btn').addEventListener('click', async function() {
+        const url = location.origin + location.pathname + '#' + s.id;
+        try {
+          await navigator.clipboard.writeText(url);
+          this.classList.add('copied');
+          this.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg> Copied`;
+          setTimeout(() => {
+            this.classList.remove('copied');
+            this.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.715 6.542L3.343 7.914a3 3 0 104.243 4.243l1.828-1.829A3 3 0 008.586 5.5L8 6.086a1 1 0 00-.154.199 2 2 0 01.861 3.337L6.88 11.45a2 2 0 11-2.83-2.83l.793-.792a4 4 0 01-.128-1.287z"/><path d="M6.586 4.672A3 3 0 007.414 9.5l.775-.776a2 2 0 01-.896-3.346L9.12 3.55a2 2 0 112.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 10-4.243-4.243L6.586 4.672z"/></svg> Copy link`;
+          }, 1500);
+        } catch {}
+      });
+
+      const prevBtn = document.getElementById('nav-prev');
+      const nextBtn = document.getElementById('nav-next');
+      if (prevBtn && prevBtn.dataset.id) prevBtn.addEventListener('click', () => openDetail(prevBtn.dataset.id));
+      if (nextBtn && nextBtn.dataset.id) nextBtn.addEventListener('click', () => openDetail(nextBtn.dataset.id));
+
+      // Upvote button
+      const upvoteBtn = document.getElementById('upvote-btn');
+      upvoteBtn.addEventListener('click', async () => {
+        if (state.votedPatterns.has(s.id)) return;
+        const ok = await castVote(s.id);
+        if (ok) {
+          upvoteBtn.classList.add('voted');
+          document.getElementById('upvote-count').textContent = (state.voteData[s.id] || {}).total || 1;
+          renderGrid();
+        }
+      });
+
+      // Load and render comments
+      loadComments(s.id).then(comments => {
+        const listEl = document.getElementById('comment-list');
+        if (!listEl) return;
+        if (!comments.length) {
+          listEl.innerHTML = '<p class="no-comments">No comments yet. Be the first!</p>';
+        } else {
+          listEl.innerHTML = comments.map(c => `
+            <div class="comment-item${c.hidden ? ' hidden-comment' : ''}">
+              <div class="comment-header">
+                <span class="comment-name">${esc(c.display_name)}</span>
+                <span class="comment-time">${esc(c.time_ago)}</span>
+              </div>
+              <div class="comment-body">${esc(c.body)}</div>
+              <div class="comment-actions">
+                <button class="flag-btn" data-comment-id="${c.id}" title="Flag as inappropriate">flag</button>
+              </div>
+            </div>
+          `).join('');
+          listEl.querySelectorAll('.flag-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const result = await flagComment(parseInt(btn.dataset.commentId));
+              if (result) {
+                btn.textContent = 'flagged';
+                btn.disabled = true;
+              }
+            });
+          });
+        }
+      });
+
+      // Comment form submission
+      const commentForm = document.getElementById('comment-form');
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('comment-name');
+        const bodyInput = document.getElementById('comment-body');
+        const hpInput = document.getElementById('comment-hp');
+        const submitBtn = document.getElementById('comment-submit');
+
+        if (hpInput.value) return; // honeypot triggered
+        const body = bodyInput.value.trim();
+        if (!body) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Posting...';
+
+        const result = await postComment(s.id, nameInput.value.trim(), body);
+        if (result && result.ok) {
+          bodyInput.value = '';
+          // Reload comments
+          const comments = await loadComments(s.id);
+          const listEl = document.getElementById('comment-list');
+          if (listEl && comments.length) {
+            listEl.innerHTML = comments.map(c => `
+              <div class="comment-item${c.hidden ? ' hidden-comment' : ''}">
+                <div class="comment-header">
+                  <span class="comment-name">${esc(c.display_name)}</span>
+                  <span class="comment-time">${esc(c.time_ago)}</span>
+                </div>
+                <div class="comment-body">${esc(c.body)}</div>
+                <div class="comment-actions">
+                  <button class="flag-btn" data-comment-id="${c.id}" title="Flag as inappropriate">flag</button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post';
+      });
+
+      // Render diagram
+      if (s.diagram && typeof mermaid !== 'undefined') {
+        try {
+          diagramCounter++;
+          const { svg } = await mermaid.render('d' + diagramCounter, s.diagram);
+          const dc = document.getElementById('diagram-container');
+          if (dc) dc.innerHTML = svg;
+        } catch (e) {
+          const dc = document.getElementById('diagram-container');
+          if (dc) dc.innerHTML = `<pre style="color:var(--text-muted);font-size:0.8rem;white-space:pre-wrap">${esc(s.diagram)}</pre>`;
+        }
+      }
+    }
+
+    function closeDetail() {
+      document.getElementById('detail').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+      currentDetailId = null;
+      history.replaceState(null, '', location.pathname);
+    }
+
+    // ─── Search ───────────────────────────────────────────
+    let searchTimeout;
+    document.getElementById('search').addEventListener('input', e => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        state.searchQuery = e.target.value;
+        renderGrid();
+      }, 120);
+    });
+
+    // ─── Overlay / Escape ─────────────────────────────────
+    document.getElementById('overlay').addEventListener('click', closeDetail);
+
+    // ─── Back to Top ──────────────────────────────────────
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 600);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ─── Keyboard Shortcuts ───────────────────────────────
+    const shortcutsOverlay = document.getElementById('shortcuts-overlay');
+    document.getElementById('shortcuts-btn').addEventListener('click', () => {
+      shortcutsOverlay.classList.add('visible');
+    });
+
+    document.addEventListener('keydown', e => {
+      const tag = (e.target.tagName || '').toLowerCase();
+      const isInput = tag === 'input' || tag === 'textarea' || tag === 'select';
+
+      // Close shortcuts overlay on any key
+      if (shortcutsOverlay.classList.contains('visible')) {
+        shortcutsOverlay.classList.remove('visible');
+        e.preventDefault();
+        return;
+      }
+
+      // Escape: close detail, then clear search
+      if (e.key === 'Escape') {
+        if (document.getElementById('detail').classList.contains('active')) {
+          closeDetail();
+        } else if (state.searchQuery || state.activeCategory || state.activeStructuralClass) {
+          clearFilters();
+        } else if (isInput) {
+          e.target.blur();
+        }
+        return;
+      }
+
+      // Skip if typing in input
+      if (isInput) return;
+
+      if (e.key === '/') {
+        e.preventDefault();
+        document.getElementById('search').focus();
+        return;
+      }
+
+      if (e.key === '?') {
+        shortcutsOverlay.classList.add('visible');
+        return;
+      }
+
+      if (e.key === 't') {
+        state.lightMode = !state.lightMode;
+        applyTheme();
+        return;
+      }
+
+      if (e.key === 's') {
+        setSort('random');
+        return;
+      }
+
+      // j/k navigation
+      const cards = document.querySelectorAll('.card');
+      if (!cards.length) return;
+
+      if (e.key === 'j') {
+        e.preventDefault();
+        state.focusedCardIndex = Math.min(state.focusedCardIndex + 1, cards.length - 1);
+        cards[state.focusedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cards.forEach(c => c.style.outline = '');
+        cards[state.focusedCardIndex].style.outline = '2px solid var(--accent)';
+        cards[state.focusedCardIndex].style.outlineOffset = '2px';
+        return;
+      }
+
+      if (e.key === 'k') {
+        e.preventDefault();
+        state.focusedCardIndex = Math.max(state.focusedCardIndex - 1, 0);
+        cards[state.focusedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cards.forEach(c => c.style.outline = '');
+        cards[state.focusedCardIndex].style.outline = '2px solid var(--accent)';
+        cards[state.focusedCardIndex].style.outlineOffset = '2px';
+        return;
+      }
+
+      if (e.key === 'Enter' && state.focusedCardIndex >= 0 && cards[state.focusedCardIndex]) {
+        openDetail(cards[state.focusedCardIndex].dataset.id);
+        return;
+      }
+
+      // Left/right arrow in detail for prev/next
+      if (currentDetailId) {
+        if (e.key === 'ArrowLeft' || e.key === 'h') {
+          const prev = document.getElementById('nav-prev');
+          if (prev && prev.dataset.id) openDetail(prev.dataset.id);
+          return;
+        }
+        if (e.key === 'ArrowRight' || e.key === 'l') {
+          const next = document.getElementById('nav-next');
+          if (next && next.dataset.id) openDetail(next.dataset.id);
+          return;
+        }
+      }
+    });
+
+    // ─── Mobile ───────────────────────────────────────────
+    const controlsEl = document.getElementById('controls');
+    const mobileBar = document.getElementById('mobile-filter-bar');
+    const mobileTab = document.getElementById('mobile-filter-tab');
+    const mobilePanelEl = document.getElementById('mobile-filter-panel');
+
+    function syncMobileCategories() {
+      // Structure tiles
+      const scCounts = getStructuralClassCounts();
+      let html = `<div style="width:100%;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.25rem">Structure</div>`;
+      html += `<div class="filter-tile filter-tile-all${!state.activeStructuralClass ? ' active' : ''}" data-sc="" style="--tile-color:var(--accent)"><div class="filter-tile-name">All</div></div>`;
+      scCounts.forEach(([sc, count]) => {
+        const color = SC_COLORS[sc] || '#888';
+        const label = SC_LABELS[sc] || sc;
+        html += `<div class="filter-tile${state.activeStructuralClass === sc ? ' active' : ''}" data-sc="${sc}" style="--tile-color:${color}"><div class="filter-tile-name">${esc(label)}</div><div class="filter-tile-count">${count}</div></div>`;
+      });
+
+      // Category tiles
+      const cats = getCategories();
+      html += `<div style="width:100%;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:0.75rem 0 0.25rem;border-top:1px solid var(--border);padding-top:0.75rem">Category</div>`;
+      html += `<div class="filter-tile filter-tile-all${!state.activeCategory ? ' active' : ''}" data-category="" style="--tile-color:var(--accent)"><div class="filter-tile-name">All</div></div>`;
+      cats.forEach(([cat, count]) => {
+        const color = CATEGORY_COLORS[cat] || '#888';
+        html += `<div class="filter-tile${state.activeCategory === cat ? ' active' : ''}" data-category="${esc(cat)}" style="--tile-color:${color}"><div class="filter-tile-name">${esc(cat)}</div><div class="filter-tile-count">${count}</div></div>`;
+      });
+
+      mobilePanelEl.innerHTML = html;
+      mobilePanelEl.querySelectorAll('.filter-tile[data-sc]').forEach(tile => {
+        tile.addEventListener('click', () => {
+          state.activeStructuralClass = tile.dataset.sc || null;
+          renderStructureTiles();
+          renderGrid();
+          mobileBar.classList.remove('open');
+        });
+      });
+      mobilePanelEl.querySelectorAll('.filter-tile[data-category]').forEach(tile => {
+        tile.addEventListener('click', () => {
+          state.activeCategory = tile.dataset.category || null;
+          renderCategories();
+          renderGrid();
+          mobileBar.classList.remove('open');
+        });
+      });
+    }
+
+    const controlsObserver = new IntersectionObserver(([entry]) => {
+      if (window.innerWidth <= 768) {
+        mobileBar.classList.toggle('visible', !entry.isIntersecting);
+        if (entry.isIntersecting) mobileBar.classList.remove('open');
+      }
+    }, { threshold: 0 });
+    controlsObserver.observe(controlsEl);
+
+    mobileTab.addEventListener('click', () => {
+      syncMobileCategories();
+      mobileBar.classList.toggle('open');
+    });
+
+    // ─── Init ─────────────────────────────────────────────
+    renderStats();
+    renderCategories();
+    renderStructureTiles();
+    renderGrid();
+
+    // Load vote data async (graceful degradation)
+    loadVoteData();
+
+    // Open from URL hash
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      if (state.structures.some(s => s.id === id)) {
+        openDetail(id);
+      }
+    }
+  </script>
+</body>
+</html>

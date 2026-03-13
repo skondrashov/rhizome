@@ -1,0 +1,2091 @@
+[
+  {
+    "id": "research-lab-pi-group",
+    "name": "Research Lab / PI Group",
+    "category": "Academic & Research",
+    "tags": [
+      "academia",
+      "mentorship",
+      "grant-funded",
+      "knowledge-production"
+    ],
+    "summary": "Principal investigator leads a lab of postdocs, grad students, and staff pursuing a coherent research agenda.",
+    "description": "The PI Group is the fundamental unit of academic research. A principal investigator secures grant funding and sets the research direction. Postdoctoral researchers conduct independent studies within the lab's scope. Graduate students apprentice under the PI and postdocs, progressing from assigned problems toward independent research. A lab manager handles equipment, procurement, and institutional compliance. The PI balances mentorship, grant writing, teaching, and their own research. Knowledge transfer happens through weekly lab meetings, one-on-one mentorship, and shared lab notebooks. The structure is inherently temporal: students graduate, postdocs move on, and institutional memory resides primarily in publications and the PI's continuity.",
+    "realWorldExample": "A computational neuroscience lab at MIT where the PI holds an NIH R01 grant. Three PhD students work on related but distinct thesis projects, two postdocs lead sub-teams, and a lab manager maintains the computing cluster and handles IRB protocols. Weekly lab meetings rotate presenters, and the PI meets each student individually biweekly.",
+    "whenToUse": "When an agent system needs a single visionary leader who mentors junior agents through long-term projects, with knowledge accumulating across generations of participants and funding cycles.",
+    "strengths": [
+      "Deep expertise develops through years-long apprenticeship under an expert",
+      "PI provides coherent long-term vision that survives individual departures",
+      "Lab meetings create regular knowledge sharing and peer feedback",
+      "Small size enables tight mentorship and rapid idea iteration"
+    ],
+    "weaknesses": [
+      "Single point of failure: if the PI leaves or loses funding, the lab dissolves",
+      "Power asymmetry between PI and students can suppress dissent or novel ideas",
+      "Institutional memory loss when experienced members graduate or depart",
+      "PI becomes bottleneck when juggling mentorship, grants, teaching, and research"
+    ],
+    "agents": [
+      {
+        "role": "principal-investigator",
+        "name": "Principal Investigator",
+        "description": "Sets research direction, secures funding, mentors all lab members, and represents the lab externally",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "postdoc-senior",
+        "name": "Senior Postdoctoral Researcher",
+        "description": "Leads independent research threads, co-mentors graduate students, and prepares for faculty positions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "postdoc-junior",
+        "name": "Junior Postdoctoral Researcher",
+        "description": "Conducts focused research within the lab agenda, publishes papers, and builds an independent research identity",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "phd-student-1",
+        "name": "Senior PhD Student",
+        "description": "Works on thesis research with increasing independence, mentors junior students, and prepares for dissertation",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "phd-student-2",
+        "name": "Junior PhD Student",
+        "description": "Learns research methods, takes courses, explores topics under close PI and postdoc supervision",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "lab-manager",
+        "name": "Lab Manager",
+        "description": "Handles equipment maintenance, procurement, safety compliance, IRB protocols, and onboarding of new members",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "undergrad-ra",
+        "name": "Undergraduate Research Assistant",
+        "description": "Performs directed tasks like data collection, coding, or literature review under graduate student supervision",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Weekly Lab Meeting",
+        "type": "round-robin",
+        "participants": [
+          "principal-investigator",
+          "postdoc-senior",
+          "postdoc-junior",
+          "phd-student-1",
+          "phd-student-2",
+          "lab-manager"
+        ]
+      },
+      {
+        "name": "PI One-on-Ones",
+        "type": "peer-to-peer",
+        "participants": [
+          "principal-investigator",
+          "postdoc-senior",
+          "postdoc-junior",
+          "phd-student-1",
+          "phd-student-2"
+        ]
+      },
+      {
+        "name": "Lab Notebook",
+        "type": "log",
+        "participants": [
+          "postdoc-senior",
+          "postdoc-junior",
+          "phd-student-1",
+          "phd-student-2",
+          "undergrad-ra"
+        ]
+      },
+      {
+        "name": "Grant Strategy",
+        "type": "advisory",
+        "participants": [
+          "principal-investigator",
+          "postdoc-senior",
+          "lab-manager"
+        ]
+      },
+      {
+        "name": "Mentorship Chain",
+        "type": "top-down",
+        "participants": [
+          "principal-investigator",
+          "postdoc-senior",
+          "phd-student-1",
+          "phd-student-2",
+          "undergrad-ra"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "publication repository",
+        "lab protocols wiki",
+        "shared datasets",
+        "grant budgets",
+        "equipment schedules"
+      ],
+      "private": [
+        "thesis drafts",
+        "individual experiment logs",
+        "career development plans",
+        "paper reviews in progress"
+      ],
+      "description": "The PI maintains a persistent shared vision document and grant portfolio that defines the lab's direction. Each researcher keeps private experiment logs and thesis drafts. Lab notebooks are append-only shared records. Publications become the permanent institutional memory. When students graduate, their codebases and datasets are archived in shared storage, but tacit knowledge often departs with them."
+    },
+    "diagram": "graph TD\n    PI[Principal Investigator] --> PS[Senior Postdoc]\n    PI --> PJ[Junior Postdoc]\n    PI --> LM[Lab Manager]\n    PS --> PhD1[Senior PhD Student]\n    PS --> PhD2[Junior PhD Student]\n    PJ --> PhD2\n    PhD1 --> UG[Undergrad RA]\n    LM -->|equipment & compliance| PS\n    LM -->|equipment & compliance| PJ",
+    "hierarchyTypes": [
+      "mesh",
+      "chain-of-command",
+      "consensus"
+    ]
+  },
+  {
+    "id": "peer-review-double-blind",
+    "name": "Peer Review Network",
+    "category": "Academic & Research",
+    "tags": [
+      "quality-control",
+      "anonymity",
+      "gatekeeping",
+      "epistemic"
+    ],
+    "summary": "Editors route manuscripts to anonymous reviewers whose evaluations determine publication worthiness.",
+    "description": "The peer review network is the epistemic immune system of science. Authors submit manuscripts to a journal, where an editor-in-chief triages them to associate editors with domain expertise. The associate editor selects 2-4 anonymous reviewers who evaluate the work for correctness, novelty, and significance. In double-blind review, neither authors nor reviewers know each other's identities. Reviewers submit independent reports, and the associate editor synthesizes them into an accept/revise/reject decision. Authors may revise and resubmit, restarting the cycle. The system relies on voluntary reviewer labor and editor judgment, creating tensions between thoroughness, speed, and fairness.",
+    "realWorldExample": "A Nature submission goes through the editor-in-chief's desk rejection filter, then to an associate editor who invites five reviewers (expecting three to accept). After eight weeks, three reviews return: one enthusiastic, one critical, one mixed. The associate editor weighs the reviews, requests major revisions, and the authors have 60 days to respond with a revised manuscript and point-by-point rebuttal.",
+    "whenToUse": "When an agent system must evaluate outputs for quality using independent anonymous assessors, with editorial synthesis to handle disagreement among evaluators.",
+    "strengths": [
+      "Anonymity reduces bias from reputation, status, or institutional prestige",
+      "Independent parallel reviews catch errors that any single reviewer would miss",
+      "Editor synthesis resolves conflicting reviews with domain judgment",
+      "Iterative revision cycles allow work to improve rather than face binary accept/reject"
+    ],
+    "weaknesses": [
+      "Relies on unpaid voluntary labor, causing reviewer fatigue and slow turnaround",
+      "Anonymity can shield lazy or hostile reviews from accountability",
+      "Editor subjectivity in synthesizing conflicting reviews introduces inconsistency",
+      "Gatekeeping can suppress unconventional ideas that challenge reviewer paradigms"
+    ],
+    "agents": [
+      {
+        "role": "editor-in-chief",
+        "name": "Editor-in-Chief",
+        "description": "Triages incoming submissions, assigns associate editors, and makes final publication decisions on contested cases",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "associate-editor",
+        "name": "Associate Editor",
+        "description": "Selects reviewers, manages the review timeline, synthesizes reviews into editorial decisions, and communicates with authors",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "reviewer-1",
+        "name": "Reviewer A",
+        "description": "Independently evaluates manuscript for scientific rigor, novelty, and clarity; submits a structured report with recommendation",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reviewer-2",
+        "name": "Reviewer B",
+        "description": "Provides a second independent evaluation focusing on methodology and reproducibility",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reviewer-3",
+        "name": "Reviewer C",
+        "description": "Provides a third independent evaluation, often selected for complementary expertise to other reviewers",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "author",
+        "name": "Corresponding Author",
+        "description": "Submits the manuscript, responds to reviewer comments with revisions and rebuttals, and handles post-acceptance proofs",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Manuscript Submission Portal",
+        "type": "queue",
+        "participants": [
+          "author",
+          "editor-in-chief"
+        ]
+      },
+      {
+        "name": "Editorial Assignment",
+        "type": "top-down",
+        "participants": [
+          "editor-in-chief",
+          "associate-editor"
+        ]
+      },
+      {
+        "name": "Review Reports",
+        "type": "per-agent",
+        "participants": [
+          "reviewer-1",
+          "reviewer-2",
+          "reviewer-3"
+        ]
+      },
+      {
+        "name": "Editorial Decision",
+        "type": "decision",
+        "participants": [
+          "associate-editor",
+          "editor-in-chief"
+        ]
+      },
+      {
+        "name": "Author Rebuttal",
+        "type": "peer-to-peer",
+        "participants": [
+          "author",
+          "associate-editor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "journal editorial policies",
+        "style guidelines",
+        "published archive"
+      ],
+      "private": [
+        "reviewer identities (hidden from authors)",
+        "author identities (hidden from reviewers in double-blind)",
+        "individual review drafts",
+        "editorial decision rationale"
+      ],
+      "description": "The system is defined by information barriers. Reviewers cannot see each other's reports until after submission. Authors cannot see reviewer identities. The associate editor is the only agent who sees all information and synthesizes it. The manuscript itself is versioned: each revision is a new version with tracked changes. Decision letters are append-only records that accumulate across revision rounds."
+    },
+    "diagram": "graph TD\n    AU[Author] -->|submits| EIC[Editor-in-Chief]\n    EIC -->|assigns| AE[Associate Editor]\n    AE -->|invites| R1[Reviewer A]\n    AE -->|invites| R2[Reviewer B]\n    AE -->|invites| R3[Reviewer C]\n    R1 -->|report| AE\n    R2 -->|report| AE\n    R3 -->|report| AE\n    AE -->|decision| AU\n    AU -->|revision| AE",
+    "hierarchyTypes": [
+      "adversarial",
+      "pipeline",
+      "consensus"
+    ]
+  },
+  {
+    "id": "think-tank-policy",
+    "name": "Think Tank",
+    "category": "Academic & Research",
+    "tags": [
+      "policy",
+      "advocacy",
+      "research-to-action",
+      "influence"
+    ],
+    "summary": "Policy researchers produce analysis that communications teams translate into public influence and funder deliverables.",
+    "description": "A think tank bridges the gap between academic research and political action. Senior fellows and policy researchers produce in-depth analysis on specific issues. A communications team translates dense research into accessible policy briefs, op-eds, and media appearances. A development team cultivates relationships with funders whose priorities shape the research agenda, creating a tension between intellectual independence and financial sustainability. The executive director manages this tension while setting organizational strategy. Unlike universities, think tanks optimize for policy impact rather than academic rigor, leading to faster publication cycles but greater vulnerability to ideological capture.",
+    "realWorldExample": "The Brookings Institution employs over 100 resident fellows organized into programs like Foreign Policy and Economic Studies. A senior fellow researches trade policy for months, then works with the communications team to produce a 2-page policy brief timed to a congressional hearing. The development office ensures the fellow's work aligns with foundation grant deliverables. The fellow testifies before Congress, citing the full report.",
+    "whenToUse": "When an agent system must translate deep analysis into actionable recommendations for decision-makers, balancing research quality with accessibility and timeliness.",
+    "strengths": [
+      "Faster research-to-impact pipeline than traditional academia",
+      "Communications layer makes expert knowledge accessible to policymakers",
+      "Fellows have freedom to pursue long-term research agendas between publication cycles",
+      "Convening power brings together researchers, policymakers, and practitioners"
+    ],
+    "weaknesses": [
+      "Funder influence can bias research toward predetermined conclusions",
+      "Policy relevance pressure may compromise methodological rigor",
+      "Revolving door between think tanks and government creates conflicts of interest",
+      "Communications simplification can distort nuanced research findings"
+    ],
+    "agents": [
+      {
+        "role": "executive-director",
+        "name": "Executive Director",
+        "description": "Sets organizational strategy, manages the tension between intellectual independence and funder relationships, and represents the think tank publicly",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senior-fellow",
+        "name": "Senior Fellow",
+        "description": "Conducts deep policy research, publishes reports and papers, testifies before legislative bodies, and mentors junior researchers",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "research-fellow",
+        "name": "Research Fellow",
+        "description": "Supports senior fellows with data analysis, literature reviews, and drafting sections of larger reports",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "comms-director",
+        "name": "Communications Director",
+        "description": "Translates research into policy briefs, op-eds, social media content, and media talking points; books fellows for media appearances",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "development-officer",
+        "name": "Development Officer",
+        "description": "Cultivates funder relationships, writes grant proposals, ensures research deliverables satisfy grant requirements",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "events-coordinator",
+        "name": "Events Coordinator",
+        "description": "Organizes panel discussions, congressional briefings, and public forums that connect researchers with policymakers",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Research Agenda Planning",
+        "type": "decision",
+        "participants": [
+          "executive-director",
+          "senior-fellow",
+          "development-officer"
+        ]
+      },
+      {
+        "name": "Publication Pipeline",
+        "type": "threaded",
+        "participants": [
+          "senior-fellow",
+          "research-fellow",
+          "comms-director"
+        ]
+      },
+      {
+        "name": "Funder Updates",
+        "type": "bottom-up",
+        "participants": [
+          "senior-fellow",
+          "development-officer",
+          "executive-director"
+        ]
+      },
+      {
+        "name": "Media Strategy",
+        "type": "advisory",
+        "participants": [
+          "comms-director",
+          "senior-fellow",
+          "executive-director"
+        ]
+      },
+      {
+        "name": "Policy Brief Review",
+        "type": "peer-to-peer",
+        "participants": [
+          "senior-fellow",
+          "comms-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "published reports archive",
+        "institutional positions database",
+        "media contact list",
+        "event calendar"
+      ],
+      "private": [
+        "draft research in progress",
+        "funder relationship details and grant amounts",
+        "fellow compensation",
+        "pre-publication embargoed findings"
+      ],
+      "description": "Published reports form the shared institutional memory and brand. Fellows maintain private research in progress to protect pre-publication findings. The development office keeps funder relationships and financial details private. Communications maintains a shared media contact database and brand guidelines. Institutional positions on key issues are versioned as they evolve over time."
+    },
+    "diagram": "graph TD\n    ED[Executive Director] --> SF[Senior Fellow]\n    ED --> CD[Comms Director]\n    ED --> DO[Development Officer]\n    SF --> RF[Research Fellow]\n    SF -->|research| CD\n    CD -->|briefs & media| PUB[Public & Policymakers]\n    DO -->|funding| ED\n    DO -->|deliverables| SF\n    EC[Events Coordinator] --> SF\n    EC --> PUB",
+    "hierarchyTypes": [
+      "consensus",
+      "federated",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "cross-disciplinary-research-center",
+    "name": "Cross-Disciplinary Research Center",
+    "category": "Academic & Research",
+    "tags": [
+      "interdisciplinary",
+      "matrix-structure",
+      "joint-appointments",
+      "boundary-spanning"
+    ],
+    "summary": "Researchers hold joint appointments across departments, bridging disciplinary silos through shared projects.",
+    "description": "A cross-disciplinary research center exists as an overlay on traditional departmental structures. Faculty hold joint appointments, belonging to both their home department and the center. A center director coordinates across departments but typically lacks hiring or tenure authority, which remains with departments. This creates a matrix structure where researchers report to both a department chair and the center director. The center provides shared resources like specialized equipment, seed grants, and administrative support that incentivize cross-departmental collaboration. Boundary-spanning postdocs and research staff physically co-located in the center serve as translators between disciplinary languages and methods.",
+    "realWorldExample": "The Santa Fe Institute operates as a pure cross-disciplinary center where physicists, biologists, economists, and computer scientists collaborate on complexity science. Resident faculty have no departmental affiliations; external faculty hold appointments at their home universities. Working groups convene for weeks to tackle specific problems, mixing disciplines deliberately. The Institute's flat structure and shared lunches force daily cross-pollination.",
+    "whenToUse": "When an agent system must integrate specialized agents from different domains to solve problems that no single domain can address alone, requiring translation between different frameworks and vocabularies.",
+    "strengths": [
+      "Bridges disciplinary silos that traditional departmental structures enforce",
+      "Shared physical and computational resources lower barriers to collaboration",
+      "Joint appointments give researchers access to multiple knowledge networks",
+      "Boundary-spanning roles actively translate between disciplinary languages"
+    ],
+    "weaknesses": [
+      "Dual reporting to department and center creates loyalty and priority conflicts",
+      "Center director often lacks hiring and tenure authority, limiting strategic control",
+      "Disciplinary depth may suffer when researchers spread across multiple communities",
+      "Success metrics are unclear: departments value publications, centers value collaboration"
+    ],
+    "agents": [
+      {
+        "role": "center-director",
+        "name": "Center Director",
+        "description": "Coordinates cross-disciplinary research agenda, allocates seed grants, and mediates between departmental priorities",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "dept-faculty-a",
+        "name": "Faculty Member (Dept A)",
+        "description": "Holds joint appointment; brings disciplinary expertise from Department A to center projects",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "dept-faculty-b",
+        "name": "Faculty Member (Dept B)",
+        "description": "Holds joint appointment; brings complementary expertise from Department B",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "dept-faculty-c",
+        "name": "Faculty Member (Dept C)",
+        "description": "Holds joint appointment; brings a third disciplinary perspective to collaborative problems",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "boundary-postdoc",
+        "name": "Boundary-Spanning Postdoc",
+        "description": "Co-located in the center; translates between disciplinary vocabularies and methods, and co-authors across groups",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "center-admin",
+        "name": "Center Administrator",
+        "description": "Manages shared resources, schedules cross-departmental meetings, and handles multi-PI grant administration",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Cross-Disciplinary Seminar",
+        "type": "round-robin",
+        "participants": [
+          "center-director",
+          "dept-faculty-a",
+          "dept-faculty-b",
+          "dept-faculty-c",
+          "boundary-postdoc"
+        ]
+      },
+      {
+        "name": "Seed Grant Review",
+        "type": "decision",
+        "participants": [
+          "center-director",
+          "dept-faculty-a",
+          "dept-faculty-b",
+          "dept-faculty-c"
+        ]
+      },
+      {
+        "name": "Translation Workshop",
+        "type": "peer-to-peer",
+        "participants": [
+          "boundary-postdoc",
+          "dept-faculty-a",
+          "dept-faculty-b",
+          "dept-faculty-c"
+        ]
+      },
+      {
+        "name": "Resource Allocation",
+        "type": "advisory",
+        "participants": [
+          "center-director",
+          "center-admin"
+        ]
+      },
+      {
+        "name": "Annual Retreat",
+        "type": "broadcast",
+        "participants": [
+          "center-director",
+          "dept-faculty-a",
+          "dept-faculty-b",
+          "dept-faculty-c",
+          "boundary-postdoc",
+          "center-admin"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "cross-disciplinary glossary",
+        "shared datasets",
+        "center publications",
+        "equipment booking system",
+        "seed grant portfolio"
+      ],
+      "private": [
+        "departmental tenure files",
+        "disciplinary draft papers",
+        "department-specific grant budgets"
+      ],
+      "description": "The center maintains a shared glossary that maps concepts across disciplines, which is continuously updated as new translations are discovered. Each faculty member retains private connections to their home department. The boundary-spanning postdoc has unique access to multiple private knowledge bases, serving as a human bridge. Shared datasets are versioned as different disciplines annotate them with different metadata schemas."
+    },
+    "diagram": "graph TD\n    CD[Center Director] --> FA[Faculty A - Physics]\n    CD --> FB[Faculty B - Biology]\n    CD --> FC[Faculty C - CS]\n    CD --> BP[Boundary Postdoc]\n    CD --> CA[Center Admin]\n    FA <-->|collaboration| BP\n    FB <-->|collaboration| BP\n    FC <-->|collaboration| BP\n    DA[Dept A] -.->|tenure line| FA\n    DB[Dept B] -.->|tenure line| FB\n    DC[Dept C] -.->|tenure line| FC",
+    "hierarchyTypes": [
+      "consensus",
+      "mesh",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "phd-advisor-tree",
+    "name": "PhD Advisor Tree / Academic Lineage",
+    "category": "Academic & Research",
+    "tags": [
+      "mentorship",
+      "lineage",
+      "generational",
+      "knowledge-cascade"
+    ],
+    "summary": "Knowledge cascades through generations as each PhD advisor trains students who become advisors themselves.",
+    "description": "The academic lineage is a tree structure where each node is a scholar and edges represent PhD supervision relationships. A senior professor advises several doctoral students, each of whom eventually graduates, starts their own lab, and advises their own students. Intellectual traditions, research methodologies, and even cultural norms propagate down the tree, mutating with each generation. The structure is unique in organizational design because it operates on a generational timescale (5-7 years per edge) and the authority relationship dissolves upon graduation, transforming into a peer or collegial relationship. Some lineages maintain strong identity (the 'Chicago school,' the 'Bourbaki tradition') while others diverge rapidly.",
+    "realWorldExample": "The Mathematics Genealogy Project traces advisor-student relationships back centuries. Gauss advised Riemann, who advised many students whose lineages produced most of modern mathematics. In machine learning, Geoffrey Hinton's academic tree includes Yann LeCun and Yoshua Bengio through various paths, creating a concentrated lineage that shaped deep learning.",
+    "whenToUse": "When an agent system needs to propagate specialized knowledge across generations, with each generation refining and extending the tradition while eventually becoming independent peers.",
+    "strengths": [
+      "Deep knowledge transfer through years-long close mentorship relationships",
+      "Intellectual traditions accumulate and refine across generations",
+      "Graduates become independent agents who extend the tree's reach and diversity",
+      "Authority dissolves naturally at graduation, preventing permanent hierarchy"
+    ],
+    "weaknesses": [
+      "Toxic advisor relationships propagate dysfunctional norms down the tree",
+      "Intellectual monoculture can develop within a lineage, creating blind spots",
+      "5-7 year cycle time means the tree adapts slowly to paradigm shifts",
+      "Prestige of lineage can substitute for quality, creating credentialism"
+    ],
+    "agents": [
+      {
+        "role": "founder-advisor",
+        "name": "Founding Advisor (Generation 0)",
+        "description": "Established the intellectual tradition; now emeritus or historical figure whose methods and ideas permeate the lineage",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "gen1-advisor-a",
+        "name": "Generation 1 Advisor A",
+        "description": "Former student of founder; now leads own lab, adapting the tradition to new domains while maintaining core methodology",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gen1-advisor-b",
+        "name": "Generation 1 Advisor B",
+        "description": "Former student of founder; diverged methodologically but retains intellectual DNA from the founding tradition",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gen2-student-a1",
+        "name": "Generation 2 Student (under A)",
+        "description": "Current PhD student of Gen 1 Advisor A; learning the refined tradition and beginning to develop independent research direction",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "gen2-student-b1",
+        "name": "Generation 2 Student (under B)",
+        "description": "Current PhD student of Gen 1 Advisor B; inheriting the divergent branch of the tradition",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "gen2-student-b2",
+        "name": "Generation 2 Student 2 (under B)",
+        "description": "Second student of Gen 1 Advisor B; will carry a distinct interpretation of the same tradition",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Advisor-Student Meetings",
+        "type": "top-down",
+        "participants": [
+          "gen1-advisor-a",
+          "gen2-student-a1"
+        ]
+      },
+      {
+        "name": "Advisor-Student Meetings B",
+        "type": "top-down",
+        "participants": [
+          "gen1-advisor-b",
+          "gen2-student-b1",
+          "gen2-student-b2"
+        ]
+      },
+      {
+        "name": "Lineage Conference",
+        "type": "broadcast",
+        "participants": [
+          "founder-advisor",
+          "gen1-advisor-a",
+          "gen1-advisor-b",
+          "gen2-student-a1",
+          "gen2-student-b1",
+          "gen2-student-b2"
+        ]
+      },
+      {
+        "name": "Peer Collaboration",
+        "type": "peer-to-peer",
+        "participants": [
+          "gen1-advisor-a",
+          "gen1-advisor-b"
+        ]
+      },
+      {
+        "name": "Lineage Archive",
+        "type": "document",
+        "participants": [
+          "founder-advisor",
+          "gen1-advisor-a",
+          "gen1-advisor-b"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "founding papers and methods",
+        "lineage tree visualization",
+        "shared research traditions",
+        "conference presentation archive"
+      ],
+      "private": [
+        "current unpublished research",
+        "advisor-specific mentorship style",
+        "student evaluations"
+      ],
+      "description": "The founding advisor's published works form an immutable shared canon that all descendants reference. Each generation adds their own publications, creating a versioned intellectual history. Mentorship norms are transmitted as persistent-private culture within each advisor-student dyad, explaining why branches of the same tree can develop very different lab cultures. The lineage tree itself is a shared append-only data structure maintained by the community."
+    },
+    "diagram": "graph TD\n    F[Founder Advisor Gen 0] --> A[Advisor A Gen 1]\n    F --> B[Advisor B Gen 1]\n    A --> SA1[Student A1 Gen 2]\n    A --> SA2[Student A2 Gen 2]\n    B --> SB1[Student B1 Gen 2]\n    B --> SB2[Student B2 Gen 2]\n    SA1 -.->|future| GA1[Gen 3...]\n    SB1 -.->|future| GB1[Gen 3...]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "five-eyes-intelligence-alliance",
+    "name": "Five Eyes Alliance",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "multinational",
+      "signals-intelligence",
+      "sovereignty",
+      "compartmented"
+    ],
+    "summary": "Five nations share signals intelligence under bilateral agreements while each retains sovereign collection capabilities.",
+    "description": "The Five Eyes alliance (FVEY) is a multilateral intelligence-sharing arrangement among the US, UK, Canada, Australia, and New Zealand. Each nation operates sovereign intelligence agencies that independently collect signals intelligence (SIGINT), human intelligence (HUMINT), and other forms. Intelligence products are shared according to classification markings and bilateral agreements. Each nation agrees not to spy on the others' citizens (with debated exceptions). The structure is not a hierarchy: no single nation commands the others. Instead, it operates through mutual benefit and division of labor, with each nation covering geographic regions based on historical presence and capability. Disagreements are resolved through diplomatic channels, not command authority.",
+    "realWorldExample": "NSA (US), GCHQ (UK), CSE (Canada), ASD (Australia), and GCSB (New Zealand) divide global SIGINT coverage. GCHQ covers Europe and the Middle East extensively, ASD covers the Asia-Pacific, and NSA provides the largest technical infrastructure. When GCHQ intercepts communications relevant to US national security, they share the processed intelligence through secure channels marked FVEY, meaning all five nations can access it.",
+    "whenToUse": "When an agent system involves multiple sovereign peers that must share intelligence or resources without any single agent having command authority over others, while maintaining strict access controls.",
+    "strengths": [
+      "Geographic division of labor provides near-global coverage without any single entity overextending",
+      "Mutual agreement not to spy on allies builds deep trust enabling raw intelligence sharing",
+      "No single command authority means each nation retains sovereignty over its own operations",
+      "Redundant capabilities mean the network survives if one member is compromised"
+    ],
+    "weaknesses": [
+      "No enforcement mechanism when a member violates agreements (e.g., spying on allies)",
+      "Classification barriers can prevent timely sharing of urgent intelligence",
+      "Smallest members (NZ) have limited leverage against largest (US) despite nominal equality",
+      "Shared infrastructure creates systemic risk if any member agency is breached"
+    ],
+    "agents": [
+      {
+        "role": "nsa-lead",
+        "name": "NSA (United States)",
+        "description": "Largest technical SIGINT capability; provides backbone infrastructure, satellite collection, and the majority of processed intelligence volume",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gchq-lead",
+        "name": "GCHQ (United Kingdom)",
+        "description": "Major SIGINT capability with extensive European and Middle Eastern coverage; deep historical tradecraft and cable-tapping infrastructure",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cse-lead",
+        "name": "CSE (Canada)",
+        "description": "Covers Arctic, Northern Atlantic, and portions of Asia; provides cyber operations capability and linguistic expertise",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "asd-lead",
+        "name": "ASD (Australia)",
+        "description": "Primary coverage of Asia-Pacific and Indian Ocean region; hosts joint facilities and provides regional human intelligence networks",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "gcsb-lead",
+        "name": "GCSB (New Zealand)",
+        "description": "Covers South Pacific and contributes satellite intercept capability; smallest member but provides critical geographic coverage",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "liaison-officer",
+        "name": "Liaison Officers",
+        "description": "Embedded staff at partner agencies who facilitate real-time intelligence sharing and resolve classification issues",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "FVEY Intelligence Product Sharing",
+        "type": "pub-sub",
+        "participants": [
+          "nsa-lead",
+          "gchq-lead",
+          "cse-lead",
+          "asd-lead",
+          "gcsb-lead"
+        ]
+      },
+      {
+        "name": "Bilateral Channels",
+        "type": "peer-to-peer",
+        "participants": [
+          "nsa-lead",
+          "gchq-lead"
+        ]
+      },
+      {
+        "name": "Principals Meeting",
+        "type": "decision",
+        "participants": [
+          "nsa-lead",
+          "gchq-lead",
+          "cse-lead",
+          "asd-lead",
+          "gcsb-lead"
+        ]
+      },
+      {
+        "name": "Liaison Coordination",
+        "type": "peer-to-peer",
+        "participants": [
+          "liaison-officer",
+          "nsa-lead",
+          "gchq-lead",
+          "cse-lead",
+          "asd-lead",
+          "gcsb-lead"
+        ]
+      },
+      {
+        "name": "Threat Assessment Board",
+        "type": "advisory",
+        "participants": [
+          "nsa-lead",
+          "gchq-lead",
+          "cse-lead",
+          "asd-lead",
+          "gcsb-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "FVEY-classified intelligence products",
+        "shared target lists",
+        "joint facility operational data",
+        "signals database"
+      ],
+      "private": [
+        "national-only intelligence (NOFORN equivalents)",
+        "sources and methods details",
+        "domestic policy constraints",
+        "bilateral-only shared material"
+      ],
+      "description": "Each nation maintains a private intelligence store that is never shared, containing sources, methods, and nationally sensitive material. A shared FVEY-classified tier contains processed intelligence products available to all five partners. Bilateral channels exist between specific pairs for material too sensitive for full five-way sharing. Liaison officers have unique cross-access that bridges private and shared tiers. Classification markings (FVEY, bilateral, national-only) control memory access at every level."
+    },
+    "diagram": "graph TD\n    NSA[NSA - United States] <-->|bilateral| GCHQ[GCHQ - United Kingdom]\n    NSA <-->|bilateral| CSE[CSE - Canada]\n    NSA <-->|bilateral| ASD[ASD - Australia]\n    NSA <-->|bilateral| GCSB[GCSB - New Zealand]\n    GCHQ <-->|bilateral| ASD\n    GCHQ <-->|bilateral| CSE\n    FVEY[FVEY Shared Pool] --- NSA\n    FVEY --- GCHQ\n    FVEY --- CSE\n    FVEY --- ASD\n    FVEY --- GCSB",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "mesh",
+      "federated",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "counterintelligence-task-force",
+    "name": "Counterintelligence Task Force",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "internal-investigation",
+      "compartmented",
+      "deception",
+      "trust-verification"
+    ],
+    "summary": "Internal investigators hunt moles within their own organization using compartmented access and deception operations.",
+    "description": "A counterintelligence task force is assembled when an organization suspects it has been penetrated by a hostile agent. The task force operates under extreme compartmentation: even its existence may be classified. A task force leader reports directly to the agency head, bypassing normal chains of command that might include the mole. Investigators are selected based on polygraph results and access history. They employ canary traps (feeding unique information to suspects to see what leaks), behavioral analysis, communications monitoring, and financial audits. The fundamental challenge is epistemic: the investigators must assume any colleague could be compromised, including potentially members of the task force itself. Trust is established through verification, not assumption.",
+    "realWorldExample": "The FBI's investigation of Robert Hanssen, codenamed GRAYSUIT, operated for years as a small compartmented team reporting directly to the FBI Director. They used a combination of SVR source recruitment (a former KGB officer who provided Hanssen's file), behavioral analysis, and surveillance to identify Hanssen as the mole who had spied for Russia for 22 years from within the FBI's own counterintelligence division.",
+    "whenToUse": "When an agent system must investigate potential compromise within itself, requiring extreme compartmentation, trust verification, and the ability to operate without alerting the suspected compromised agent.",
+    "strengths": [
+      "Direct reporting to the top bypasses potentially compromised middle management",
+      "Canary traps systematically narrow the suspect pool through information control",
+      "Small team size limits exposure and reduces the chance of tipping off the target",
+      "Compartmented access means each investigator sees only what they need"
+    ],
+    "weaknesses": [
+      "Paranoid culture can damage morale and legitimate collaboration across the organization",
+      "Task force itself could be compromised if the mole is senior enough to influence staffing",
+      "Extreme secrecy prevents leveraging the full organization's resources and expertise",
+      "Long investigations (years) strain the small team and risk operational security fatigue"
+    ],
+    "agents": [
+      {
+        "role": "agency-head",
+        "name": "Agency Director",
+        "description": "Authorizes the task force's existence, receives reports, and makes decisions about arrests, doubles, or continued monitoring",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "task-force-lead",
+        "name": "Task Force Leader",
+        "description": "Manages the investigation, assigns compartmented tasks to team members, and reports directly to the agency head",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "behavioral-analyst",
+        "name": "Behavioral Analyst",
+        "description": "Studies suspect behavior patterns, lifestyle changes, travel anomalies, and psychological indicators of espionage",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "sigint-monitor",
+        "name": "Communications Monitor",
+        "description": "Conducts authorized surveillance of suspect communications, dead drops, and digital activity under court order",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "financial-investigator",
+        "name": "Financial Investigator",
+        "description": "Traces unexplained wealth, foreign bank accounts, and spending patterns inconsistent with official salary",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "deception-officer",
+        "name": "Deception Operations Officer",
+        "description": "Designs and executes canary traps, feeding unique marked information to suspects to identify the leak source",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Director Briefing",
+        "type": "top-down",
+        "participants": [
+          "agency-head",
+          "task-force-lead"
+        ]
+      },
+      {
+        "name": "Task Force Sync",
+        "type": "threaded",
+        "participants": [
+          "task-force-lead",
+          "behavioral-analyst",
+          "sigint-monitor",
+          "financial-investigator",
+          "deception-officer"
+        ]
+      },
+      {
+        "name": "Canary Trap Results",
+        "type": "bottom-up",
+        "participants": [
+          "deception-officer",
+          "task-force-lead"
+        ]
+      },
+      {
+        "name": "Surveillance Log",
+        "type": "log",
+        "participants": [
+          "sigint-monitor",
+          "task-force-lead"
+        ]
+      },
+      {
+        "name": "Evidence Vault",
+        "type": "document",
+        "participants": [
+          "task-force-lead",
+          "behavioral-analyst",
+          "financial-investigator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "suspect list (compartmented within task force only)",
+        "canary trap registry",
+        "timeline of anomalies"
+      ],
+      "private": [
+        "individual investigator's working theories",
+        "surveillance raw data",
+        "source identities",
+        "financial audit details"
+      ],
+      "description": "Memory is aggressively compartmented. Each investigator knows only their lane: the behavioral analyst doesn't see raw SIGINT, and the communications monitor doesn't see financial records. Only the task force leader integrates all threads. The evidence vault is append-only and cryptographically logged to prevent tampering. The task force's very existence is private from the rest of the organization. Canary trap information is uniquely marked per suspect, making the registry a critical shared asset."
+    },
+    "diagram": "graph TD\n    DIR[Agency Director] --> TFL[Task Force Leader]\n    TFL --> BA[Behavioral Analyst]\n    TFL --> SM[SIGINT Monitor]\n    TFL --> FI[Financial Investigator]\n    TFL --> DO[Deception Officer]\n    DO -->|canary traps| SUSPECTS[Suspect Pool]\n    SM -->|surveillance| SUSPECTS\n    BA -->|behavioral analysis| SUSPECTS\n    FI -->|financial audit| SUSPECTS\n    TFL -->|reports| DIR",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "regulatory-agency-fda-sec",
+    "name": "Regulatory Agency (FDA/SEC Model)",
+    "category": "Legal & Judicial",
+    "tags": [
+      "rulemaking",
+      "enforcement",
+      "adjudication",
+      "administrative-law"
+    ],
+    "summary": "One agency writes rules, investigates violations, and adjudicates cases under one specialized roof.",
+    "description": "Regulatory agencies like the FDA or SEC are sometimes called the 'fourth branch of government' because they combine functions normally separated. The rulemaking division drafts regulations through notice-and-comment procedures, incorporating public input. The enforcement division investigates potential violations, conducts examinations, and brings enforcement actions. The adjudication division (administrative law judges) hears contested cases. Commissioners appointed by the president and confirmed by the Senate set policy direction. This concentration of powers enables specialized expertise and faster action than Congress, but raises due process concerns. Internal firewalls between divisions prevent the same people who write rules from adjudicating violations of those rules.",
+    "realWorldExample": "The SEC's Division of Enforcement investigates insider trading, then refers cases to the Commission for formal charges. The accused can settle or contest the charges before an SEC Administrative Law Judge, whose decision can be appealed to the full Commission, then to federal courts. Meanwhile, the Division of Corporation Finance reviews filings and the Division of Trading and Markets writes rules for exchanges.",
+    "whenToUse": "When an agent system must combine standard-setting, monitoring, and enforcement into a single specialized entity, with internal firewalls to prevent conflicts between these functions.",
+    "strengths": [
+      "Deep domain specialization impossible for generalist legislators or courts to achieve",
+      "Speed of rulemaking and enforcement compared to congressional legislation and federal litigation",
+      "Notice-and-comment rulemaking incorporates stakeholder input systematically",
+      "Internal firewalls between divisions maintain procedural fairness"
+    ],
+    "weaknesses": [
+      "Concentration of powers raises due process concerns about being judge, jury, and rulemaker",
+      "Regulatory capture occurs when the agency identifies more with industry than public interest",
+      "Political appointee commissioners create policy instability across administrations",
+      "Rulemaking through enforcement actions (regulation by litigation) bypasses democratic input"
+    ],
+    "agents": [
+      {
+        "role": "commission-chair",
+        "name": "Commission Chair",
+        "description": "Presidentially appointed; sets policy priorities, schedules votes on rules and enforcement actions, and represents the agency publicly",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "commissioner-a",
+        "name": "Commissioner A",
+        "description": "One of the appointed commissioners; votes on rules and enforcement actions, may dissent publicly",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "commissioner-b",
+        "name": "Commissioner B",
+        "description": "Another appointed commissioner providing an independent vote and perspective on agency actions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "rulemaking-director",
+        "name": "Director of Rulemaking",
+        "description": "Drafts proposed rules, manages notice-and-comment periods, analyzes public input, and prepares final rules for commission vote",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "enforcement-director",
+        "name": "Director of Enforcement",
+        "description": "Investigates potential violations, authorizes examinations, and recommends enforcement actions to the commission",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "alj",
+        "name": "Administrative Law Judge",
+        "description": "Independently adjudicates contested enforcement actions; issues initial decisions that can be appealed to the full commission",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "general-counsel",
+        "name": "General Counsel",
+        "description": "Provides legal advice to the commission, defends agency actions in federal court, and ensures procedural compliance",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Commission Meeting",
+        "type": "decision",
+        "participants": [
+          "commission-chair",
+          "commissioner-a",
+          "commissioner-b"
+        ]
+      },
+      {
+        "name": "Rulemaking Docket",
+        "type": "pub-sub",
+        "participants": [
+          "rulemaking-director",
+          "commission-chair",
+          "general-counsel"
+        ]
+      },
+      {
+        "name": "Enforcement Referral",
+        "type": "bottom-up",
+        "participants": [
+          "enforcement-director",
+          "commission-chair"
+        ]
+      },
+      {
+        "name": "Administrative Hearing",
+        "type": "peer-to-peer",
+        "participants": [
+          "alj",
+          "enforcement-director"
+        ]
+      },
+      {
+        "name": "Public Comment Period",
+        "type": "queue",
+        "participants": [
+          "rulemaking-director"
+        ]
+      },
+      {
+        "name": "Legal Review",
+        "type": "advisory",
+        "participants": [
+          "general-counsel",
+          "commission-chair",
+          "rulemaking-director",
+          "enforcement-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "published rules (Federal Register)",
+        "public enforcement actions",
+        "commission meeting minutes",
+        "agency guidance documents"
+      ],
+      "private": [
+        "ongoing investigation details",
+        "pre-decisional rulemaking drafts",
+        "ALJ deliberation notes",
+        "whistleblower identities"
+      ],
+      "description": "Published rules and enforcement actions are shared public memory. Ongoing investigations are strictly private to enforcement, firewalled from rulemaking to prevent prejudging. ALJ deliberations are private and independent from the commission until a decision is issued. Public comments are shared inputs that become part of the rulemaking record. Commissioner votes are recorded but deliberations may be private under the sunshine act exemptions."
+    },
+    "diagram": "graph TD\n    CC[Commission Chair] --> CA[Commissioner A]\n    CC --> CB[Commissioner B]\n    CC --> RD[Rulemaking Director]\n    CC --> ED[Enforcement Director]\n    CC --> GC[General Counsel]\n    RD -->|proposed rules| PUB[Public Comment]\n    PUB -->|comments| RD\n    ED -->|investigations| TARGETS[Regulated Entities]\n    ED -->|charges| ALJ[Admin Law Judge]\n    ALJ -->|appeal| CC\n    GC -->|legal review| RD\n    GC -->|legal review| ED",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "international-criminal-court",
+    "name": "International Criminal Court",
+    "category": "Legal & Judicial",
+    "tags": [
+      "international-law",
+      "adversarial",
+      "victim-participation",
+      "treaty-based"
+    ],
+    "summary": "Prosecution, defense, judges, and victim representatives interact in a treaty-based court for crimes against humanity.",
+    "description": "The International Criminal Court (ICC) operates under the Rome Statute to prosecute genocide, crimes against humanity, war crimes, and aggression. The Office of the Prosecutor independently investigates and brings cases. Pre-Trial, Trial, and Appeals Chambers of judges evaluate evidence and render verdicts. Uniquely, the ICC includes a Victims Participation Unit that gives victims legal standing to present views and concerns separate from the prosecution, a feature absent from most national courts. The Registry provides administrative support and manages witness protection. The structure must navigate tensions between state sovereignty (states can refuse to cooperate), prosecutorial independence, and the rights of both victims and accused.",
+    "realWorldExample": "In the prosecution of Thomas Lubanga for conscripting child soldiers in the DRC, the ICC's Office of the Prosecutor gathered evidence from conflict zones while the Victims Participation Unit enabled 129 victims to participate through legal representatives. The Trial Chamber heard testimony over three years. Lubanga's defense team challenged evidence provenance. The Appeals Chamber later addressed novel questions about victim reparations.",
+    "whenToUse": "When an agent system must adjudicate disputes involving multiple sovereign stakeholders, with independent investigation, adversarial proceedings, and explicit representation of affected parties beyond the two primary adversaries.",
+    "strengths": [
+      "Victim participation gives affected parties a voice beyond just serving as prosecution witnesses",
+      "Prosecutorial independence from political bodies protects against selective justice",
+      "Three-chamber structure (Pre-Trial, Trial, Appeals) provides layered review of decisions",
+      "Treaty basis gives the court legitimacy derived from state consent rather than coercion"
+    ],
+    "weaknesses": [
+      "No enforcement mechanism: relies on state cooperation for arrests, evidence, and sentences",
+      "Cases take years or decades, during which evidence degrades and witnesses face danger",
+      "Perception of bias toward prosecuting African conflicts undermines universal legitimacy",
+      "Major powers (US, China, Russia) not party to the Rome Statute, limiting jurisdiction"
+    ],
+    "agents": [
+      {
+        "role": "chief-prosecutor",
+        "name": "Chief Prosecutor",
+        "description": "Independently investigates situations, gathers evidence from conflict zones, and brings charges before the Pre-Trial Chamber",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "pretrial-judge",
+        "name": "Pre-Trial Chamber Judge",
+        "description": "Reviews prosecution evidence to decide whether charges are confirmed and the case proceeds to trial",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "trial-judge",
+        "name": "Trial Chamber Presiding Judge",
+        "description": "Presides over the trial, rules on evidence admissibility, and renders verdict and sentence",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "defense-counsel",
+        "name": "Defense Counsel",
+        "description": "Represents the accused; challenges evidence, cross-examines witnesses, and argues for acquittal or mitigation",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "victims-representative",
+        "name": "Victims' Legal Representative",
+        "description": "Represents victims' views and concerns in proceedings; can present evidence and question witnesses on victims' behalf",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "registrar",
+        "name": "Registrar",
+        "description": "Manages court administration, witness protection programs, detention facilities, and outreach to affected communities",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "appeals-judge",
+        "name": "Appeals Chamber Judge",
+        "description": "Reviews trial decisions for legal errors; can overturn convictions, modify sentences, or order new trials",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pre-Trial Hearing",
+        "type": "decision",
+        "participants": [
+          "pretrial-judge",
+          "chief-prosecutor",
+          "defense-counsel",
+          "victims-representative"
+        ]
+      },
+      {
+        "name": "Trial Proceedings",
+        "type": "peer-to-peer",
+        "participants": [
+          "trial-judge",
+          "chief-prosecutor",
+          "defense-counsel",
+          "victims-representative"
+        ]
+      },
+      {
+        "name": "Appeals Brief Exchange",
+        "type": "document",
+        "participants": [
+          "appeals-judge",
+          "chief-prosecutor",
+          "defense-counsel"
+        ]
+      },
+      {
+        "name": "Witness Protection Coordination",
+        "type": "advisory",
+        "participants": [
+          "registrar",
+          "chief-prosecutor",
+          "defense-counsel"
+        ]
+      },
+      {
+        "name": "Victim Reparations Proceedings",
+        "type": "decision",
+        "participants": [
+          "trial-judge",
+          "victims-representative",
+          "registrar"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Rome Statute and Rules of Procedure",
+        "public court transcripts",
+        "published judgments",
+        "reparations orders"
+      ],
+      "private": [
+        "prosecution evidence and witness identities",
+        "defense strategy and privileged communications",
+        "victim identities in protected proceedings",
+        "sealed indictments"
+      ],
+      "description": "The Rome Statute is the immutable shared foundation. Court transcripts are shared but can be partially redacted for witness protection. The prosecution and defense maintain strictly private evidence files that are disclosed to each other only according to disclosure rules. Victim identities may be kept private even from the accused in extreme cases. Judgments are versioned through the appeals process, with each chamber's decision building on but potentially overturning the previous."
+    },
+    "diagram": "graph TD\n    OTP[Office of the Prosecutor] -->|charges| PTC[Pre-Trial Chamber]\n    PTC -->|confirms charges| TC[Trial Chamber]\n    DC[Defense Counsel] --> PTC\n    DC --> TC\n    VR[Victims Representative] --> PTC\n    VR --> TC\n    TC -->|verdict| AC[Appeals Chamber]\n    REG[Registrar] -->|admin support| TC\n    REG -->|witness protection| OTP\n    REG -->|witness protection| DC",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus",
+      "federated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "coding-bootcamp-cohort",
+    "name": "Coding Bootcamp Cohort",
+    "category": "Education & Training",
+    "tags": [
+      "intensive-learning",
+      "cohort-based",
+      "career-transition",
+      "project-based"
+    ],
+    "summary": "Career changers learn intensively in a time-boxed cohort with pair programming and a demo day capstone.",
+    "description": "A coding bootcamp compresses years of traditional education into 12-16 weeks of intensive, full-time instruction. Students form a cohort that progresses together through a structured curriculum. Lead instructors deliver core content while teaching assistants provide one-on-one debugging help. Mentors from industry offer career guidance and code review. The curriculum is project-based: students build increasingly complex applications, culminating in a capstone project presented at a public demo day. Career services coaches prepare students for job interviews through mock technical screens, resume workshops, and employer networking. The cohort model creates intense peer bonds and accountability, but the compressed timeline means gaps in fundamentals are common.",
+    "realWorldExample": "A Hack Reactor cohort of 30 students spends 6 days a week for 13 weeks in an immersive JavaScript program. The first 6 weeks cover fundamentals with daily pair programming rotations. Weeks 7-9 are group projects with sprints and standups mimicking real development teams. Weeks 10-13 are solo capstone projects. Demo day brings in 50 hiring partners. Career services continues for 6 months post-graduation.",
+    "whenToUse": "When an agent system must rapidly train new agents from novice to functional competence in a specific domain, using intense time-boxed immersion with peer learning and mentorship.",
+    "strengths": [
+      "Compressed timeline forces focus and eliminates the procrastination possible in longer programs",
+      "Cohort model creates peer accountability and collaborative learning culture",
+      "Project-based curriculum produces portfolio evidence that flat credential-checking cannot",
+      "Industry mentors and career services directly connect learning to employment outcomes"
+    ],
+    "weaknesses": [
+      "Speed sacrifices depth: graduates may lack theoretical foundations for novel problems",
+      "One-size-fits-all pacing leaves faster students bored and slower students overwhelmed",
+      "Demo day pressure can incentivize impressive-looking projects over solid engineering",
+      "High cost and intensity creates survivorship bias in reported outcomes"
+    ],
+    "agents": [
+      {
+        "role": "lead-instructor",
+        "name": "Lead Instructor",
+        "description": "Delivers core curriculum through lectures and live coding; sets daily learning objectives and designs project specifications",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "teaching-assistant",
+        "name": "Teaching Assistant",
+        "description": "Provides one-on-one debugging help, reviews student code, and identifies students who are falling behind for early intervention",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "industry-mentor",
+        "name": "Industry Mentor",
+        "description": "Working software engineer who volunteers for weekly code reviews, career advice, and mock technical interviews",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "student-a",
+        "name": "Cohort Student (Strong)",
+        "description": "A student with some prior experience who progresses quickly and often helps peers during pair programming",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "student-b",
+        "name": "Cohort Student (Struggling)",
+        "description": "A career changer with no prior coding experience who needs extra TA support and repetition to solidify concepts",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "career-coach",
+        "name": "Career Services Coach",
+        "description": "Prepares students for job search through resume workshops, mock interviews, salary negotiation training, and employer introductions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "program-manager",
+        "name": "Program Manager",
+        "description": "Manages cohort logistics, tracks student progress metrics, handles student welfare issues, and coordinates demo day",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Daily Standup",
+        "type": "round-robin",
+        "participants": [
+          "lead-instructor",
+          "student-a",
+          "student-b",
+          "teaching-assistant"
+        ]
+      },
+      {
+        "name": "Pair Programming",
+        "type": "peer-to-peer",
+        "participants": [
+          "student-a",
+          "student-b"
+        ]
+      },
+      {
+        "name": "Code Review",
+        "type": "advisory",
+        "participants": [
+          "industry-mentor",
+          "student-a",
+          "student-b"
+        ]
+      },
+      {
+        "name": "Progress Check-in",
+        "type": "top-down",
+        "participants": [
+          "program-manager",
+          "lead-instructor",
+          "teaching-assistant"
+        ]
+      },
+      {
+        "name": "Career Workshop",
+        "type": "broadcast",
+        "participants": [
+          "career-coach",
+          "student-a",
+          "student-b"
+        ]
+      },
+      {
+        "name": "Demo Day",
+        "type": "broadcast",
+        "participants": [
+          "student-a",
+          "student-b",
+          "industry-mentor",
+          "career-coach"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "curriculum syllabus",
+        "project specifications",
+        "coding style guide",
+        "shared code repositories",
+        "demo day schedule"
+      ],
+      "private": [
+        "individual student progress metrics",
+        "TA notes on struggling students",
+        "career coach job search tracking",
+        "mentor feedback on individual students"
+      ],
+      "description": "The curriculum is a shared, versioned document that instructors update between cohorts based on industry trends and student feedback. Student code repositories are shared within the cohort for peer learning. Progress metrics are private between the student and program manager to avoid public shaming. Career services maintains private job search pipelines for each graduate. The demo day presentation archive becomes shared institutional memory that attracts future employers and students."
+    },
+    "diagram": "graph TD\n    PM[Program Manager] --> LI[Lead Instructor]\n    PM --> CC[Career Coach]\n    LI --> TA[Teaching Assistant]\n    LI -->|lectures| SA[Student A]\n    LI -->|lectures| SB[Student B]\n    TA -->|1-on-1 help| SA\n    TA -->|1-on-1 help| SB\n    SA <-->|pair programming| SB\n    IM[Industry Mentor] -->|code review| SA\n    IM -->|code review| SB\n    CC -->|career prep| SA\n    CC -->|career prep| SB",
+    "hierarchyTypes": [
+      "mesh",
+      "chain-of-command",
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "military-war-college-seminar",
+    "name": "Military War College Seminar",
+    "category": "Education & Training",
+    "tags": [
+      "socratic-method",
+      "senior-leadership",
+      "strategic-thinking",
+      "peer-learning"
+    ],
+    "summary": "Senior officers develop strategic thinking through Socratic discussion, case studies, and wargames.",
+    "description": "War college seminars educate colonels and generals for strategic-level leadership. Unlike traditional military training with its rigid hierarchy, seminars use the Socratic method: a faculty seminar leader poses questions and facilitates debate rather than lecturing. Students are peers of roughly equal rank who bring decades of operational experience. The curriculum covers strategy, history, policy, and joint operations through case studies, wargames, and research papers. Students are organized into small seminar groups (12-16) that stay together for the full academic year, developing trust that enables candid discussion. The deliberate flattening of hierarchy within the seminar room contrasts sharply with the rank-conscious culture these officers inhabit outside it.",
+    "realWorldExample": "At the US Army War College in Carlisle, Pennsylvania, a seminar of 16 colonels from different branches (Army, Navy, Air Force, Marines, allied nations) spends a year together. The faculty seminar leader, a retired general or PhD strategist, poses a scenario: 'China blockades Taiwan. You advise the President. What do you recommend?' Two hours of structured debate follow, drawing on history, doctrine, and personal operational experience.",
+    "whenToUse": "When an agent system must develop strategic reasoning in already-experienced agents through facilitated debate and case analysis, rather than top-down instruction.",
+    "strengths": [
+      "Socratic method develops critical thinking rather than rote knowledge absorption",
+      "Peer learning leverages decades of diverse operational experience across branches and nations",
+      "Year-long seminar cohort builds trust that enables genuine intellectual challenge",
+      "Deliberate hierarchy flattening allows colonels to challenge generals' assumptions safely"
+    ],
+    "weaknesses": [
+      "Small seminar size limits the diversity of perspectives available in any single discussion",
+      "Socratic facilitation requires exceptionally skilled faculty who can guide without dominating",
+      "Military cultural deference to rank can reassert itself despite structural flattening",
+      "Strategic concepts are harder to assess than tactical skills, making evaluation subjective"
+    ],
+    "agents": [
+      {
+        "role": "seminar-leader",
+        "name": "Faculty Seminar Leader",
+        "description": "Retired senior officer or civilian strategist who facilitates Socratic discussion, poses scenarios, and guides analysis without imposing conclusions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "army-colonel",
+        "name": "Army Colonel",
+        "description": "Brings ground force operational experience; contributes perspectives on land warfare, counterinsurgency, and force deployment",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "navy-captain",
+        "name": "Navy Captain",
+        "description": "Brings maritime and carrier operations experience; contributes perspectives on sea control, power projection, and naval strategy",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "air-force-colonel",
+        "name": "Air Force Colonel",
+        "description": "Brings air superiority and space operations experience; contributes perspectives on air power theory and strategic bombing",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "marine-colonel",
+        "name": "Marine Colonel",
+        "description": "Brings amphibious and expeditionary warfare experience; bridges land and naval perspectives",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "allied-officer",
+        "name": "Allied Nation Officer",
+        "description": "International fellow who brings a different national strategic perspective, challenging US-centric assumptions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "civilian-professor",
+        "name": "Civilian Professor",
+        "description": "Academic expert in strategy, history, or political science who provides theoretical frameworks and historical context",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Seminar Discussion",
+        "type": "round-robin",
+        "participants": [
+          "seminar-leader",
+          "army-colonel",
+          "navy-captain",
+          "air-force-colonel",
+          "marine-colonel",
+          "allied-officer"
+        ]
+      },
+      {
+        "name": "Wargame Exercise",
+        "type": "decision",
+        "participants": [
+          "army-colonel",
+          "navy-captain",
+          "air-force-colonel",
+          "marine-colonel",
+          "allied-officer"
+        ]
+      },
+      {
+        "name": "Guest Lecture Q&A",
+        "type": "broadcast",
+        "participants": [
+          "civilian-professor",
+          "seminar-leader",
+          "army-colonel",
+          "navy-captain",
+          "air-force-colonel",
+          "marine-colonel",
+          "allied-officer"
+        ]
+      },
+      {
+        "name": "Research Paper Review",
+        "type": "peer-to-peer",
+        "participants": [
+          "seminar-leader",
+          "civilian-professor",
+          "army-colonel"
+        ]
+      },
+      {
+        "name": "After-Hours Discussion",
+        "type": "peer-to-peer",
+        "participants": [
+          "army-colonel",
+          "navy-captain",
+          "air-force-colonel",
+          "marine-colonel",
+          "allied-officer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "case study library",
+        "historical campaign analyses",
+        "wargame scenario repository",
+        "doctrine references",
+        "seminar reading list"
+      ],
+      "private": [
+        "individual research papers in progress",
+        "personal operational experiences (some classified)",
+        "assessment evaluations",
+        "career development reflections"
+      ],
+      "description": "The shared case study library and doctrine repository provide common reference points for discussion. Each officer brings private operational experience, some of which is classified and can only be alluded to rather than shared directly. The seminar leader maintains persistent notes on discussion themes and student development. Wargame outcomes are shared learning artifacts. Individual research papers are private until presentation. The year-long shared experience creates a persistent peer network that extends well beyond graduation."
+    },
+    "diagram": "graph TD\n    SL[Seminar Leader] --> SD[Seminar Discussion]\n    CP[Civilian Professor] --> SD\n    AC[Army Colonel] --> SD\n    NC[Navy Captain] --> SD\n    AFC[Air Force Colonel] --> SD\n    MC[Marine Colonel] --> SD\n    AO[Allied Officer] --> SD\n    SD --> WG[Wargame Exercise]\n    SD --> RP[Research Papers]\n    WG --> AAR[After Action Review]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "mesh",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "flocking-v-formation",
+    "name": "Flocking V-Formation",
+    "category": "Nature-Inspired",
+    "tags": [
+      "rotating-leadership",
+      "energy-conservation",
+      "aerodynamic",
+      "emergent-order"
+    ],
+    "summary": "Birds rotate the lead position to share wind-breaking costs while followers draft in formation.",
+    "description": "In V-formation flight, the lead bird breaks the headwind while trailing birds draft in the upwash from the leader's wingtips, reducing their energy expenditure by up to 70%. The key organizational insight is that leadership rotates: when the lead bird tires, it drops back to a trailing position and another bird moves forward. No bird is permanently in charge. Each bird follows two simple rules: maintain position relative to the bird ahead, and match the flock's speed. The V-shape emerges from these local rules without centralized coordination. Communication is through physical position and wing-beat synchronization rather than explicit signaling. The formation automatically adapts to wind conditions and flock size.",
+    "realWorldExample": "Migrating Canada geese fly in V-formation across thousands of miles. Research using GPS loggers on northern bald ibises showed that birds precisely positioned their wingtips in the upwash zone of the bird ahead, and that leadership rotated in reciprocal pairs: birds that led more were followed more, creating a cooperative equilibrium without explicit negotiation.",
+    "whenToUse": "When an agent system involves a shared costly task where the lead agent bears disproportionate burden, requiring fair rotation of leadership to prevent burnout while maintaining collective efficiency.",
+    "strengths": [
+      "Leadership rotation prevents any single agent from burning out on the hardest work",
+      "Drafting effect means the system achieves more total work than individual agents working alone",
+      "No centralized coordination needed: formation emerges from simple local rules",
+      "Formation automatically scales with more agents and adapts to environmental conditions"
+    ],
+    "weaknesses": [
+      "Requires all agents to be roughly equally capable of leading (no specialist leader)",
+      "Rotation fairness can break down if some agents free-ride in trailing positions",
+      "Formation is fragile: if one bird breaks position, downstream birds lose efficiency",
+      "Only works for tasks with a clear 'headwind' metaphor where leading is costly but following is efficient"
+    ],
+    "agents": [
+      {
+        "role": "lead-bird",
+        "name": "Current Lead Bird",
+        "description": "Currently breaking headwind at the point of the V; bears highest energy cost but sets pace and direction for the flock",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wing-left-1",
+        "name": "Left Wing Position 1",
+        "description": "First bird on the left wing; drafts off lead bird's right wingtip upwash and is next in rotation to lead",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wing-right-1",
+        "name": "Right Wing Position 1",
+        "description": "First bird on the right wing; drafts off lead bird's left wingtip upwash and monitors for crosswind shifts",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wing-left-2",
+        "name": "Left Wing Position 2",
+        "description": "Second bird on the left wing; maintains position relative to wing-left-1 and enjoys maximum energy savings",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wing-right-2",
+        "name": "Right Wing Position 2",
+        "description": "Second bird on the right wing; maintains position relative to wing-right-1",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "tail-bird",
+        "name": "Tail Bird",
+        "description": "Rearmost position; recently rotated from lead and is recovering energy while drafting behind the entire formation",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Formation Signals",
+        "type": "broadcast",
+        "participants": [
+          "lead-bird",
+          "wing-left-1",
+          "wing-right-1",
+          "wing-left-2",
+          "wing-right-2",
+          "tail-bird"
+        ]
+      },
+      {
+        "name": "Leadership Rotation",
+        "type": "round-robin",
+        "participants": [
+          "lead-bird",
+          "wing-left-1",
+          "wing-right-1"
+        ]
+      },
+      {
+        "name": "Position Adjustment",
+        "type": "peer-to-peer",
+        "participants": [
+          "wing-left-1",
+          "wing-left-2"
+        ]
+      },
+      {
+        "name": "Speed Synchronization",
+        "type": "broadcast",
+        "participants": [
+          "lead-bird",
+          "wing-left-1",
+          "wing-right-1",
+          "wing-left-2",
+          "wing-right-2",
+          "tail-bird"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current heading and speed",
+        "formation shape",
+        "destination waypoint"
+      ],
+      "private": [
+        "individual energy level",
+        "time since last lead stint",
+        "personal navigation sense"
+      ],
+      "description": "Memory is almost entirely ephemeral and positional. Each bird's state is defined by its current position in the formation and its energy level. The shared state is simply the flock's heading and speed, communicated through physical proximity rather than explicit messages. The rotation schedule is emergent: birds self-assess their fatigue and initiate position swaps. No persistent memory of past flights is needed because the rules are embedded in behavior, not in stored data."
+    },
+    "diagram": "graph TD\n    LB[Lead Bird] --> WL1[Left Wing 1]\n    LB --> WR1[Right Wing 1]\n    WL1 --> WL2[Left Wing 2]\n    WR1 --> WR2[Right Wing 2]\n    WL2 --> TB[Tail Bird]\n    TB -.->|rotation| LB\n    WL1 -.->|rotation| LB\n    WR1 -.->|rotation| LB",
+    "hierarchyTypes": [
+      "swarm",
+      "mesh"
+    ]
+  },
+  {
+    "id": "jellyfish-nerve-net",
+    "name": "Jellyfish Nerve Net",
+    "category": "Nature-Inspired",
+    "tags": [
+      "decentralized",
+      "no-brain",
+      "diffuse-sensing",
+      "reactive"
+    ],
+    "summary": "A decentralized nervous system with no brain coordinates behavior through local signal propagation across a nerve net.",
+    "description": "Jellyfish possess a nerve net rather than a centralized brain. Neurons are distributed evenly throughout the body, connected in a diffuse network. When one part of the body detects a stimulus (food, predator, light), the signal propagates through the nerve net in all directions. The body responds as a whole through coordinated muscle contractions, but no single neuron or cluster acts as a controller. Rhopalia (sensory structures around the bell margin) detect light and gravity, providing directional input that biases the net's activity without commanding it. This architecture makes the organism remarkably resilient: any portion of the nerve net can be removed and the rest continues functioning. The trade-off is limited behavioral complexity.",
+    "realWorldExample": "The box jellyfish Tripedalia cystophora has 24 eyes distributed across four rhopalia, but no brain to process visual information centrally. Instead, each rhopalium processes its own visual input and modulates local swimming contractions. The jellyfish navigates toward light and avoids obstacles through this distributed processing, achieving surprisingly sophisticated behavior without any central coordination.",
+    "whenToUse": "When an agent system must be maximally resilient to partial failure, with every node capable of both sensing and acting, and where simple reactive behavior is sufficient rather than complex planning.",
+    "strengths": [
+      "Maximum resilience: any portion can be destroyed and the system continues functioning",
+      "No single point of failure because there is no central controller to lose",
+      "Extremely low latency for local responses since signals don't need to travel to a brain",
+      "Scales naturally: adding more nerve net extends capability without architectural changes"
+    ],
+    "weaknesses": [
+      "Cannot perform complex sequential reasoning or planning without central processing",
+      "Signal propagation in all directions wastes energy on irrelevant body regions",
+      "No learning or memory formation capability limits behavioral adaptation",
+      "Conflicting stimuli from multiple sources cannot be prioritized or arbitrated"
+    ],
+    "agents": [
+      {
+        "role": "nerve-node-1",
+        "name": "Nerve Node Alpha",
+        "description": "A cluster of neurons in one body region that senses local stimuli and propagates signals to adjacent nodes",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "nerve-node-2",
+        "name": "Nerve Node Beta",
+        "description": "Adjacent nerve cluster that receives signals from Alpha and propagates them further while triggering local muscle contraction",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "nerve-node-3",
+        "name": "Nerve Node Gamma",
+        "description": "Another nerve cluster in a different body region, independently sensing and responding to local conditions",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "nerve-node-4",
+        "name": "Nerve Node Delta",
+        "description": "Nerve cluster on the opposite side of the body, receiving attenuated signals and responding proportionally",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "rhopalium-1",
+        "name": "Rhopalium (Sensory Organ)",
+        "description": "Marginal sensory structure with light-sensing and gravity-sensing cells that biases nerve net activity directionally",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "rhopalium-2",
+        "name": "Rhopalium (Secondary)",
+        "description": "Second sensory organ on the opposite margin, providing redundant directional sensing",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Nerve Net Propagation",
+        "type": "broadcast",
+        "participants": [
+          "nerve-node-1",
+          "nerve-node-2",
+          "nerve-node-3",
+          "nerve-node-4"
+        ]
+      },
+      {
+        "name": "Local Stimulus Response",
+        "type": "peer-to-peer",
+        "participants": [
+          "nerve-node-1",
+          "nerve-node-2"
+        ]
+      },
+      {
+        "name": "Sensory Bias Signal",
+        "type": "broadcast",
+        "participants": [
+          "rhopalium-1",
+          "rhopalium-2",
+          "nerve-node-1",
+          "nerve-node-2",
+          "nerve-node-3",
+          "nerve-node-4"
+        ]
+      },
+      {
+        "name": "Contraction Synchronization",
+        "type": "pub-sub",
+        "participants": [
+          "nerve-node-1",
+          "nerve-node-2",
+          "nerve-node-3",
+          "nerve-node-4"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current signal propagation state (transient)",
+        "ambient chemical gradients"
+      ],
+      "private": [
+        "local stimulus intensity",
+        "local contraction state"
+      ],
+      "description": "There is essentially no persistent memory in this system. All state is ephemeral: signals propagate, trigger responses, and dissipate. The rhopalia provide continuous sensory input but do not store it. The nerve net has no mechanism for learning or remembering past events. Coordination emerges entirely from the physics of signal propagation speed and the geometry of the nerve net. This is the most purely reactive architecture possible."
+    },
+    "diagram": "graph TD\n    R1[Rhopalium 1] -->|light/gravity| NN1[Nerve Node Alpha]\n    R2[Rhopalium 2] -->|light/gravity| NN3[Nerve Node Gamma]\n    NN1 <-->|signal| NN2[Nerve Node Beta]\n    NN2 <-->|signal| NN3\n    NN3 <-->|signal| NN4[Nerve Node Delta]\n    NN4 <-->|signal| NN1\n    NN1 -->|contract| M1[Muscle Region 1]\n    NN2 -->|contract| M2[Muscle Region 2]\n    NN3 -->|contract| M3[Muscle Region 3]\n    NN4 -->|contract| M4[Muscle Region 4]",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "east-india-company",
+    "name": "East India Company",
+    "category": "Historical & Traditional",
+    "tags": [
+      "corporate-state",
+      "colonial",
+      "military-commercial",
+      "chartered"
+    ],
+    "summary": "A chartered corporation wielding sovereign powers: armies, currency, and territorial governance for profit.",
+    "description": "The British East India Company (EIC) was a corporate-state hybrid that operated from 1600 to 1874. Chartered by the Crown, it held monopoly trading rights but gradually acquired sovereign functions: raising armies, administering justice, collecting taxes, and conducting diplomacy. The Court of Directors in London set strategy, but the vast distance to India (6+ months by ship) meant that presidencies in Calcutta, Madras, and Bombay operated with enormous autonomy. Governors-general made war and peace decisions without London's approval. The Company maintained separate military, commercial, and administrative hierarchies that frequently conflicted. This structure produced enormous wealth but also catastrophic governance failures (the Bengal Famine of 1770), eventually leading Parliament to progressively strip the Company of its powers.",
+    "realWorldExample": "In 1757, Robert Clive led Company troops to victory at the Battle of Plassey, effectively conquering Bengal. He made himself governor and the Company became tax collector for 30 million people. The Court of Directors in London learned of these events months later. Clive's commercial agents simultaneously traded in the region they governed, creating massive conflicts of interest. By 1773, Parliament passed the Regulating Act to impose government oversight.",
+    "whenToUse": "When an agent system must operate autonomously at great distance from its principals, combining commercial, military, and governance functions, with the understanding that this concentration of power creates severe accountability risks.",
+    "strengths": [
+      "Extreme autonomy enables rapid local adaptation without waiting for distant approval",
+      "Combining trade, military, and governance creates self-reinforcing power in new territories",
+      "Chartered monopoly provides stable funding and legal authority for long-term operations",
+      "Decentralized presidencies can pursue region-specific strategies simultaneously"
+    ],
+    "weaknesses": [
+      "Communication lag means principals cannot monitor or correct agent behavior in real time",
+      "Combining commercial incentives with governance power creates catastrophic conflicts of interest",
+      "Military force amplifies commercial disputes into wars that serve profit, not public interest",
+      "Accountability gap between London directors and India operations enables systematic exploitation"
+    ],
+    "agents": [
+      {
+        "role": "court-of-directors",
+        "name": "Court of Directors",
+        "description": "London-based board that sets overall strategy, allocates capital, appoints governors, and reports to shareholders and Parliament",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "governor-general",
+        "name": "Governor-General of India",
+        "description": "Supreme authority in India; makes military, diplomatic, and administrative decisions with months of autonomy between London communications",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "presidency-governor",
+        "name": "Presidency Governor (Madras/Bombay)",
+        "description": "Governs a regional presidency with its own army, revenue collection, and trade operations; nominally subordinate to Governor-General",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "company-military",
+        "name": "Military Commander",
+        "description": "Commands Company sepoy and European troops; conducts campaigns, garrisons forts, and enforces Company authority by force",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "chief-merchant",
+        "name": "Chief Merchant (Commercial)",
+        "description": "Manages trading operations, negotiates with local rulers for trade concessions, and operates warehouses and shipping",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "revenue-collector",
+        "name": "Revenue Collector (Diwani)",
+        "description": "Collects land taxes from Indian subjects in Company-controlled territories; the primary funding source for military and operations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "crown-representative",
+        "name": "Crown Representative / Board of Control",
+        "description": "Parliamentary oversight agent imposed after 1784; reviews political and military decisions but not commercial ones",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Court of Directors Meeting",
+        "type": "decision",
+        "participants": [
+          "court-of-directors",
+          "crown-representative"
+        ]
+      },
+      {
+        "name": "Dispatch to India",
+        "type": "top-down",
+        "participants": [
+          "court-of-directors",
+          "governor-general"
+        ]
+      },
+      {
+        "name": "Governor-General's Council",
+        "type": "decision",
+        "participants": [
+          "governor-general",
+          "presidency-governor",
+          "company-military",
+          "chief-merchant"
+        ]
+      },
+      {
+        "name": "Revenue Reports",
+        "type": "bottom-up",
+        "participants": [
+          "revenue-collector",
+          "governor-general",
+          "court-of-directors"
+        ]
+      },
+      {
+        "name": "Military Campaign Authorization",
+        "type": "advisory",
+        "participants": [
+          "company-military",
+          "governor-general"
+        ]
+      },
+      {
+        "name": "Parliamentary Oversight",
+        "type": "advisory",
+        "participants": [
+          "crown-representative",
+          "court-of-directors"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Company charter",
+        "trade monopoly terms",
+        "shareholder reports",
+        "parliamentary acts governing the Company"
+      ],
+      "private": [
+        "local treaty terms with Indian rulers",
+        "military disposition and campaign plans",
+        "personal trade accounts of Company servants",
+        "revenue collection details"
+      ],
+      "description": "The 6-month communication lag between London and India created a de facto split-brain architecture. The Court of Directors maintained one version of reality based on dispatches, while governors maintained another based on ground truth. Revenue records were private and frequently manipulated. Company servants maintained personal trade accounts that often conflicted with Company interests. Parliamentary oversight created a third memory layer that occasionally audited the gap between London's and India's versions of events."
+    },
+    "diagram": "graph TD\n    PARL[Parliament] -->|oversight| COD[Court of Directors - London]\n    COD -->|dispatches 6mo| GG[Governor-General - India]\n    GG --> PMad[Presidency - Madras]\n    GG --> PBom[Presidency - Bombay]\n    GG --> MIL[Military Commander]\n    GG --> CM[Chief Merchant]\n    GG --> RC[Revenue Collector]\n    MIL -->|force| TERR[Territories]\n    RC -->|taxes| TERR\n    CM -->|trade| TERR",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "consensus"
+    ]
+  },
+  {
+    "id": "venetian-republic-governance",
+    "name": "Venetian Republic",
+    "category": "Historical & Traditional",
+    "tags": [
+      "anti-corruption",
+      "oligarchic",
+      "checks-and-balances",
+      "longevity"
+    ],
+    "summary": "Overlapping councils, random selection, and term limits prevented power seizure for 1,100 years.",
+    "description": "The Republic of Venice (697-1797) was history's longest-lasting republic, surviving 1,100 years through an elaborate system of checks against power concentration. The Doge served as head of state for life but had almost no independent power, acting only with council approval. The Great Council (all patrician families) elected officials through a unique multi-round process alternating between random lottery and voting, making bribery nearly impossible. The Council of Ten handled state security with extraordinary powers but rotating membership and term limits. The Senate managed foreign policy and trade. Three Avogadori (state attorneys) could challenge any government action as unconstitutional. Anonymous denunciation boxes (bocca di leone) enabled citizens to report corruption. This layered system deliberately traded efficiency for stability.",
+    "realWorldExample": "Electing a Doge required 11 rounds alternating between lottery and ballot. Starting with the Great Council of ~2,000 members, 30 were chosen by lot, reduced to 9 by lot, who elected 40, reduced to 12 by lot, who elected 25, reduced to 9 by lot, who elected 45, reduced to 11 by lot, who elected 41 final electors. These 41 then elected the Doge by supermajority. This process made it virtually impossible to rig the outcome.",
+    "whenToUse": "When an agent system must prevent any single agent or coalition from accumulating unchecked power, prioritizing long-term institutional stability over short-term decisional efficiency.",
+    "strengths": [
+      "Multi-round lottery-ballot hybrid makes election manipulation virtually impossible",
+      "Overlapping councils with different compositions prevent any single body from dominating",
+      "Term limits and rotation ensure fresh perspectives and prevent power entrenchment",
+      "1,100 years of stability validates the architecture's resilience to internal threats"
+    ],
+    "weaknesses": [
+      "Extreme procedural complexity makes rapid decision-making nearly impossible in crises",
+      "Restricted to patrician class: stability came at the cost of excluding most citizens from power",
+      "Anonymous denunciation system was vulnerable to abuse for personal vendettas",
+      "Institutional conservatism that preserved the republic also prevented necessary adaptation to modernity"
+    ],
+    "agents": [
+      {
+        "role": "doge",
+        "name": "Doge",
+        "description": "Ceremonial head of state elected for life; presides over councils but cannot act unilaterally, representing the republic's continuity and dignity",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "great-council",
+        "name": "Great Council",
+        "description": "Assembly of all patrician families (~2,000 members) that elects officials, passes legislation, and serves as the ultimate sovereign body",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senate",
+        "name": "Senate (Pregadi)",
+        "description": "Deliberative body of ~300 members managing foreign policy, trade agreements, and military strategy",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "council-of-ten",
+        "name": "Council of Ten",
+        "description": "State security body with extraordinary powers; investigates conspiracies, manages intelligence, and can act in secret, but members rotate annually",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "avogadori",
+        "name": "Avogadori di Comun",
+        "description": "Three state attorneys who review all government actions for constitutionality and can block or reverse illegal decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "ducal-councilors",
+        "name": "Ducal Councilors (Minor Council)",
+        "description": "Six councilors who must be present for any Doge action to be valid; serve as a constant check on ducal authority",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "inquisitors-of-state",
+        "name": "State Inquisitors",
+        "description": "Three officials drawn from the Council of Ten with power to investigate and prosecute treason, operating in total secrecy",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Great Council Assembly",
+        "type": "decision",
+        "participants": [
+          "great-council",
+          "doge",
+          "avogadori"
+        ]
+      },
+      {
+        "name": "Senate Deliberation",
+        "type": "threaded",
+        "participants": [
+          "senate",
+          "doge",
+          "ducal-councilors"
+        ]
+      },
+      {
+        "name": "Council of Ten Session",
+        "type": "decision",
+        "participants": [
+          "council-of-ten",
+          "doge",
+          "ducal-councilors"
+        ]
+      },
+      {
+        "name": "Constitutional Review",
+        "type": "advisory",
+        "participants": [
+          "avogadori",
+          "doge",
+          "great-council"
+        ]
+      },
+      {
+        "name": "Ducal Approval",
+        "type": "peer-to-peer",
+        "participants": [
+          "doge",
+          "ducal-councilors"
+        ]
+      },
+      {
+        "name": "Anonymous Denunciations",
+        "type": "queue",
+        "participants": [
+          "council-of-ten",
+          "inquisitors-of-state"
+        ]
+      },
+      {
+        "name": "Doge Election Process",
+        "type": "decision",
+        "participants": [
+          "great-council"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "constitutional laws and customs",
+        "public decrees",
+        "trade treaties",
+        "Great Council membership roll",
+        "election procedures"
+      ],
+      "private": [
+        "Council of Ten security files",
+        "State Inquisitor investigation records",
+        "anonymous denunciation contents",
+        "intelligence reports"
+      ],
+      "description": "Venice's memory architecture was deliberately fragmented to prevent power concentration. Constitutional laws were shared and immutable without Great Council supermajority. The Council of Ten maintained private security files but with rotating access as membership changed annually. The Doge's actions were recorded in shared minutes that required Ducal Councilor co-signatures. Anonymous denunciations were private to the Council of Ten and could only be acted upon if corroborated by independent investigation. Election records used a lottery-based system that was intentionally unrecordable to prevent pattern analysis."
+    },
+    "diagram": "graph TD\n    GC[Great Council 2000+] -->|elects| DOGE[Doge]\n    GC -->|elects| SEN[Senate 300]\n    GC -->|elects| C10[Council of Ten]\n    DOGE --> DC[Ducal Councilors 6]\n    DC -->|must approve| DOGE\n    C10 --> INQ[State Inquisitors 3]\n    AVG[Avogadori 3] -->|constitutional review| GC\n    AVG -->|constitutional review| SEN\n    AVG -->|constitutional review| C10\n    BOCCA[Bocca di Leone] -->|denunciations| C10",
+    "hierarchyTypes": [
+      "consensus",
+      "federated"
+    ]
+  }
+]

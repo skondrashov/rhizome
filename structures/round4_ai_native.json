@@ -1,0 +1,1432 @@
+[
+  {
+    "id": "context-window-relay",
+    "name": "Context Window Relay",
+    "category": "Technology & Engineering",
+    "tags": [
+      "context-management",
+      "summarization",
+      "token-efficiency",
+      "sequential-handoff"
+    ],
+    "summary": "Agents pass compressed context like a relay baton when approaching token limits.",
+    "description": "When an agent's context window fills up during a long-running task, it compresses its working state into a structured summary and hands it to a fresh agent. The receiving agent has a full, empty context window and continues the work. Each handoff is a lossy compression event, so the relay protocol includes a priority schema that preserves critical state (decisions made, constraints discovered, dead ends) while discarding low-value tokens (verbose reasoning, failed attempts). The pattern turns an inherent limitation of LLMs -- finite context -- into a feature that forces periodic distillation of knowledge.",
+    "realWorldExample": "Claude Code's context rollover system, where a long coding session summarizes progress and active goals into a compact memo that bootstraps the next context window seamlessly.",
+    "whenToUse": "When tasks exceed any single context window, when long-running sessions accumulate stale or contradictory context, or when periodic forced summarization actually improves output quality by pruning noise.",
+    "strengths": [
+      "Enables arbitrarily long tasks despite finite context windows",
+      "Forced compression often improves clarity by distilling essential insights",
+      "Each fresh agent starts without accumulated confusion or hallucination drift",
+      "Naturally creates a log of progressive summaries that document the work"
+    ],
+    "weaknesses": [
+      "Every handoff loses nuance -- subtle reasoning chains may not survive compression",
+      "The summary format must be carefully designed or critical context is dropped",
+      "Agents cannot reference earlier raw reasoning, only the compressed version",
+      "Latency spikes at each handoff while the new agent re-orients"
+    ],
+    "agents": [
+      {
+        "role": "active-runner",
+        "name": "Active Runner",
+        "description": "The agent currently holding the baton, performing the primary task within its context window",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "compressor",
+        "name": "Compressor",
+        "description": "Monitors token usage and produces structured summaries when context is nearing capacity",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "fresh-runner",
+        "name": "Fresh Runner",
+        "description": "A new agent instance that receives the compressed baton and continues work with a full context window",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "relay-auditor",
+        "name": "Relay Auditor",
+        "description": "Verifies that no critical information was lost during handoff by spot-checking key facts",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Baton Channel",
+        "type": "queue",
+        "participants": [
+          "active-runner",
+          "compressor",
+          "fresh-runner"
+        ]
+      },
+      {
+        "name": "Summary Archive",
+        "type": "log",
+        "participants": [
+          "compressor",
+          "relay-auditor"
+        ]
+      },
+      {
+        "name": "Integrity Checks",
+        "type": "advisory",
+        "participants": [
+          "relay-auditor",
+          "fresh-runner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "baton-summary-queue",
+        "handoff-log",
+        "critical-decisions-registry"
+      ],
+      "private": [
+        "token-usage-tracker",
+        "compression-heuristics"
+      ],
+      "description": "Each runner's context is ephemeral and dies at handoff. The compressor maintains persistent knowledge of what matters most in this task domain. The baton summary queue is the sole bridge between agent lifetimes. The auditor keeps a persistent record of all summaries to detect cumulative drift."
+    },
+    "diagram": "graph LR\n    R1[Runner 1] -->|fills context| C[Compressor]\n    C -->|structured baton| R2[Runner 2]\n    R2 -->|fills context| C\n    C -->|structured baton| R3[Runner 3]\n    C -->|archive| SA[Summary Archive]\n    RA[Relay Auditor] -->|spot-check| SA\n    RA -->|integrity flag| R2\n    RA -->|integrity flag| R3",
+    "hierarchyTypes": [
+      "pipeline"
+    ]
+  },
+  {
+    "id": "temperature-gradient-ensemble",
+    "name": "Temperature Gradient Ensemble",
+    "category": "Technology & Engineering",
+    "tags": [
+      "sampling-diversity",
+      "ensemble-method",
+      "temperature-control",
+      "voting"
+    ],
+    "summary": "Same prompt at different temperatures produces diverse candidates; a cold judge selects the best.",
+    "description": "Multiple agents receive identical prompts but operate at different temperature settings, creating a gradient from deterministic (near-zero temperature) to highly creative (high temperature). Low-temperature agents produce safe, conventional outputs. High-temperature agents produce surprising, occasionally brilliant, occasionally nonsensical outputs. A judge agent operating at very low temperature evaluates all candidates against explicit criteria and selects or synthesizes the best result. This exploits the fact that LLM temperature is a unique knob with no human analogue -- it literally controls the entropy of thought.",
+    "realWorldExample": "Google DeepMind's AlphaCode generates thousands of code solutions with high sampling temperature, then clusters and ranks them with deterministic evaluation to find correct programs that greedy decoding would never produce.",
+    "whenToUse": "When the problem rewards creative solutions but also demands correctness, when you suspect the greedy/obvious answer is suboptimal, or when you need reliable novelty on demand.",
+    "strengths": [
+      "Systematically explores the creativity-reliability tradeoff in a single pass",
+      "High-temperature samples occasionally find solutions invisible to greedy search",
+      "The cold judge provides a reliable quality filter on diverse candidates",
+      "Trivially parallelizable since all generation agents are independent"
+    ],
+    "weaknesses": [
+      "Compute cost scales linearly with the number of temperature tiers",
+      "High-temperature outputs are mostly low quality, wasting tokens on noise",
+      "The cold judge may be too conservative, filtering out genuinely novel ideas",
+      "No mechanism for agents at different temperatures to learn from each other"
+    ],
+    "agents": [
+      {
+        "role": "cold-generator",
+        "name": "Cold Generator",
+        "description": "Generates at near-zero temperature for deterministic, safe, high-probability outputs",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "warm-generator",
+        "name": "Warm Generator",
+        "description": "Generates at moderate temperature for balanced creativity and coherence",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "hot-generator",
+        "name": "Hot Generator",
+        "description": "Generates at high temperature for maximum diversity and surprising combinations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "cold-judge",
+        "name": "Cold Judge",
+        "description": "Evaluates all candidates at near-zero temperature using explicit criteria, selects or synthesizes the best",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Candidate Pool",
+        "type": "queue",
+        "participants": [
+          "cold-generator",
+          "warm-generator",
+          "hot-generator",
+          "cold-judge"
+        ]
+      },
+      {
+        "name": "Judgment Rationale",
+        "type": "broadcast",
+        "participants": [
+          "cold-judge"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "candidate-pool",
+        "evaluation-rubric",
+        "selection-history"
+      ],
+      "private": [
+        "generation-parameters",
+        "sampling-seed"
+      ],
+      "description": "All generators write to a shared candidate pool with no awareness of each other. The judge reads the full pool and applies the rubric. Memory is entirely ephemeral per round -- no generator remembers previous rounds. The selection history exists only for external analysis of which temperature tiers produce the most winners over time."
+    },
+    "diagram": "graph TD\n    P[Shared Prompt] --> CG[Cold Generator t=0.1]\n    P --> WG[Warm Generator t=0.7]\n    P --> HG[Hot Generator t=1.4]\n    CG -->|candidate| CP[Candidate Pool]\n    WG -->|candidate| CP\n    HG -->|candidate| CP\n    CP --> CJ[Cold Judge t=0.0]\n    CJ -->|selected output| OUT[Final Output]",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "checkpoint-and-branch",
+    "name": "Checkpoint & Branch",
+    "category": "Technology & Engineering",
+    "tags": [
+      "state-management",
+      "parallel-exploration",
+      "rollback",
+      "branching"
+    ],
+    "summary": "Agents checkpoint state, branch into parallel explorations, and merge the winning branch.",
+    "description": "An agent working on a complex task periodically saves its full state -- context, decisions, artifacts -- as a checkpoint. At decision points with high uncertainty, the system forks into parallel branches, each exploring a different path from the same checkpoint. Branches run independently and are evaluated against success criteria. The best branch is promoted while others are discarded, or valuable discoveries from losing branches are cherry-picked back. This is version control for thought, and it only makes sense because AI agent state is serializable in a way that human cognition is not.",
+    "realWorldExample": "Devin and similar AI coding agents that save workspace snapshots before attempting risky refactors, branching into multiple implementation strategies and keeping whichever one passes tests.",
+    "whenToUse": "When decisions are high-stakes and partially irreversible, when you cannot evaluate a strategy without committing significant compute to it, or when the solution space has multiple promising but mutually exclusive directions.",
+    "strengths": [
+      "Eliminates the cost of bad decisions -- you can always roll back to the checkpoint",
+      "Parallel branches explore diverse strategies without mutual interference",
+      "Cherry-picking from losing branches preserves partial discoveries",
+      "Creates a natural decision tree that documents the exploration process"
+    ],
+    "weaknesses": [
+      "Memory and compute cost multiply with each fork in the branch tree",
+      "Branch evaluation requires clear success criteria defined in advance",
+      "Merging insights from multiple branches is lossy and may miss synergies",
+      "Deep branching trees become exponentially expensive and hard to manage"
+    ],
+    "agents": [
+      {
+        "role": "trunk-agent",
+        "name": "Trunk Agent",
+        "description": "The primary agent that performs work and decides when to checkpoint and branch",
+        "memory": "versioned"
+      },
+      {
+        "role": "branch-agent",
+        "name": "Branch Agent",
+        "description": "A forked copy of the trunk agent that explores one specific path from a checkpoint",
+        "memory": "versioned"
+      },
+      {
+        "role": "branch-evaluator",
+        "name": "Branch Evaluator",
+        "description": "Compares branch outcomes against success criteria and selects the winning branch",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cherry-picker",
+        "name": "Cherry Picker",
+        "description": "Extracts valuable partial results from losing branches before they are discarded",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Checkpoint Store",
+        "type": "log",
+        "participants": [
+          "trunk-agent",
+          "branch-agent"
+        ]
+      },
+      {
+        "name": "Branch Results",
+        "type": "queue",
+        "participants": [
+          "branch-agent",
+          "branch-evaluator"
+        ]
+      },
+      {
+        "name": "Merge Decisions",
+        "type": "decision",
+        "participants": [
+          "branch-evaluator",
+          "cherry-picker",
+          "trunk-agent"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "checkpoint-store",
+        "branch-result-registry",
+        "cherry-picked-insights"
+      ],
+      "private": [
+        "branch-local-state",
+        "exploration-path-log"
+      ],
+      "description": "The checkpoint store holds serialized agent states at branch points. Each branch agent has private memory that diverges from the checkpoint. The evaluator maintains a shared registry of branch outcomes. Cherry-picked insights are added to trunk memory before the next phase. Losing branches are garbage-collected after cherry-picking."
+    },
+    "diagram": "graph TD\n    T[Trunk Agent] -->|checkpoint| CP1[Checkpoint 1]\n    CP1 --> B1[Branch A]\n    CP1 --> B2[Branch B]\n    CP1 --> B3[Branch C]\n    B1 -->|result| EV[Branch Evaluator]\n    B2 -->|result| EV\n    B3 -->|result| EV\n    EV -->|winner| T2[Trunk Continues]\n    EV -->|losers| CHP[Cherry Picker]\n    CHP -->|partial insights| T2",
+    "hierarchyTypes": [
+      "pipeline",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "tool-specialist-ring",
+    "name": "Tool Specialist Ring",
+    "category": "Technology & Engineering",
+    "tags": [
+      "tool-use",
+      "specialization",
+      "routing",
+      "capability-based"
+    ],
+    "summary": "Agents specialize in specific tools and a router dispatches subtasks to the right specialist.",
+    "description": "Each agent in the ring is fine-tuned or prompted to excel with a specific tool category: one masters code execution, another web search, another mathematical computation, another file manipulation. A lightweight router agent analyzes incoming tasks, decomposes them into tool-requiring subtasks, and dispatches each to the appropriate specialist. Specialists return results to the router, which assembles the final output. This pattern exploits the empirical finding that LLMs perform better when focused on one tool at a time rather than juggling many tools simultaneously, and it mirrors how system prompts and few-shot examples can create deep tool expertise.",
+    "realWorldExample": "Microsoft AutoGen's group chat pattern where a code executor agent, a web researcher agent, and a planner agent each handle their domain, coordinated by a manager agent that routes requests.",
+    "whenToUse": "When tasks require multiple tool types, when tool-specific prompting significantly improves accuracy, or when you want to update or swap individual tool specialists without rebuilding the whole system.",
+    "strengths": [
+      "Each specialist's prompt is optimized for one tool, maximizing tool-use accuracy",
+      "New tools are added by adding a specialist, not modifying existing agents",
+      "Specialists can be different models chosen for their tool-specific strengths",
+      "Parallel dispatch when subtasks are independent across tool domains"
+    ],
+    "weaknesses": [
+      "The router is a single point of failure and bottleneck for all task decomposition",
+      "Cross-tool reasoning is lost since no single agent sees the full tool landscape",
+      "Router misclassification sends subtasks to the wrong specialist with no recovery",
+      "Overhead of inter-agent communication adds latency compared to a single multi-tool agent"
+    ],
+    "agents": [
+      {
+        "role": "router",
+        "name": "Task Router",
+        "description": "Analyzes tasks, decomposes them into tool-requiring subtasks, and dispatches to specialists",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "code-specialist",
+        "name": "Code Specialist",
+        "description": "Expert in code generation, execution, and debugging with sandboxed runtime access",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "search-specialist",
+        "name": "Search Specialist",
+        "description": "Expert in web search, retrieval, and information synthesis from external sources",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "math-specialist",
+        "name": "Math Specialist",
+        "description": "Expert in formal computation, symbolic math, and numerical analysis tools",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "file-specialist",
+        "name": "File Specialist",
+        "description": "Expert in file system operations, document parsing, and data format transformations",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Task Dispatch Queue",
+        "type": "queue",
+        "participants": [
+          "router",
+          "code-specialist",
+          "search-specialist",
+          "math-specialist",
+          "file-specialist"
+        ]
+      },
+      {
+        "name": "Results Assembly",
+        "type": "bottom-up",
+        "participants": [
+          "code-specialist",
+          "search-specialist",
+          "math-specialist",
+          "file-specialist",
+          "router"
+        ]
+      },
+      {
+        "name": "Capability Registry",
+        "type": "document",
+        "participants": [
+          "router"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "task-dispatch-queue",
+        "assembled-results",
+        "capability-registry"
+      ],
+      "private": [
+        "tool-specific-examples",
+        "error-recovery-patterns",
+        "specialist-session-state"
+      ],
+      "description": "The router maintains a shared capability registry describing what each specialist can do. Each specialist maintains private memory of tool-specific patterns and error recovery strategies learned over time. Results flow back through a shared assembly area where the router combines them. No specialist sees another specialist's work directly."
+    },
+    "diagram": "graph TD\n    IN[Incoming Task] --> R[Task Router]\n    R -->|code subtask| CS[Code Specialist]\n    R -->|search subtask| SS[Search Specialist]\n    R -->|math subtask| MS[Math Specialist]\n    R -->|file subtask| FS[File Specialist]\n    CS -->|result| RA[Results Assembly]\n    SS -->|result| RA\n    MS -->|result| RA\n    FS -->|result| RA\n    RA --> R\n    R --> OUT[Final Output]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "constitutional-governance",
+    "name": "Constitutional AI Governance",
+    "category": "Technology & Engineering",
+    "tags": [
+      "safety",
+      "alignment",
+      "red-teaming",
+      "constitutional"
+    ],
+    "summary": "A constitution agent enforces principles, a red-team attacks outputs, and a reviser fixes issues.",
+    "description": "Three agents form a governance layer over any generative process. The constitution agent holds an explicit set of principles and reviews all outputs for violations. The red-team agent adversarially probes outputs for subtle failures -- edge cases, implicit biases, factual errors, safety violations -- that constitutional review might miss. The reviser agent takes flagged outputs and rewrites them to satisfy both the constitutional principles and the red-team's concerns while preserving the original intent. This pattern is native to AI because the agents can literally evaluate against a formal principle document with a consistency that humans cannot maintain, and the red-team agent can be prompted to adopt adversarial personas that would be psychologically difficult for human reviewers.",
+    "realWorldExample": "Anthropic's Constitutional AI training process where a model critiques its own outputs against a set of principles, then revises to comply, creating a self-improving alignment loop.",
+    "whenToUse": "When outputs must meet strict safety, accuracy, or policy requirements, when you need adversarial robustness testing on every output, or when building trust in AI systems through verifiable compliance.",
+    "strengths": [
+      "Explicit principles make governance auditable and debuggable",
+      "Red-team catches failures that rule-based checking would miss",
+      "The revision step preserves value while fixing problems, rather than just rejecting",
+      "Separation of concerns prevents any single agent from being judge and jury"
+    ],
+    "weaknesses": [
+      "Three-agent pipeline adds significant latency to every output",
+      "Constitutional principles can conflict, requiring meta-level adjudication",
+      "Red-team agent may flag false positives, creating unnecessary revision churn",
+      "The constitution is only as good as the humans who wrote it"
+    ],
+    "agents": [
+      {
+        "role": "constitution-keeper",
+        "name": "Constitution Keeper",
+        "description": "Holds the explicit principle document and reviews all outputs for compliance violations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "red-team",
+        "name": "Red Team",
+        "description": "Adversarially probes outputs for subtle failures, edge cases, and safety violations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reviser",
+        "name": "Reviser",
+        "description": "Rewrites flagged outputs to satisfy principles and red-team concerns while preserving intent",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "generator",
+        "name": "Generator",
+        "description": "Produces the initial output that enters the governance pipeline",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Review Pipeline",
+        "type": "queue",
+        "participants": [
+          "generator",
+          "constitution-keeper",
+          "red-team",
+          "reviser"
+        ]
+      },
+      {
+        "name": "Principle Document",
+        "type": "document",
+        "participants": [
+          "constitution-keeper",
+          "reviser"
+        ]
+      },
+      {
+        "name": "Violation Log",
+        "type": "log",
+        "participants": [
+          "constitution-keeper",
+          "red-team"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "constitution-document",
+        "violation-log",
+        "revision-history"
+      ],
+      "private": [
+        "red-team-attack-patterns",
+        "revision-strategies"
+      ],
+      "description": "The constitution document is the shared source of truth. The violation log records every flagged issue for pattern analysis. The red-team agent deliberately uses ephemeral memory so it approaches each output fresh, avoiding the trap of only checking for previously seen failure modes. The reviser is also ephemeral to prevent developing blind spots."
+    },
+    "diagram": "graph LR\n    G[Generator] -->|draft output| CK[Constitution Keeper]\n    CK -->|pass or flag| RT[Red Team]\n    RT -->|pass or flag| REV[Reviser]\n    REV -->|revised output| CK\n    CK -->|approved| OUT[Final Output]\n    PD[Principle Document] -.->|guides| CK\n    PD -.->|guides| REV\n    VL[Violation Log] -.->|patterns| CK",
+    "hierarchyTypes": [
+      "adversarial",
+      "pipeline",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "prompt-chain-assembly-line",
+    "name": "Prompt Chain Assembly Line",
+    "category": "Technology & Engineering",
+    "tags": [
+      "sequential-processing",
+      "artifact-building",
+      "chain-of-thought",
+      "pipeline"
+    ],
+    "summary": "Each agent adds a layer of transformation to a growing artifact passed sequentially down the line.",
+    "description": "A sequence of specialized agents each performs one transformation on a growing artifact. The first agent generates a rough draft, the second adds structure, the third enriches with examples, the fourth polishes style, the fifth verifies facts. Each agent sees only the current state of the artifact and its specific transformation instructions -- not the original prompt or previous agents' reasoning. This mirrors manufacturing assembly lines but for language artifacts, and it works because each agent's context window is filled only with the artifact and its specialty prompt, maximizing the attention budget for its specific task. The pattern is AI-native because each station can be a different model chosen for its transformation strength.",
+    "realWorldExample": "LangChain's sequential chains where a research agent gathers information, a drafting agent writes prose, an editing agent refines, and a formatting agent produces the final document.",
+    "whenToUse": "When the final artifact requires multiple distinct skill types, when no single prompt can reliably produce the end product, or when you want to swap individual transformation stages independently.",
+    "strengths": [
+      "Each agent's context is focused entirely on its transformation, maximizing quality",
+      "Easy to debug by inspecting the artifact at each stage of the pipeline",
+      "Individual stages can be swapped, reordered, or upgraded without affecting others",
+      "Different model sizes or types can be used at each stage based on difficulty"
+    ],
+    "weaknesses": [
+      "Latency is the sum of all stages, no parallelism possible",
+      "Early-stage errors propagate and compound through the entire pipeline",
+      "No agent has the full context of the original request, risking drift from intent",
+      "Adding or removing stages requires careful re-evaluation of the whole pipeline"
+    ],
+    "agents": [
+      {
+        "role": "drafter",
+        "name": "Drafter",
+        "description": "Generates the initial rough artifact from the original request",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "structurer",
+        "name": "Structurer",
+        "description": "Reorganizes the draft into a logical structure with clear sections and hierarchy",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "enricher",
+        "name": "Enricher",
+        "description": "Adds examples, evidence, details, and supporting content to the structured artifact",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "polisher",
+        "name": "Polisher",
+        "description": "Refines style, tone, clarity, and readability of the enriched artifact",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "verifier",
+        "name": "Verifier",
+        "description": "Fact-checks claims, validates logic, and flags unsupported assertions in the final artifact",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Assembly Belt",
+        "type": "queue",
+        "participants": [
+          "drafter",
+          "structurer",
+          "enricher",
+          "polisher",
+          "verifier"
+        ]
+      },
+      {
+        "name": "Stage Inspection Log",
+        "type": "log",
+        "participants": [
+          "drafter",
+          "structurer",
+          "enricher",
+          "polisher",
+          "verifier"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "artifact-in-transit",
+        "stage-inspection-snapshots",
+        "original-request-hash"
+      ],
+      "private": [
+        "transformation-instructions",
+        "stage-specific-examples"
+      ],
+      "description": "The artifact flows through a shared queue, visible only to the current stage. Each stage saves a snapshot for debugging. All agent memory is ephemeral -- they have no knowledge of previous runs or other stages. A hash of the original request travels with the artifact so the verifier can check for intent drift without seeing the full original prompt."
+    },
+    "diagram": "graph LR\n    REQ[Original Request] --> D[Drafter]\n    D -->|rough draft| S[Structurer]\n    S -->|structured| E[Enricher]\n    E -->|enriched| P[Polisher]\n    P -->|polished| V[Verifier]\n    V -->|verified| OUT[Final Artifact]\n    D -.->|snapshot| LOG[Inspection Log]\n    S -.->|snapshot| LOG\n    E -.->|snapshot| LOG\n    P -.->|snapshot| LOG",
+    "hierarchyTypes": [
+      "pipeline"
+    ]
+  },
+  {
+    "id": "rag-librarian-analyst-split",
+    "name": "RAG Librarian-Analyst Split",
+    "category": "Technology & Engineering",
+    "tags": [
+      "retrieval-augmented",
+      "separation-of-concerns",
+      "knowledge-management",
+      "grounded-reasoning"
+    ],
+    "summary": "A retrieval agent finds relevant context while an analyst agent reasons over it, cleanly separated.",
+    "description": "The system splits the RAG pipeline into two distinct agent roles. The librarian agent specializes in retrieval: given a query, it searches vector stores, databases, documents, and the web, then curates and ranks the most relevant passages. The analyst agent specializes in reasoning: it receives only the curated context and the original question, then produces a grounded answer. Neither agent does the other's job. This separation is AI-native because it addresses a fundamental tension in LLM prompting -- retrieval quality and reasoning quality compete for the same context window space. By splitting them, each agent's full context budget serves its specialty.",
+    "realWorldExample": "Perplexity AI's architecture where a retrieval system finds and ranks web sources independently of the language model that synthesizes them into a coherent answer with citations.",
+    "whenToUse": "When answers must be grounded in specific documents or data, when retrieval quality is as important as reasoning quality, or when you want to swap retrieval strategies without touching the reasoning layer.",
+    "strengths": [
+      "Each agent's full context window serves its specialty, improving both retrieval and reasoning",
+      "The librarian can be swapped between vector search, keyword search, or hybrid without touching the analyst",
+      "Analyst receives pre-curated context, reducing hallucination from irrelevant passages",
+      "Clear accountability: retrieval failures and reasoning failures are independently diagnosable"
+    ],
+    "weaknesses": [
+      "The librarian may retrieve passages the analyst needs but fail to recognize their relevance",
+      "The analyst cannot request additional retrieval if the initial context is insufficient",
+      "Two-agent latency is higher than a single agent doing both retrieval and reasoning",
+      "The librarian must guess what the analyst will need, which requires implicit theory of mind"
+    ],
+    "agents": [
+      {
+        "role": "librarian",
+        "name": "Librarian",
+        "description": "Searches knowledge sources, curates relevant passages, and ranks them by relevance to the query",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "analyst",
+        "name": "Analyst",
+        "description": "Receives curated context and the original question, then produces a grounded, cited answer",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "feedback-loop",
+        "name": "Feedback Agent",
+        "description": "If the analyst indicates insufficient context, triggers additional retrieval rounds",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Retrieval Results",
+        "type": "queue",
+        "participants": [
+          "librarian",
+          "analyst"
+        ]
+      },
+      {
+        "name": "Insufficiency Signals",
+        "type": "peer-to-peer",
+        "participants": [
+          "analyst",
+          "feedback-loop",
+          "librarian"
+        ]
+      },
+      {
+        "name": "Source Index",
+        "type": "document",
+        "participants": [
+          "librarian"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "retrieval-results-cache",
+        "source-index",
+        "query-reformulation-history"
+      ],
+      "private": [
+        "embedding-space-model",
+        "retrieval-strategy-preferences",
+        "citation-tracking"
+      ],
+      "description": "The librarian maintains a persistent index of available sources and learns retrieval preferences over time. The analyst is deliberately ephemeral -- it reasons only from the context provided, preventing it from relying on memorized knowledge. The feedback agent tracks patterns of insufficiency to proactively improve future retrieval."
+    },
+    "diagram": "graph TD\n    Q[User Query] --> L[Librarian]\n    L -->|searches| VS[Vector Store]\n    L -->|searches| DB[Document DB]\n    L -->|searches| WEB[Web Sources]\n    L -->|curated context| A[Analyst]\n    Q --> A\n    A -->|grounded answer| OUT[Output with Citations]\n    A -->|need more| FB[Feedback Agent]\n    FB -->|refined query| L",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "critic-generator-loop",
+    "name": "Critic-Generator Loop",
+    "category": "Novel & Experimental",
+    "tags": [
+      "iterative-refinement",
+      "adversarial-cooperation",
+      "tight-loop",
+      "quality-ratchet"
+    ],
+    "summary": "A generator proposes, a critic evaluates, and the generator revises in a tight refinement loop.",
+    "description": "Two agents form a tight iterative loop. The generator produces an output, then the critic identifies specific flaws, gaps, or improvement opportunities with detailed, actionable feedback. The generator revises its output based on the critique, and the cycle repeats until the critic finds no further issues or a maximum iteration count is reached. This is AI-native because the critic can be prompted with evaluation rubrics that create superhuman consistency in quality assessment, and the loop termination can be automated based on the critic's diminishing feedback signal. Unlike human feedback loops, there is zero ego, zero communication friction, and the loop can run at machine speed.",
+    "realWorldExample": "OpenAI's RLHF process at inference time: models like o1 internally generate, evaluate, and refine reasoning steps before producing a final answer, essentially running a critic-generator loop within a single forward pass.",
+    "whenToUse": "When first-draft quality is reliably improvable through feedback, when the evaluation criteria are well-defined, or when you need to reach a specific quality threshold and can afford iterative compute.",
+    "strengths": [
+      "Monotonically improves output quality with each iteration up to the critic's limit",
+      "The critic provides a natural stopping criterion when feedback diminishes",
+      "Generator learns to anticipate criticism, improving initial drafts over time",
+      "Separating generation from evaluation prevents self-reinforcing biases"
+    ],
+    "weaknesses": [
+      "The loop can only improve along dimensions the critic can evaluate",
+      "Risk of over-editing: the critic may introduce new issues while fixing old ones",
+      "Latency grows linearly with iteration count, unpredictable total time",
+      "The generator and critic can enter adversarial oscillation, alternately fixing and breaking things"
+    ],
+    "agents": [
+      {
+        "role": "generator",
+        "name": "Generator",
+        "description": "Produces and iteratively revises outputs based on critique feedback",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "critic",
+        "name": "Critic",
+        "description": "Evaluates outputs against rubric, provides specific actionable feedback, signals when quality is sufficient",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "loop-controller",
+        "name": "Loop Controller",
+        "description": "Monitors iteration count, detects oscillation, and enforces termination conditions",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Revision Cycle",
+        "type": "peer-to-peer",
+        "participants": [
+          "generator",
+          "critic"
+        ]
+      },
+      {
+        "name": "Quality Trajectory",
+        "type": "log",
+        "participants": [
+          "critic",
+          "loop-controller"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current-artifact-version",
+        "critique-history",
+        "quality-score-trajectory"
+      ],
+      "private": [
+        "evaluation-rubric",
+        "oscillation-detection-state"
+      ],
+      "description": "The current artifact version is shared between generator and critic. Critique history accumulates so the generator can see all past feedback. The quality trajectory tracks scores over iterations so the loop controller can detect plateaus and oscillation. Both generator and critic are ephemeral per-iteration to prevent staleness, but see the full critique history."
+    },
+    "diagram": "graph TD\n    G[Generator] -->|draft v1| C[Critic]\n    C -->|feedback| G\n    G -->|draft v2| C\n    C -->|feedback| G\n    G -->|draft vN| C\n    C -->|approved| OUT[Final Output]\n    C -->|scores| LC[Loop Controller]\n    LC -->|terminate signal| C",
+    "hierarchyTypes": [
+      "mesh",
+      "adversarial",
+      "chain-of-command",
+      "orchestrated",
+      "pipeline",
+      "federated"
+    ]
+  },
+  {
+    "id": "mixture-of-agents",
+    "name": "Mixture of Agents",
+    "category": "Novel & Experimental",
+    "tags": [
+      "heterogeneous-models",
+      "aggregation",
+      "diversity",
+      "synthesis"
+    ],
+    "summary": "Diverse specialist agents with different strengths produce outputs that an aggregator synthesizes.",
+    "description": "Multiple agents with genuinely different capabilities -- different base models, different fine-tuning, different system prompts, different tool access -- each process the same input. Their outputs are fed to an aggregator agent that synthesizes the best elements from each into a single response. Unlike simple voting, the aggregator performs intelligent fusion: it might take the factual claims from the most accurate model, the writing style from the most eloquent, the code from the best programmer, and the reasoning structure from the best logician. This is native to AI because agents can be trivially diversified along dimensions that are hard for humans: model architecture, training data, temperature, and prompting strategy.",
+    "realWorldExample": "Together AI's 'Mixture of Agents' paper demonstrated that combining outputs from Llama, Qwen, and Mistral through an aggregator LLM outperformed all individual models, including GPT-4, on benchmarks.",
+    "whenToUse": "When no single model excels at all aspects of the task, when you have access to diverse models with complementary strengths, or when the aggregation cost is justified by the quality improvement.",
+    "strengths": [
+      "Exceeds the capability of any individual model by combining complementary strengths",
+      "Robust to individual model failures since the aggregator can route around weak outputs",
+      "Easy to add new models to the mixture without changing existing agents",
+      "Diversity of perspectives reduces systematic blind spots present in any single model"
+    ],
+    "weaknesses": [
+      "The aggregator agent must be sophisticated enough to recognize quality across diverse outputs",
+      "Compute cost is multiplicative: every query runs through all specialists plus the aggregator",
+      "If specialists produce contradictory information, the aggregator may make arbitrary choices",
+      "The aggregator becomes a bottleneck that limits throughput to single-agent speed"
+    ],
+    "agents": [
+      {
+        "role": "specialist-a",
+        "name": "Reasoning Specialist",
+        "description": "A model fine-tuned for logical reasoning and structured analysis",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "specialist-b",
+        "name": "Creative Specialist",
+        "description": "A model fine-tuned for creative writing, metaphor, and engaging prose",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "specialist-c",
+        "name": "Factual Specialist",
+        "description": "A model with strong factual grounding and citation habits, trained on curated knowledge",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "specialist-d",
+        "name": "Code Specialist",
+        "description": "A model fine-tuned specifically for code generation and technical implementation",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "aggregator",
+        "name": "Aggregator",
+        "description": "Reads all specialist outputs and synthesizes the best elements into a single superior response",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Specialist Outputs",
+        "type": "queue",
+        "participants": [
+          "specialist-a",
+          "specialist-b",
+          "specialist-c",
+          "specialist-d",
+          "aggregator"
+        ]
+      },
+      {
+        "name": "Synthesis Rationale",
+        "type": "broadcast",
+        "participants": [
+          "aggregator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "specialist-output-pool",
+        "synthesis-rationale-log"
+      ],
+      "private": [
+        "model-specific-parameters",
+        "specialist-system-prompt"
+      ],
+      "description": "All specialists write to a shared output pool but cannot see each other's outputs. The aggregator reads all outputs and produces a synthesis with an explicit rationale explaining which elements came from which specialist. All memory is ephemeral -- each query is independent. The synthesis rationale log exists for external analysis of which specialists are most valuable."
+    },
+    "diagram": "graph TD\n    IN[Input Query] --> SA[Reasoning Specialist]\n    IN --> SB[Creative Specialist]\n    IN --> SC[Factual Specialist]\n    IN --> SD[Code Specialist]\n    SA -->|output| AGG[Aggregator]\n    SB -->|output| AGG\n    SC -->|output| AGG\n    SD -->|output| AGG\n    AGG -->|synthesized| OUT[Final Output]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "pipeline",
+      "swarm"
+    ]
+  },
+  {
+    "id": "hierarchical-summarization-tree",
+    "name": "Hierarchical Summarization Tree",
+    "category": "Technology & Engineering",
+    "tags": [
+      "map-reduce",
+      "summarization",
+      "large-document",
+      "tree-structure"
+    ],
+    "summary": "Leaf agents process document chunks, parent agents merge summaries up a tree to a root synthesis.",
+    "description": "For processing documents that exceed any single context window, the input is split into chunks assigned to leaf agents. Each leaf produces a summary of its chunk. Parent agents at the next level receive summaries from their children and merge them into higher-level summaries. This continues up the tree until a root agent produces the final synthesis. The tree structure is AI-native because it directly addresses the context window constraint: no agent ever needs to hold more than a few summaries in context, yet the system processes arbitrarily large inputs. The branching factor and tree depth can be tuned to optimize the compression-quality tradeoff at each level.",
+    "realWorldExample": "LangChain's MapReduceDocumentsChain splits large documents into chunks, summarizes each independently, then progressively combines summaries until a single coherent summary remains.",
+    "whenToUse": "When inputs far exceed any single context window, when summarization quality degrades with chunk size, or when you need to process a corpus of documents into a unified synthesis.",
+    "strengths": [
+      "Processes arbitrarily large inputs regardless of context window size",
+      "Leaf-level processing is embarrassingly parallel, enabling massive speedup",
+      "Each agent operates within comfortable context limits, maintaining quality",
+      "The tree structure naturally creates multi-resolution summaries as a byproduct"
+    ],
+    "weaknesses": [
+      "Cross-chunk relationships are only visible at merge points, potentially missing long-range dependencies",
+      "Each merge is a lossy compression step; deep trees lose significant detail",
+      "The chunking strategy critically affects quality and is hard to get right",
+      "Redundant information across chunks may be over-represented in the final summary"
+    ],
+    "agents": [
+      {
+        "role": "leaf-summarizer",
+        "name": "Leaf Summarizer",
+        "description": "Processes a single chunk of the input and produces a focused summary",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "branch-merger",
+        "name": "Branch Merger",
+        "description": "Receives summaries from child nodes and merges them into a higher-level synthesis",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "root-synthesizer",
+        "name": "Root Synthesizer",
+        "description": "Produces the final synthesis from the top-level branch summaries",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "chunk-planner",
+        "name": "Chunk Planner",
+        "description": "Analyzes the input to determine optimal chunking boundaries and tree structure",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Summary Tree",
+        "type": "bottom-up",
+        "participants": [
+          "leaf-summarizer",
+          "branch-merger",
+          "root-synthesizer"
+        ]
+      },
+      {
+        "name": "Chunking Plan",
+        "type": "top-down",
+        "participants": [
+          "chunk-planner",
+          "leaf-summarizer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "summary-tree-state",
+        "chunking-plan",
+        "multi-resolution-summaries"
+      ],
+      "private": [
+        "chunk-boundary-heuristics"
+      ],
+      "description": "The summary tree itself is the primary shared data structure, with summaries flowing upward. Each agent's memory is ephemeral -- it only sees its inputs and produces its output. The chunk planner maintains persistent memory of what chunking strategies work well for different document types. Multi-resolution summaries at each tree level are retained as a useful byproduct."
+    },
+    "diagram": "graph TD\n    CP[Chunk Planner] -->|plan| L1[Leaf 1]\n    CP -->|plan| L2[Leaf 2]\n    CP -->|plan| L3[Leaf 3]\n    CP -->|plan| L4[Leaf 4]\n    L1 -->|summary| B1[Branch Merger 1]\n    L2 -->|summary| B1\n    L3 -->|summary| B2[Branch Merger 2]\n    L4 -->|summary| B2\n    B1 -->|merged summary| R[Root Synthesizer]\n    B2 -->|merged summary| R\n    R -->|final synthesis| OUT[Output]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "debate-protocol",
+    "name": "Debate Protocol",
+    "category": "Novel & Experimental",
+    "tags": [
+      "adversarial",
+      "argumentation",
+      "truth-seeking",
+      "dual-process"
+    ],
+    "summary": "Two agents argue opposing positions on a question; a judge evaluates the arguments for truth.",
+    "description": "Two debater agents are assigned opposing positions on a question. Each presents arguments, rebuts the other's claims, and provides evidence for their position across multiple rounds. A judge agent, who may be less capable than the debaters, evaluates the arguments to determine which position is better supported. This pattern is AI-native because it leverages a key insight from AI safety research: it is easier to judge between two well-argued positions than to independently arrive at the correct answer. The debaters' adversarial pressure forces each side to expose the other's weaknesses, making the judge's job tractable even for hard questions. Both debaters can be the same model -- the diversity comes from the assigned positions, not model differences.",
+    "realWorldExample": "Irving et al.'s 'AI Safety via Debate' paper from OpenAI proposed this as an alignment technique: two AI debaters argue before a human judge, with the theoretical property that truth-telling is the optimal strategy in the debate game.",
+    "whenToUse": "When the correct answer is hard to determine directly but easy to evaluate when well-argued, when you need to surface hidden assumptions or counterarguments, or when a less capable judge needs to oversee more capable agents.",
+    "strengths": [
+      "Adversarial pressure forces both sides to address weaknesses rather than hide them",
+      "The judge can be less capable than the debaters and still reach correct conclusions",
+      "Truth-telling is theoretically the dominant strategy in well-structured debates",
+      "Naturally surfaces counterarguments and edge cases that single-agent reasoning would miss"
+    ],
+    "weaknesses": [
+      "Debaters optimized for persuasion may find rhetorical tricks that fool the judge",
+      "Fixed position assignment means one debater must argue for the wrong answer",
+      "Multi-round debates consume significant tokens, especially for nuanced topics",
+      "The judge's biases become the system's biases since the judge has final say"
+    ],
+    "agents": [
+      {
+        "role": "debater-pro",
+        "name": "Pro Debater",
+        "description": "Argues in favor of the assigned position, presenting evidence and rebutting opposing arguments",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "debater-con",
+        "name": "Con Debater",
+        "description": "Argues against the assigned position, presenting counterevidence and attacking pro arguments",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "judge",
+        "name": "Judge",
+        "description": "Evaluates arguments from both sides, determines which position is better supported by evidence and logic",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "moderator",
+        "name": "Moderator",
+        "description": "Enforces debate rules, manages turn-taking, prevents rhetorical manipulation, keeps arguments on topic",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Debate Floor",
+        "type": "round-robin",
+        "participants": [
+          "debater-pro",
+          "debater-con",
+          "moderator"
+        ]
+      },
+      {
+        "name": "Judge's Chamber",
+        "type": "decision",
+        "participants": [
+          "judge"
+        ]
+      },
+      {
+        "name": "Transcript Archive",
+        "type": "log",
+        "participants": [
+          "debater-pro",
+          "debater-con",
+          "judge",
+          "moderator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "debate-transcript",
+        "evidence-registry",
+        "judge-ruling"
+      ],
+      "private": [
+        "assigned-position",
+        "rebuttal-strategy",
+        "rhetorical-foul-patterns"
+      ],
+      "description": "The debate transcript is shared among all agents. Both debaters see the full transcript to construct rebuttals. The judge reads the full transcript but only after both sides rest. The moderator maintains private memory of rhetorical manipulation patterns to catch debate fouls. Evidence cited by either debater is registered in a shared evidence pool for verification."
+    },
+    "diagram": "graph TD\n    Q[Question] --> MOD[Moderator]\n    MOD -->|assigns positions| PRO[Pro Debater]\n    MOD -->|assigns positions| CON[Con Debater]\n    PRO -->|argument| DF[Debate Floor]\n    CON -->|rebuttal| DF\n    PRO -->|counter-rebuttal| DF\n    CON -->|closing| DF\n    DF -->|full transcript| J[Judge]\n    J -->|ruling| OUT[Final Answer]\n    MOD -.->|enforces rules| DF",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus"
+    ]
+  },
+  {
+    "id": "monte-carlo-agent-tree-search",
+    "name": "Monte Carlo Agent Tree Search",
+    "category": "Novel & Experimental",
+    "tags": [
+      "tree-search",
+      "exploration-exploitation",
+      "rollout",
+      "planning"
+    ],
+    "summary": "Agents explore a solution tree like MCTS: select, expand, simulate, and backpropagate value.",
+    "description": "The solution space is modeled as a tree where each node represents a partial solution and each edge represents a decision. Agents perform the four MCTS phases: a selector agent uses UCB-style scoring to pick the most promising unexplored node, an expander agent generates possible next steps from that node, simulator agents do rapid low-quality rollouts to estimate the value of each expansion, and a backpropagator updates value estimates up the tree. This is profoundly AI-native because LLMs can both generate the tree expansions (what are the possible next steps?) and perform the rollouts (if we commit to this direction, how does it play out?) -- two tasks that in classical MCTS require a domain-specific simulator. The LLM IS the simulator.",
+    "realWorldExample": "OpenAI's o1 and o3 models internally use tree search over reasoning steps, exploring multiple reasoning chains and selecting the most promising ones, effectively implementing MCTS over thought space.",
+    "whenToUse": "When the problem has a large solution space with sequential decisions, when you can evaluate partial solutions, or when greedy left-to-right generation misses solutions that require exploring unpromising-looking intermediate steps.",
+    "strengths": [
+      "Systematically balances exploration of new ideas with exploitation of promising ones",
+      "Can find solutions that require counterintuitive intermediate steps that greedy search would never attempt",
+      "Value backpropagation means early exploration improves all future decisions",
+      "The LLM serves as both the expansion function and the rollout simulator, requiring no domain-specific code"
+    ],
+    "weaknesses": [
+      "Extremely compute-intensive: each node expansion and rollout is a full LLM call",
+      "Tree branching factor can explode for open-ended problems, requiring aggressive pruning",
+      "Rollout quality depends on the LLM's ability to simulate outcomes, which may be poor",
+      "Complex orchestration with four distinct agent roles and persistent tree state"
+    ],
+    "agents": [
+      {
+        "role": "selector",
+        "name": "Tree Selector",
+        "description": "Uses UCB scoring to select the most promising unexplored node in the search tree",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "expander",
+        "name": "Node Expander",
+        "description": "Generates possible next steps from a selected node, creating child nodes in the tree",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "simulator",
+        "name": "Rollout Simulator",
+        "description": "Performs rapid low-quality rollouts from expanded nodes to estimate their downstream value",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "backpropagator",
+        "name": "Value Backpropagator",
+        "description": "Updates value estimates and visit counts up the tree based on rollout results",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Search Tree",
+        "type": "document",
+        "participants": [
+          "selector",
+          "expander",
+          "backpropagator"
+        ]
+      },
+      {
+        "name": "Rollout Queue",
+        "type": "queue",
+        "participants": [
+          "expander",
+          "simulator"
+        ]
+      },
+      {
+        "name": "Value Updates",
+        "type": "bottom-up",
+        "participants": [
+          "simulator",
+          "backpropagator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "search-tree-state",
+        "node-value-estimates",
+        "visit-counts",
+        "best-path-so-far"
+      ],
+      "private": [
+        "ucb-parameters",
+        "rollout-heuristics"
+      ],
+      "description": "The search tree is the core shared data structure, with node values and visit counts updated after every rollout cycle. The selector and backpropagator need persistent access to tree state. Expanders and simulators are ephemeral -- they do their job and report results. The best complete path found so far is maintained as an anytime result."
+    },
+    "diagram": "graph TD\n    SEL[Selector] -->|picks node| EXP[Expander]\n    EXP -->|creates children| SIM1[Simulator 1]\n    EXP -->|creates children| SIM2[Simulator 2]\n    SIM1 -->|value estimate| BP[Backpropagator]\n    SIM2 -->|value estimate| BP\n    BP -->|updates| ST[Search Tree]\n    ST -->|UCB scores| SEL\n    ST -->|best path| OUT[Best Solution]",
+    "hierarchyTypes": [
+      "pipeline",
+      "adversarial",
+      "swarm"
+    ]
+  },
+  {
+    "id": "reflection-loop",
+    "name": "Reflection Loop",
+    "category": "Novel & Experimental",
+    "tags": [
+      "metacognition",
+      "self-improvement",
+      "introspection",
+      "single-agent-multi-pass"
+    ],
+    "summary": "An agent generates, reflects on its own output to find flaws, then regenerates with self-awareness.",
+    "description": "A single agent runs in multiple passes with distinct modes. In generation mode, it produces an output. In reflection mode, it re-reads its output with a critical lens, explicitly identifying logical errors, unsupported claims, missing considerations, and style issues. In regeneration mode, it rewrites the output incorporating its self-critique. This pattern is AI-native in a deep sense: it exploits the asymmetry between generation and evaluation that is empirically observed in LLMs. Models are often better at spotting errors in text than avoiding them during generation. By explicitly separating the generation and evaluation mindsets through distinct prompts, the same model operates at a higher effective capability. The reflection step makes the implicit quality gap between 'writing mode' and 'reading mode' exploitable.",
+    "realWorldExample": "Reflexion by Shinn et al. demonstrated that LLM agents that reflect on failed attempts and maintain a memory of what went wrong significantly outperform agents that simply retry, achieving state-of-the-art on HumanEval and ALFWorld.",
+    "whenToUse": "When single-pass generation consistently has identifiable flaws, when the same model can reliably evaluate what it cannot reliably generate, or when you want metacognitive improvement without requiring a separate critic model.",
+    "strengths": [
+      "Requires only a single model, making it the cheapest multi-pass quality improvement",
+      "Exploits the empirical generation-evaluation gap in LLMs for free quality gains",
+      "The reflection trace provides explicit documentation of the agent's reasoning about quality",
+      "Reflection memory across tasks enables genuine learning from past mistakes"
+    ],
+    "weaknesses": [
+      "The agent may be blind to its own systematic biases, reflecting without catching them",
+      "Multiple passes multiply latency with diminishing returns after 2-3 iterations",
+      "Reflection can be sycophantic -- the agent may praise its own output rather than truly critiquing it",
+      "No external grounding: reflection without new information just rearranges existing beliefs"
+    ],
+    "agents": [
+      {
+        "role": "generator-mode",
+        "name": "Generator Mode",
+        "description": "Produces the initial output focused on content quality and completeness",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reflector-mode",
+        "name": "Reflector Mode",
+        "description": "Re-reads the output with a critical prompt, explicitly listing flaws and improvement opportunities",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "regenerator-mode",
+        "name": "Regenerator Mode",
+        "description": "Rewrites the output incorporating the reflection, with the self-critique visible in context",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "reflection-memory",
+        "name": "Reflection Memory",
+        "description": "Accumulates patterns from past reflections to pre-empt recurring mistakes in future generations",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Self-Dialogue",
+        "type": "peer-to-peer",
+        "participants": [
+          "generator-mode",
+          "reflector-mode",
+          "regenerator-mode"
+        ]
+      },
+      {
+        "name": "Reflection Journal",
+        "type": "log",
+        "participants": [
+          "reflector-mode",
+          "reflection-memory"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current-output-version",
+        "self-critique",
+        "reflection-patterns"
+      ],
+      "private": [
+        "generation-prompt",
+        "reflection-prompt",
+        "regeneration-prompt"
+      ],
+      "description": "Each mode is ephemeral within a single task but shares the output and critique. The reflection memory is append-only and persists across tasks, accumulating patterns like 'I tend to forget edge cases' or 'My introductions are often too long.' This persistent self-knowledge is injected into future generation prompts as preemptive guidance."
+    },
+    "diagram": "graph TD\n    IN[Input] --> GEN[Generator Mode]\n    GEN -->|output v1| REF[Reflector Mode]\n    REF -->|self-critique| REGEN[Regenerator Mode]\n    REGEN -->|output v2| REF2[Reflector Mode 2]\n    REF2 -->|approved| OUT[Final Output]\n    REF -->|patterns| RM[Reflection Memory]\n    RM -->|pre-emptive guidance| GEN",
+    "hierarchyTypes": [
+      "mesh",
+      "chain-of-command",
+      "pipeline",
+      "federated"
+    ]
+  },
+  {
+    "id": "multi-persona-council",
+    "name": "Multi-Persona Council",
+    "category": "Novel & Experimental",
+    "tags": [
+      "persona-simulation",
+      "perspective-diversity",
+      "synthetic-committee",
+      "role-prompting"
+    ],
+    "summary": "A single model adopts diverse personas to generate perspectives, then a meta-agent synthesizes them.",
+    "description": "The same base model is prompted to adopt radically different personas -- a skeptical scientist, an enthusiastic entrepreneur, a cautious ethicist, a pragmatic engineer -- each processing the same input. Each persona genuinely shifts the model's attention patterns, priors, and reasoning style, producing outputs that differ not just in surface framing but in substantive conclusions. A meta-agent then reads all persona outputs and synthesizes a balanced response that integrates the best insights from each perspective. This is purely AI-native because no human can genuinely adopt a completely different knowledge base and reasoning style on demand, but persona prompting demonstrably shifts LLM behavior in deep ways. The diversity is not theatrical -- it is a real computational phenomenon arising from how role prompts modulate the model's latent space.",
+    "realWorldExample": "Society of Mind prompting technique from Microsoft Research, where GPT-4 is prompted as multiple cognitive agents (a planner, a coder, a reviewer) within a single context, producing outputs that substantially differ based on the assigned cognitive role.",
+    "whenToUse": "When you want diverse perspectives but cannot afford multiple model instances, when the problem benefits from multiple disciplinary viewpoints, or when you need to stress-test a decision from opposing value systems.",
+    "strengths": [
+      "Generates genuine perspective diversity from a single model at minimal cost",
+      "Persona prompting shifts reasoning patterns, not just surface style, producing substantively different analysis",
+      "The meta-agent synthesis step prevents any single persona from dominating",
+      "Easy to add new personas or swap perspectives without infrastructure changes"
+    ],
+    "weaknesses": [
+      "Personas share the same model, so the diversity has a ceiling set by the model's training data",
+      "Sequential persona generation is slow; each persona consumes a full inference pass",
+      "The model may produce stereotyped rather than genuinely different reasoning under persona prompts",
+      "The meta-agent may default to averaging instead of genuine synthesis of perspectives"
+    ],
+    "agents": [
+      {
+        "role": "persona-scientist",
+        "name": "Skeptical Scientist",
+        "description": "Evaluates the problem through a lens of empirical evidence, falsifiability, and methodological rigor",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "persona-entrepreneur",
+        "name": "Pragmatic Entrepreneur",
+        "description": "Evaluates the problem through a lens of feasibility, market fit, and speed of execution",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "persona-ethicist",
+        "name": "Cautious Ethicist",
+        "description": "Evaluates the problem through a lens of fairness, unintended consequences, and stakeholder impact",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "persona-engineer",
+        "name": "Systems Engineer",
+        "description": "Evaluates the problem through a lens of scalability, reliability, and technical constraints",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "meta-synthesizer",
+        "name": "Meta Synthesizer",
+        "description": "Reads all persona outputs and produces a balanced synthesis integrating the strongest insights from each",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Persona Chamber",
+        "type": "per-agent",
+        "participants": [
+          "persona-scientist",
+          "persona-entrepreneur",
+          "persona-ethicist",
+          "persona-engineer"
+        ]
+      },
+      {
+        "name": "Council Table",
+        "type": "broadcast",
+        "participants": [
+          "persona-scientist",
+          "persona-entrepreneur",
+          "persona-ethicist",
+          "persona-engineer",
+          "meta-synthesizer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "persona-outputs-collection",
+        "synthesis-rationale"
+      ],
+      "private": [
+        "persona-system-prompt",
+        "persona-few-shot-examples"
+      ],
+      "description": "Each persona operates in isolation with its own private system prompt and examples that define its worldview. Persona outputs are collected in a shared space that only the meta-synthesizer reads in full. All persona memory is ephemeral -- they do not remember previous council sessions. The synthesis rationale documents which persona insights were prioritized and why."
+    },
+    "diagram": "graph TD\n    IN[Input Problem] --> PS[Skeptical Scientist]\n    IN --> PE[Pragmatic Entrepreneur]\n    IN --> PTH[Cautious Ethicist]\n    IN --> PEG[Systems Engineer]\n    PS -->|analysis| CT[Council Table]\n    PE -->|analysis| CT\n    PTH -->|analysis| CT\n    PEG -->|analysis| CT\n    CT --> MS[Meta Synthesizer]\n    MS -->|balanced synthesis| OUT[Final Output]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "chain-of-command",
+      "swarm"
+    ]
+  },
+  {
+    "id": "token-budget-economy",
+    "name": "Token Budget Economy",
+    "category": "Novel & Experimental",
+    "tags": [
+      "resource-allocation",
+      "economic-constraints",
+      "adaptive-compute",
+      "cost-optimization"
+    ],
+    "summary": "Agents bid tokens from a fixed budget on subtasks; a market allocator assigns compute where it matters most.",
+    "description": "A fixed token budget is allocated across a team of agents using market-like mechanisms. Each agent can bid for additional tokens based on the perceived difficulty of its subtask. Easy subtasks get minimal token budgets (short, concise responses). Hard subtasks get large budgets (detailed, thorough analysis). A market allocator agent monitors bids, evaluates historical difficulty patterns, and distributes the budget. Agents that consistently produce good results with fewer tokens earn priority in future allocations. This is uniquely AI-native because token consumption directly maps to compute cost and output quality in a way that has no analog in human labor -- you cannot meaningfully tell a human expert to 'use fewer thoughts' on an easy problem, but you can literally set an LLM's max_tokens parameter.",
+    "realWorldExample": "Adaptive compute mechanisms in Mixture-of-Experts models like Switch Transformer route tokens through different numbers of expert layers based on input difficulty, spending more compute on harder tokens.",
+    "whenToUse": "When operating under strict cost constraints, when tasks have highly variable difficulty, or when you want the system to autonomously learn the right amount of compute for each subtask type.",
+    "strengths": [
+      "Automatically allocates more compute to harder problems and less to easy ones",
+      "Total cost is bounded and predictable regardless of task complexity distribution",
+      "Agents learn to be concise by default, producing verbose output only when justified",
+      "The bidding mechanism creates a natural signal of task difficulty for external monitoring"
+    ],
+    "weaknesses": [
+      "Agents may game the bidding system, overestimating difficulty to get larger budgets",
+      "Hard problems that genuinely need more tokens may be starved if the budget is too tight",
+      "The market allocator adds overhead and requires calibration of bidding heuristics",
+      "Budget starvation on one subtask can cascade into failures in dependent downstream tasks"
+    ],
+    "agents": [
+      {
+        "role": "market-allocator",
+        "name": "Market Allocator",
+        "description": "Manages the total token budget, evaluates bids, and distributes tokens based on difficulty and historical performance",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "worker-agent",
+        "name": "Budget Worker",
+        "description": "Receives a token budget for its subtask, bids for more if needed, produces output within allocation",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "efficiency-auditor",
+        "name": "Efficiency Auditor",
+        "description": "Evaluates whether agents used their budgets well, tracking quality-per-token metrics over time",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Token Market",
+        "type": "pub-sub",
+        "participants": [
+          "market-allocator",
+          "worker-agent"
+        ]
+      },
+      {
+        "name": "Bid Board",
+        "type": "queue",
+        "participants": [
+          "worker-agent",
+          "market-allocator"
+        ]
+      },
+      {
+        "name": "Efficiency Reports",
+        "type": "log",
+        "participants": [
+          "efficiency-auditor",
+          "market-allocator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "remaining-budget",
+        "bid-board",
+        "allocation-history"
+      ],
+      "private": [
+        "difficulty-estimation-model",
+        "quality-per-token-metrics",
+        "agent-reputation-scores"
+      ],
+      "description": "The remaining budget and bid board are shared so all agents can see resource availability. The market allocator maintains persistent reputation scores for each agent, tracking how efficiently they use their budgets. Workers are ephemeral per task. The efficiency auditor builds a private model of which task types genuinely need large budgets versus which agents habitually over-bid."
+    },
+    "diagram": "graph TD\n    TB[Total Token Budget] --> MA[Market Allocator]\n    W1[Worker 1] -->|bid: 500 tokens| MA\n    W2[Worker 2] -->|bid: 2000 tokens| MA\n    W3[Worker 3] -->|bid: 200 tokens| MA\n    MA -->|allocate 400| W1\n    MA -->|allocate 1800| W2\n    MA -->|allocate 200| W3\n    W1 -->|output| EA[Efficiency Auditor]\n    W2 -->|output| EA\n    W3 -->|output| EA\n    EA -->|reputation update| MA",
+    "hierarchyTypes": [
+      "pipeline",
+      "chain-of-command",
+      "swarm"
+    ]
+  }
+]

@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rhizome Agent Orchestration Pattern",
+  "description": "Schema for defining agent orchestration structures",
+  "type": "object",
+  "required": ["id", "name", "category", "hierarchyTypes", "tags", "summary", "description", "agents", "forums"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique kebab-case identifier, e.g. 'military-chain-of-command'"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name"
+    },
+    "category": {
+      "type": "string",
+      "description": "One of the predefined categories",
+      "enum": [
+        "Military & Defense",
+        "Corporate & Business",
+        "Government & Political",
+        "Academic & Research",
+        "Creative & Arts",
+        "Technology & Engineering",
+        "Medical & Emergency",
+        "Historical & Traditional",
+        "Nature-Inspired",
+        "Network Topologies",
+        "Agile & Software",
+        "Social & Community",
+        "Novel & Experimental",
+        "Religious & Spiritual",
+        "Legal & Judicial",
+        "Education & Training",
+        "Intelligence & Espionage",
+        "Maritime & Aviation",
+        "Sports & Competition",
+        "Media & Communications"
+      ]
+    },
+    "hierarchyTypes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "adversarial", "chain-of-command", "orchestrated", "swarm",
+          "mesh", "pipeline", "consensus", "federated"
+        ]
+      },
+      "minItems": 1,
+      "description": "Structural topologies of how agents relate and coordinate (first entry is primary)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Searchable tags like 'hierarchical', 'flat', 'democratic', 'strict'"
+    },
+    "summary": {
+      "type": "string",
+      "description": "One-sentence summary shown on the card (max ~120 chars)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full description of the orchestration pattern (2-4 sentences)"
+    },
+    "realWorldExample": {
+      "type": "string",
+      "description": "A concrete real-world example, e.g. 'US Army division'"
+    },
+    "whenToUse": {
+      "type": "string",
+      "description": "When this pattern is the right choice for an agent system"
+    },
+    "strengths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "3-5 key strengths"
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "3-5 key weaknesses"
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "name", "description"],
+        "properties": {
+          "role": { "type": "string", "description": "Machine-readable role identifier" },
+          "name": { "type": "string", "description": "Display name" },
+          "description": { "type": "string", "description": "What this agent does" },
+          "memory": {
+            "type": "string",
+            "description": "Memory type",
+            "enum": ["persistent-shared", "persistent-private", "ephemeral", "hierarchical", "append-only", "versioned"]
+          },
+          "count": { "type": "integer", "description": "How many instances of this role (default 1)" }
+        }
+      }
+    },
+    "forums": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["broadcast", "threaded", "top-down", "bottom-up", "peer-to-peer", "advisory", "decision", "retrospective", "emergency", "log", "document", "per-agent", "round-robin", "pub-sub", "queue"]
+          },
+          "participants": {
+            "oneOf": [
+              { "type": "array", "items": { "type": "string" } },
+              { "type": "string" }
+            ]
+          }
+        }
+      }
+    },
+    "memoryArchitecture": {
+      "type": "object",
+      "properties": {
+        "shared": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "string" }
+          ]
+        },
+        "private": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "string" }
+          ]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "diagram": {
+      "type": "string",
+      "description": "Mermaid.js diagram definition (graph TD format)"
+    },
+    "structuralClass": {
+      "type": "string",
+      "description": "Structural class identifier connecting structurally similar patterns across domains (injected by build.py from agent-forge's structural-classes.json)"
+    }
+  }
+}

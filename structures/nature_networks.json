@@ -1,0 +1,1822 @@
+[
+  {
+    "id": "bee-hive-waggle-dance",
+    "name": "Bee Hive Waggle Dance",
+    "category": "Nature-Inspired",
+    "tags": [
+      "swarm",
+      "consensus",
+      "decentralized",
+      "recruitment",
+      "quorum-sensing"
+    ],
+    "summary": "Scout agents evaluate options and recruit supporters through persuasive signaling until quorum is reached.",
+    "description": "Modeled on honeybee decision-making, where scout bees discover candidate sites and communicate quality through waggle dances. The vigor of each scout's dance is proportional to the quality of what it found, recruiting idle agents to verify. Multiple options compete in parallel. A decision is reached when enough agents converge on one option, forming a quorum. No central arbiter exists; the best option wins by accumulating the most enthusiastic advocates.",
+    "realWorldExample": "Honeybee swarms selecting a new nest site from dozens of candidates within 24 hours",
+    "whenToUse": "When you need distributed evaluation of multiple alternatives with no single agent able to assess all options, and a robust consensus mechanism that resists noisy or low-quality proposals.",
+    "strengths": [
+      "Naturally selects highest-quality option",
+      "Robust to individual agent errors",
+      "Parallelizes exploration across many candidates",
+      "No single point of failure or central bottleneck"
+    ],
+    "weaknesses": [
+      "Slow convergence when options are similar in quality",
+      "Quorum threshold must be tuned carefully",
+      "No mechanism for urgent override or deadline pressure",
+      "Agents must be interchangeable and unspecialized"
+    ],
+    "agents": [
+      {
+        "role": "scout",
+        "name": "Scout",
+        "description": "Discovers and evaluates candidate solutions, then reports quality through dance intensity",
+        "memory": "ephemeral",
+        "count": 12
+      },
+      {
+        "role": "follower",
+        "name": "Follower",
+        "description": "Observes dances, selects a scout to follow, verifies the proposed solution independently",
+        "memory": "ephemeral",
+        "count": 30
+      },
+      {
+        "role": "quorum-sensor",
+        "name": "Quorum Sensor",
+        "description": "Monitors convergence across all agents and declares when sufficient agreement is reached",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dance Floor",
+        "type": "broadcast",
+        "participants": [
+          "scout",
+          "follower"
+        ]
+      },
+      {
+        "name": "Verification Reports",
+        "type": "bottom-up",
+        "participants": [
+          "follower",
+          "quorum-sensor"
+        ]
+      },
+      {
+        "name": "Quorum Declaration",
+        "type": "broadcast",
+        "participants": [
+          "quorum-sensor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Current dance board with proposal scores",
+        "Quorum threshold and current counts",
+        "Final decision record"
+      ],
+      "private": [
+        "Individual site evaluation notes",
+        "Recruitment history"
+      ],
+      "description": "Scouts write proposals to a shared dance board with quality scores. Followers read the board, pick the most vigorous dance, and add their own verification. The quorum sensor reads convergence state. No agent has a global view; consensus emerges from local interactions."
+    },
+    "diagram": "graph TD\n    S1[Scout 1] -->|dance| DF((Dance Floor))\n    S2[Scout 2] -->|dance| DF\n    S3[Scout 3] -->|dance| DF\n    DF -->|observe| F1[Follower 1]\n    DF -->|observe| F2[Follower 2]\n    DF -->|observe| F3[Follower 3]\n    F1 -->|verify| VR[Verification Reports]\n    F2 -->|verify| VR\n    F3 -->|verify| VR\n    VR --> QS[Quorum Sensor]\n    QS -->|declare| DF",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "wolf-pack-hunt",
+    "name": "Wolf Pack Hunt",
+    "category": "Nature-Inspired",
+    "tags": [
+      "hierarchical",
+      "adaptive",
+      "coordinated",
+      "role-switching",
+      "pursuit"
+    ],
+    "summary": "Small hierarchical pack with dynamic role assignment where the alpha directs but any member can escalate.",
+    "description": "Based on wolf pack hunting behavior with a clear but flexible hierarchy. The alpha sets direction and strategy, betas coordinate flanking and positioning, and the pack adjusts roles dynamically based on prey behavior. Unlike rigid military hierarchies, any pack member can signal an opportunity or danger and the alpha adapts. Roles shift during execution: a flanker may become the driver, the driver may become the closer. The pack maintains cohesion through constant short-range signaling.",
+    "realWorldExample": "Wolf packs coordinating elk hunts in Yellowstone, with role-switching mid-chase",
+    "whenToUse": "When you need a small, tightly coordinated team with clear leadership but enough flexibility for any member to adapt their role based on real-time conditions.",
+    "strengths": [
+      "Clear leadership reduces confusion",
+      "Dynamic role-switching during execution",
+      "High cohesion through constant communication",
+      "Small team size minimizes coordination overhead"
+    ],
+    "weaknesses": [
+      "Does not scale beyond 8-12 agents",
+      "Alpha failure disrupts entire pack",
+      "Requires high-bandwidth real-time communication",
+      "Role ambiguity during transitions can cause collisions"
+    ],
+    "agents": [
+      {
+        "role": "alpha",
+        "name": "Alpha",
+        "description": "Sets hunt strategy, chooses target, directs pack formation and timing",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "beta",
+        "name": "Beta",
+        "description": "Coordinates flanking positions, relays alpha orders, can assume alpha role if needed",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "driver",
+        "name": "Driver",
+        "description": "Pursues and pressures the target toward the pack's kill zone",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "flanker",
+        "name": "Flanker",
+        "description": "Cuts off escape routes and herds target toward drivers",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "closer",
+        "name": "Closer",
+        "description": "Executes the final action once the target is in position",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pack Howl",
+        "type": "broadcast",
+        "participants": [
+          "alpha",
+          "beta",
+          "driver",
+          "flanker",
+          "closer"
+        ]
+      },
+      {
+        "name": "Alpha Directive",
+        "type": "top-down",
+        "participants": [
+          "alpha",
+          "beta"
+        ]
+      },
+      {
+        "name": "Field Signals",
+        "type": "peer-to-peer",
+        "participants": [
+          "driver",
+          "flanker",
+          "closer"
+        ]
+      },
+      {
+        "name": "Opportunity Alert",
+        "type": "bottom-up",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Current target state",
+        "Pack formation positions",
+        "Hunt phase (stalk/chase/close)"
+      ],
+      "private": [
+        "Individual position and velocity",
+        "Local terrain observations",
+        "Role assignment history"
+      ],
+      "description": "Shared state is minimal: target location, current formation, and hunt phase. Each agent maintains its own position awareness. The alpha holds the strategic model. Communication is frequent but lightweight, like body-language signals rather than detailed reports."
+    },
+    "diagram": "graph TD\n    A[Alpha] -->|directs| B1[Beta 1]\n    A -->|directs| B2[Beta 2]\n    B1 -->|coordinates| D1[Driver 1]\n    B1 -->|coordinates| F1[Flanker 1]\n    B2 -->|coordinates| D2[Driver 2]\n    B2 -->|coordinates| F2[Flanker 2]\n    D1 -.->|signals| F1\n    D2 -.->|signals| F2\n    F1 -->|herds to| C[Closer]\n    F2 -->|herds to| C\n    C -.->|status| A",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "starling-murmuration",
+    "name": "Starling Murmuration",
+    "category": "Nature-Inspired",
+    "tags": [
+      "swarm",
+      "local-rules",
+      "emergent",
+      "leaderless",
+      "reactive"
+    ],
+    "summary": "Leaderless swarm where each agent follows only its nearest neighbors, producing coherent global behavior.",
+    "description": "Inspired by starling murmurations where thousands of birds move in breathtaking coordinated patterns without any leader. Each agent follows three simple local rules: separation (avoid crowding nearby agents), alignment (steer toward the average heading of neighbors), and cohesion (move toward the average position of neighbors). Each agent only observes its 6-7 nearest neighbors. Complex, adaptive global behavior emerges entirely from these local interactions. The system is extremely resilient because no agent is special.",
+    "realWorldExample": "Flocks of starlings evading peregrine falcons over Rome at dusk",
+    "whenToUse": "When you need massive parallelism with graceful degradation, where agents perform similar tasks and must react to environmental changes without centralized coordination.",
+    "strengths": [
+      "Extreme fault tolerance: any agent can be removed",
+      "Scales to thousands of agents trivially",
+      "Near-instant collective response to threats",
+      "Zero coordination overhead beyond local observation"
+    ],
+    "weaknesses": [
+      "Cannot execute precise strategic plans",
+      "Global objectives must be encoded in local rules",
+      "Difficult to debug emergent misbehavior",
+      "No mechanism for agent specialization"
+    ],
+    "agents": [
+      {
+        "role": "bird",
+        "name": "Flock Member",
+        "description": "Observes 6-7 nearest neighbors, applies separation/alignment/cohesion rules, adjusts heading",
+        "memory": "ephemeral",
+        "count": 50
+      }
+    ],
+    "forums": [
+      {
+        "name": "Local Neighborhood",
+        "type": "peer-to-peer",
+        "participants": [
+          "bird"
+        ]
+      },
+      {
+        "name": "Threat Signal",
+        "type": "broadcast",
+        "participants": [
+          "bird"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Local rules (separation, alignment, cohesion weights)"
+      ],
+      "private": [
+        "Current position and velocity",
+        "Nearest neighbor list",
+        "Threat detection state"
+      ],
+      "description": "Almost no shared memory. Each agent maintains only its own state and a snapshot of its nearest neighbors. The global pattern exists only as an emergent property; no agent stores or perceives it. Rules are hardcoded, not learned."
+    },
+    "diagram": "graph TD\n    B1[Bird 1] -.->|observes| B2[Bird 2]\n    B1 -.->|observes| B3[Bird 3]\n    B2 -.->|observes| B1\n    B2 -.->|observes| B4[Bird 4]\n    B3 -.->|observes| B1\n    B3 -.->|observes| B5[Bird 5]\n    B4 -.->|observes| B2\n    B4 -.->|observes| B5\n    B5 -.->|observes| B3\n    B5 -.->|observes| B4",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "mycelium-fungal-network",
+    "name": "Mycelium Fungal Network",
+    "category": "Nature-Inspired",
+    "tags": [
+      "mesh",
+      "resource-sharing",
+      "resilient",
+      "underground",
+      "mutualistic"
+    ],
+    "summary": "Underground mesh network where hub nodes redistribute resources and signals between disconnected producers.",
+    "description": "Based on mycorrhizal fungal networks that connect forest trees underground. Hub nodes (mature trees with large root systems) connect to many partners, while peripheral nodes may connect to only one or two hubs. The network redistributes resources from surplus areas to deficit areas, taking a small tax for the transport. Critically, the network also carries warning signals: when one node is attacked, chemical alarm signals propagate through the mesh to pre-activate defenses in distant nodes. The topology is scale-free, with a few highly-connected hubs.",
+    "realWorldExample": "The 'Wood Wide Web' connecting Douglas fir mother trees to hundreds of seedlings in Pacific Northwest forests",
+    "whenToUse": "When agents have uneven resource availability and you need passive redistribution, early warning propagation, and resilience to localized failures.",
+    "strengths": [
+      "Passive resource redistribution without central planning",
+      "Warning signals propagate faster than direct observation",
+      "Highly resilient to localized damage",
+      "Supports agents of vastly different capability levels"
+    ],
+    "weaknesses": [
+      "Hub nodes become critical infrastructure",
+      "Transport tax reduces overall efficiency",
+      "Slow to establish new connections",
+      "Parasitic agents can exploit the network's generosity"
+    ],
+    "agents": [
+      {
+        "role": "mother-hub",
+        "name": "Mother Hub",
+        "description": "Highly connected node that redistributes resources to many dependents and amplifies warning signals",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "mature-node",
+        "name": "Mature Node",
+        "description": "Established node connected to 2-4 hubs, both produces and consumes resources",
+        "memory": "persistent-private",
+        "count": 6
+      },
+      {
+        "role": "seedling",
+        "name": "Seedling",
+        "description": "New node connected to one hub, primarily a resource consumer until established",
+        "memory": "ephemeral",
+        "count": 8
+      },
+      {
+        "role": "mycelium-bridge",
+        "name": "Mycelium Bridge",
+        "description": "Transport agent that moves resources between nodes and takes a small tax",
+        "memory": "append-only",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Nutrient Channel",
+        "type": "pub-sub",
+        "participants": [
+          "mother-hub",
+          "mature-node",
+          "seedling"
+        ]
+      },
+      {
+        "name": "Warning Signal",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Resource Ledger",
+        "type": "log",
+        "participants": [
+          "mycelium-bridge",
+          "mother-hub"
+        ]
+      },
+      {
+        "name": "Connection Requests",
+        "type": "queue",
+        "participants": [
+          "seedling",
+          "mother-hub"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Resource flow ledger",
+        "Network topology map",
+        "Active warning signals"
+      ],
+      "private": [
+        "Local resource reserves",
+        "Connection partner list",
+        "Defense state"
+      ],
+      "description": "The mycelium bridges maintain an append-only ledger of resource transfers. Hub nodes hold the topology map. Warning signals are written to shared memory and propagate through connected nodes. Individual resource reserves are private."
+    },
+    "diagram": "graph TD\n    MH1((Mother Hub 1)) -->|nutrients| S1[Seedling 1]\n    MH1 -->|nutrients| S2[Seedling 2]\n    MH1 -->|nutrients| M1[Mature 1]\n    MH2((Mother Hub 2)) -->|nutrients| M2[Mature 2]\n    MH2 -->|nutrients| S3[Seedling 3]\n    M1 -.->|bridge| MH2\n    MH1 -.->|bridge| MH2\n    M2 -.->|bridge| MH1\n    MH1 ==>|warning| MH2\n    MH2 ==>|warning| M2",
+    "hierarchyTypes": [
+      "swarm",
+      "pipeline",
+      "orchestrated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "slime-mold-physarum",
+    "name": "Slime Mold (Physarum)",
+    "category": "Nature-Inspired",
+    "tags": [
+      "adaptive-network",
+      "optimization",
+      "decentralized",
+      "exploration-exploitation",
+      "no-brain"
+    ],
+    "summary": "Brainless network that discovers optimal paths by reinforcing successful routes and pruning dead ends.",
+    "description": "Based on Physarum polycephalum, a slime mold that solves optimization problems without a brain. The organism extends exploratory tendrils in all directions. Tendrils that find food sources thicken as more cytoplasm flows through them. Tendrils that find nothing thin and retract. Over time, the network converges on near-optimal paths connecting all food sources. This is a physical implementation of positive feedback reinforcement. The system has been shown to replicate the Tokyo rail network and solve mazes.",
+    "realWorldExample": "Physarum polycephalum replicating the Tokyo railway network on a map of Japan with oat flakes at city locations",
+    "whenToUse": "When you need to discover optimal routing or resource allocation across a graph with unknown topology, and can afford an exploratory phase where many agents fail.",
+    "strengths": [
+      "Discovers near-optimal paths without global knowledge",
+      "Self-healing: reroutes around damage automatically",
+      "No planning or intelligence required per agent",
+      "Converges reliably on well-connected solutions"
+    ],
+    "weaknesses": [
+      "Slow exploration phase with high waste",
+      "Cannot handle rapidly changing environments",
+      "Gets trapped in local optima if food sources move",
+      "No capacity for abstract reasoning or planning"
+    ],
+    "agents": [
+      {
+        "role": "tendril",
+        "name": "Exploratory Tendril",
+        "description": "Extends into unexplored territory, reports whether resources were found",
+        "memory": "ephemeral",
+        "count": 20
+      },
+      {
+        "role": "tube",
+        "name": "Transport Tube",
+        "description": "Established connection between two resource nodes, thickness proportional to flow",
+        "memory": "append-only",
+        "count": 10
+      },
+      {
+        "role": "nucleus",
+        "name": "Resource Node",
+        "description": "A discovered resource point that attracts and anchors connections",
+        "memory": "persistent-shared",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Flow Gradient",
+        "type": "pub-sub",
+        "participants": [
+          "tendril",
+          "tube",
+          "nucleus"
+        ]
+      },
+      {
+        "name": "Discovery Announcements",
+        "type": "broadcast",
+        "participants": [
+          "tendril",
+          "nucleus"
+        ]
+      },
+      {
+        "name": "Pruning Log",
+        "type": "log",
+        "participants": [
+          "tube"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Resource node locations",
+        "Tube thickness map (flow graph)",
+        "Global nutrient level"
+      ],
+      "private": [
+        "Tendril exploration direction",
+        "Local cytoplasm reserves"
+      ],
+      "description": "The shared flow graph is the core memory structure. Successful tendrils become tubes and are recorded in the shared map. Failed tendrils leave no trace. Tube thickness is continuously updated based on flow. The network's memory is its topology."
+    },
+    "diagram": "graph LR\n    N1((Food 1)) ==>|thick tube| N2((Food 2))\n    N2 ==>|thick tube| N3((Food 3))\n    N1 -->|thin tube| N3\n    N1 -.->|tendril| E1[Exploring...]\n    N2 -.->|tendril| E2[Exploring...]\n    N3 -.->|tendril| E3[Exploring...]\n    E1 -.->|found!| N4((Food 4))\n    E2 -.->|nothing| X1[Retract]\n    E3 -.->|nothing| X2[Retract]",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "octopus-distributed-brain",
+    "name": "Octopus Distributed Brain",
+    "category": "Nature-Inspired",
+    "tags": [
+      "distributed-intelligence",
+      "autonomous-limbs",
+      "minimal-central",
+      "embodied",
+      "parallel"
+    ],
+    "summary": "Central brain sets goals while semi-autonomous limbs solve local problems independently with minimal oversight.",
+    "description": "Based on the octopus nervous system where two-thirds of neurons reside in the arms rather than the central brain. Each arm can taste, touch, and make local decisions independently. The central brain sends high-level goals (reach for that crab) but the arms figure out the motor details autonomously. Arms can even continue operating when severed. This architecture minimizes communication bandwidth between central coordination and execution while maximizing local responsiveness.",
+    "realWorldExample": "Octopus arms independently solving jar-opening problems while the central brain monitors progress",
+    "whenToUse": "When execution requires complex local problem-solving that would overwhelm centralized control, and you can tolerate arms occasionally working at cross-purposes.",
+    "strengths": [
+      "Massive reduction in central processing load",
+      "Arms react to local conditions at full speed",
+      "Central brain focuses purely on strategy",
+      "Graceful degradation if limbs are lost"
+    ],
+    "weaknesses": [
+      "Arms may conflict with each other without central mediation",
+      "Central brain has limited awareness of limb details",
+      "Debugging distributed decisions is very difficult",
+      "Requires well-defined goal interface between brain and limbs"
+    ],
+    "agents": [
+      {
+        "role": "central-brain",
+        "name": "Central Brain",
+        "description": "Sets high-level goals, coordinates between arms when conflicts arise, maintains world model",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "arm",
+        "name": "Autonomous Arm",
+        "description": "Receives goals from brain, solves local motor/sensing problems independently, reports completion",
+        "memory": "persistent-private",
+        "count": 8
+      },
+      {
+        "role": "sucker",
+        "name": "Sucker Sensor",
+        "description": "Provides chemotactile feedback to its arm, detecting texture, taste, and grip strength",
+        "memory": "ephemeral",
+        "count": 16
+      }
+    ],
+    "forums": [
+      {
+        "name": "Goal Broadcast",
+        "type": "top-down",
+        "participants": [
+          "central-brain",
+          "arm"
+        ]
+      },
+      {
+        "name": "Arm-to-Arm Conflict",
+        "type": "peer-to-peer",
+        "participants": [
+          "arm"
+        ]
+      },
+      {
+        "name": "Completion Reports",
+        "type": "bottom-up",
+        "participants": [
+          "arm",
+          "central-brain"
+        ]
+      },
+      {
+        "name": "Sensory Stream",
+        "type": "bottom-up",
+        "participants": [
+          "sucker",
+          "arm"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Current goals",
+        "World model (approximate)",
+        "Conflict resolution rules"
+      ],
+      "private": [
+        "Arm's local sensory state",
+        "Motor plan and execution history",
+        "Grip and texture memory"
+      ],
+      "description": "The central brain maintains a coarse world model shared with all arms. Each arm holds detailed local sensory state that would be too high-bandwidth to centralize. Arms only report summarized completion/failure status upward. Sensory details stay local."
+    },
+    "diagram": "graph TD\n    CB[Central Brain] -->|goal| A1[Arm 1]\n    CB -->|goal| A2[Arm 2]\n    CB -->|goal| A3[Arm 3]\n    CB -->|goal| A4[Arm 4]\n    A1 -.->|done| CB\n    A2 -.->|conflict| A3\n    A1 --> S1[Suckers]\n    A1 --> S2[Suckers]\n    A2 --> S3[Suckers]\n    A3 --> S4[Suckers]\n    A4 --> S5[Suckers]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "swarm"
+    ]
+  },
+  {
+    "id": "immune-system-adaptive",
+    "name": "Immune System (Adaptive)",
+    "category": "Nature-Inspired",
+    "tags": [
+      "pattern-matching",
+      "clonal-selection",
+      "memory-cells",
+      "escalation",
+      "multi-layer"
+    ],
+    "summary": "Multi-layer defense with pattern recognition, clonal expansion of successful agents, and persistent memory.",
+    "description": "Modeled on the adaptive immune system's response to pathogens. The first layer (innate) provides fast, generic detection. When a novel threat is identified, dendritic cells present the antigen to T-cells, which then activate the most pattern-matched B-cells. Successful B-cells undergo clonal expansion, producing many copies of the effective agent. After the threat is neutralized, most clones die but a few become long-lived memory cells that enable rapid response to future encounters. The key insight is clonal selection: generate diversity, test against the threat, expand what works.",
+    "realWorldExample": "Human immune response to a novel virus, from initial infection through antibody production to long-term immunity",
+    "whenToUse": "When you face diverse, unpredictable threats and need a system that learns from encounters, scales its response proportionally, and remembers past solutions for instant future deployment.",
+    "strengths": [
+      "Learns and remembers novel threats permanently",
+      "Scales response proportionally to threat severity",
+      "Massive diversity handles unforeseen challenges",
+      "Multi-layer provides defense in depth"
+    ],
+    "weaknesses": [
+      "First encounter is slow and costly",
+      "Can misidentify self as threat (autoimmune errors)",
+      "Clonal expansion consumes significant resources",
+      "Memory cells may match outdated threat variants"
+    ],
+    "agents": [
+      {
+        "role": "innate-detector",
+        "name": "Innate Detector",
+        "description": "Fast, generic pattern matcher that flags common threat signatures and raises initial alarms",
+        "memory": "ephemeral",
+        "count": 10
+      },
+      {
+        "role": "dendritic",
+        "name": "Dendritic Presenter",
+        "description": "Captures novel threat signatures and presents them to T-cells for specific matching",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "t-cell",
+        "name": "T-Cell Coordinator",
+        "description": "Evaluates presented antigens, selects and activates the best-matching B-cells, regulates response intensity",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "b-cell",
+        "name": "B-Cell Responder",
+        "description": "Produces specific countermeasures against matched threats, can be clonally expanded",
+        "memory": "persistent-private",
+        "count": 8
+      },
+      {
+        "role": "memory-cell",
+        "name": "Memory Cell",
+        "description": "Long-lived record of a previously defeated threat, enables rapid response on re-encounter",
+        "memory": "persistent-shared",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Alarm Signal (Cytokines)",
+        "type": "broadcast",
+        "participants": [
+          "innate-detector",
+          "dendritic"
+        ]
+      },
+      {
+        "name": "Antigen Presentation",
+        "type": "advisory",
+        "participants": [
+          "dendritic",
+          "t-cell"
+        ]
+      },
+      {
+        "name": "Activation Orders",
+        "type": "top-down",
+        "participants": [
+          "t-cell",
+          "b-cell"
+        ]
+      },
+      {
+        "name": "Threat Database",
+        "type": "document",
+        "participants": [
+          "memory-cell",
+          "t-cell"
+        ]
+      },
+      {
+        "name": "After-Action Cleanup",
+        "type": "retrospective",
+        "participants": [
+          "t-cell",
+          "memory-cell"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Threat signature database (memory cells)",
+        "Current threat level",
+        "Active response registry"
+      ],
+      "private": [
+        "Individual receptor specificity",
+        "Clonal lineage history",
+        "Activation threshold"
+      ],
+      "description": "Memory cells provide persistent shared storage of past threat signatures. T-cells maintain private activation histories. The threat database grows monotonically; past encounters are never forgotten. Current threat state is broadcast ephemerally via cytokine signals."
+    },
+    "diagram": "graph TD\n    P[Pathogen] -->|detected| ID[Innate Detectors]\n    ID -->|alarm| DC[Dendritic Cells]\n    DC -->|present antigen| TC[T-Cell Coordinators]\n    TC -->|activate| B1[B-Cell 1]\n    TC -->|activate| B2[B-Cell 2]\n    B1 -->|clone| B1a[B-Cell Clone]\n    B1 -->|clone| B1b[B-Cell Clone]\n    B2 -->|neutralize| P\n    B1a -->|survive| MC[Memory Cell]\n    MC -.->|rapid recall| TC",
+    "hierarchyTypes": [
+      "swarm",
+      "orchestrated",
+      "chain-of-command",
+      "consensus"
+    ]
+  },
+  {
+    "id": "coral-reef-ecosystem",
+    "name": "Coral Reef Ecosystem",
+    "category": "Nature-Inspired",
+    "tags": [
+      "symbiotic",
+      "niche-specialization",
+      "mutualistic",
+      "layered",
+      "biodiversity"
+    ],
+    "summary": "Symbiotic ecosystem where specialized agents occupy niches and exchange services in mutualistic relationships.",
+    "description": "Based on coral reef ecosystems where extreme biodiversity is sustained through niche specialization and mutualistic exchange. The reef structure itself (coral) provides the platform. Symbiotic algae (zooxanthellae) live inside coral and provide energy through photosynthesis. Cleaner fish service larger fish. Each organism occupies a precise niche. The system is extraordinarily productive because waste from one agent is food for another, creating closed resource loops. Diversity itself is a strength: the more niches filled, the more resilient the system.",
+    "realWorldExample": "Great Barrier Reef with 1,500+ fish species, 400+ coral species, and thousands of invertebrates in mutualistic networks",
+    "whenToUse": "When you have many different agent types that can form mutualistic pairs, and you want maximum throughput by ensuring every agent's waste output is another agent's input.",
+    "strengths": [
+      "Maximum resource efficiency through closed loops",
+      "Extreme specialization increases quality per niche",
+      "Biodiversity provides resilience against novel disruptions",
+      "Mutualistic relationships are self-reinforcing"
+    ],
+    "weaknesses": [
+      "Keystone species removal can cascade into collapse",
+      "Extremely slow to establish from scratch",
+      "Fragile to environmental shifts that affect the platform layer",
+      "Complex interdependencies are hard to reason about"
+    ],
+    "agents": [
+      {
+        "role": "coral-platform",
+        "name": "Coral Platform",
+        "description": "Provides structural foundation, grows slowly, hosts symbiotic agents within its body",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "zooxanthellae",
+        "name": "Symbiotic Producer",
+        "description": "Lives inside the platform agent, converts raw inputs into energy, shares 90% with host",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "grazer",
+        "name": "Grazer",
+        "description": "Consumes overgrowth that would otherwise smother the platform, maintaining balance",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "cleaner",
+        "name": "Cleaner Agent",
+        "description": "Services other agents by removing parasitic processes and errors, earning goodwill",
+        "memory": "ephemeral",
+        "count": 2
+      },
+      {
+        "role": "predator",
+        "name": "Apex Predator",
+        "description": "Regulates population of grazers and mid-level agents, preventing any one type from dominating",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Chemical Gradient",
+        "type": "pub-sub",
+        "participants": [
+          "coral-platform",
+          "zooxanthellae",
+          "grazer"
+        ]
+      },
+      {
+        "name": "Cleaning Station",
+        "type": "peer-to-peer",
+        "participants": [
+          "cleaner",
+          "grazer",
+          "predator"
+        ]
+      },
+      {
+        "name": "Reef Health Monitor",
+        "type": "log",
+        "participants": [
+          "coral-platform"
+        ]
+      },
+      {
+        "name": "Resource Exchange",
+        "type": "queue",
+        "participants": [
+          "zooxanthellae",
+          "coral-platform"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Reef structure map",
+        "Current nutrient levels",
+        "Species population counts"
+      ],
+      "private": [
+        "Niche-specific parameters",
+        "Mutualistic partner registry",
+        "Energy reserves"
+      ],
+      "description": "The coral platform is the persistent shared structure that all agents reference. Nutrient levels are broadcast through chemical gradients. Each species tracks its own energy and partner relationships privately. The reef's health history is an append-only log."
+    },
+    "diagram": "graph TD\n    CP[Coral Platform] -->|hosts| Z1[Symbiotic Producer 1]\n    CP -->|hosts| Z2[Symbiotic Producer 2]\n    Z1 -->|energy| CP\n    Z2 -->|energy| CP\n    G1[Grazer 1] -->|cleans algae| CP\n    G2[Grazer 2] -->|cleans algae| CP\n    CL[Cleaner] -.->|services| G1\n    CL -.->|services| AP\n    AP[Apex Predator] -->|regulates| G1\n    AP -->|regulates| G2",
+    "hierarchyTypes": [
+      "pipeline",
+      "swarm",
+      "adversarial",
+      "mesh",
+      "federated"
+    ]
+  },
+  {
+    "id": "termite-mound-construction",
+    "name": "Termite Mound Construction",
+    "category": "Nature-Inspired",
+    "tags": [
+      "stigmergy",
+      "construction",
+      "emergent-architecture",
+      "decentralized",
+      "environmental-memory"
+    ],
+    "summary": "Agents build complex structures by depositing artifacts that trigger further construction from other agents.",
+    "description": "Based on termite mound construction, where millions of termites build elaborate structures with ventilation, fungus gardens, and temperature regulation without any blueprint or architect. The mechanism is stigmergy: agents deposit pheromone-marked material, and the presence of existing deposits triggers further deposits nearby according to simple rules. The environment IS the coordination mechanism. Different castes (workers, soldiers, royalty) handle different aspects. The resulting structure is far more complex than any individual termite could plan.",
+    "realWorldExample": "Macrotermes termite mounds in Africa with internal temperature regulation accurate to 1 degree Celsius",
+    "whenToUse": "When you need to build complex artifacts incrementally through many small contributions, where the artifact itself guides what to build next, and no single agent needs to understand the whole.",
+    "strengths": [
+      "Produces structures far beyond individual agent capability",
+      "No blueprint needed; structure emerges from rules",
+      "Massively parallel construction",
+      "Self-repairing: damage triggers local reconstruction"
+    ],
+    "weaknesses": [
+      "Final structure quality depends on rule calibration",
+      "Cannot easily build to a specific specification",
+      "Difficult to redirect construction mid-process",
+      "No agent understands or can explain the whole structure"
+    ],
+    "agents": [
+      {
+        "role": "worker",
+        "name": "Worker",
+        "description": "Deposits material at pheromone-marked sites, follows local deposition rules, performs maintenance",
+        "memory": "ephemeral",
+        "count": 20
+      },
+      {
+        "role": "soldier",
+        "name": "Soldier",
+        "description": "Patrols structure perimeter, detects breaches, marks damage sites for worker repair",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "queen",
+        "name": "Queen",
+        "description": "Generates new workers and soldiers, sets global pheromone baseline that modulates construction intensity",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "fungus-tender",
+        "name": "Fungus Tender",
+        "description": "Maintains internal resource gardens, monitors environmental conditions inside the structure",
+        "memory": "persistent-private",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pheromone Field",
+        "type": "pub-sub",
+        "participants": [
+          "worker",
+          "soldier",
+          "queen"
+        ]
+      },
+      {
+        "name": "Damage Alerts",
+        "type": "emergency",
+        "participants": [
+          "soldier",
+          "worker"
+        ]
+      },
+      {
+        "name": "Construction Log",
+        "type": "log",
+        "participants": [
+          "worker"
+        ]
+      },
+      {
+        "name": "Environmental Readings",
+        "type": "bottom-up",
+        "participants": [
+          "fungus-tender",
+          "queen"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "The structure itself (artifact as memory)",
+        "Pheromone concentration map",
+        "Damage registry"
+      ],
+      "private": [
+        "Current material payload",
+        "Local pheromone sensor readings"
+      ],
+      "description": "The primary memory is the artifact being built: the structure's current state determines what each agent does next. Pheromone fields provide volatile shared memory that decays over time. The queen's baseline signal modulates global activity level. Individual agents have almost no private memory."
+    },
+    "diagram": "graph TD\n    Q[Queen] ==>|pheromone baseline| PF((Pheromone Field))\n    PF -->|triggers| W1[Worker 1]\n    PF -->|triggers| W2[Worker 2]\n    PF -->|triggers| W3[Worker 3]\n    W1 -->|deposits| ST((Structure))\n    W2 -->|deposits| ST\n    W3 -->|deposits| ST\n    ST -->|guides next| PF\n    S1[Soldier] -->|patrols| ST\n    S1 -->|marks damage| PF\n    FT[Fungus Tender] -->|monitors| ST",
+    "hierarchyTypes": [
+      "swarm"
+    ]
+  },
+  {
+    "id": "whale-pod-echolocation",
+    "name": "Whale Pod Communication",
+    "category": "Nature-Inspired",
+    "tags": [
+      "long-range",
+      "cultural-memory",
+      "matriarchal",
+      "vocal-protocol",
+      "migratory"
+    ],
+    "summary": "Matriarch-led pod with long-range vocal communication, cultural knowledge transfer, and dialect-based identity.",
+    "description": "Based on orca and sperm whale pod structure, where a matriarch holds decades of accumulated knowledge about migration routes, hunting techniques, and danger zones. Communication uses complex vocalizations that travel vast distances through the medium. Each pod has a distinct dialect that serves as an identity marker. Knowledge is transmitted culturally from grandmother to daughter to calf over generations. Hunting strategies are coordinated through call-and-response vocal protocols. The matriarch's death can mean the loss of irreplaceable route knowledge.",
+    "realWorldExample": "Resident orca pods in the Pacific Northwest, where matriarchs lead pods of 20-30 to salmon runs they learned from their mothers",
+    "whenToUse": "When institutional knowledge accumulated over long periods is the primary competitive advantage, and you need reliable long-range coordination with strong group identity.",
+    "strengths": [
+      "Deep institutional memory spanning generations",
+      "Long-range communication enables wide coordination",
+      "Strong group identity prevents infiltration",
+      "Cultural transmission preserves hard-won knowledge"
+    ],
+    "weaknesses": [
+      "Matriarch is a catastrophic single point of failure",
+      "Knowledge transfer is slow and lossy across generations",
+      "Dialect differences prevent inter-pod cooperation",
+      "Cannot adapt faster than cultural transmission allows"
+    ],
+    "agents": [
+      {
+        "role": "matriarch",
+        "name": "Matriarch",
+        "description": "Holds generational knowledge of routes and strategies, makes all navigation and major hunting decisions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "adult-female",
+        "name": "Adult Female",
+        "description": "Experienced hunter and future matriarch, learns routes from matriarch, teaches calves",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "adult-male",
+        "name": "Adult Male",
+        "description": "Long-range scout and protector, ventures far from pod but returns to report",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "juvenile",
+        "name": "Juvenile",
+        "description": "Learning agent that observes and practices, gradually acquiring cultural knowledge",
+        "memory": "ephemeral",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Echolocation Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "all"
+        ]
+      },
+      {
+        "name": "Matriarch Directive",
+        "type": "top-down",
+        "participants": [
+          "matriarch",
+          "adult-female",
+          "adult-male"
+        ]
+      },
+      {
+        "name": "Scout Reports",
+        "type": "bottom-up",
+        "participants": [
+          "adult-male",
+          "matriarch"
+        ]
+      },
+      {
+        "name": "Teaching Sessions",
+        "type": "advisory",
+        "participants": [
+          "adult-female",
+          "juvenile"
+        ]
+      },
+      {
+        "name": "Pod Dialect Register",
+        "type": "document",
+        "participants": [
+          "matriarch"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Migration route database",
+        "Pod dialect and identity markers",
+        "Current threat registry"
+      ],
+      "private": [
+        "Individual hunting specializations",
+        "Personal navigation experience",
+        "Social relationship map"
+      ],
+      "description": "The matriarch holds the canonical route and strategy database in persistent shared memory. Adult females maintain versioned copies that diverge over time (potential future pod splits). Juveniles have ephemeral learning memory that gradually solidifies. The pod dialect is the shared identity credential."
+    },
+    "diagram": "graph TD\n    M[Matriarch] -->|directs| AF1[Adult Female 1]\n    M -->|directs| AF2[Adult Female 2]\n    M -->|directs| AM1[Adult Male 1]\n    AM1 -.->|scout report| M\n    AM2[Adult Male 2] -.->|scout report| M\n    AF1 -->|teaches| J1[Juvenile 1]\n    AF1 -->|teaches| J2[Juvenile 2]\n    AF2 -->|teaches| J3[Juvenile 3]\n    M ==>|broadcast| ALL((Pod Echolocation))\n    ALL ==>|long-range| AM1",
+    "hierarchyTypes": [
+      "swarm",
+      "chain-of-command",
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "star-topology",
+    "name": "Star Topology",
+    "category": "Network Topologies",
+    "tags": [
+      "centralized",
+      "hub-spoke",
+      "simple",
+      "single-point-of-failure",
+      "low-latency"
+    ],
+    "summary": "Central hub connects all agents directly; every message passes through one coordinator with full visibility.",
+    "description": "The simplest centralized topology: one hub node connects to every other node, and all communication passes through the hub. The hub has complete visibility of all traffic, can route, filter, and prioritize messages. Adding or removing peripheral nodes is trivial and does not affect other nodes. The maximum path length between any two agents is exactly 2 hops. The fundamental tradeoff is stark: unmatched simplicity and visibility versus complete dependence on the hub.",
+    "realWorldExample": "Traditional Ethernet hubs, early mainframe-terminal architectures, call center routing",
+    "whenToUse": "When you need maximum visibility and control from a single coordinator, the agent count is moderate (under 20), and you can provision a robust hub.",
+    "strengths": [
+      "Trivial to add or remove peripheral agents",
+      "Hub has complete traffic visibility",
+      "Maximum 2-hop latency between any pair",
+      "Simplest possible topology to reason about"
+    ],
+    "weaknesses": [
+      "Hub is a total single point of failure",
+      "Hub bandwidth limits scale",
+      "Peripheral agents cannot communicate directly",
+      "Hub becomes bottleneck under high message volume"
+    ],
+    "agents": [
+      {
+        "role": "hub",
+        "name": "Central Hub",
+        "description": "Routes all messages, maintains complete state, coordinates all peripheral agents",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "spoke",
+        "name": "Spoke Agent",
+        "description": "Connects only to the hub, sends requests and receives responses through the central node",
+        "memory": "persistent-private",
+        "count": 8
+      }
+    ],
+    "forums": [
+      {
+        "name": "Hub Inbox",
+        "type": "queue",
+        "participants": [
+          "spoke",
+          "hub"
+        ]
+      },
+      {
+        "name": "Hub Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "hub",
+          "spoke"
+        ]
+      },
+      {
+        "name": "Hub Log",
+        "type": "log",
+        "participants": [
+          "hub"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Hub state (complete system view)",
+        "Message routing table",
+        "System health dashboard"
+      ],
+      "private": [
+        "Spoke-local working state",
+        "Pending request queue"
+      ],
+      "description": "The hub maintains the only shared memory. Spokes have private working memory but no awareness of other spokes. All state synchronization happens through the hub. If the hub fails, no spoke can access shared state."
+    },
+    "diagram": "graph TD\n    H((Hub)) --> S1[Spoke 1]\n    H --> S2[Spoke 2]\n    H --> S3[Spoke 3]\n    H --> S4[Spoke 4]\n    H --> S5[Spoke 5]\n    H --> S6[Spoke 6]\n    S1 -->|request| H\n    S4 -->|request| H",
+    "hierarchyTypes": [
+      "orchestrated",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "ring-topology",
+    "name": "Ring Topology",
+    "category": "Network Topologies",
+    "tags": [
+      "circular",
+      "token-passing",
+      "ordered",
+      "equal-access",
+      "deterministic"
+    ],
+    "summary": "Agents arranged in a ring where messages pass sequentially; a token controls who speaks next.",
+    "description": "Agents are arranged in a unidirectional or bidirectional ring. A token circulates around the ring, and only the agent holding the token may transmit. This provides perfectly fair, deterministic access: every agent gets equal opportunity in a predictable order. Messages travel hop by hop around the ring. Each agent acts as both endpoint and relay. The topology naturally supports round-robin processing, pipeline architectures, and sequential refinement where each agent adds its contribution before passing the work forward.",
+    "realWorldExample": "IBM Token Ring networks, manufacturing assembly lines, legislative speaking order in parliaments",
+    "whenToUse": "When agents must take turns in a fair, predictable order, or when work flows through a sequential pipeline where each agent adds value before passing it along.",
+    "strengths": [
+      "Perfectly fair access: every agent guaranteed a turn",
+      "Deterministic message ordering",
+      "No central coordinator needed",
+      "Natural fit for pipeline processing"
+    ],
+    "weaknesses": [
+      "Single agent failure breaks the ring",
+      "Latency proportional to ring size",
+      "Adding agents requires ring reconfiguration",
+      "Token loss requires complex recovery protocol"
+    ],
+    "agents": [
+      {
+        "role": "ring-node",
+        "name": "Ring Node",
+        "description": "Receives messages and token from predecessor, processes or relays, passes to successor",
+        "memory": "persistent-private",
+        "count": 8
+      },
+      {
+        "role": "token-manager",
+        "name": "Token Manager",
+        "description": "Monitors token circulation, regenerates token if lost, manages ring membership changes",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Token Ring",
+        "type": "round-robin",
+        "participants": [
+          "ring-node"
+        ]
+      },
+      {
+        "name": "Ring Health",
+        "type": "broadcast",
+        "participants": [
+          "token-manager",
+          "ring-node"
+        ]
+      },
+      {
+        "name": "Membership Changes",
+        "type": "queue",
+        "participants": [
+          "ring-node",
+          "token-manager"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Token state (who holds it)",
+        "Ring membership list",
+        "Circulation count"
+      ],
+      "private": [
+        "Local processing state",
+        "Predecessor/successor identity",
+        "Messages awaiting token"
+      ],
+      "description": "Shared memory is minimal: just the token state and ring membership. Each node knows only its immediate predecessor and successor. Messages queued locally until the token arrives. The token manager holds the authoritative ring membership list."
+    },
+    "diagram": "graph LR\n    N1[Node 1] -->|token| N2[Node 2]\n    N2 -->|token| N3[Node 3]\n    N3 -->|token| N4[Node 4]\n    N4 -->|token| N5[Node 5]\n    N5 -->|token| N6[Node 6]\n    N6 -->|token| N1\n    TM[Token Manager] -.->|monitors| N1\n    TM -.->|monitors| N4",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "full-mesh-topology",
+    "name": "Full Mesh Topology",
+    "category": "Network Topologies",
+    "tags": [
+      "fully-connected",
+      "redundant",
+      "expensive",
+      "fault-tolerant",
+      "low-latency"
+    ],
+    "summary": "Every agent connects directly to every other agent; maximum redundancy and minimum latency at maximum cost.",
+    "description": "In a full mesh, every agent has a direct connection to every other agent. This provides the theoretical optimum for latency (1 hop between any pair) and fault tolerance (any agent can fail without disconnecting others). However, the connection count grows as n*(n-1)/2, making it impractical beyond small groups. Each agent must maintain n-1 connections. This topology is ideal for small, critical groups where every agent must be able to reach every other agent instantly and independently.",
+    "realWorldExample": "Core internet backbone routers (partial mesh), supreme court deliberation, small special forces teams",
+    "whenToUse": "When you have a small number of critical agents (under 10) that all need direct, low-latency communication with every other agent and maximum fault tolerance.",
+    "strengths": [
+      "1-hop latency between any pair",
+      "Maximum fault tolerance: no single point of failure",
+      "No routing needed: direct connections",
+      "Every agent has complete peer visibility"
+    ],
+    "weaknesses": [
+      "O(n^2) connections make it unscalable",
+      "Every agent must manage n-1 connections",
+      "High bandwidth and memory overhead",
+      "Adding one agent requires n new connections"
+    ],
+    "agents": [
+      {
+        "role": "mesh-node",
+        "name": "Mesh Node",
+        "description": "Maintains direct connections to all other nodes, can send and receive without intermediaries",
+        "memory": "persistent-shared",
+        "count": 6
+      }
+    ],
+    "forums": [
+      {
+        "name": "Direct Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "mesh-node"
+        ]
+      },
+      {
+        "name": "Group Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "mesh-node"
+        ]
+      },
+      {
+        "name": "Consensus Protocol",
+        "type": "decision",
+        "participants": [
+          "mesh-node"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Full system state (replicated on all nodes)",
+        "Consensus log",
+        "Membership registry"
+      ],
+      "private": [
+        "Connection health metrics per peer",
+        "Local processing queue"
+      ],
+      "description": "All nodes maintain a replicated copy of shared state. Consensus protocols keep replicas synchronized. Each node also tracks the health of its n-1 direct connections. The redundancy is extreme: the full system state exists on every node."
+    },
+    "diagram": "graph TD\n    N1[Node 1] --- N2[Node 2]\n    N1 --- N3[Node 3]\n    N1 --- N4[Node 4]\n    N1 --- N5[Node 5]\n    N2 --- N3\n    N2 --- N4\n    N2 --- N5\n    N3 --- N4\n    N3 --- N5\n    N4 --- N5",
+    "hierarchyTypes": [
+      "mesh",
+      "swarm"
+    ]
+  },
+  {
+    "id": "small-world-network",
+    "name": "Small-World Network",
+    "category": "Network Topologies",
+    "tags": [
+      "shortcuts",
+      "six-degrees",
+      "clustered",
+      "efficient",
+      "social-graph"
+    ],
+    "summary": "Highly clustered local neighborhoods with rare long-range shortcuts enabling any-to-any paths in few hops.",
+    "description": "Based on the Watts-Strogatz small-world model. Agents are primarily connected to their local neighborhood (high clustering coefficient) but a few random long-range connections create shortcuts across the network. This produces the 'six degrees of separation' property: any two agents can reach each other in logarithmically few hops despite the network being large. The topology combines the benefits of local clusters (efficient local communication, strong neighborhoods) with global reachability through shortcut agents.",
+    "realWorldExample": "Human social networks, neural networks in C. elegans, power grid interconnections, academic co-authorship graphs",
+    "whenToUse": "When agents naturally form local clusters but occasionally need to reach distant parts of the network quickly, and you want both strong local cohesion and global connectivity.",
+    "strengths": [
+      "Short path length between any pair (logarithmic)",
+      "High local clustering enables efficient neighborhoods",
+      "Small number of shortcuts provides global reach",
+      "Robust to random node failure"
+    ],
+    "weaknesses": [
+      "Shortcut agents become critical bridges",
+      "Targeted removal of shortcuts fragments the network",
+      "Difficult to guarantee specific path lengths",
+      "Uneven load distribution: shortcuts carry disproportionate traffic"
+    ],
+    "agents": [
+      {
+        "role": "cluster-member",
+        "name": "Cluster Member",
+        "description": "Connected to 4-6 local neighbors within its cluster, handles local communication efficiently",
+        "memory": "persistent-private",
+        "count": 16
+      },
+      {
+        "role": "shortcut-bridge",
+        "name": "Shortcut Bridge",
+        "description": "A cluster member that also maintains one or more long-range connections to distant clusters",
+        "memory": "persistent-shared",
+        "count": 4
+      },
+      {
+        "role": "cluster-hub",
+        "name": "Cluster Hub",
+        "description": "Locally central node that routes inter-cluster messages to the nearest shortcut bridge",
+        "memory": "persistent-shared",
+        "count": 4
+      }
+    ],
+    "forums": [
+      {
+        "name": "Local Cluster Chat",
+        "type": "peer-to-peer",
+        "participants": [
+          "cluster-member",
+          "cluster-hub"
+        ]
+      },
+      {
+        "name": "Shortcut Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "shortcut-bridge"
+        ]
+      },
+      {
+        "name": "Route Discovery",
+        "type": "pub-sub",
+        "participants": [
+          "cluster-hub",
+          "shortcut-bridge"
+        ]
+      },
+      {
+        "name": "Network Map",
+        "type": "document",
+        "participants": [
+          "shortcut-bridge",
+          "cluster-hub"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Network topology map (approximate)",
+        "Shortcut bridge locations",
+        "Cluster membership lists"
+      ],
+      "private": [
+        "Local neighbor list",
+        "Routing cache",
+        "Message forwarding history"
+      ],
+      "description": "Cluster hubs maintain local topology maps. Shortcut bridges hold inter-cluster routing tables. Regular members know only their immediate neighbors and their cluster hub. Route discovery propagates through the network as needed."
+    },
+    "diagram": "graph TD\n    subgraph Cluster A\n    A1[Member] --- A2[Member]\n    A2 --- A3[Hub A]\n    A3 --- A1\n    end\n    subgraph Cluster B\n    B1[Member] --- B2[Member]\n    B2 --- B3[Hub B]\n    B3 --- B1\n    end\n    subgraph Cluster C\n    C1[Member] --- C2[Member]\n    C2 --- C3[Hub C]\n    C3 --- C1\n    end\n    A2 -.->|shortcut| C1\n    B1 -.->|shortcut| A3\n    C3 -.->|shortcut| B2",
+    "hierarchyTypes": [
+      "federated",
+      "swarm",
+      "mesh"
+    ]
+  },
+  {
+    "id": "scale-free-network",
+    "name": "Scale-Free Network",
+    "category": "Network Topologies",
+    "tags": [
+      "power-law",
+      "preferential-attachment",
+      "hubs",
+      "resilient-to-random",
+      "vulnerable-to-targeted"
+    ],
+    "summary": "Power-law degree distribution where a few mega-hubs handle most connections while most nodes have few.",
+    "description": "Based on the Barabasi-Albert model of preferential attachment: new nodes preferentially connect to already well-connected nodes, creating a power-law degree distribution. A few mega-hubs accumulate hundreds of connections while most nodes have only 2-3. This topology is extremely resilient to random failures (removing random low-degree nodes barely affects the network) but catastrophically vulnerable to targeted attacks on hubs. It emerges naturally in the internet, citation networks, and social media follower graphs.",
+    "realWorldExample": "The internet's autonomous system topology, Twitter follower networks, airline hub-and-spoke routes, citation networks",
+    "whenToUse": "When your agent network grows organically and new agents naturally prefer connecting to established, well-connected agents, or when you need resilience to random failures more than resilience to targeted attacks.",
+    "strengths": [
+      "Extremely resilient to random node failures",
+      "Short average path lengths through mega-hubs",
+      "Grows organically through preferential attachment",
+      "Efficient information dissemination through hubs"
+    ],
+    "weaknesses": [
+      "Catastrophic vulnerability to targeted hub removal",
+      "Mega-hubs become severe bottlenecks",
+      "Highly unequal load distribution",
+      "Power-law means most nodes are poorly connected"
+    ],
+    "agents": [
+      {
+        "role": "mega-hub",
+        "name": "Mega Hub",
+        "description": "Extremely well-connected node handling hundreds of connections and routing most traffic",
+        "memory": "persistent-shared",
+        "count": 2
+      },
+      {
+        "role": "medium-hub",
+        "name": "Medium Hub",
+        "description": "Moderately connected node serving as regional relay between mega-hubs and peripheral nodes",
+        "memory": "persistent-shared",
+        "count": 5
+      },
+      {
+        "role": "peripheral",
+        "name": "Peripheral Node",
+        "description": "Lightly connected node with 2-3 connections, depends on hubs for network access",
+        "memory": "persistent-private",
+        "count": 20
+      }
+    ],
+    "forums": [
+      {
+        "name": "Hub-to-Hub Backbone",
+        "type": "peer-to-peer",
+        "participants": [
+          "mega-hub",
+          "medium-hub"
+        ]
+      },
+      {
+        "name": "Hub Broadcast",
+        "type": "broadcast",
+        "participants": [
+          "mega-hub",
+          "medium-hub",
+          "peripheral"
+        ]
+      },
+      {
+        "name": "Attachment Requests",
+        "type": "queue",
+        "participants": [
+          "peripheral",
+          "mega-hub",
+          "medium-hub"
+        ]
+      },
+      {
+        "name": "Hub Health Monitor",
+        "type": "emergency",
+        "participants": [
+          "mega-hub",
+          "medium-hub"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Global routing table (on mega-hubs)",
+        "Network degree distribution",
+        "Hub health status"
+      ],
+      "private": [
+        "Local connection list",
+        "Preferred hub ranking",
+        "Message queue"
+      ],
+      "description": "Mega-hubs hold the authoritative routing tables and global network state. Medium-hubs cache regional routing information. Peripheral nodes know only their direct connections and rely on hubs for discovery. If a mega-hub fails, its routing knowledge is lost."
+    },
+    "diagram": "graph TD\n    MH1((Mega Hub 1)) === MH2((Mega Hub 2))\n    MH1 --> M1[Med Hub 1]\n    MH1 --> M2[Med Hub 2]\n    MH1 --> M3[Med Hub 3]\n    MH2 --> M4[Med Hub 4]\n    MH2 --> M5[Med Hub 5]\n    M1 --> P1[Peripheral]\n    M1 --> P2[Peripheral]\n    M2 --> P3[Peripheral]\n    M3 --> P4[Peripheral]\n    M4 --> P5[Peripheral]\n    M5 --> P6[Peripheral]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm",
+      "mesh",
+      "chain-of-command",
+      "pipeline",
+      "federated",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "gossip-protocol-network",
+    "name": "Gossip Protocol Network",
+    "category": "Network Topologies",
+    "tags": [
+      "epidemic",
+      "probabilistic",
+      "eventually-consistent",
+      "decentralized",
+      "rumor-spreading"
+    ],
+    "summary": "Each agent periodically tells a random peer its latest state; information spreads epidemically to all nodes.",
+    "description": "Based on epidemic/gossip protocols used in distributed systems. Each agent periodically selects a random peer and exchanges state information. Like a rumor spreading through a population, information reaches all agents in O(log n) rounds with high probability. There is no central coordinator, no fixed topology, and no routing tables. Agents need only the ability to select a random peer. The protocol is inherently fault-tolerant because redundant transmissions compensate for lost messages. Consistency is eventual, not immediate.",
+    "realWorldExample": "Amazon Dynamo's failure detection, Apache Cassandra's cluster state management, Bitcoin transaction propagation",
+    "whenToUse": "When you need all agents to eventually converge on the same state without central coordination, can tolerate brief inconsistency windows, and want maximum simplicity and fault tolerance.",
+    "strengths": [
+      "Converges in O(log n) rounds",
+      "No single point of failure or fixed topology",
+      "Extremely simple to implement per agent",
+      "Self-healing: redundant transmissions compensate for failures"
+    ],
+    "weaknesses": [
+      "Only eventually consistent, not immediately",
+      "Redundant messages waste bandwidth",
+      "Difficult to guarantee delivery of any specific message",
+      "Old information can temporarily overwrite new information"
+    ],
+    "agents": [
+      {
+        "role": "gossiper",
+        "name": "Gossip Node",
+        "description": "Periodically selects a random peer, exchanges state digests, resolves differences",
+        "memory": "persistent-private",
+        "count": 15
+      },
+      {
+        "role": "seed-node",
+        "name": "Seed Node",
+        "description": "Well-known bootstrap node that new agents contact to discover their first peers",
+        "memory": "persistent-shared",
+        "count": 3
+      }
+    ],
+    "forums": [
+      {
+        "name": "Gossip Exchange",
+        "type": "peer-to-peer",
+        "participants": [
+          "gossiper",
+          "seed-node"
+        ]
+      },
+      {
+        "name": "State Digest",
+        "type": "pub-sub",
+        "participants": [
+          "gossiper"
+        ]
+      },
+      {
+        "name": "Bootstrap Registry",
+        "type": "document",
+        "participants": [
+          "seed-node"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Seed node addresses (bootstrap only)",
+        "Expected state schema"
+      ],
+      "private": [
+        "Local state vector with version timestamps",
+        "Known peer list",
+        "Gossip history (last exchange per peer)"
+      ],
+      "description": "Each node maintains its own versioned state vector. During gossip exchanges, nodes compare version timestamps and take the newer value for each key. Shared memory is minimal: just the bootstrap seed addresses. The 'shared state' is an emergent property of convergence, not a physical shared store."
+    },
+    "diagram": "graph TD\n    G1[Node 1] -.->|gossip| G3[Node 3]\n    G2[Node 2] -.->|gossip| G5[Node 5]\n    G3 -.->|gossip| G4[Node 4]\n    G4 -.->|gossip| G1\n    G5 -.->|gossip| G2\n    G1 -.->|gossip| G5\n    G3 -.->|gossip| G2\n    S((Seed Node)) -.->|bootstrap| G1\n    S -.->|bootstrap| G3\n    S -.->|bootstrap| G5",
+    "hierarchyTypes": [
+      "swarm",
+      "mesh",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "blockchain-dag-consensus",
+    "name": "Blockchain DAG Consensus",
+    "category": "Network Topologies",
+    "tags": [
+      "distributed-ledger",
+      "trustless",
+      "append-only",
+      "consensus",
+      "immutable"
+    ],
+    "summary": "Trustless network where agents propose blocks validated by consensus, forming an immutable append-only DAG.",
+    "description": "Inspired by blockchain and DAG-based distributed ledgers. Agents propose blocks of work that reference previous blocks, forming a directed acyclic graph. A consensus mechanism (proof-of-work, proof-of-stake, or BFT) ensures that all honest agents agree on the canonical chain. The ledger is append-only and immutable: once a block is confirmed, it cannot be altered. This provides trustless coordination where agents need not trust each other, only the protocol. The tradeoff is high latency and computational overhead for consensus.",
+    "realWorldExample": "Bitcoin and Ethereum blockchains, IOTA Tangle (DAG variant), Git commit graph",
+    "whenToUse": "When agents do not trust each other and you need a verifiable, immutable record of all actions that all agents can audit independently.",
+    "strengths": [
+      "Trustless: no agent needs to trust any other",
+      "Immutable audit trail of all actions",
+      "Byzantine fault tolerant (up to 1/3 malicious agents)",
+      "No central authority required"
+    ],
+    "weaknesses": [
+      "Very high latency for consensus finality",
+      "Enormous computational or stake overhead",
+      "Throughput limited by consensus mechanism",
+      "Immutability means mistakes are permanent"
+    ],
+    "agents": [
+      {
+        "role": "validator",
+        "name": "Validator Node",
+        "description": "Proposes new blocks, validates others' proposals, participates in consensus voting",
+        "memory": "persistent-shared",
+        "count": 7
+      },
+      {
+        "role": "proposer",
+        "name": "Block Proposer",
+        "description": "Assembles pending transactions into candidate blocks and broadcasts for validation",
+        "memory": "persistent-private",
+        "count": 3
+      },
+      {
+        "role": "auditor",
+        "name": "Auditor",
+        "description": "Reads the chain to verify historical claims, does not participate in consensus",
+        "memory": "persistent-private",
+        "count": 2
+      }
+    ],
+    "forums": [
+      {
+        "name": "Block Proposals",
+        "type": "broadcast",
+        "participants": [
+          "proposer",
+          "validator"
+        ]
+      },
+      {
+        "name": "Consensus Votes",
+        "type": "decision",
+        "participants": [
+          "validator"
+        ]
+      },
+      {
+        "name": "Transaction Pool",
+        "type": "queue",
+        "participants": [
+          "proposer"
+        ]
+      },
+      {
+        "name": "Chain State",
+        "type": "document",
+        "participants": [
+          "validator",
+          "auditor"
+        ]
+      },
+      {
+        "name": "Audit Reports",
+        "type": "log",
+        "participants": [
+          "auditor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "The canonical chain/DAG (immutable, append-only)",
+        "Consensus rules and protocol parameters",
+        "Current validator set"
+      ],
+      "private": [
+        "Pending transaction mempool",
+        "Local chain replica",
+        "Stake or proof-of-work state"
+      ],
+      "description": "The canonical chain is the shared, append-only, immutable memory. Every validator holds a full replica. Consensus determines which proposed blocks become canonical. The mempool of pending transactions is private to each proposer. Auditors hold read-only replicas."
+    },
+    "diagram": "graph LR\n    B0[Genesis Block] --> B1[Block 1]\n    B1 --> B2[Block 2]\n    B2 --> B3a[Block 3a]\n    B2 --> B3b[Block 3b]\n    B3a --> B4[Block 4]\n    V1[Validator 1] -.->|votes| B3a\n    V2[Validator 2] -.->|votes| B3a\n    V3[Validator 3] -.->|votes| B3b\n    P[Proposer] -->|proposes| B3a\n    A[Auditor] -.->|reads| B4",
+    "hierarchyTypes": [
+      "consensus",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "onion-routing-layers",
+    "name": "Onion Routing Layers",
+    "category": "Network Topologies",
+    "tags": [
+      "privacy",
+      "layered-encryption",
+      "anonymous",
+      "relay-chain",
+      "defense-in-depth"
+    ],
+    "summary": "Messages wrapped in encryption layers pass through relay agents; each peels one layer, knowing only its neighbors.",
+    "description": "Based on onion routing as used in Tor. A message is encrypted in multiple layers, one for each relay in the path. Each relay agent decrypts its layer, revealing only the address of the next hop and the still-encrypted inner payload. No single relay knows both the origin and destination. The entry guard knows the sender but not the content or destination. The exit relay knows the content and destination but not the sender. The path is randomly selected from available relays, and changes periodically.",
+    "realWorldExample": "The Tor network with 6,000+ relay nodes providing anonymous internet access worldwide",
+    "whenToUse": "When agent communications must be anonymous and no single compromised relay should be able to deanonymize the sender-receiver pair.",
+    "strengths": [
+      "No single relay knows both sender and receiver",
+      "Compromising one relay reveals minimal information",
+      "Path randomization frustrates traffic analysis",
+      "Defense in depth: multiple layers must be breached"
+    ],
+    "weaknesses": [
+      "Latency multiplied by number of relay hops",
+      "Entry and exit nodes are higher-value targets",
+      "Vulnerable to traffic correlation by global adversary",
+      "Relay participation requires trust in the relay selection protocol"
+    ],
+    "agents": [
+      {
+        "role": "sender",
+        "name": "Sender",
+        "description": "Constructs multi-layered encrypted message, selects random relay path, sends to entry guard",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "entry-guard",
+        "name": "Entry Guard",
+        "description": "First relay in the circuit; knows the sender but not the destination or content",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "middle-relay",
+        "name": "Middle Relay",
+        "description": "Peels one encryption layer, forwards to next relay; knows neither sender nor destination",
+        "memory": "ephemeral",
+        "count": 6
+      },
+      {
+        "role": "exit-relay",
+        "name": "Exit Relay",
+        "description": "Final relay that peels the last layer and delivers to destination; knows destination but not sender",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "receiver",
+        "name": "Receiver",
+        "description": "Receives the fully decrypted message with no knowledge of the relay path used",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Encrypted Relay Chain",
+        "type": "peer-to-peer",
+        "participants": [
+          "sender",
+          "entry-guard",
+          "middle-relay",
+          "exit-relay",
+          "receiver"
+        ]
+      },
+      {
+        "name": "Relay Directory",
+        "type": "document",
+        "participants": [
+          "entry-guard",
+          "middle-relay",
+          "exit-relay"
+        ]
+      },
+      {
+        "name": "Circuit Establishment",
+        "type": "peer-to-peer",
+        "participants": [
+          "sender",
+          "entry-guard"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Relay directory (public keys and addresses)",
+        "Protocol specification"
+      ],
+      "private": [
+        "Circuit keys (per-hop encryption keys)",
+        "Relay's own private key",
+        "Ephemeral session state"
+      ],
+      "description": "The relay directory is the only shared memory, listing available relays and their public keys. Each relay holds only its private key and ephemeral session state for active circuits. The sender holds the complete circuit keys but shares each key only with its corresponding relay. No relay can reconstruct the full path."
+    },
+    "diagram": "graph LR\n    S[Sender] -->|layer 3| EG[Entry Guard]\n    EG -->|layer 2| MR1[Middle Relay 1]\n    MR1 -->|layer 1| MR2[Middle Relay 2]\n    MR2 -->|plaintext| EX[Exit Relay]\n    EX -->|deliver| R[Receiver]\n    S -.->|knows sender| EG\n    EX -.->|knows dest| R\n    MR1 -.->|knows nothing| MR2",
+    "hierarchyTypes": [
+      "swarm",
+      "mesh",
+      "federated",
+      "pipeline"
+    ]
+  }
+]

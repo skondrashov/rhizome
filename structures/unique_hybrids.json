@@ -1,0 +1,1904 @@
+[
+  {
+    "id": "wikipedia-governance",
+    "name": "Wikipedia Governance Model",
+    "category": "Social & Community",
+    "tags": [
+      "consensus-driven",
+      "layered-trust",
+      "edit-warfare",
+      "bureaucratic-meritocracy"
+    ],
+    "summary": "Consensus-based editing with escalating trust layers, where anyone can contribute but power accrues to the persistent.",
+    "description": "Modeled on Wikipedia's actual governance, this pattern creates a radically open system where any agent can modify shared artifacts, but a hierarchy of trust gates controls destructive actions. Autopatrolled editors handle routine work, administrators can revert and protect, bureaucrats grant permissions, stewards operate cross-wiki, and an elected Arbitration Committee resolves intractable disputes. The key insight is that consensus is the default decision mechanism, but when consensus fails, escalation paths exist. Edit conflicts are resolved not by authority but by policy interpretation, creating a quasi-legal system run by volunteers.",
+    "realWorldExample": "English Wikipedia's 6.8 million articles are maintained by this exact structure: roughly 500 active admins, 30 bureaucrats, and a 15-member Arbitration Committee governing 40,000+ active editors.",
+    "whenToUse": "When you need massive parallel contribution to a shared knowledge artifact, when contributors vary wildly in quality and trustworthiness, and when the system must remain open while still converging on accuracy.",
+    "strengths": [
+      "Scales to tens of thousands of contributors without centralized bottlenecks",
+      "Meritocratic trust accumulation means the best contributors naturally gain influence",
+      "Consensus-seeking produces more durable decisions than top-down edicts",
+      "Radical openness allows rapid incorporation of new information"
+    ],
+    "weaknesses": [
+      "Edit wars between persistent agents can paralyze decision-making on contentious topics",
+      "Bureaucratic process creep eventually makes simple changes require extensive discussion",
+      "Systemic bias emerges from contributor demographics rather than from any individual decision",
+      "Consensus culture can suppress bold or unconventional ideas in favor of safe compromises"
+    ],
+    "agents": [
+      {
+        "role": "anon-editor",
+        "name": "Anonymous Editor",
+        "description": "Makes edits to shared documents with no special privileges; all changes are logged and reviewable",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "autopatrolled",
+        "name": "Autopatrolled Editor",
+        "description": "Trusted contributor whose edits skip the review queue; earned through consistent quality contributions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "administrator",
+        "name": "Administrator",
+        "description": "Can revert edits, protect pages from modification, and block disruptive editors; elected by community consensus",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "bureaucrat",
+        "name": "Bureaucrat",
+        "description": "Grants and revokes admin privileges based on community consensus votes; manages the trust hierarchy itself",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "arbcom-member",
+        "name": "Arbitration Committee Member",
+        "description": "Hears disputes that consensus cannot resolve; issues binding decisions on editor conduct and policy interpretation",
+        "memory": "append-only"
+      },
+      {
+        "role": "bot",
+        "name": "Maintenance Bot",
+        "description": "Automated agent performing routine tasks: fixing formatting, reverting obvious vandalism, updating cross-references",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Article Talk Pages",
+        "type": "threaded",
+        "participants": [
+          "anon-editor",
+          "autopatrolled",
+          "administrator",
+          "bureaucrat"
+        ]
+      },
+      {
+        "name": "Requests for Adminship",
+        "type": "decision",
+        "participants": [
+          "autopatrolled",
+          "administrator",
+          "bureaucrat"
+        ]
+      },
+      {
+        "name": "Arbitration Cases",
+        "type": "decision",
+        "participants": [
+          "arbcom-member",
+          "administrator"
+        ]
+      },
+      {
+        "name": "Recent Changes Feed",
+        "type": "broadcast",
+        "participants": [
+          "anon-editor",
+          "autopatrolled",
+          "administrator",
+          "bot"
+        ]
+      },
+      {
+        "name": "Village Pump",
+        "type": "threaded",
+        "participants": [
+          "anon-editor",
+          "autopatrolled",
+          "administrator",
+          "bureaucrat",
+          "arbcom-member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "article-content-with-full-revision-history",
+        "policy-pages",
+        "user-contribution-logs",
+        "block-and-protection-logs"
+      ],
+      "private": [
+        "watchlists",
+        "draft-workspace",
+        "arbcom-deliberation-notes"
+      ],
+      "description": "Every edit to every page is permanently recorded with attribution, creating a complete audit trail. Policy documents are themselves wiki pages subject to the same consensus process. Private memory is minimal: personal watchlists and drafts. The Arbitration Committee maintains private deliberation notes but publishes all final decisions. The revision history IS the institutional memory."
+    },
+    "diagram": "graph TD\n    AE[Anonymous Editor] -->|edits| AP[Article Pages]\n    AU[Autopatrolled] -->|edits skip review| AP\n    BOT[Maintenance Bot] -->|auto-fixes| AP\n    AD[Administrator] -->|reverts/protects| AP\n    AD -->|blocks| AE\n    BU[Bureaucrat] -->|grants permissions| AD\n    AC[Arbitration Committee] -->|binding rulings| AD\n    AC -->|binding rulings| AU\n    AE -->|appeals| AC\n    AU -->|nominates| BU",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "burning-man-festival",
+    "name": "Burning Man Festival Organization",
+    "category": "Social & Community",
+    "tags": [
+      "radical-self-reliance",
+      "gift-economy",
+      "temporary-city",
+      "decommodification"
+    ],
+    "summary": "A temporary city emerges from radical decentralization, gift economy, and theme camp self-organization.",
+    "description": "This pattern creates a large-scale temporary system from a hybrid of top-down infrastructure (the city layout, perimeter, medical) and radically bottom-up contribution (theme camps, art, mutual aid). The Org provides the grid, safety services, and placement decisions, but the actual content is entirely generated by participants who bring their own resources and give freely. Rangers act as non-authoritarian community mediators rather than enforcers. The DPW (Department of Public Works) builds and tears down the physical infrastructure in brutal conditions. Art grants distribute resources for large installations. The entire system exists for one week and then vanishes, with Leave No Trace as a hard constraint.",
+    "realWorldExample": "Burning Man's Black Rock City: 80,000 people self-organize into a functioning city for one week in the Nevada desert, with 1,500+ theme camps, 400+ art installations, and no commerce.",
+    "whenToUse": "When you need massive creative output from autonomous agents with minimal central control, when the output is ephemeral by design, or when you want intrinsic motivation to replace monetary incentives.",
+    "strengths": [
+      "Generates extraordinary creative diversity because no central authority curates content",
+      "Gift economy eliminates transactional overhead and aligns incentives with genuine contribution",
+      "Radical self-reliance means each unit is independently viable, making the whole antifragile",
+      "Temporary nature creates urgency and eliminates institutional cruft"
+    ],
+    "weaknesses": [
+      "Leave No Trace constraint requires enormous cleanup effort that falls on the most committed",
+      "Placement decisions create political tensions in a system that claims to reject hierarchy",
+      "Radical self-reliance disadvantages agents with fewer resources, creating hidden inequality",
+      "Scaling beyond a threshold breaks the gift economy as free-riders overwhelm contributors"
+    ],
+    "agents": [
+      {
+        "role": "theme-camp-lead",
+        "name": "Theme Camp Lead",
+        "description": "Organizes an autonomous unit that provides a specific experience or gift to the community; responsible for camp logistics and Leave No Trace compliance",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "ranger",
+        "name": "Black Rock Ranger",
+        "description": "Non-confrontational community mediator who de-escalates conflicts through communication rather than authority; the soft power of the system",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "dpw-crew",
+        "name": "DPW Crew Member",
+        "description": "Builds and dismantles city infrastructure including roads, signs, power distribution, and the city perimeter fence",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "placement-lead",
+        "name": "Placement Lead",
+        "description": "Decides where each theme camp goes on the city grid based on interactivity, sound, and community contribution history",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "art-grant-reviewer",
+        "name": "Art Grant Reviewer",
+        "description": "Evaluates proposals for large-scale art installations and allocates resources from the communal fund",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "participant",
+        "name": "Participant",
+        "description": "Self-reliant individual who contributes through participation, gifting, and radical self-expression",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "City Grid Plan",
+        "type": "document",
+        "participants": [
+          "placement-lead",
+          "dpw-crew"
+        ]
+      },
+      {
+        "name": "Ranger Radio Net",
+        "type": "emergency",
+        "participants": [
+          "ranger",
+          "dpw-crew"
+        ]
+      },
+      {
+        "name": "Art Grant Proposals",
+        "type": "decision",
+        "participants": [
+          "art-grant-reviewer",
+          "theme-camp-lead"
+        ]
+      },
+      {
+        "name": "Theme Camp Directory",
+        "type": "pub-sub",
+        "participants": [
+          "theme-camp-lead",
+          "participant",
+          "placement-lead"
+        ]
+      },
+      {
+        "name": "MOOP Map",
+        "type": "log",
+        "participants": [
+          "dpw-crew",
+          "theme-camp-lead",
+          "ranger"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "city-grid-layout",
+        "art-grant-allocations",
+        "moop-map-leave-no-trace-scores",
+        "ranger-incident-log"
+      ],
+      "private": [
+        "camp-internal-logistics",
+        "grant-review-scores",
+        "personal-packing-lists"
+      ],
+      "description": "Most memory is deliberately ephemeral -- the city vanishes and so does most institutional knowledge. The few persistent shared memories are the city grid template (evolved year over year), the MOOP (Matter Out Of Place) map that tracks environmental compliance, and the placement history that influences future camp locations. Theme camps maintain their own private knowledge across years. The radical ephemerality is a feature, not a bug."
+    },
+    "diagram": "graph TD\n    ORG[Burning Man Org] --> PL[Placement Lead]\n    ORG --> AGR[Art Grant Reviewers]\n    ORG --> DPW[DPW Crew]\n    PL -->|assigns locations| TC1[Theme Camp A]\n    PL -->|assigns locations| TC2[Theme Camp B]\n    PL -->|assigns locations| TC3[Theme Camp N]\n    AGR -->|funds| ART[Art Installations]\n    DPW -->|builds grid| CITY[Black Rock City]\n    RNG[Rangers] -->|mediates| TC1\n    RNG -->|mediates| TC2\n    P[Participants] -->|gifts| TC1\n    P -->|gifts| TC2",
+    "hierarchyTypes": [
+      "federated",
+      "swarm",
+      "consensus"
+    ]
+  },
+  {
+    "id": "911-dispatch-escalation",
+    "name": "911 Emergency Dispatch System",
+    "category": "Technology & Engineering",
+    "tags": [
+      "triage",
+      "real-time-escalation",
+      "life-critical",
+      "protocol-driven"
+    ],
+    "summary": "Call takers triage, dispatchers allocate, responders execute -- all in seconds with zero tolerance for error.",
+    "description": "This pattern handles unpredictable, high-stakes requests through a strict triage-dispatch-response pipeline where every second counts. Call takers follow rigid protocol scripts (like MPDS -- Medical Priority Dispatch System) to classify incidents in under 60 seconds. Dispatchers maintain a real-time mental model of all available units and their locations, making allocation decisions that balance urgency against proximity and capability. First responders operate with high autonomy once on scene but report status changes that update the dispatcher's resource map. The entire system is designed for graceful degradation: if one layer fails, adjacent layers absorb the load. Mutual aid agreements allow cross-jurisdictional escalation when local resources are exhausted.",
+    "realWorldExample": "NYPD's 911 system handles 11 million calls per year, dispatching to 77 precincts, 218 fire houses, and 400+ ambulance units with average answer time under 10 seconds.",
+    "whenToUse": "When requests arrive unpredictably with wildly varying urgency, when response latency directly determines outcome quality, and when resource allocation must happen in real-time under incomplete information.",
+    "strengths": [
+      "Protocol scripts enable consistent triage even under extreme stress and with varying operator skill",
+      "Separation of triage from dispatch from response prevents any single failure from cascading",
+      "Real-time resource tracking enables optimal allocation across large geographic areas",
+      "Mutual aid protocols allow seamless scaling beyond any single jurisdiction's capacity"
+    ],
+    "weaknesses": [
+      "Rigid protocols can misclassify novel situations that don't fit predefined categories",
+      "Dispatcher cognitive load is the system bottleneck -- one overwhelmed dispatcher degrades everything",
+      "Information loss at each handoff (caller to taker to dispatcher to responder) compounds",
+      "System optimizes for speed over accuracy, sometimes dispatching resources that turn out to be wrong type"
+    ],
+    "agents": [
+      {
+        "role": "call-taker",
+        "name": "Call Taker",
+        "description": "Answers incoming calls and follows scripted protocols to classify incident type, severity, and location within 60 seconds",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "dispatcher",
+        "name": "Dispatcher",
+        "description": "Maintains real-time map of all available units; assigns responders based on proximity, capability, and incident priority",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "first-responder",
+        "name": "First Responder",
+        "description": "Executes on-scene with high autonomy; reports status changes (arrived, under control, need backup) back to dispatch",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "supervisor",
+        "name": "Shift Supervisor",
+        "description": "Monitors call volume and dispatcher load; activates mutual aid and overflow protocols when local capacity is exceeded",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cad-system",
+        "name": "CAD System",
+        "description": "Computer-Aided Dispatch: automated tracking of all units, incidents, and response times; provides decision support to dispatchers",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Incoming Call Queue",
+        "type": "queue",
+        "participants": [
+          "call-taker"
+        ]
+      },
+      {
+        "name": "Dispatch Channel",
+        "type": "broadcast",
+        "participants": [
+          "dispatcher",
+          "first-responder",
+          "supervisor"
+        ]
+      },
+      {
+        "name": "CAD Incident Board",
+        "type": "document",
+        "participants": [
+          "call-taker",
+          "dispatcher",
+          "cad-system",
+          "supervisor"
+        ]
+      },
+      {
+        "name": "Mutual Aid Request",
+        "type": "emergency",
+        "participants": [
+          "supervisor",
+          "dispatcher"
+        ]
+      },
+      {
+        "name": "Unit Status Feed",
+        "type": "pub-sub",
+        "participants": [
+          "first-responder",
+          "dispatcher",
+          "cad-system"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "cad-incident-database",
+        "unit-availability-map",
+        "response-time-metrics",
+        "mutual-aid-agreements"
+      ],
+      "private": [
+        "protocol-scripts",
+        "caller-interaction-notes"
+      ],
+      "description": "The CAD system is the central nervous system -- a persistent, real-time shared database of every active incident and every available unit. Call takers write to it, dispatchers read and update it, responders update their status through it. Individual call recordings are retained for QA but are not part of active memory. The system's memory is optimized for recency: what matters is the current state of resources, not historical patterns."
+    },
+    "diagram": "graph LR\n    CALLER[Caller] -->|dials 911| CT[Call Taker]\n    CT -->|classifies incident| CAD[CAD System]\n    CAD -->|prioritized queue| DISP[Dispatcher]\n    DISP -->|assigns unit| FR1[Fire/EMS]\n    DISP -->|assigns unit| FR2[Police]\n    FR1 -->|status updates| CAD\n    FR2 -->|status updates| CAD\n    SUP[Supervisor] -->|monitors load| DISP\n    SUP -->|activates| MA[Mutual Aid]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "kitchen-brigade-escoffier",
+    "name": "Escoffier Kitchen Brigade",
+    "category": "Corporate & Business",
+    "tags": [
+      "station-based",
+      "parallel-pipeline",
+      "expeditor-bottleneck",
+      "mise-en-place"
+    ],
+    "summary": "Parallel station-based production with a single expeditor synchronizing outputs into coherent deliverables.",
+    "description": "Auguste Escoffier's kitchen brigade system solves a brutal coordination problem: producing dozens of different dishes simultaneously, each requiring different preparation times and techniques, all arriving at the table together and hot. The solution is radical station specialization. Each station (saucier, grillardin, poissonnier, patissier, etc.) operates as an independent production unit with its own mise en place (pre-staged ingredients and tools). The sous chef translates high-level orders into station-specific tasks. The expeditor (often the head chef) is the critical synchronization point, calling out timing, inspecting quality, and ensuring all components of a table's order converge at the pass simultaneously. This is a pipeline architecture with a single-point synchronization barrier.",
+    "realWorldExample": "Thomas Keller's The French Laundry runs a brigade of 35-40 cooks across 8 stations, producing a 9-course tasting menu where each course is plated in under 90 seconds with zero defects.",
+    "whenToUse": "When multiple parallel workstreams must synchronize their outputs into a single coherent deliverable under hard time constraints, and when individual workstream quality must be independently high.",
+    "strengths": [
+      "Station specialization allows deep expertise in narrow domains, producing consistently high quality",
+      "Parallel execution means total throughput far exceeds what sequential processing could achieve",
+      "Mise en place philosophy ensures each station is always ready to execute without blocking on dependencies",
+      "Single expeditor creates a clear quality gate and synchronization point"
+    ],
+    "weaknesses": [
+      "The expeditor is an extreme bottleneck -- if they fall behind, the entire kitchen backs up",
+      "Rigid station boundaries make it hard to handle novel dishes that don't fit existing categories",
+      "High startup cost: each station must maintain its own pre-staged inventory and workspace",
+      "Communication is strictly hierarchical -- a poissonnier cannot directly coordinate with a saucier"
+    ],
+    "agents": [
+      {
+        "role": "executive-chef",
+        "name": "Executive Chef / Expeditor",
+        "description": "Sets the menu, calls out orders, synchronizes timing across all stations, inspects every plate at the pass before it leaves the kitchen",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "sous-chef",
+        "name": "Sous Chef",
+        "description": "Translates orders into station-specific tasks, steps in at any station that falls behind, manages personnel and scheduling",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "saucier",
+        "name": "Saucier (Sauce Station)",
+        "description": "Prepares all sauces, stews, and sautes; considered the most skilled station due to sauce complexity",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "grillardin",
+        "name": "Grillardin (Grill Station)",
+        "description": "Handles all grilled and broiled items; must judge doneness by touch and timing across multiple proteins simultaneously",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "patissier",
+        "name": "Patissier (Pastry Station)",
+        "description": "Operates semi-independently producing all baked goods and desserts; often works on a different timeline than the hot line",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "garde-manger",
+        "name": "Garde Manger (Cold Station)",
+        "description": "Prepares all cold items: salads, cold appetizers, charcuterie, and plating garnishes",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "The Pass",
+        "type": "broadcast",
+        "participants": [
+          "executive-chef",
+          "sous-chef",
+          "saucier",
+          "grillardin",
+          "patissier",
+          "garde-manger"
+        ]
+      },
+      {
+        "name": "Order Fire Calls",
+        "type": "top-down",
+        "participants": [
+          "executive-chef",
+          "saucier",
+          "grillardin",
+          "patissier",
+          "garde-manger"
+        ]
+      },
+      {
+        "name": "Station Ready Signals",
+        "type": "bottom-up",
+        "participants": [
+          "saucier",
+          "grillardin",
+          "patissier",
+          "garde-manger",
+          "sous-chef"
+        ]
+      },
+      {
+        "name": "Prep List",
+        "type": "document",
+        "participants": [
+          "sous-chef",
+          "saucier",
+          "grillardin",
+          "patissier",
+          "garde-manger"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "active-ticket-board",
+        "mise-en-place-inventory",
+        "menu-specifications",
+        "timing-standards"
+      ],
+      "private": [
+        "station-recipes-and-techniques",
+        "prep-list-progress",
+        "personal-mise-en-place"
+      ],
+      "description": "The ticket board is the shared real-time state: every active order, its status at each station, and its fire time. Each station maintains private knowledge of its techniques and current inventory levels. The menu specification is the shared contract -- every station knows exactly what its contribution to each dish must be. Memory is highly temporal: what was served last night is irrelevant; what's on the board right now is everything."
+    },
+    "diagram": "graph TD\n    ORDER[Order In] --> EC[Executive Chef]\n    EC -->|fires courses| SC[Sous Chef]\n    SC --> SAU[Saucier]\n    SC --> GRL[Grillardin]\n    SC --> GM[Garde Manger]\n    SC --> PAT[Patissier]\n    SAU -->|plate component| PASS[The Pass]\n    GRL -->|plate component| PASS\n    GM -->|plate component| PASS\n    PAT -->|plate component| PASS\n    EC -->|inspects & sends| TABLE[Table]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "airline-crew-resource-mgmt",
+    "name": "Airline Crew Resource Management",
+    "category": "Technology & Engineering",
+    "tags": [
+      "authority-gradient",
+      "checklist-protocol",
+      "sterile-cockpit",
+      "error-chain-breaking"
+    ],
+    "summary": "Hierarchical command with structured dissent protocols, where the junior officer is duty-bound to challenge authority.",
+    "description": "CRM was born from airline disasters caused by excessive authority gradients -- copilots who noticed errors but didn't speak up because the captain was senior. The pattern creates a hierarchy (captain has final authority) but embeds mandatory challenge-and-response protocols that require junior agents to voice concerns using escalating assertion levels (hint, preference, statement, command). The sterile cockpit rule eliminates non-essential communication during critical phases. Checklists externalize memory so no agent relies on recall under stress. ATC provides an external coordination layer with its own authority that can override the flight crew. The key innovation is that hierarchy exists for efficiency, but structured dissent mechanisms exist for safety.",
+    "realWorldExample": "United Airlines pioneered CRM after the 1978 Portland crash (UA 173), where the flight engineer couldn't get the captain's attention about fuel exhaustion. Post-CRM, commercial aviation's fatal accident rate dropped by over 80%.",
+    "whenToUse": "When tasks require clear chain of command for efficiency but authority gradient errors could be catastrophic, when operating under time pressure with incomplete information, and when checklist-driven verification can catch errors.",
+    "strengths": [
+      "Structured dissent protocols catch errors that pure hierarchy would suppress",
+      "Checklists externalize critical memory, eliminating reliance on individual recall under stress",
+      "Sterile cockpit rule eliminates distraction during high-cognitive-load phases",
+      "Clear authority means decisions are made quickly when time pressure demands it"
+    ],
+    "weaknesses": [
+      "Authority gradient is reduced but never eliminated -- junior agents still under-report in practice",
+      "Checklist discipline degrades over time as routine breeds complacency",
+      "The pattern assumes a small, fixed crew -- it doesn't scale to large teams",
+      "Over-reliance on automation creates skill atrophy for manual intervention when automation fails"
+    ],
+    "agents": [
+      {
+        "role": "captain",
+        "name": "Captain (PIC)",
+        "description": "Final authority on all flight decisions; responsible for overall safety; delegates flying or monitoring duties to first officer",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "first-officer",
+        "name": "First Officer",
+        "description": "Shares flying duties; duty-bound to challenge captain when safety concerns arise using graduated assertion protocol",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cabin-crew-lead",
+        "name": "Cabin Crew Lead",
+        "description": "Manages passenger safety and cabin operations; relays cabin status to flight deck; independent authority for cabin evacuations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "atc",
+        "name": "Air Traffic Control",
+        "description": "External coordination agent managing separation between aircraft; provides clearances and traffic advisories; authority over airspace",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "dispatch",
+        "name": "Airline Dispatch",
+        "description": "Ground-based agent monitoring weather, fuel, and fleet status; co-signs flight plans; can recommend diversions",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Flight Deck Intercom",
+        "type": "peer-to-peer",
+        "participants": [
+          "captain",
+          "first-officer"
+        ]
+      },
+      {
+        "name": "Challenge-Response Checklist",
+        "type": "round-robin",
+        "participants": [
+          "captain",
+          "first-officer"
+        ]
+      },
+      {
+        "name": "ATC Radio",
+        "type": "broadcast",
+        "participants": [
+          "captain",
+          "first-officer",
+          "atc"
+        ]
+      },
+      {
+        "name": "Cabin-to-Cockpit Interphone",
+        "type": "bottom-up",
+        "participants": [
+          "cabin-crew-lead",
+          "captain"
+        ]
+      },
+      {
+        "name": "ACARS Datalink",
+        "type": "peer-to-peer",
+        "participants": [
+          "captain",
+          "dispatch"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "flight-management-computer-state",
+        "active-checklists",
+        "weather-and-notams",
+        "fuel-state-and-calculations"
+      ],
+      "private": [
+        "personal-minimums-and-limits",
+        "mental-model-of-situation"
+      ],
+      "description": "The flight management computer holds the shared truth: current position, fuel, weather, and flight plan. Checklists are externalized shared memory that both pilots step through together. Each pilot maintains a private mental model of the situation, and CRM protocols are specifically designed to surface discrepancies between these private models. The CVR (cockpit voice recorder) creates an append-only audit log of all communication, but it's for post-incident analysis, not operational use."
+    },
+    "diagram": "graph TD\n    ATC[Air Traffic Control] -->|clearances| FD[Flight Deck]\n    DISP[Dispatch] -->|weather/fuel updates| FD\n    FD --> CAPT[Captain]\n    FD --> FO[First Officer]\n    CAPT <-->|challenge-response| FO\n    CAPT -->|orders| CCL[Cabin Crew Lead]\n    CCL -->|cabin status| CAPT\n    FMC[Flight Computer] <--> CAPT\n    FMC <--> FO\n    CL[Checklists] --> CAPT\n    CL --> FO",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "heist-crew-specialist",
+    "name": "Heist Crew (Specialist Recruitment)",
+    "category": "Novel & Experimental",
+    "tags": [
+      "one-shot-assembly",
+      "specialist-recruitment",
+      "high-stakes",
+      "compartmentalization"
+    ],
+    "summary": "Specialists recruited for a single operation where each knows only their part, and the plan survives only if all execute.",
+    "description": "This pattern assembles a team of extreme specialists for a one-time, high-stakes operation where failure is catastrophic and there's no second attempt. The mastermind recruits each specialist for a specific capability (infiltration, demolition, social engineering, driving, forgery, hacking) but deliberately compartmentalizes information so no single agent knows the full plan. This provides security (a compromised agent can only reveal their piece) but creates a coordination challenge. The plan is a precisely choreographed sequence where each specialist's output becomes the next specialist's precondition. Timing is everything. There's no rehearsal with the actual target, so dry runs must perfectly simulate conditions. The team disbands immediately after execution.",
+    "realWorldExample": "The Apollo 13 rescue was effectively a heist crew operation: flight controllers with extreme specializations (EECOM for electrical, GNC for guidance, RETRO for trajectories) each solved their piece of an unprecedented problem under a hard deadline with no second chances.",
+    "whenToUse": "When a task requires multiple rare specializations that no single agent possesses, when the operation is one-shot with no iteration, and when security requires information compartmentalization.",
+    "strengths": [
+      "Each specialist operates at the absolute peak of their narrow domain",
+      "Compartmentalization means compromise of one agent doesn't expose the full plan",
+      "One-shot framing eliminates bureaucracy and forces razor-sharp focus on execution",
+      "The team has no legacy overhead -- no politics, no history, no technical debt"
+    ],
+    "weaknesses": [
+      "Zero fault tolerance: if any specialist fails, the entire operation fails",
+      "Compartmentalization prevents specialists from helping each other or adapting to surprises",
+      "No institutional learning: the team disbands, so lessons are lost",
+      "The mastermind is a catastrophic single point of failure who knows everything"
+    ],
+    "agents": [
+      {
+        "role": "mastermind",
+        "name": "Mastermind",
+        "description": "The only agent who knows the full plan; recruits specialists, designs the sequence, manages timing, and adapts when things go wrong",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "infiltrator",
+        "name": "Infiltrator",
+        "description": "Gains physical or digital access to the target; knows entry/exit points but not what happens after they open the door",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "social-engineer",
+        "name": "Social Engineer",
+        "description": "Manipulates human elements through deception, charm, or impersonation; creates openings that technical agents exploit",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "tech-specialist",
+        "name": "Tech Specialist",
+        "description": "Handles all technical systems: security bypasses, communications, surveillance countermeasures",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "wheelman",
+        "name": "Wheelman",
+        "description": "Manages logistics, transportation, and extraction; knows timing and routes but not the operation's objective",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "inside-agent",
+        "name": "Inside Agent",
+        "description": "Already embedded in the target organization; provides intelligence and creates vulnerabilities from within",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Full Briefing",
+        "type": "top-down",
+        "participants": [
+          "mastermind"
+        ]
+      },
+      {
+        "name": "Need-to-Know Briefings",
+        "type": "per-agent",
+        "participants": [
+          "mastermind",
+          "infiltrator",
+          "social-engineer",
+          "tech-specialist",
+          "wheelman",
+          "inside-agent"
+        ]
+      },
+      {
+        "name": "Execution Comms",
+        "type": "broadcast",
+        "participants": [
+          "mastermind",
+          "infiltrator",
+          "tech-specialist",
+          "wheelman"
+        ]
+      },
+      {
+        "name": "Dead Drops",
+        "type": "queue",
+        "participants": [
+          "inside-agent",
+          "mastermind"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "timing-sequence-only",
+        "abort-signals",
+        "rally-point-locations"
+      ],
+      "private": [
+        "full-plan-mastermind-only",
+        "individual-role-briefings",
+        "inside-agent-intelligence",
+        "specialist-tools-and-methods"
+      ],
+      "description": "Memory is aggressively compartmentalized. The mastermind holds the only complete picture in private memory. Each specialist receives only their role briefing and timing cues. Shared memory is minimal by design: just enough timing and abort-signal information for coordination. After the operation, all shared memory is destroyed. The inside agent maintains long-term persistent memory from their embedded position but shares only through secure dead drops."
+    },
+    "diagram": "graph TD\n    MM[Mastermind] -->|partial briefing| INF[Infiltrator]\n    MM -->|partial briefing| SE[Social Engineer]\n    MM -->|partial briefing| TS[Tech Specialist]\n    MM -->|partial briefing| WH[Wheelman]\n    IA[Inside Agent] -->|dead drops| MM\n    SE -->|creates opening| INF\n    INF -->|gains access| TS\n    TS -->|disables security| TARGET[Target]\n    WH -->|extraction| INF\n    WH -->|extraction| SE",
+    "hierarchyTypes": [
+      "orchestrated",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "firefighting-incident-command",
+    "name": "Firefighting Incident Command System",
+    "category": "Government & Political",
+    "tags": [
+      "scalable-hierarchy",
+      "span-of-control",
+      "modular-expansion",
+      "unified-command"
+    ],
+    "summary": "A hierarchy that grows modularly from 1 truck to 10,000 personnel, maintaining 3-7 span of control at every level.",
+    "description": "ICS is the most battle-tested scalable organizational pattern in existence. It starts with a single Incident Commander on a one-truck response and can expand to manage 10,000+ personnel across multiple agencies on a month-long wildfire -- using the exact same structural principles. The key constraint is span of control: no agent supervises more than 7 subordinates (ideally 3-5). When a level gets overloaded, it splits by creating a new level below it. The four sections (Operations, Planning, Logistics, Finance) activate only when needed. Unified Command allows multiple agencies to share leadership without creating a separate hierarchy for each. Every 12-24 hours, the Planning section produces an Incident Action Plan that becomes the shared operational truth.",
+    "realWorldExample": "The 2018 Camp Fire in Paradise, California deployed ICS to coordinate 5,600+ personnel from 70+ agencies over 17 days, scaling from initial alarm to a Type 1 incident management team within 48 hours.",
+    "whenToUse": "When the scale of the problem is unknown at the start and may grow by orders of magnitude, when multiple independent organizations must coordinate under unified direction, and when the response may last days or weeks.",
+    "strengths": [
+      "Scales smoothly from 5 to 5,000 agents using the same structural rules",
+      "Modular activation means you only create overhead that the current situation demands",
+      "Unified Command elegantly solves multi-agency coordination without subordinating any agency",
+      "Incident Action Plans create a shared 12-24 hour operational picture that aligns everyone"
+    ],
+    "weaknesses": [
+      "Overhead of full ICS is excessive for small incidents, tempting people to skip structure",
+      "Transfer of command between shifts loses tacit knowledge that doesn't fit the IAP",
+      "The planning cycle assumes incident evolution is slow enough for 12-24 hour plans",
+      "Strict hierarchy can suppress ground-level intelligence that doesn't flow up through channels"
+    ],
+    "agents": [
+      {
+        "role": "incident-commander",
+        "name": "Incident Commander",
+        "description": "Overall authority for the incident; sets objectives, approves the Incident Action Plan, manages command staff",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "operations-chief",
+        "name": "Operations Section Chief",
+        "description": "Directs all tactical operations; manages divisions, groups, and strike teams that do the actual work",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "planning-chief",
+        "name": "Planning Section Chief",
+        "description": "Produces the Incident Action Plan; tracks resources, maps the situation, forecasts incident evolution",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "logistics-chief",
+        "name": "Logistics Section Chief",
+        "description": "Provides all support: food, fuel, equipment, communications, medical for responders, base camp",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "division-supervisor",
+        "name": "Division Supervisor",
+        "description": "Manages 3-7 strike teams or task forces within a geographic division; the lowest level with tactical authority",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "safety-officer",
+        "name": "Safety Officer",
+        "description": "Has authority to stop any unsafe operation regardless of who ordered it; reports directly to IC, not through chain",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Incident Action Plan",
+        "type": "document",
+        "participants": [
+          "incident-commander",
+          "operations-chief",
+          "planning-chief",
+          "logistics-chief",
+          "safety-officer"
+        ]
+      },
+      {
+        "name": "Tactical Radio Net",
+        "type": "broadcast",
+        "participants": [
+          "operations-chief",
+          "division-supervisor"
+        ]
+      },
+      {
+        "name": "Planning Meeting",
+        "type": "decision",
+        "participants": [
+          "incident-commander",
+          "operations-chief",
+          "planning-chief",
+          "logistics-chief",
+          "safety-officer"
+        ]
+      },
+      {
+        "name": "Situation Report",
+        "type": "bottom-up",
+        "participants": [
+          "division-supervisor",
+          "operations-chief",
+          "planning-chief"
+        ]
+      },
+      {
+        "name": "Safety Alert",
+        "type": "emergency",
+        "participants": [
+          "safety-officer",
+          "incident-commander",
+          "operations-chief"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "incident-action-plan-current",
+        "situation-map-with-perimeter",
+        "resource-status-board",
+        "incident-objectives"
+      ],
+      "private": [
+        "division-assignment-lists",
+        "safety-concern-notes",
+        "logistics-supply-chain-status"
+      ],
+      "description": "The Incident Action Plan is the central shared memory artifact, regenerated every operational period (12-24 hours). It contains objectives, organization chart, assignments, communications plan, and maps. The situation map is continuously updated shared state. Resource tracking is critical shared memory: who is deployed where, what's available, what's en route. Private memory exists at each level for operational details that don't need to flow up. The planning section is essentially the memory management unit of the entire system."
+    },
+    "diagram": "graph TD\n    IC[Incident Commander] --> SO[Safety Officer]\n    IC --> OPS[Operations Chief]\n    IC --> PLAN[Planning Chief]\n    IC --> LOG[Logistics Chief]\n    OPS --> DIV1[Division A]\n    OPS --> DIV2[Division B]\n    OPS --> DIV3[Division C]\n    DIV1 --> ST1[Strike Team 1]\n    DIV1 --> ST2[Strike Team 2]\n    PLAN -->|produces| IAP[Incident Action Plan]\n    IAP -->|guides| OPS",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "yc-batch-cohort",
+    "name": "Y Combinator Batch Model",
+    "category": "Corporate & Business",
+    "tags": [
+      "cohort-pressure",
+      "demo-day-deadline",
+      "peer-competition",
+      "advisory-network"
+    ],
+    "summary": "A cohort of competing peers with shared advisors and a hard demo deadline that forces convergence under time pressure.",
+    "description": "The YC batch model creates a paradoxical structure: intensely competitive peers who also help each other, unified by a shared hard deadline (Demo Day) and access to the same advisor pool. Each startup in the batch operates independently but is embedded in a dense network of peer feedback, office hours with partners, and weekly group dinners where progress is implicitly compared. The demo day deadline creates a Schelling point that focuses all work. Partners act as advisors rather than managers -- they can't force any decision but their suggestions carry enormous weight because of their track record. The batch alumni network creates long-term value that outlasts any individual company. The competitive-cooperative tension is the engine: you want your batchmates to succeed because it raises the batch's prestige, but you also want to be the standout.",
+    "realWorldExample": "Y Combinator's W2005 batch of 8 startups included Reddit and produced a combined valuation exceeding $10B. Modern batches include 200+ companies going through the same 3-month pressure cooker simultaneously.",
+    "whenToUse": "When you need multiple agents to produce high-quality independent outputs quickly, when peer pressure and comparison drives better performance than top-down management, and when a shared deadline creates productive urgency.",
+    "strengths": [
+      "Demo Day deadline creates a hard convergence point that eliminates scope creep and indecision",
+      "Peer comparison within the batch motivates performance better than external benchmarks",
+      "Shared advisor pool means best practices diffuse rapidly across the entire cohort",
+      "Alumni network creates persistent value long after the batch ends"
+    ],
+    "weaknesses": [
+      "Competitive dynamics can discourage genuine knowledge sharing on sensitive topics",
+      "Uniform 3-month timeline forces all agents into the same cadence regardless of problem complexity",
+      "Survivorship bias in advisor feedback: partners optimize for what worked before, not for novelty",
+      "Cohort size creates diminishing returns on partner attention as batches grow"
+    ],
+    "agents": [
+      {
+        "role": "startup-founder",
+        "name": "Startup Founder",
+        "description": "Leads an independent venture within the batch; builds product, talks to users, iterates rapidly toward demo day",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "yc-partner",
+        "name": "YC Partner",
+        "description": "Experienced advisor who conducts office hours, gives feedback at group dinners, and provides pattern-matching from hundreds of prior startups",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "batch-peer",
+        "name": "Batch Peer",
+        "description": "Another founder in the same cohort who provides feedback, shares war stories, and creates productive competitive pressure",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "visiting-speaker",
+        "name": "Visiting Speaker",
+        "description": "Successful founder or domain expert who gives one-time talks sharing specific knowledge with the entire batch",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "demo-day-investor",
+        "name": "Demo Day Investor",
+        "description": "External evaluator who sees the final presentations and makes funding decisions based on the compressed pitch",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Office Hours",
+        "type": "advisory",
+        "participants": [
+          "startup-founder",
+          "yc-partner"
+        ]
+      },
+      {
+        "name": "Group Dinner",
+        "type": "broadcast",
+        "participants": [
+          "startup-founder",
+          "batch-peer",
+          "yc-partner"
+        ]
+      },
+      {
+        "name": "Batch Forum",
+        "type": "threaded",
+        "participants": [
+          "startup-founder",
+          "batch-peer"
+        ]
+      },
+      {
+        "name": "Demo Day Stage",
+        "type": "broadcast",
+        "participants": [
+          "startup-founder",
+          "demo-day-investor",
+          "yc-partner"
+        ]
+      },
+      {
+        "name": "Alumni Network",
+        "type": "threaded",
+        "participants": [
+          "startup-founder",
+          "batch-peer",
+          "yc-partner"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "batch-directory-and-one-liners",
+        "partner-advice-patterns",
+        "demo-day-schedule",
+        "alumni-knowledge-base"
+      ],
+      "private": [
+        "startup-metrics-and-runway",
+        "product-roadmap",
+        "investor-pipeline",
+        "office-hours-notes"
+      ],
+      "description": "Each startup maintains strictly private memory for metrics, strategy, and investor relationships. Shared memory includes the batch directory (who's building what), accumulated partner wisdom, and the alumni knowledge base. The key dynamic is that partners accumulate persistent shared memory across many batches, creating a pattern library that no individual startup could build alone. Group dinner conversations become informal shared memory that diffuses insights across the cohort."
+    },
+    "diagram": "graph TD\n    YC[YC Partners] -->|office hours| S1[Startup A]\n    YC -->|office hours| S2[Startup B]\n    YC -->|office hours| S3[Startup C]\n    YC -->|office hours| S4[Startup N]\n    S1 <-->|peer feedback| S2\n    S2 <-->|peer feedback| S3\n    S3 <-->|peer feedback| S4\n    VS[Visiting Speakers] -->|talks| ALL[Group Dinner]\n    S1 -->|pitch| DD[Demo Day]\n    S2 -->|pitch| DD\n    S3 -->|pitch| DD\n    DD --> INV[Investors]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "federated"
+    ]
+  },
+  {
+    "id": "ship-of-theseus-org",
+    "name": "Ship of Theseus Organization",
+    "category": "Novel & Experimental",
+    "tags": [
+      "gradual-turnover",
+      "institutional-memory",
+      "knowledge-transfer",
+      "identity-paradox"
+    ],
+    "summary": "An organization where every member is eventually replaced, testing whether institutional knowledge survives complete turnover.",
+    "description": "Named for the ancient paradox, this pattern deliberately engineers complete agent turnover while attempting to preserve organizational identity and capability. No agent serves indefinitely; each has a defined tenure after which they must be replaced by a new agent they've trained. The departing agent's knowledge must be captured in documentation, onboarding materials, and mentorship before they leave. The organization maintains a persistent memory layer (wikis, runbooks, decision logs) that is independent of any individual agent. The philosophical question the pattern explores is: if every agent has been replaced, is it still the same organization? In practice, this pattern reveals which knowledge is truly codifiable and which dies with its holder despite best efforts.",
+    "realWorldExample": "The Roman Catholic Church has operated for 2,000 years through complete personnel turnover many times over, using dogma, liturgy, canonical law, and institutional rituals as its persistent memory substrate. Every pope, cardinal, and priest is eventually replaced, yet the institution persists.",
+    "whenToUse": "When you need to stress-test whether institutional knowledge is actually captured in systems rather than trapped in individual agents' heads, or when you want to prevent knowledge hoarding and single-agent dependencies.",
+    "strengths": [
+      "Forces genuine knowledge externalization since every agent knows they'll be replaced",
+      "Prevents knowledge hoarding and empire-building by any individual agent",
+      "Continuously refreshes the organization with new perspectives and capabilities",
+      "Reveals which processes are robust and which are held together by individual heroics"
+    ],
+    "weaknesses": [
+      "Tacit knowledge inevitably degrades with each handoff despite documentation efforts",
+      "Continuous onboarding overhead reduces the organization's productive capacity",
+      "New agents may misinterpret documentation, creating drift from original intent over generations",
+      "The organization's identity can gradually shift in unintended directions as cultural carriers leave"
+    ],
+    "agents": [
+      {
+        "role": "incumbent",
+        "name": "Incumbent Agent",
+        "description": "Currently holds a role; actively performs duties while simultaneously documenting their knowledge and training their successor",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "successor",
+        "name": "Successor Agent",
+        "description": "Shadowing the incumbent during an overlap period; learning from both documentation and direct observation",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "archivist",
+        "name": "Archivist",
+        "description": "Maintains the persistent institutional memory: decision logs, runbooks, tribal knowledge documents, and onboarding materials",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "continuity-auditor",
+        "name": "Continuity Auditor",
+        "description": "Tests whether institutional knowledge actually survives handoffs by quizzing successors and comparing their performance to incumbents",
+        "memory": "versioned"
+      },
+      {
+        "role": "emeritus",
+        "name": "Emeritus Advisor",
+        "description": "Former incumbent who remains available for consultation during a limited grace period after handoff; the fade-out buffer",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Handoff Sessions",
+        "type": "peer-to-peer",
+        "participants": [
+          "incumbent",
+          "successor"
+        ]
+      },
+      {
+        "name": "Institutional Knowledge Base",
+        "type": "document",
+        "participants": [
+          "incumbent",
+          "successor",
+          "archivist"
+        ]
+      },
+      {
+        "name": "Continuity Assessment",
+        "type": "retrospective",
+        "participants": [
+          "continuity-auditor",
+          "successor",
+          "archivist"
+        ]
+      },
+      {
+        "name": "Emeritus Consultation",
+        "type": "advisory",
+        "participants": [
+          "emeritus",
+          "successor"
+        ]
+      },
+      {
+        "name": "Succession Planning Board",
+        "type": "decision",
+        "participants": [
+          "incumbent",
+          "archivist",
+          "continuity-auditor"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "runbooks-and-playbooks",
+        "decision-logs-with-rationale",
+        "organizational-values-document",
+        "onboarding-curriculum"
+      ],
+      "private": [
+        "incumbent-tacit-knowledge",
+        "successor-learning-journal",
+        "emeritus-contact-availability"
+      ],
+      "description": "The entire architecture is designed around the question: what survives when the person leaves? Shared memory is the organization's true substrate -- runbooks, decision logs, values documents, and onboarding materials. The archivist is the most critical role because they maintain the memory that outlives every other agent. The continuity auditor uses versioned memory to track knowledge degradation across handoffs, measuring what's lost each generation. Private memory is explicitly temporary and acknowledged as such."
+    },
+    "diagram": "graph LR\n    INC[Incumbent] -->|documents| KB[Knowledge Base]\n    INC -->|mentors| SUC[Successor]\n    KB -->|onboards| SUC\n    SUC -->|becomes| INC2[New Incumbent]\n    INC -->|becomes| EM[Emeritus]\n    EM -->|consults| SUC\n    ARC[Archivist] -->|maintains| KB\n    CA[Continuity Auditor] -->|tests| SUC\n    CA -->|measures drift| KB",
+    "hierarchyTypes": [
+      "consensus",
+      "mesh"
+    ]
+  },
+  {
+    "id": "debate-tournament",
+    "name": "Debate Tournament with Flowing",
+    "category": "Education & Training",
+    "tags": [
+      "adversarial-pairs",
+      "judge-evaluation",
+      "argument-tracking",
+      "time-constrained"
+    ],
+    "summary": "Structured adversarial argumentation where paired agents build and attack argument chains under strict time limits.",
+    "description": "Debate tournament structure creates a unique pattern where two teams construct competing argument trees under strict time constraints, while judges maintain a running record (the 'flow') of which arguments have been made, answered, and dropped. The affirmative team presents a case; the negative team attacks it while building an alternative. Through alternating constructive and rebuttal speeches, each team must extend their own arguments while responding to the opponent's. A dropped argument is treated as conceded. The judge's flow serves as an objective external memory of the debate's argument state. Cross-examination periods allow direct interrogation. The pattern is distinctive because it forces comprehensive engagement: you cannot simply ignore inconvenient opposing arguments. Speed and comprehensiveness matter as much as depth.",
+    "realWorldExample": "The National Debate Tournament (NDT) features 78 two-person teams debating a single policy resolution for an entire academic year, with cumulative win-loss records determining tournament seeding and elimination rounds judged by 3-panel critic panels.",
+    "whenToUse": "When you need thorough adversarial analysis that ensures no argument goes unaddressed, when you want to compare the relative strength of two competing proposals, and when time pressure should force prioritization of the strongest arguments.",
+    "strengths": [
+      "Dropped argument rule ensures comprehensive engagement -- you cannot dodge inconvenient points",
+      "The flow creates an objective shared record that prevents agents from misrepresenting the debate history",
+      "Time constraints force agents to prioritize their strongest arguments, naturally filtering for quality",
+      "Cross-examination exposes weaknesses that prepared speeches can paper over"
+    ],
+    "weaknesses": [
+      "Adversarial framing can prevent synthesis -- good elements of both positions may be lost",
+      "Speed optimization (spreading) can sacrifice depth for breadth, degrading argument quality",
+      "Binary winner/loser outcome obscures cases where the truth lies in between both positions",
+      "Judge subjectivity in weighing arguments introduces inconsistency despite structured flowing"
+    ],
+    "agents": [
+      {
+        "role": "first-affirmative",
+        "name": "First Affirmative Constructive",
+        "description": "Presents the initial case for the proposition with plan, advantages, and solvency arguments in a time-limited speech",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "first-negative",
+        "name": "First Negative Constructive",
+        "description": "Attacks the affirmative case and presents off-case arguments (disadvantages, counterplans, kritiks) in the first negative speech",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "second-affirmative",
+        "name": "Second Affirmative",
+        "description": "Extends affirmative arguments, answers negative attacks, and rebuilds the case in rebuttal speeches",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "second-negative",
+        "name": "Second Negative",
+        "description": "Extends negative strategy, collapses to the strongest voting issues, and delivers the final negative rebuttal",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "judge",
+        "name": "Judge (Critic)",
+        "description": "Maintains the flow of all arguments, evaluates which arguments were won or dropped, and renders a decision with written feedback",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Constructive Speeches",
+        "type": "round-robin",
+        "participants": [
+          "first-affirmative",
+          "first-negative",
+          "second-affirmative",
+          "second-negative"
+        ]
+      },
+      {
+        "name": "Cross-Examination",
+        "type": "peer-to-peer",
+        "participants": [
+          "first-affirmative",
+          "first-negative",
+          "second-affirmative",
+          "second-negative"
+        ]
+      },
+      {
+        "name": "The Flow",
+        "type": "document",
+        "participants": [
+          "judge"
+        ]
+      },
+      {
+        "name": "Decision and RFD",
+        "type": "broadcast",
+        "participants": [
+          "judge",
+          "first-affirmative",
+          "first-negative",
+          "second-affirmative",
+          "second-negative"
+        ]
+      },
+      {
+        "name": "Prep Time Huddle",
+        "type": "peer-to-peer",
+        "participants": [
+          "first-affirmative",
+          "second-affirmative"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "resolution-text",
+        "tournament-rules",
+        "flow-argument-tree",
+        "time-allocation-records"
+      ],
+      "private": [
+        "case-files-and-evidence",
+        "strategy-blocks",
+        "opponent-research",
+        "prep-time-allocation"
+      ],
+      "description": "Teams maintain extensive private case files accumulated over the season. The flow is the critical shared memory artifact: a real-time append-only record of every argument made, answered, or dropped. The judge's flow is the authoritative record. Teams maintain their own flows to track what needs answering. After the round, the judge's written Reason for Decision becomes part of the shared record. Evidence read during the round becomes shared; evidence not read remains private."
+    },
+    "diagram": "graph TD\n    RES[Resolution] --> AFF[Affirmative Team]\n    RES --> NEG[Negative Team]\n    AFF -->|1AC speech| FLOW[The Flow]\n    NEG -->|1NC speech| FLOW\n    AFF -->|CX questions| NEG\n    NEG -->|CX questions| AFF\n    AFF -->|2AR rebuttal| FLOW\n    NEG -->|2NR rebuttal| FLOW\n    FLOW --> J[Judge]\n    J -->|decision + RFD| RESULT[Winner/Loser]",
+    "hierarchyTypes": [
+      "adversarial",
+      "mesh"
+    ]
+  },
+  {
+    "id": "archaeological-dig",
+    "name": "Archaeological Dig Site",
+    "category": "Academic & Research",
+    "tags": [
+      "destructive-process",
+      "stratigraphic-recording",
+      "irreversible-extraction",
+      "context-is-everything"
+    ],
+    "summary": "Irreversible extraction where the process destroys the source, making documentation more important than the artifacts.",
+    "description": "Archaeological excavation is unique because the process of extracting information literally destroys the information source. You cannot re-dig a site. This makes the recording system more important than the artifacts themselves -- an artifact without context (which layer, which position, which associations) is scientifically worthless. The site director sets research questions and excavation strategy. Trench supervisors manage individual excavation areas and make real-time decisions about which layers to remove. Finds specialists process, clean, catalog, and analyze artifacts. The conservation team preserves fragile materials. Every action is recorded in context sheets, section drawings, and photographs with scales. The Harris Matrix tracks the stratigraphic sequence (which layer is above/below which). This pattern is fundamentally about operating in an environment where every action is irreversible and the metadata is more valuable than the data.",
+    "realWorldExample": "The excavation of Pompeii has continued for 250+ years using increasingly sophisticated versions of this system. Each campaign's records must be compatible with all previous ones because you can never go back and re-excavate.",
+    "whenToUse": "When the process of extracting value from a resource permanently consumes or alters that resource, when context and provenance are more important than individual data points, and when long-term record compatibility across different teams is essential.",
+    "strengths": [
+      "Obsessive documentation ensures that future researchers can reconstruct what the excavators saw",
+      "Stratigraphic recording preserves temporal relationships that would otherwise be lost forever",
+      "Specialist processing means each artifact type gets expert handling appropriate to its material",
+      "The Harris Matrix provides a formal, verifiable model of site formation processes"
+    ],
+    "weaknesses": [
+      "Documentation overhead is enormous -- recording can take longer than excavation itself",
+      "Real-time decisions about what to dig and what to preserve are irreversible and often made with incomplete information",
+      "Specialist bottlenecks (e.g., one conservator for the whole site) can halt excavation of fragile areas",
+      "Record quality varies wildly between supervisors despite standardized forms"
+    ],
+    "agents": [
+      {
+        "role": "site-director",
+        "name": "Site Director",
+        "description": "Sets research questions, decides excavation strategy, allocates resources across trenches, and publishes the final site report",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "trench-supervisor",
+        "name": "Trench Supervisor",
+        "description": "Manages a specific excavation area; makes real-time decisions about layer removal; completes context sheets for every archaeological event",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "finds-specialist",
+        "name": "Finds Processing Specialist",
+        "description": "Cleans, catalogs, photographs, and analyzes artifacts; assigns typological classifications and dates based on artifact types",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "conservator",
+        "name": "Conservator",
+        "description": "Stabilizes fragile materials in situ and in the lab; advises trench supervisors on extraction methods for delicate finds",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "surveyor",
+        "name": "Site Surveyor",
+        "description": "Maintains the spatial reference system; records 3D positions of all finds and features using total station or GPS",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "illustrator",
+        "name": "Archaeological Illustrator",
+        "description": "Creates section drawings, plan drawings, and artifact illustrations that serve as permanent record of what was seen",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Morning Briefing",
+        "type": "broadcast",
+        "participants": [
+          "site-director",
+          "trench-supervisor",
+          "finds-specialist",
+          "conservator"
+        ]
+      },
+      {
+        "name": "Context Recording Sheets",
+        "type": "per-agent",
+        "participants": [
+          "trench-supervisor",
+          "site-director"
+        ]
+      },
+      {
+        "name": "Finds Register",
+        "type": "log",
+        "participants": [
+          "trench-supervisor",
+          "finds-specialist",
+          "surveyor"
+        ]
+      },
+      {
+        "name": "Harris Matrix",
+        "type": "document",
+        "participants": [
+          "trench-supervisor",
+          "site-director"
+        ]
+      },
+      {
+        "name": "Conservation Urgent Request",
+        "type": "emergency",
+        "participants": [
+          "trench-supervisor",
+          "conservator"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "site-grid-and-coordinate-system",
+        "harris-matrix-stratigraphic-sequence",
+        "context-sheet-database",
+        "photographic-archive-with-metadata"
+      ],
+      "private": [
+        "specialist-analysis-notes",
+        "conservation-treatment-records",
+        "unpublished-interpretations"
+      ],
+      "description": "Memory is append-only by necessity -- you cannot un-dig a layer, so every record is permanent. The Harris Matrix is the key shared data structure: a directed acyclic graph encoding which layers are above/below which others, representing the site's formation history. Context sheets are the atomic unit of recording, one per archaeological event. The photographic archive with scales and north arrows serves as the visual memory. All shared memory must be archivally stable because it may be consulted centuries later by researchers the original excavators never imagined."
+    },
+    "diagram": "graph TD\n    SD[Site Director] -->|strategy| TS1[Trench Supervisor A]\n    SD -->|strategy| TS2[Trench Supervisor B]\n    TS1 -->|context sheets| HM[Harris Matrix]\n    TS2 -->|context sheets| HM\n    TS1 -->|finds| FP[Finds Processing]\n    TS2 -->|finds| FP\n    SUR[Surveyor] -->|coordinates| TS1\n    SUR -->|coordinates| TS2\n    CON[Conservator] -->|stabilizes| TS1\n    ILL[Illustrator] -->|records| HM\n    FP -->|catalog| ARCHIVE[Site Archive]",
+    "hierarchyTypes": [
+      "orchestrated",
+      "swarm"
+    ]
+  },
+  {
+    "id": "teal-organization-laloux",
+    "name": "Teal Self-Managing Organization",
+    "category": "Novel & Experimental",
+    "tags": [
+      "no-hierarchy",
+      "advice-process",
+      "wholeness",
+      "evolutionary-purpose"
+    ],
+    "summary": "No managers, no job titles -- anyone can make any decision after seeking advice from affected parties and experts.",
+    "description": "Frederic Laloux's Teal organization abolishes hierarchy in favor of three principles: self-management (no bosses, distributed authority), wholeness (bring your full self to work, not just a professional persona), and evolutionary purpose (the organization has its own sense of direction that members sense into rather than dictate). The advice process is the key mechanism: anyone can make any decision, including spending large sums, as long as they first seek advice from people affected by the decision and people with relevant expertise. They don't need permission or consensus -- just advice. Conflict resolution follows a structured escalation: first direct conversation, then mediated conversation, then a panel. Roles are granular and self-selected rather than assigned as job titles. Compensation is often peer-set through transparent processes.",
+    "realWorldExample": "Buurtzorg, a Dutch home healthcare organization of 15,000 nurses organized in self-managing teams of 10-12 with no middle management, achieving the highest patient satisfaction scores in the Netherlands at the lowest cost.",
+    "whenToUse": "When creative autonomy matters more than coordination efficiency, when agent motivation and engagement are primary concerns, and when the domain changes too fast for hierarchical decision-making to keep up.",
+    "strengths": [
+      "The advice process produces better decisions than either hierarchy or consensus because it combines broad input with individual accountability",
+      "Self-selected roles mean agents naturally gravitate to work where they're most capable and motivated",
+      "No management layer eliminates a major source of overhead, politics, and information distortion",
+      "Wholeness practices reduce the energy wasted on organizational persona management"
+    ],
+    "weaknesses": [
+      "The advice process requires high interpersonal skill -- agents who can't handle giving and receiving candid feedback struggle",
+      "Without hierarchy, difficult decisions about compensation and termination become psychologically intense for peers",
+      "Scaling beyond ~150 people per unit requires federating into sub-units, reintroducing coordination overhead",
+      "New agents acculturated to hierarchical organizations can take months to function effectively in self-management"
+    ],
+    "agents": [
+      {
+        "role": "self-managing-member",
+        "name": "Self-Managing Member",
+        "description": "Holds multiple granular roles; can make any decision after running the advice process; accountable to peers, not a boss",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "advice-giver",
+        "name": "Advice Giver",
+        "description": "Provides expertise or perspective when consulted through the advice process; cannot veto but can influence",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "conflict-mediator",
+        "name": "Conflict Mediator",
+        "description": "Facilitates resolution when direct peer-to-peer conflict resolution fails; no authority to impose solutions",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "purpose-listener",
+        "name": "Purpose Listener",
+        "description": "Senses into the organization's evolutionary purpose through market signals, team energy, and emergent patterns; surfaces direction without dictating it",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "onboarding-buddy",
+        "name": "Onboarding Buddy",
+        "description": "Guides new members through the deep culture shift from hierarchy to self-management; models the advice process in practice",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Advice Process Requests",
+        "type": "threaded",
+        "participants": [
+          "self-managing-member",
+          "advice-giver"
+        ]
+      },
+      {
+        "name": "Role Marketplace",
+        "type": "pub-sub",
+        "participants": [
+          "self-managing-member"
+        ]
+      },
+      {
+        "name": "Conflict Resolution Escalation",
+        "type": "peer-to-peer",
+        "participants": [
+          "self-managing-member",
+          "conflict-mediator"
+        ]
+      },
+      {
+        "name": "Purpose Sensing Circle",
+        "type": "retrospective",
+        "participants": [
+          "purpose-listener",
+          "self-managing-member"
+        ]
+      },
+      {
+        "name": "Compensation Transparency Board",
+        "type": "document",
+        "participants": [
+          "self-managing-member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "role-registry-with-accountabilities",
+        "advice-process-log",
+        "compensation-data-transparent",
+        "purpose-statements-and-sensing-notes"
+      ],
+      "private": [
+        "personal-development-journal",
+        "peer-feedback-received",
+        "decision-making-rationale"
+      ],
+      "description": "Radical transparency is the default. Compensation data is shared. The advice process log records who sought advice on what, who was consulted, and what decision was made -- creating accountability without hierarchy. The role registry is the organization's structure: a living document of who holds which roles and what each role's accountabilities are. Purpose sensing notes capture the emergent direction. Private memory is limited to personal development and the internal reasoning behind decisions."
+    },
+    "diagram": "graph TD\n    M1[Member A] <-->|advice process| M2[Member B]\n    M1 <-->|advice process| M3[Member C]\n    M2 <-->|peer feedback| M3\n    M3 <-->|advice process| M4[Member D]\n    M4 <-->|peer feedback| M1\n    CM[Conflict Mediator] -.->|when needed| M1\n    CM -.->|when needed| M2\n    PL[Purpose Listener] -->|senses direction| ALL[Purpose Circle]\n    OB[Onboarding Buddy] -->|guides| NEW[New Member]",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated",
+      "mesh",
+      "consensus",
+      "swarm"
+    ]
+  },
+  {
+    "id": "war-room-intelligence-fusion",
+    "name": "War Room / Situation Room",
+    "category": "Government & Political",
+    "tags": [
+      "intelligence-fusion",
+      "real-time-crisis",
+      "multi-source",
+      "decision-under-uncertainty"
+    ],
+    "summary": "Multiple intelligence streams fuse in real-time to support a single decision-maker under extreme time pressure and uncertainty.",
+    "description": "The war room pattern brings together agents with different intelligence sources (SIGINT, HUMINT, IMINT, OSINT, CYBER) into a single physical or virtual space where their streams are fused in real-time to support a senior decision-maker facing a crisis. Unlike normal intelligence analysis which has days or weeks, the war room operates under extreme time pressure where the cost of delay may exceed the cost of acting on incomplete information. Each intelligence stream has its own reliability assessment, and the fusion process must weigh contradictory signals. The decision-maker doesn't analyze -- they decide, based on briefings that compress enormous complexity into actionable options. The red team deliberately argues against the emerging consensus to prevent groupthink. The chronicler maintains the decision log for after-action review. The pattern is designed for high-stakes, time-critical decisions with irreversible consequences.",
+    "realWorldExample": "The White House Situation Room during the Bin Laden raid: President Obama and principals watched real-time feeds while intelligence analysts from CIA, NSA, and JSOC fused information from satellite imagery, intercepted communications, and ground-team reports into a single operational picture.",
+    "whenToUse": "When a critical decision must be made quickly with incomplete and contradictory information from multiple sources, when the cost of delay exceeds the cost of imperfect action, and when post-decision analysis is as important as the decision itself.",
+    "strengths": [
+      "Multi-source intelligence fusion creates a more complete picture than any single stream alone",
+      "Red team function prevents the groupthink that destroyed decision quality in Bay of Pigs",
+      "Clear separation between intelligence (what we know) and decision (what we do) prevents analysts from biasing their assessments",
+      "Decision log enables rigorous after-action review that improves future crisis response"
+    ],
+    "weaknesses": [
+      "Information overload can paralyze the decision-maker when streams conflict with no way to resolve",
+      "The red team can be marginalized when social pressure toward action is intense",
+      "Compression of complex intelligence into decision briefs inevitably loses nuance and caveats",
+      "Sunk cost of assembling the war room creates pressure to act even when inaction is the best option"
+    ],
+    "agents": [
+      {
+        "role": "decision-maker",
+        "name": "Senior Decision-Maker",
+        "description": "Has the authority to commit resources and take irreversible action; receives synthesized briefings, doesn't analyze raw intelligence",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "intelligence-analyst",
+        "name": "Intelligence Analyst",
+        "description": "Processes raw intelligence from a specific stream (SIGINT/HUMINT/IMINT/OSINT), assesses reliability, and produces synthesized briefings",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "fusion-coordinator",
+        "name": "Fusion Coordinator",
+        "description": "Integrates briefings from all intelligence streams into a single coherent picture, flagging contradictions and confidence levels",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "red-team",
+        "name": "Red Team / Devil's Advocate",
+        "description": "Deliberately argues against the emerging consensus; identifies assumptions, challenges evidence quality, and presents worst-case scenarios",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "chronicler",
+        "name": "Chronicler",
+        "description": "Maintains a real-time decision log recording what was known when, what was decided, and the reasoning -- for after-action review",
+        "memory": "append-only"
+      },
+      {
+        "role": "comms-officer",
+        "name": "Communications Officer",
+        "description": "Manages secure communications with field assets and external agencies; controls information flow in and out of the room",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Intelligence Briefing",
+        "type": "bottom-up",
+        "participants": [
+          "intelligence-analyst",
+          "fusion-coordinator"
+        ]
+      },
+      {
+        "name": "Fused Picture",
+        "type": "broadcast",
+        "participants": [
+          "fusion-coordinator",
+          "decision-maker",
+          "red-team",
+          "chronicler"
+        ]
+      },
+      {
+        "name": "Red Team Challenge",
+        "type": "advisory",
+        "participants": [
+          "red-team",
+          "decision-maker",
+          "fusion-coordinator"
+        ]
+      },
+      {
+        "name": "Decision Log",
+        "type": "log",
+        "participants": [
+          "chronicler",
+          "decision-maker"
+        ]
+      },
+      {
+        "name": "Field Communications",
+        "type": "emergency",
+        "participants": [
+          "comms-officer",
+          "intelligence-analyst"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "common-operating-picture",
+        "decision-log-with-timestamps",
+        "intelligence-confidence-assessments",
+        "action-orders-issued"
+      ],
+      "private": [
+        "raw-intelligence-by-stream",
+        "source-identities-and-methods",
+        "red-team-analysis-notes"
+      ],
+      "description": "The common operating picture is the central shared artifact: a real-time synthesis of all intelligence streams with confidence levels. The decision log is append-only and timestamped, creating an unalterable record of what was known and decided at each moment. Raw intelligence remains private to each stream to protect sources and methods. Red team notes are kept private to prevent social pressure from suppressing dissent. After the crisis, the decision log and common operating picture become the basis for after-action review."
+    },
+    "diagram": "graph TD\n    SIGINT[SIGINT Analyst] -->|assessment| FC[Fusion Coordinator]\n    HUMINT[HUMINT Analyst] -->|assessment| FC\n    IMINT[IMINT Analyst] -->|assessment| FC\n    OSINT[OSINT Analyst] -->|assessment| FC\n    FC -->|fused picture| DM[Decision-Maker]\n    RT[Red Team] -->|challenges| DM\n    RT -->|challenges| FC\n    DM -->|decides| CO[Comms Officer]\n    CO -->|orders| FIELD[Field Assets]\n    CHR[Chronicler] -->|records| LOG[Decision Log]",
+    "hierarchyTypes": [
+      "consensus",
+      "chain-of-command",
+      "orchestrated",
+      "adversarial",
+      "swarm",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "network-state-balaji",
+    "name": "Network State (Balaji Model)",
+    "category": "Government & Political",
+    "tags": [
+      "digital-first-sovereignty",
+      "crowdfunded-territory",
+      "moral-innovation",
+      "cloud-nation"
+    ],
+    "summary": "An online community with shared values that acquires physical territory and eventually seeks diplomatic recognition.",
+    "description": "Balaji Srinivasan's Network State pattern inverts traditional nation-building: instead of starting with land and building culture, you start with a shared moral innovation online, build a community around it, grow it into a network society with its own economy and governance, crowdfund the acquisition of physical territory, and eventually seek diplomatic recognition. The community is organized as a one-commandment society -- a single clear moral proposition that differentiates it (e.g., 'sugar is the new tobacco', 'radical life extension is a human right'). Governance is digital-first with smart contracts and on-chain voting. Physical meetups and eventually coliving spaces create in-person bonds. The census dashboard publicly tracks population, territory, and income to demonstrate growing legitimacy. This is a startup approach to state-building: iterative, metric-driven, and opt-in.",
+    "realWorldExample": "Prospera (Honduras ZEDE) and Praxis are early attempts at this model, creating special jurisdictions with their own regulatory frameworks, digital governance, and deliberate community self-selection around shared values.",
+    "whenToUse": "When you want to build a community that eventually has real-world sovereignty or autonomy, when digital-first coordination can precede and scaffold physical organization, and when the community's identity comes from a shared belief rather than shared geography.",
+    "strengths": [
+      "Opt-in membership means all participants genuinely share the founding values, solving the consent problem",
+      "Digital-first governance is more transparent and auditable than traditional political systems",
+      "The census dashboard creates real-time accountability by publicly tracking all key metrics",
+      "Iterative growth from online community to physical territory reduces the risk of premature over-investment"
+    ],
+    "weaknesses": [
+      "The 'one commandment' can calcify into dogma that prevents adaptation as circumstances change",
+      "Physical territory acquisition requires navigating existing sovereign states who may resist",
+      "Digital governance tools are immature and vulnerable to both technical exploits and social manipulation",
+      "Self-selecting communities risk becoming echo chambers that can't function in the broader world"
+    ],
+    "agents": [
+      {
+        "role": "founder",
+        "name": "Network State Founder",
+        "description": "Articulates the one commandment (the moral innovation), bootstraps the initial online community, and maintains the founding vision",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "citizen",
+        "name": "Citizen",
+        "description": "Opted-in member who participates in governance, contributes to the economy, and may colive in physical territory",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "governance-smart-contract",
+        "name": "Governance Smart Contract",
+        "description": "Automated agent that executes on-chain voting, treasury management, and rule enforcement without human intermediary",
+        "memory": "versioned"
+      },
+      {
+        "role": "census-dashboard",
+        "name": "Census Dashboard Agent",
+        "description": "Continuously aggregates and publishes key metrics: population, territory held, GDP equivalent, and growth trends",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "diplomat",
+        "name": "Diplomatic Agent",
+        "description": "Engages with existing nation-states and international bodies to seek recognition and negotiate jurisdictional agreements",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "On-Chain Governance Votes",
+        "type": "decision",
+        "participants": [
+          "citizen",
+          "governance-smart-contract"
+        ]
+      },
+      {
+        "name": "Community Forum",
+        "type": "threaded",
+        "participants": [
+          "citizen",
+          "founder"
+        ]
+      },
+      {
+        "name": "Census Dashboard",
+        "type": "broadcast",
+        "participants": [
+          "census-dashboard",
+          "citizen",
+          "founder",
+          "diplomat"
+        ]
+      },
+      {
+        "name": "Diplomatic Channel",
+        "type": "peer-to-peer",
+        "participants": [
+          "diplomat",
+          "founder"
+        ]
+      },
+      {
+        "name": "Physical Meetup Coordination",
+        "type": "pub-sub",
+        "participants": [
+          "citizen"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "blockchain-governance-record",
+        "census-data-public-dashboard",
+        "one-commandment-constitution",
+        "treasury-balance-on-chain"
+      ],
+      "private": [
+        "citizen-identity-and-reputation-score",
+        "diplomatic-negotiation-details",
+        "personal-contribution-history"
+      ],
+      "description": "The blockchain serves as the immutable shared memory: all governance decisions, treasury movements, and constitutional amendments are recorded on-chain. The census dashboard aggregates shared metrics publicly. The one commandment is the most important piece of shared memory -- the founding moral proposition that defines the community's identity. Citizen identity and reputation scores are private but verifiable. Diplomatic negotiations remain private until agreements are ratified through on-chain governance."
+    },
+    "diagram": "graph TD\n    OC[One Commandment] --> F[Founder]\n    F -->|bootstraps| COMM[Online Community]\n    COMM -->|grows into| NS[Network Society]\n    NS -->|crowdfunds| TERR[Physical Territory]\n    CIT[Citizens] -->|vote on-chain| GOV[Governance Smart Contract]\n    GOV -->|enforces| NS\n    CD[Census Dashboard] -->|tracks| CIT\n    CD -->|tracks| TERR\n    DIP[Diplomat] -->|seeks recognition| EXT[Existing Nations]",
+    "hierarchyTypes": [
+      "consensus",
+      "swarm",
+      "federated",
+      "mesh"
+    ]
+  },
+  {
+    "id": "kibbutz-general-assembly",
+    "name": "Kibbutz General Assembly",
+    "category": "Social & Community",
+    "tags": [
+      "direct-democracy",
+      "rotating-roles",
+      "communal-ownership",
+      "agricultural-collective"
+    ],
+    "summary": "Direct democracy with rotating leadership and communal ownership, where the assembly of all members is the supreme authority.",
+    "description": "The kibbutz model is one of the most radical organizational patterns ever sustained at scale: complete communal ownership, direct democracy through a General Assembly of all members, and systematic role rotation to prevent power concentration. The General Assembly (Asefa) is the supreme decision-making body -- every member has one vote on everything from annual budgets to accepting new members. A secretariat handles day-to-day management but serves at the assembly's pleasure and rotates regularly (typically 2-3 year terms). Economic branches (agriculture, industry, services) are managed by coordinators who also rotate. The dining hall and children's houses create social bonds that make the political structure work. The pattern proves that direct democracy can function for groups up to ~1000, but only when members share daily life and economic fate. Privatization pressures in recent decades have tested which elements of the model are essential.",
+    "realWorldExample": "Kibbutz Degania Alef, founded in 1910, operated as a fully communal settlement for over 90 years with 300+ members making all major decisions by direct vote in weekly General Assembly meetings.",
+    "whenToUse": "When maximum member buy-in is essential because all members share the consequences of every decision, when preventing power concentration is more important than decision speed, and when the group is small enough for direct democracy (under ~500 active participants).",
+    "strengths": [
+      "Direct democracy creates genuine ownership of decisions -- no one can blame distant management",
+      "Rotating roles prevent power concentration and ensure every member understands every function",
+      "Communal ownership eliminates principal-agent problems since everyone's interests are perfectly aligned",
+      "Shared daily life (dining hall, social events) creates the social fabric that makes collective governance work"
+    ],
+    "weaknesses": [
+      "Direct democracy is agonizingly slow for decisions that need quick action",
+      "Role rotation means no one develops deep expertise in management functions",
+      "Free-rider problem intensifies as the group grows -- hard to monitor contribution in a 500-person commune",
+      "Admitting new members is existentially fraught because each addition dilutes existing members' shared ownership"
+    ],
+    "agents": [
+      {
+        "role": "general-assembly",
+        "name": "General Assembly (Asefa)",
+        "description": "The supreme authority: all members meet weekly to vote on policy, budgets, and membership; decisions require simple majority",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "secretary",
+        "name": "Kibbutz Secretary",
+        "description": "Manages day-to-day operations; serves a 2-3 year rotating term; implements assembly decisions but cannot override them",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "branch-coordinator",
+        "name": "Branch Coordinator",
+        "description": "Manages a specific economic branch (agriculture, industry, services) on a rotating basis; reports to the assembly",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "member",
+        "name": "Kibbutz Member",
+        "description": "Full and equal participant in all decisions; works in assigned branch; contributes to and benefits from the communal economy",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "membership-committee",
+        "name": "Membership Committee",
+        "description": "Evaluates prospective members during a trial period and recommends to the General Assembly whether to grant full membership",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Weekly General Assembly",
+        "type": "decision",
+        "participants": [
+          "general-assembly",
+          "secretary",
+          "branch-coordinator",
+          "member"
+        ]
+      },
+      {
+        "name": "Secretariat Bulletin",
+        "type": "broadcast",
+        "participants": [
+          "secretary",
+          "member"
+        ]
+      },
+      {
+        "name": "Branch Meetings",
+        "type": "threaded",
+        "participants": [
+          "branch-coordinator",
+          "member"
+        ]
+      },
+      {
+        "name": "Membership Hearing",
+        "type": "decision",
+        "participants": [
+          "membership-committee",
+          "general-assembly"
+        ]
+      },
+      {
+        "name": "Dining Hall Conversation",
+        "type": "peer-to-peer",
+        "participants": [
+          "member"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "assembly-minutes-and-decisions",
+        "communal-budget-and-accounts",
+        "role-rotation-schedule",
+        "membership-registry"
+      ],
+      "private": [
+        "personal-needs-requests",
+        "branch-operational-plans",
+        "membership-committee-evaluations"
+      ],
+      "description": "Financial transparency is total: every member can see the complete communal budget and accounts. Assembly minutes record all decisions and form the constitutional memory of the kibbutz. The role rotation schedule is shared and planned years in advance. Private memory is minimal because communal life is inherently transparent. The dining hall serves as the informal shared memory where decisions are debated before they reach the assembly floor. Membership committee evaluations are the rare exception -- kept private to protect prospective members during their trial period."
+    },
+    "diagram": "graph TD\n    GA[General Assembly] -->|elects| SEC[Secretary]\n    GA -->|approves| BUD[Budget]\n    GA -->|votes on| MEM[New Members]\n    SEC -->|manages| BC1[Agriculture Branch]\n    SEC -->|manages| BC2[Industry Branch]\n    SEC -->|manages| BC3[Services Branch]\n    MC[Membership Committee] -->|recommends| GA\n    M1[Member] -->|votes in| GA\n    M2[Member] -->|votes in| GA\n    M3[Member] -->|votes in| GA\n    DH[Dining Hall] -.->|informal debate| GA",
+    "hierarchyTypes": [
+      "consensus",
+      "orchestrated",
+      "federated",
+      "chain-of-command",
+      "mesh"
+    ]
+  }
+]

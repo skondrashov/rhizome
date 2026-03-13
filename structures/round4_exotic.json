@@ -1,0 +1,2632 @@
+[
+  {
+    "id": "amish-barn-raising",
+    "name": "Amish Barn Raising",
+    "category": "Social & Community",
+    "tags": [
+      "collective-labor",
+      "reciprocity",
+      "burst-work",
+      "no-payment"
+    ],
+    "summary": "Entire community builds a barn in one day through unpaid collective burst labor with reciprocal obligation.",
+    "description": "An Amish barn raising assembles 100-300 community members to construct a full barn in a single day. There is no payment; participation creates a reciprocal debt that will be called upon when another family needs help. A master carpenter directs the work, dividing the community into specialized crews: foundation, framing, roofing, interior. Women organize a parallel logistics operation providing meals and refreshments. The key mechanism is social memory: everyone knows who showed up and who didn't. This creates a self-enforcing cooperation equilibrium where free-riding is punished by future exclusion. The pattern achieves in one day what a single family would need months to accomplish.",
+    "realWorldExample": "In Lancaster County, Pennsylvania, an Amish family loses their barn to fire on Monday. By Wednesday, the community has sourced lumber. On Saturday, 250 men arrive at dawn. The master carpenter has pre-cut timber and chalk-marked assembly points. By sundown, a 40x60-foot barn stands complete with roof, siding, and stalls. The family serves dinner to all participants.",
+    "whenToUse": "When an agent system needs massive parallelism for a short burst task, where all participants benefit from mutual aid and social reputation tracking ensures cooperation without monetary incentives.",
+    "strengths": [
+      "Achieves in hours what would take an individual weeks or months",
+      "Reciprocal obligation creates a self-sustaining cooperation network without payment",
+      "Social memory of participation enforces accountability without formal contracts",
+      "Parallel specialization (framing crew, roofing crew, meal crew) maximizes throughput"
+    ],
+    "weaknesses": [
+      "Requires a pre-existing trust network; strangers cannot participate meaningfully",
+      "Master carpenter is a single point of failure for coordination",
+      "Free-riders are punished socially but enforcement is slow and informal",
+      "Only works for tasks that can be parallelized into a single-day burst"
+    ],
+    "agents": [
+      {
+        "role": "master-carpenter",
+        "name": "Master Carpenter",
+        "description": "Plans the build, pre-cuts timber, assigns crews, and directs all structural work throughout the day",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "framing-crew-lead",
+        "name": "Framing Crew Lead",
+        "description": "Directs the largest crew to erect wall frames and connect structural beams",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "roofing-crew-lead",
+        "name": "Roofing Crew Lead",
+        "description": "Takes over once framing is complete, directing sheathing, shingling, and weatherproofing",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "foundation-crew-lead",
+        "name": "Foundation Crew Lead",
+        "description": "Prepares the site and lays the foundation before framing begins",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "logistics-coordinator",
+        "name": "Logistics Coordinator (Women's Lead)",
+        "description": "Organizes meals, water, first aid, and childcare for all participants throughout the day",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "community-elder",
+        "name": "Community Elder",
+        "description": "Maintains social memory of participation, tracks reciprocal obligations, and mediates disputes",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Build Plan",
+        "type": "top-down",
+        "participants": [
+          "master-carpenter",
+          "framing-crew-lead",
+          "roofing-crew-lead",
+          "foundation-crew-lead"
+        ]
+      },
+      {
+        "name": "Work Coordination",
+        "type": "broadcast",
+        "participants": [
+          "master-carpenter",
+          "framing-crew-lead",
+          "roofing-crew-lead",
+          "foundation-crew-lead",
+          "logistics-coordinator"
+        ]
+      },
+      {
+        "name": "Obligation Ledger",
+        "type": "log",
+        "participants": [
+          "community-elder",
+          "master-carpenter",
+          "logistics-coordinator"
+        ]
+      },
+      {
+        "name": "Meal Breaks",
+        "type": "broadcast",
+        "participants": [
+          "logistics-coordinator",
+          "framing-crew-lead",
+          "roofing-crew-lead",
+          "foundation-crew-lead"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "build blueprints",
+        "reciprocal obligation ledger",
+        "participation records",
+        "community skill roster"
+      ],
+      "private": [
+        "crew-specific task lists",
+        "family obligation history",
+        "material inventory"
+      ],
+      "description": "The community elder maintains a persistent shared ledger of who helped whom, creating a web of reciprocal obligations. The master carpenter keeps build plans that are shared on the day but discarded after. Individual participation is recorded in community memory that persists across years, enforcing cooperation through reputation."
+    },
+    "diagram": "graph TD\n    CE[Community Elder] -->|mobilizes| MC[Master Carpenter]\n    MC -->|assigns| FC[Foundation Crew]\n    MC -->|assigns| FR[Framing Crew]\n    MC -->|assigns| RC[Roofing Crew]\n    LC[Logistics Coordinator] -->|feeds| FC\n    LC -->|feeds| FR\n    LC -->|feeds| RC\n    FC -->|completes| FR\n    FR -->|completes| RC\n    CE -->|records| OL[Obligation Ledger]",
+    "hierarchyTypes": [
+      "swarm",
+      "consensus"
+    ]
+  },
+  {
+    "id": "shuttle-launch-countdown",
+    "name": "Space Shuttle Launch Countdown",
+    "category": "Technology & Engineering",
+    "tags": [
+      "go-no-go",
+      "hold-points",
+      "abort-modes",
+      "sequential-gates"
+    ],
+    "summary": "Disciplined countdown with hold points, go/no-go polls, and cascading abort modes for irreversible launches.",
+    "description": "The Space Shuttle launch countdown is a 43-hour choreographed sequence of thousands of steps with built-in hold points where the launch director polls each discipline for go/no-go status. Any single discipline can scrub the launch unilaterally. The sequence is irreversible past certain points, triggering different abort modes (Return to Launch Site, Transatlantic Abort, Abort to Orbit) depending on when a failure occurs. The Orbiter Test Conductor manages vehicle systems while the NASA Test Director manages ground systems. At T-9 minutes the Ground Launch Sequencer computer takes over, executing the final steps faster than humans can. This creates a progressive commitment structure where checks become more rigorous as reversibility decreases.",
+    "realWorldExample": "STS-51L Challenger: on January 27, 1986, the launch was scrubbed due to weather. Engineers from Morton Thiokol raised concerns about O-ring performance in cold temperatures during a teleconference, but management overrode engineering's no-go recommendation. The next day's launch at 36 degrees F resulted in catastrophe. The failure was not in the countdown structure but in allowing management pressure to override engineering veto authority.",
+    "whenToUse": "When an agent system must execute a high-stakes irreversible action and needs progressive commitment gates where any specialist can halt the process, with different recovery modes depending on how far the process has advanced.",
+    "strengths": [
+      "Any single discipline can unilaterally halt the process, preventing groupthink",
+      "Built-in hold points create natural checkpoints for reassessment",
+      "Progressive abort modes provide graceful degradation at every stage",
+      "Automated sequencer eliminates human reaction-time bottlenecks in final critical phase"
+    ],
+    "weaknesses": [
+      "Extremely conservative: a single false alarm scrubs the entire operation",
+      "Management pressure can undermine engineering veto authority if culture degrades",
+      "43-hour timeline creates fatigue that degrades human judgment at critical moments",
+      "Rigid sequential structure cannot adapt to novel failure modes not in the checklist"
+    ],
+    "agents": [
+      {
+        "role": "launch-director",
+        "name": "Launch Director",
+        "description": "Has final authority for launch commit, conducts go/no-go polls at each hold point, can scrub at any time",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "nasa-test-director",
+        "name": "NASA Test Director",
+        "description": "Manages all ground support systems, coordinates pad operations and range safety",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "orbiter-test-conductor",
+        "name": "Orbiter Test Conductor",
+        "description": "Manages all vehicle systems, monitors telemetry, reports vehicle status at hold points",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "propulsion-engineer",
+        "name": "Propulsion Systems Engineer",
+        "description": "Monitors main engines, solid rocket boosters, and external tank; provides go/no-go for propulsion",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "weather-officer",
+        "name": "Range Weather Officer",
+        "description": "Monitors weather conditions, lightning, upper-level winds; provides go/no-go for weather constraints",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "flight-dynamics",
+        "name": "Flight Dynamics Officer",
+        "description": "Calculates launch windows, trajectory parameters, and abort mode boundaries",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "ground-launch-sequencer",
+        "name": "Ground Launch Sequencer",
+        "description": "Automated system that executes the final 9-minute countdown sequence faster than human operators",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Go/No-Go Poll",
+        "type": "decision",
+        "participants": [
+          "launch-director",
+          "nasa-test-director",
+          "orbiter-test-conductor",
+          "propulsion-engineer",
+          "weather-officer",
+          "flight-dynamics"
+        ]
+      },
+      {
+        "name": "Hold Point Conference",
+        "type": "round-robin",
+        "participants": [
+          "launch-director",
+          "nasa-test-director",
+          "orbiter-test-conductor",
+          "propulsion-engineer",
+          "weather-officer",
+          "flight-dynamics"
+        ]
+      },
+      {
+        "name": "Countdown Timeline",
+        "type": "log",
+        "participants": [
+          "launch-director",
+          "nasa-test-director",
+          "orbiter-test-conductor",
+          "ground-launch-sequencer"
+        ]
+      },
+      {
+        "name": "Anomaly Reports",
+        "type": "emergency",
+        "participants": [
+          "nasa-test-director",
+          "orbiter-test-conductor",
+          "propulsion-engineer",
+          "launch-director"
+        ]
+      },
+      {
+        "name": "Automated Sequence Status",
+        "type": "broadcast",
+        "participants": [
+          "ground-launch-sequencer",
+          "launch-director",
+          "nasa-test-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "countdown timeline log",
+        "go/no-go poll results",
+        "abort mode parameters",
+        "launch commit criteria"
+      ],
+      "private": [
+        "subsystem telemetry",
+        "weather models",
+        "trajectory calculations",
+        "propulsion diagnostics"
+      ],
+      "description": "The countdown timeline is an append-only shared log that records every action and decision. Go/no-go poll results are shared immediately. Each discipline maintains private subsystem data but must surface any constraint violation to the shared anomaly channel. The ground launch sequencer operates from a fixed shared program with no private state. Post-launch, all data is archived for future anomaly investigation."
+    },
+    "diagram": "graph TD\n    LD[Launch Director] -->|polls| NTD[NASA Test Director]\n    LD -->|polls| OTC[Orbiter Test Conductor]\n    LD -->|polls| PE[Propulsion Engineer]\n    LD -->|polls| WO[Weather Officer]\n    LD -->|polls| FD[Flight Dynamics]\n    LD -->|commit| GLS[Ground Launch Sequencer]\n    GLS -->|T-9 min auto| LAUNCH[Launch]\n    PE -->|anomaly| LD\n    WO -->|scrub| LD",
+    "hierarchyTypes": [
+      "pipeline",
+      "chain-of-command",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "talmudic-chavruta",
+    "name": "Talmudic Chavruta Study Pair",
+    "category": "Education & Training",
+    "tags": [
+      "peer-debate",
+      "no-teacher",
+      "dialectical",
+      "text-based"
+    ],
+    "summary": "Two students debate a shared text without a teacher, discovering meaning through structured disagreement.",
+    "description": "Chavruta (literally 'friendship') is the primary learning method in yeshiva education, dating back over 1500 years. Two students of roughly equal ability sit across from each other with the same text, typically a page of Talmud containing multiple layers of commentary. They read aloud, question each other's interpretations, propose and demolish arguments, and attempt to reconcile contradictions. There is no teacher present during chavruta; the teacher (rosh yeshiva) gives a periodic shiur (lecture) that sets the text and frames the questions, but understanding emerges from peer argument. The method works because the Talmud itself is structured as recorded disagreements between rabbis, so the students mirror the text's own dialectical method. Partners rotate periodically to prevent stagnation.",
+    "realWorldExample": "At the Mir Yeshiva in Jerusalem, the study hall (beit midrash) holds 500 students learning in pairs. Each pair studies the same daf (page) of Talmud, reading Rashi's commentary and Tosafot's counter-commentary. One student proposes that Rashi and Tosafot actually agree, the other argues they fundamentally disagree. After 90 minutes of debate, the rosh yeshiva delivers a 45-minute shiur that reframes the question entirely, sending pairs back for another round.",
+    "whenToUse": "When an agent system benefits from two agents of equal capability debating the same input to discover nuances, contradictions, and deeper meanings that a single agent would miss, especially for interpreting ambiguous or layered information.",
+    "strengths": [
+      "Peer disagreement forces both agents to articulate and defend reasoning explicitly",
+      "No authority figure means neither agent can defer; both must engage fully",
+      "Rotating partners prevents echo chambers and introduces fresh perspectives",
+      "Mirrors the dialectical structure of complex, multi-layered source material"
+    ],
+    "weaknesses": [
+      "Requires roughly equal capability; mismatched pairs produce tutoring, not debate",
+      "Can spiral into unproductive argument without periodic reframing from an external lecture",
+      "No arbiter means some disagreements may never resolve",
+      "Highly dependent on the quality and richness of the shared source text"
+    ],
+    "agents": [
+      {
+        "role": "chavruta-aleph",
+        "name": "Study Partner Aleph",
+        "description": "Reads the text, proposes interpretations, challenges Partner Bet's readings, and defends positions through argument",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "chavruta-bet",
+        "name": "Study Partner Bet",
+        "description": "Reads the same text, offers counter-interpretations, identifies contradictions, and stress-tests Partner Aleph's reasoning",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "rosh-yeshiva",
+        "name": "Rosh Yeshiva (Head of Academy)",
+        "description": "Selects the text, delivers periodic lectures that reframe the questions, and pairs/rotates study partners",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "mashgiach",
+        "name": "Mashgiach Ruchani (Spiritual Supervisor)",
+        "description": "Monitors the emotional and intellectual health of study pairs, intervenes when debates become unproductive",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Chavruta Debate",
+        "type": "peer-to-peer",
+        "participants": [
+          "chavruta-aleph",
+          "chavruta-bet"
+        ]
+      },
+      {
+        "name": "Shiur (Lecture)",
+        "type": "broadcast",
+        "participants": [
+          "rosh-yeshiva",
+          "chavruta-aleph",
+          "chavruta-bet"
+        ]
+      },
+      {
+        "name": "Chiddushim (Novel Insights) Log",
+        "type": "log",
+        "participants": [
+          "chavruta-aleph",
+          "chavruta-bet"
+        ]
+      },
+      {
+        "name": "Partner Rotation",
+        "type": "top-down",
+        "participants": [
+          "rosh-yeshiva",
+          "mashgiach",
+          "chavruta-aleph",
+          "chavruta-bet"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "selected text passages",
+        "shiur notes",
+        "accumulated chiddushim (novel insights)",
+        "partner rotation schedule"
+      ],
+      "private": [
+        "personal interpretations",
+        "unresolved questions",
+        "argument strategies",
+        "learning progress"
+      ],
+      "description": "Each partner maintains private notes on their evolving interpretation. Novel insights (chiddushim) that survive mutual scrutiny are recorded in a shared log. The rosh yeshiva's lectures are shared broadcasts that reframe but do not resolve the debates. When partners rotate, private memory persists but shared debate context resets, forcing fresh articulation."
+    },
+    "diagram": "graph LR\n    RY[Rosh Yeshiva] -->|sets text & lectures| CA[Partner Aleph]\n    RY -->|sets text & lectures| CB[Partner Bet]\n    CA <-->|debate| CB\n    CB -->|chiddush| CL[Insights Log]\n    CA -->|chiddush| CL\n    MG[Mashgiach] -->|monitors| CA\n    MG -->|monitors| CB\n    RY -->|rotates pairs| MG",
+    "hierarchyTypes": [
+      "mesh",
+      "consensus"
+    ]
+  },
+  {
+    "id": "apache-lazy-consensus",
+    "name": "Apache Software Foundation Lazy Consensus",
+    "category": "Agile & Software",
+    "tags": [
+      "lazy-consensus",
+      "veto-power",
+      "meritocracy",
+      "open-source"
+    ],
+    "summary": "Changes pass by default unless someone objects; committers earn trust through merit, vetoes require justification.",
+    "description": "The Apache Software Foundation governance model handles thousands of contributors across hundreds of projects using 'lazy consensus': a proposal passes if no one objects within 72 hours. This inverts the typical approval model; silence means consent. However, any committer can issue a binding veto, but must provide a technical justification and ideally a counter-proposal. The meritocratic hierarchy (user -> contributor -> committer -> PMC member -> ASF member -> board) is earned through sustained quality contributions, not appointed. Each project has a Project Management Committee (PMC) that oversees releases and community health. The model scales to massive distributed teams because most decisions require zero active approval.",
+    "realWorldExample": "Apache Kafka receives a pull request to change the replication protocol. The contributor posts a KIP (Kafka Improvement Proposal) to the dev mailing list. After 72 hours with no objections from committers, it passes lazy consensus. One committer raises a -1 (binding veto) on the implementation approach, citing a race condition. The proposer revises the KIP, the veto is withdrawn, and after another 72-hour window of silence, the change merges.",
+    "whenToUse": "When an agent system has many autonomous contributors and most decisions are non-controversial, so requiring active approval from everyone would create bottlenecks. Best when trust has been established through meritocratic advancement.",
+    "strengths": [
+      "Scales to hundreds of contributors by requiring action only on disagreement, not agreement",
+      "Veto power ensures any single expert can prevent a bad decision with justification",
+      "Meritocratic advancement aligns decision-making authority with demonstrated competence",
+      "Asynchronous by default, accommodating contributors across all time zones"
+    ],
+    "weaknesses": [
+      "Silence-as-consent can mask disengagement or lack of review",
+      "Veto power can be abused by a single obstructionist committer",
+      "Meritocratic hierarchy can ossify, with long-tenured committers blocking newcomers",
+      "Complex or controversial proposals need active discussion that lazy consensus doesn't encourage"
+    ],
+    "agents": [
+      {
+        "role": "pmc-chair",
+        "name": "PMC Chair",
+        "description": "Oversees the project management committee, manages releases, and represents the project to the ASF board",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senior-committer",
+        "name": "Senior Committer",
+        "description": "Has binding vote on technical decisions, reviews code, mentors contributors, and can issue vetoes",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "committer",
+        "name": "Committer",
+        "description": "Has merge access and binding vote rights earned through sustained contributions",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "contributor",
+        "name": "Contributor",
+        "description": "Submits patches and proposals but has no binding vote; earns committer status through quality work",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "release-manager",
+        "name": "Release Manager",
+        "description": "Coordinates release votes, ensures license compliance, and manages the release candidate process",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Dev Mailing List",
+        "type": "threaded",
+        "participants": [
+          "pmc-chair",
+          "senior-committer",
+          "committer",
+          "contributor"
+        ]
+      },
+      {
+        "name": "Lazy Consensus Window",
+        "type": "decision",
+        "participants": [
+          "senior-committer",
+          "committer"
+        ]
+      },
+      {
+        "name": "Veto Discussion",
+        "type": "threaded",
+        "participants": [
+          "pmc-chair",
+          "senior-committer",
+          "committer",
+          "contributor"
+        ]
+      },
+      {
+        "name": "Release Vote",
+        "type": "decision",
+        "participants": [
+          "pmc-chair",
+          "senior-committer",
+          "committer",
+          "release-manager"
+        ]
+      },
+      {
+        "name": "PMC Private List",
+        "type": "peer-to-peer",
+        "participants": [
+          "pmc-chair",
+          "senior-committer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "mailing list archives",
+        "improvement proposals (KIPs/JEPs)",
+        "release artifacts",
+        "committer roster",
+        "vote records"
+      ],
+      "private": [
+        "code review notes",
+        "veto justifications in draft",
+        "mentorship assessments"
+      ],
+      "description": "All decisions are recorded on public mailing lists, creating a permanent shared archive. Lazy consensus windows are tracked with timestamps. Veto justifications become part of the permanent record. The committer roster is a shared meritocratic ledger. Private communications among PMC members handle sensitive personnel matters like committer nominations."
+    },
+    "diagram": "graph TD\n    CONT[Contributor] -->|proposes| ML[Dev Mailing List]\n    ML -->|72h silence| LC[Lazy Consensus Pass]\n    ML -->|veto -1| VD[Veto Discussion]\n    VD -->|revised proposal| ML\n    SC[Senior Committer] -->|binding vote| ML\n    COM[Committer] -->|binding vote| ML\n    PMC[PMC Chair] -->|oversees| ML\n    RM[Release Manager] -->|release vote| PMC",
+    "hierarchyTypes": [
+      "consensus",
+      "federated",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "airline-hub-spoke-ops",
+    "name": "Airline Hub-and-Spoke Operations",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "hub-spoke",
+      "scheduling",
+      "crew-rotation",
+      "network-optimization"
+    ],
+    "summary": "Flights funnel through hub airports in coordinated waves, connecting any origin to any destination via one stop.",
+    "description": "The hub-and-spoke model allows an airline to connect N cities with only N routes instead of N*(N-1)/2 direct routes. Flights arrive at the hub in coordinated 'banks' (waves), passengers connect during a tight window, then flights depart in the next bank. This requires exquisite coordination: crew scheduling must satisfy FAA rest requirements, aircraft must be turned (cleaned, fueled, catered) in 35-45 minutes, gate assignments must minimize passenger walking distance for connections, and the entire system must absorb delays without cascading. Operations Control coordinates real-time disruptions while crew scheduling solves a massive constraint-satisfaction problem months in advance. The pattern trades point-to-point efficiency for network reach.",
+    "realWorldExample": "Delta Air Lines operates its Atlanta hub (ATL) with 8 daily banks. Between 11:00-11:45, approximately 80 flights arrive from across the country. Passengers connect during a 90-minute window. Between 12:15-13:00, 80 flights depart. If a thunderstorm delays inbound flights, Operations Control decides in real-time which connections to hold gates for and which passengers to rebook, while crew tracking ensures no pilot exceeds their duty-time limit.",
+    "whenToUse": "When an agent system must efficiently connect many sources to many destinations through intermediate processing nodes, with tight timing constraints and real-time disruption management.",
+    "strengths": [
+      "Connects N points with only N links instead of N-squared, dramatically reducing complexity",
+      "Coordinated waves create predictable connection windows for downstream agents",
+      "Centralized hub enables real-time disruption management and resource reallocation",
+      "Crew and equipment rotation at the hub maximizes asset utilization"
+    ],
+    "weaknesses": [
+      "Hub is a catastrophic single point of failure; bad weather at one hub disrupts the entire network",
+      "Connection time adds latency that point-to-point avoids",
+      "Wave scheduling creates peak load spikes that stress hub capacity",
+      "Cascade failures propagate rapidly when early-bank delays spill into later banks"
+    ],
+    "agents": [
+      {
+        "role": "ops-control",
+        "name": "Operations Control Center",
+        "description": "Monitors all flights in real-time, manages disruptions, decides on delays, cancellations, and rebookings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "crew-scheduler",
+        "name": "Crew Scheduling",
+        "description": "Solves the constraint-satisfaction problem of assigning pilots and flight attendants to flights while satisfying rest rules",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "hub-controller",
+        "name": "Hub Station Controller",
+        "description": "Manages gate assignments, ground crews, baggage routing, and aircraft turnaround at the hub airport",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "dispatcher",
+        "name": "Flight Dispatcher",
+        "description": "Plans fuel loads, routes, and alternate airports for each flight; shares legal authority with the captain for flight safety",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "revenue-mgmt",
+        "name": "Revenue Management",
+        "description": "Optimizes seat pricing and rebooking priority based on passenger value and connection criticality",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "maintenance-ctrl",
+        "name": "Maintenance Control",
+        "description": "Tracks aircraft health, schedules maintenance, and can ground aircraft that develop mechanical issues",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Operations Board",
+        "type": "broadcast",
+        "participants": [
+          "ops-control",
+          "crew-scheduler",
+          "hub-controller",
+          "dispatcher",
+          "maintenance-ctrl"
+        ]
+      },
+      {
+        "name": "Disruption Conference",
+        "type": "emergency",
+        "participants": [
+          "ops-control",
+          "crew-scheduler",
+          "hub-controller",
+          "revenue-mgmt"
+        ]
+      },
+      {
+        "name": "Flight Plan Channel",
+        "type": "per-agent",
+        "participants": [
+          "dispatcher",
+          "ops-control"
+        ]
+      },
+      {
+        "name": "Gate Assignment Board",
+        "type": "broadcast",
+        "participants": [
+          "hub-controller",
+          "ops-control"
+        ]
+      },
+      {
+        "name": "Crew Legality Check",
+        "type": "decision",
+        "participants": [
+          "crew-scheduler",
+          "ops-control"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "flight schedule",
+        "gate map",
+        "aircraft positions",
+        "weather data",
+        "disruption log",
+        "maintenance status board"
+      ],
+      "private": [
+        "crew rest calculations",
+        "revenue optimization models",
+        "dispatch fuel calculations",
+        "individual aircraft maintenance history"
+      ],
+      "description": "The operations board is a shared real-time display of all flight positions and statuses. Gate assignments and aircraft maintenance status are shared. Crew scheduling maintains private constraint-satisfaction state that is too complex to share but surfaces legality decisions. Revenue management keeps pricing models private. All disruption decisions are logged in a shared append-only disruption log for post-event analysis."
+    },
+    "diagram": "graph TD\n    OC[Ops Control] -->|directs| HC[Hub Controller]\n    OC -->|queries| CS[Crew Scheduler]\n    OC -->|alerts| DISP[Dispatcher]\n    HC -->|gate assignments| GATES[Gate Board]\n    CS -->|crew legality| OC\n    RM[Revenue Mgmt] -->|rebooking priority| OC\n    MC[Maintenance Ctrl] -->|aircraft status| OC\n    SPOKE1[Spoke City A] -->|arrivals| HC\n    SPOKE2[Spoke City B] -->|arrivals| HC\n    HC -->|departures| SPOKE1\n    HC -->|departures| SPOKE2",
+    "hierarchyTypes": [
+      "orchestrated",
+      "consensus"
+    ]
+  },
+  {
+    "id": "prison-yard-ecology",
+    "name": "Prison Yard Ecology",
+    "category": "Social & Community",
+    "tags": [
+      "information-asymmetry",
+      "informal-economy",
+      "power-dynamics",
+      "surveillance"
+    ],
+    "summary": "Guards, gangs, and loners negotiate an informal order with contraband currency and information asymmetry.",
+    "description": "A prison yard is an ecology of competing power structures operating under extreme information asymmetry. Formal authority (guards, warden) controls physical infrastructure and official privileges. Informal authority (gang leaders, shot-callers) controls the underground economy of contraband, protection, and debt enforcement. Between these poles exist independent operators (jailhouse lawyers, commissary traders) and unaffiliated individuals who must navigate both systems. Information flows asymmetrically: guards see surveillance cameras but not social networks; gangs know social debts but not guard schedules. The informal economy uses cigarettes, stamps, or ramen as currency. Stability emerges not from top-down control but from a Nash equilibrium where disrupting the balance harms everyone.",
+    "realWorldExample": "At California's Pelican Bay State Prison, the Mexican Mafia (Eme) issues orders from the SHU (solitary housing unit) to the general population via coded messages in legal mail. Guards monitor phone calls but cannot decode the slang. A commissary trader operates between gang territories, accepted by all sides because disrupting trade hurts everyone. When a new inmate arrives unaffiliated, the yard politics determine whether they can remain neutral or must align.",
+    "whenToUse": "When an agent system operates in a contested environment with multiple competing authority structures, asymmetric information, and informal economies that emerge alongside formal rules.",
+    "strengths": [
+      "Emergent stability without centralized design; equilibrium self-enforces because disruption is mutually costly",
+      "Information asymmetry creates specialized niches for agents who bridge knowledge gaps",
+      "Informal economy enables resource allocation that formal channels prohibit or cannot support",
+      "Multiple parallel governance structures provide redundancy if one fails"
+    ],
+    "weaknesses": [
+      "Violence is always latent; small perturbations can cascade into system-wide conflict",
+      "Information asymmetry creates exploitation opportunities for better-informed agents",
+      "New entrants face a cold-start problem with no reputation or alliances",
+      "Formal and informal authority can conflict, creating impossible situations for agents caught between them"
+    ],
+    "agents": [
+      {
+        "role": "warden",
+        "name": "Warden",
+        "description": "Sets official policy, controls privileges and punishment, sees surveillance data but lacks social network intelligence",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "guard-sergeant",
+        "name": "Guard Sergeant",
+        "description": "Enforces rules on the yard, manages daily operations, gathers on-the-ground intelligence through observation",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "shot-caller",
+        "name": "Gang Shot-Caller",
+        "description": "Issues orders for the dominant gang, controls protection rackets and contraband supply, enforces debts through violence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "commissary-trader",
+        "name": "Commissary Trader",
+        "description": "Operates between factions as a neutral economic agent, trades goods at markup, accepted by all sides for utility",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "jailhouse-lawyer",
+        "name": "Jailhouse Lawyer",
+        "description": "Provides legal knowledge to inmates, trades legal services for commissary goods, bridges the formal/informal systems",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "unaffiliated-inmate",
+        "name": "Unaffiliated Inmate",
+        "description": "Navigates between formal rules and informal power without gang backing, must build individual reputation",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Official Orders",
+        "type": "top-down",
+        "participants": [
+          "warden",
+          "guard-sergeant"
+        ]
+      },
+      {
+        "name": "Yard Intelligence",
+        "type": "bottom-up",
+        "participants": [
+          "guard-sergeant",
+          "warden"
+        ]
+      },
+      {
+        "name": "Underground Economy",
+        "type": "peer-to-peer",
+        "participants": [
+          "shot-caller",
+          "commissary-trader",
+          "jailhouse-lawyer",
+          "unaffiliated-inmate"
+        ]
+      },
+      {
+        "name": "Coded Messages",
+        "type": "peer-to-peer",
+        "participants": [
+          "shot-caller"
+        ]
+      },
+      {
+        "name": "Incident Reports",
+        "type": "log",
+        "participants": [
+          "warden",
+          "guard-sergeant"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "official rules and privileges",
+        "surveillance footage",
+        "incident reports"
+      ],
+      "private": [
+        "gang debt ledgers",
+        "contraband stash locations",
+        "informant identities",
+        "legal case files",
+        "guard patrol schedules"
+      ],
+      "description": "Radical information asymmetry defines this system. Guards share surveillance data and incident reports but cannot access social debt ledgers. Gangs maintain private debt and alliance records invisible to formal authority. The commissary trader's private knowledge of who owes what to whom is their primary survival asset. No single agent has full system visibility."
+    },
+    "diagram": "graph TD\n    W[Warden] -->|official orders| GS[Guard Sergeant]\n    GS -->|surveillance| W\n    SC[Shot-Caller] -->|orders| UG[Underground Economy]\n    CT[Commissary Trader] <-->|trades| SC\n    CT <-->|trades| UI[Unaffiliated Inmate]\n    JL[Jailhouse Lawyer] <-->|legal services| UI\n    JL <-->|legal services| SC\n    GS -.->|monitors| UG\n    W -.->|cannot see| SC",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "tcg-tournament-swiss",
+    "name": "Trading Card Game Tournament (Swiss Rounds)",
+    "category": "Sports & Competition",
+    "tags": [
+      "swiss-pairing",
+      "deck-metagame",
+      "judges",
+      "coverage"
+    ],
+    "summary": "Players compete in Swiss rounds where wins pair you against other winners, surfacing the best without elimination.",
+    "description": "A major trading card game tournament (Magic: The Gathering, Yu-Gi-Oh, Pokemon) uses Swiss-system rounds to efficiently rank hundreds of players without eliminating anyone early. Each round, players with the same win-loss record are paired against each other. After enough rounds (log2 of player count), the top 8 players advance to a single-elimination bracket. Crucially, the metagame layer operates above individual games: players must predict what decks others will bring and choose their own deck accordingly, creating a rock-paper-scissors dynamic at the population level. Judges handle rule disputes in real-time using a layered appeals system. Feature match coverage and commentary create a parallel broadcast layer. Side events run simultaneously for eliminated players, keeping the whole venue active.",
+    "realWorldExample": "At Magic: The Gathering Pro Tour 2024, 250 players compete in 16 rounds of Swiss (8 draft, 8 constructed). A player at 5-2 is paired against another 5-2 player. Tiebreakers (opponent match win percentage) determine standings when records are equal. Head judge makes a ruling that a player accidentally drew an extra card; the floor judge's ruling is appealed and overturned. The top 8 advance to single-elimination on Sunday, with live commentary reaching 100,000 viewers.",
+    "whenToUse": "When an agent system must efficiently rank many participants with minimal rounds, tolerate some losses without elimination, and handle a metagame layer where strategy depends on predicting others' strategies.",
+    "strengths": [
+      "Swiss pairing efficiently surfaces top performers in O(log N) rounds without eliminating anyone",
+      "Same-record pairing ensures competitive matches at every skill level throughout the event",
+      "Metagame prediction layer adds strategic depth beyond individual match skill",
+      "Layered judge system handles disputes without halting the tournament"
+    ],
+    "weaknesses": [
+      "Tiebreaker math (opponent win percentage) is opaque and can feel arbitrary to participants",
+      "Intentional draws in final rounds by top players can lock out deserving competitors",
+      "Metagame can become stale if one dominant strategy emerges with no counter",
+      "Late rounds are high-variance: one bad pairing can end a 12-1 player's tournament"
+    ],
+    "agents": [
+      {
+        "role": "head-judge",
+        "name": "Head Judge",
+        "description": "Final arbiter on all rules disputes, sets tournament policy, handles appeals from floor judges",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "floor-judge",
+        "name": "Floor Judge",
+        "description": "Roams the tournament floor, answers rules questions, makes initial rulings on disputes",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "scorekeeper",
+        "name": "Scorekeeper",
+        "description": "Runs the Swiss pairing algorithm, records results, calculates tiebreakers, posts standings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "competitor-aggro",
+        "name": "Aggressive Competitor",
+        "description": "Chose a fast deck predicting a slow metagame; wins quickly or loses to prepared opponents",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "competitor-control",
+        "name": "Control Competitor",
+        "description": "Chose a reactive deck predicting aggression; excels in long games against fast strategies",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "coverage-commentator",
+        "name": "Coverage Commentator",
+        "description": "Selects feature matches, provides real-time analysis, and broadcasts the metagame narrative",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Pairings Board",
+        "type": "broadcast",
+        "participants": [
+          "scorekeeper",
+          "competitor-aggro",
+          "competitor-control",
+          "head-judge"
+        ]
+      },
+      {
+        "name": "Rules Dispute",
+        "type": "advisory",
+        "participants": [
+          "floor-judge",
+          "head-judge",
+          "competitor-aggro",
+          "competitor-control"
+        ]
+      },
+      {
+        "name": "Results Slip",
+        "type": "queue",
+        "participants": [
+          "competitor-aggro",
+          "competitor-control",
+          "scorekeeper"
+        ]
+      },
+      {
+        "name": "Feature Match Coverage",
+        "type": "broadcast",
+        "participants": [
+          "coverage-commentator"
+        ]
+      },
+      {
+        "name": "Metagame Analysis",
+        "type": "log",
+        "participants": [
+          "coverage-commentator",
+          "scorekeeper"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "pairings per round",
+        "standings",
+        "tiebreaker calculations",
+        "rules errata",
+        "metagame breakdown"
+      ],
+      "private": [
+        "deck composition",
+        "sideboard strategy",
+        "opponent scouting notes",
+        "match history"
+      ],
+      "description": "The scorekeeper maintains the authoritative shared standings and pairings. Deck composition is private until the top 8, when decklists are published. Each competitor keeps private scouting notes on opponents' decks observed in previous rounds. The metagame breakdown is a shared statistical layer maintained by coverage. Judge rulings create precedent stored in shared memory for consistent future rulings."
+    },
+    "diagram": "graph TD\n    SK[Scorekeeper] -->|pairings| PB[Pairings Board]\n    CA[Competitor A] -->|plays| MATCH[Match]\n    CC[Competitor B] -->|plays| MATCH\n    MATCH -->|result| SK\n    FJ[Floor Judge] -->|ruling| MATCH\n    FJ -->|appeal| HJ[Head Judge]\n    HJ -->|final ruling| MATCH\n    SK -->|standings| TOP8[Top 8 Bracket]\n    COV[Coverage] -->|broadcasts| MATCH",
+    "hierarchyTypes": [
+      "adversarial",
+      "pipeline",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "cathedral-building-guild",
+    "name": "Gothic Cathedral Building Guild",
+    "category": "Historical & Traditional",
+    "tags": [
+      "multi-generation",
+      "master-builder",
+      "traveling-journeymen",
+      "sacred-geometry"
+    ],
+    "summary": "Master builder directs a multi-generation project with traveling journeymen, trade secrets, and no blueprints.",
+    "description": "A Gothic cathedral took 50-200 years to build, spanning multiple generations of workers, multiple master builders, and often multiple architectural visions. The master builder (magister operis) held the design in their head and communicated through full-scale templates drawn on a tracing floor, not paper blueprints. Masons were organized into lodges with strict hierarchies (apprentice -> journeyman -> master) and trade secrets transmitted through ritual. Journeymen traveled between cathedral projects across Europe, carrying techniques from one site to another. When a master builder died mid-project, the successor might reinterpret the design, explaining why many cathedrals show stylistic shifts between sections. Funding came in irregular waves from the Church and local patrons, causing decades-long construction pauses. The result is a structure that no single person ever fully designed.",
+    "realWorldExample": "Cologne Cathedral began in 1248 under Master Gerhard. When he died around 1271, Master Arnold took over and altered the choir design. Construction halted entirely in 1473, leaving the south tower incomplete. Work didn't resume until 1842, when the original medieval plans were rediscovered. The cathedral was finally completed in 1880, 632 years after breaking ground, using a mix of medieval techniques and 19th-century engineering.",
+    "whenToUse": "When an agent system must sustain a project across multiple agent generations where no single agent will see the full lifecycle, requiring durable design encoding and graceful succession.",
+    "strengths": [
+      "Trade guild structure preserves tacit knowledge across generations through apprenticeship",
+      "Traveling journeymen cross-pollinate techniques between independent projects",
+      "Full-scale templates encode design intent more durably than abstract plans",
+      "The system tolerates decades-long pauses and resumes without total knowledge loss"
+    ],
+    "weaknesses": [
+      "Master builder death creates succession crises and potential design reinterpretation",
+      "No paper blueprints means design intent lives in one person's head",
+      "Multi-century timelines mean original vision may become irrelevant to later generations",
+      "Irregular funding creates unpredictable start-stop cycles that disrupt team continuity"
+    ],
+    "agents": [
+      {
+        "role": "master-builder",
+        "name": "Master Builder (Magister Operis)",
+        "description": "Holds the architectural vision, draws full-scale templates on the tracing floor, directs all construction",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "lodge-master",
+        "name": "Lodge Master",
+        "description": "Manages the mason's lodge, enforces trade secrets, handles apprentice advancement and quality standards",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "journeyman-mason",
+        "name": "Journeyman Mason",
+        "description": "Travels between cathedral sites, carries techniques and stylistic knowledge, executes master builder's templates",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "apprentice-mason",
+        "name": "Apprentice Mason",
+        "description": "Learns through doing under journeyman supervision, earns advancement through demonstrated skill over years",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "chapter-patron",
+        "name": "Cathedral Chapter / Patron",
+        "description": "Provides funding and commissions work, sets religious program requirements, can pause or resume construction",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "successor-builder",
+        "name": "Successor Master Builder",
+        "description": "Takes over when the master builder dies, interprets inherited templates and may alter the unfinished design",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Tracing Floor",
+        "type": "document",
+        "participants": [
+          "master-builder",
+          "lodge-master",
+          "journeyman-mason",
+          "successor-builder"
+        ]
+      },
+      {
+        "name": "Lodge Meeting",
+        "type": "threaded",
+        "participants": [
+          "lodge-master",
+          "journeyman-mason",
+          "apprentice-mason"
+        ]
+      },
+      {
+        "name": "Chapter Commission",
+        "type": "top-down",
+        "participants": [
+          "chapter-patron",
+          "master-builder"
+        ]
+      },
+      {
+        "name": "Journeyman Network",
+        "type": "peer-to-peer",
+        "participants": [
+          "journeyman-mason"
+        ]
+      },
+      {
+        "name": "Succession Briefing",
+        "type": "peer-to-peer",
+        "participants": [
+          "master-builder",
+          "successor-builder"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "full-scale templates on tracing floor",
+        "completed stonework (the building itself)",
+        "patron commission records",
+        "lodge regulations"
+      ],
+      "private": [
+        "trade secrets (mason's marks, geometric ratios)",
+        "journeyman travel knowledge",
+        "master builder's undrawn future plans"
+      ],
+      "description": "The building itself is the primary shared memory: completed stonework is the most durable record of past decisions. Templates on the tracing floor are shared but ephemeral (they get erased and redrawn). The master builder's unbuilt vision is dangerously private - lost at death unless transmitted to a successor. Trade secrets are deliberately kept private within lodge rituals. Journeymen carry cross-site knowledge as private memory that they selectively share."
+    },
+    "diagram": "graph TD\n    CP[Cathedral Chapter] -->|commissions & funds| MB[Master Builder]\n    MB -->|templates| TF[Tracing Floor]\n    MB -->|directs| LM[Lodge Master]\n    LM -->|supervises| JM[Journeyman Mason]\n    JM -->|trains| AM[Apprentice Mason]\n    JM <-->|travels between sites| OTHER[Other Cathedrals]\n    MB -->|succession| SB[Successor Builder]\n    SB -->|reinterprets| TF\n    TF -->|guides| STONE[The Building Itself]",
+    "hierarchyTypes": [
+      "federated",
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "polynesian-wayfinding-fleet",
+    "name": "Polynesian Wayfinding Fleet",
+    "category": "Maritime & Aviation",
+    "tags": [
+      "star-navigation",
+      "oral-tradition",
+      "fleet-coordination",
+      "instrument-free"
+    ],
+    "summary": "Navigator reads stars, swells, and wildlife to guide a fleet of canoes across open ocean without instruments.",
+    "description": "Polynesian wayfinding is arguably the greatest feat of non-instrumental navigation in human history: crossing thousands of miles of open Pacific Ocean using only stars, ocean swells, cloud patterns, bird behavior, and a mental model of the ocean called the 'star compass.' The master navigator (pwo or tohunga) holds the navigational knowledge in memory, transmitted orally across generations. In a fleet migration, the lead canoe carries the navigator who reads environmental signs continuously, while trailing canoes follow visual and acoustic signals. The navigator does not sleep during multi-day crossings, entering a meditative state to maintain continuous awareness. Fleet coordination uses drum signals, torch lights, and canoe positioning. The system represents an oral-tradition computing architecture where the algorithm (star compass) is stored entirely in human memory.",
+    "realWorldExample": "In 1976, the Hokule'a voyaging canoe sailed from Hawaii to Tahiti using traditional Polynesian navigation under master navigator Mau Piailug from Satawal, Micronesia. Mau used no instruments, navigating 2,500 miles by reading star positions, ocean swell patterns, and the behavior of golden plovers. He divided the night sky into a star compass of 32 directional houses, tracking which stars rose and set at each position. When clouds obscured the sky, he read ocean swells reflected off distant islands.",
+    "whenToUse": "When an agent system must navigate complex decision spaces using pattern recognition rather than explicit instruments, with knowledge stored in specialized agent memory rather than external databases.",
+    "strengths": [
+      "Zero dependency on external instruments or infrastructure; all knowledge is agent-internal",
+      "Multi-modal sensing (stars, swells, birds, clouds) provides redundancy when one signal is obscured",
+      "Oral tradition has preserved navigation knowledge across 30+ generations with high fidelity",
+      "Fleet coordination achieves collective movement without radio or precise measurement"
+    ],
+    "weaknesses": [
+      "Master navigator is an extreme single point of failure; their incapacitation strands the fleet",
+      "Knowledge transmission requires years of apprenticeship, creating a succession bottleneck",
+      "Environmental signals can be ambiguous or absent (overcast nights, calm seas)",
+      "No way to independently verify position; cumulative errors compound over long voyages"
+    ],
+    "agents": [
+      {
+        "role": "master-navigator",
+        "name": "Master Navigator (Pwo)",
+        "description": "Holds the star compass in memory, continuously reads stars, swells, bird patterns, and clouds; does not sleep during crossings",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "navigator-apprentice",
+        "name": "Navigator Apprentice",
+        "description": "Learns the star compass through years of oral instruction, assists with watches, and prepares for eventual succession",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "lead-canoe-captain",
+        "name": "Lead Canoe Captain",
+        "description": "Commands the lead canoe carrying the navigator, manages crew, sails, and implements navigator's course directions",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "fleet-canoe-captain",
+        "name": "Fleet Canoe Captain",
+        "description": "Commands a following canoe, maintains visual contact with lead canoe, relays signals to rear vessels",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "provisions-master",
+        "name": "Provisions Master",
+        "description": "Manages food, water, and fishing operations for the fleet; pace of provisioning constrains voyage duration",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Navigator's Observations",
+        "type": "top-down",
+        "participants": [
+          "master-navigator",
+          "lead-canoe-captain"
+        ]
+      },
+      {
+        "name": "Fleet Signals",
+        "type": "broadcast",
+        "participants": [
+          "lead-canoe-captain",
+          "fleet-canoe-captain"
+        ]
+      },
+      {
+        "name": "Apprentice Instruction",
+        "type": "peer-to-peer",
+        "participants": [
+          "master-navigator",
+          "navigator-apprentice"
+        ]
+      },
+      {
+        "name": "Provisions Status",
+        "type": "bottom-up",
+        "participants": [
+          "provisions-master",
+          "lead-canoe-captain"
+        ]
+      },
+      {
+        "name": "Oral Star Compass",
+        "type": "document",
+        "participants": [
+          "master-navigator",
+          "navigator-apprentice"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "current heading",
+        "fleet formation",
+        "provisions inventory",
+        "signal protocols"
+      ],
+      "private": [
+        "star compass (32-house directional system)",
+        "swell pattern library",
+        "bird behavior signatures",
+        "island cloud reflections catalog"
+      ],
+      "description": "The star compass and its associated environmental knowledge exist entirely in the master navigator's private memory, transmitted orally to the apprentice. There is no written record. The fleet shares only immediate operational state: heading, formation, provisions. The navigator's private memory IS the navigation system - if it is lost, the fleet is lost. This is the most extreme case of critical knowledge stored in private agent memory."
+    },
+    "diagram": "graph LR\n    MN[Master Navigator] -->|course| LCC[Lead Canoe Captain]\n    LCC -->|signals| FC1[Fleet Canoe 1]\n    FC1 -->|relays| FC2[Fleet Canoe 2]\n    STARS[Stars & Swells] -->|reads| MN\n    BIRDS[Bird Patterns] -->|reads| MN\n    MN -->|teaches| APP[Apprentice]\n    PM[Provisions Master] -->|status| LCC",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "swarm",
+      "mesh"
+    ]
+  },
+  {
+    "id": "gosplan-planned-economy",
+    "name": "Soviet Gosplan Planned Economy",
+    "category": "Government & Political",
+    "tags": [
+      "central-planning",
+      "quotas",
+      "five-year-plans",
+      "shadow-economy"
+    ],
+    "summary": "Central planners set production quotas for the entire economy; managers game metrics while fixers fill gaps.",
+    "description": "Gosplan (State Planning Committee) attempted to centrally plan the entire Soviet economy, setting production targets for every factory, farm, and mine. Five-year plans set strategic direction; annual plans set specific quotas. The system created a massive principal-agent problem: factory managers optimized for the measured metric rather than actual utility (producing heavy chandeliers when measured by weight, tiny nails when measured by quantity). 'Tolkachi' (fixers/pushers) emerged as informal intermediaries who brokered trades between factories outside the plan, solving bottlenecks the planners couldn't foresee. The shadow economy (blat network) of personal connections filled gaps between what the plan allocated and what people actually needed. The system demonstrates how centralized control over a sufficiently complex system inevitably spawns informal parallel systems.",
+    "realWorldExample": "In the 1970s, a Soviet ball-bearing factory received a quota to produce 10 million bearings. The factory produced the easiest small bearings to meet the number, causing a shortage of the large bearings that heavy industry actually needed. A tolkach from a tractor factory offered to supply the ball-bearing factory with off-plan steel in exchange for large bearings, both managers filing creative paperwork to reconcile with Gosplan's records. Meanwhile, the five-year plan reported 105% quota fulfillment.",
+    "whenToUse": "When studying how centralized planning breaks down in complex systems, creating Goodhart's Law effects, and when understanding why informal intermediary agents emerge to fill coordination gaps in any sufficiently rigid hierarchy.",
+    "strengths": [
+      "Can mobilize massive resources toward strategic priorities (space program, military) through top-down allocation",
+      "Five-year plans provide long-term stability and predictability for large capital investments",
+      "Central planning eliminates duplicated effort and wasteful competition in theory",
+      "Clear chain of command enables rapid redirection during crises (war economy)"
+    ],
+    "weaknesses": [
+      "Information problem: planners cannot know local conditions at millions of sites simultaneously",
+      "Goodhart's Law: managers optimize measured metrics, not actual value, systematically distorting outcomes",
+      "Shadow economy is essential for functioning but invisible to planners, making the plan increasingly fictional",
+      "Rigid quotas cannot adapt to demand changes, causing chronic shortages and surpluses simultaneously"
+    ],
+    "agents": [
+      {
+        "role": "gosplan-chairman",
+        "name": "Gosplan Chairman",
+        "description": "Sets five-year plan targets and annual quotas based on aggregated reports from ministries; believes the plan reflects reality",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "ministry-head",
+        "name": "Industrial Ministry Head",
+        "description": "Translates Gosplan targets into factory-level quotas, aggregates production reports upward, bargains for lower quotas",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "factory-director",
+        "name": "Factory Director",
+        "description": "Manages a factory, games metrics to meet quotas, hoards inputs, and relies on tolkachi for off-plan supplies",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "tolkach-fixer",
+        "name": "Tolkach (Fixer)",
+        "description": "Informal intermediary who brokers inter-factory deals outside the plan, uses personal connections to solve bottlenecks",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "party-inspector",
+        "name": "Party Inspector",
+        "description": "Audits factories for plan compliance, can report deviations to higher authority, but is often co-opted by local networks",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "black-market-operator",
+        "name": "Blat Network Operator",
+        "description": "Arranges off-the-books trades of consumer goods and services through personal connections, filling gaps the plan ignores",
+        "memory": "persistent-private"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Five-Year Plan Directives",
+        "type": "top-down",
+        "participants": [
+          "gosplan-chairman",
+          "ministry-head",
+          "factory-director"
+        ]
+      },
+      {
+        "name": "Production Reports",
+        "type": "bottom-up",
+        "participants": [
+          "factory-director",
+          "ministry-head",
+          "gosplan-chairman"
+        ]
+      },
+      {
+        "name": "Quota Bargaining",
+        "type": "peer-to-peer",
+        "participants": [
+          "ministry-head",
+          "factory-director"
+        ]
+      },
+      {
+        "name": "Shadow Network",
+        "type": "peer-to-peer",
+        "participants": [
+          "tolkach-fixer",
+          "factory-director",
+          "black-market-operator"
+        ]
+      },
+      {
+        "name": "Party Audit",
+        "type": "top-down",
+        "participants": [
+          "party-inspector",
+          "factory-director"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "five-year plan documents",
+        "annual quota tables",
+        "official production statistics (often fictional)",
+        "party directives"
+      ],
+      "private": [
+        "actual production figures",
+        "hoarded input inventories",
+        "tolkach contact networks",
+        "blat favor ledgers",
+        "creative accounting records"
+      ],
+      "description": "The defining feature is the divergence between shared and private memory. Official shared records show plan fulfillment; private records show reality. Factory directors maintain two sets of books. Tolkachi keep private contact networks that are their primary asset. The blat network operates on private reciprocal favor tracking. Gosplan makes decisions based on shared information that everyone knows is fictional but no one corrects."
+    },
+    "diagram": "graph TD\n    GP[Gosplan] -->|quotas| MH[Ministry Head]\n    MH -->|quotas| FD[Factory Director]\n    FD -->|fictional reports| MH\n    MH -->|aggregated fiction| GP\n    FD <-->|off-plan trades| TK[Tolkach Fixer]\n    TK <-->|brokers| FD2[Other Factory]\n    PI[Party Inspector] -->|audits| FD\n    FD -.->|co-opts| PI\n    BMO[Blat Network] <-->|fills gaps| FD",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "hospital-mm-conference",
+    "name": "Hospital Morbidity & Mortality Conference",
+    "category": "Medical & Emergency",
+    "tags": [
+      "blame-free",
+      "retrospective",
+      "case-review",
+      "systems-thinking"
+    ],
+    "summary": "Physicians anonymously review deaths and complications, seeking system failures rather than individual blame.",
+    "description": "The Morbidity and Mortality (M&M) Conference is a weekly ritual in teaching hospitals where physicians present cases where patients died or experienced serious complications. The presenting physician walks through the clinical timeline while colleagues identify decision points where different choices might have changed the outcome. The critical cultural norm is blame-free analysis: the goal is to identify systemic failures (inadequate protocols, communication breakdowns, cognitive biases) rather than punish individuals. Cases are selected by a conference leader who chooses educationally valuable situations, not just dramatic ones. The format is Socratic: attendees ask questions and the discussion reveals layers of causation. Legal protections in many jurisdictions make M&M proceedings inadmissible in court, enabling candor. The pattern has been adopted by aviation (ASRS), software (blameless postmortems), and nuclear power.",
+    "realWorldExample": "At Massachusetts General Hospital, a surgical M&M presents a case where a patient developed sepsis after routine gallbladder removal. The presenting resident walks through the timeline. Discussion reveals: the post-op fever was flagged by nursing at 2 AM but the on-call resident was managing three simultaneous admissions and delayed response by 4 hours. The conference identifies the systemic issue (resident workload during overnight shifts) rather than blaming the individual resident. The department subsequently adjusts overnight staffing ratios.",
+    "whenToUse": "When an agent system needs to learn from failures without creating a culture of blame that suppresses error reporting, using structured retrospective analysis to identify systemic rather than individual causes.",
+    "strengths": [
+      "Blame-free culture encourages honest reporting of errors that would otherwise be hidden",
+      "Socratic questioning reveals hidden layers of causation beyond the obvious proximate failure",
+      "Legal protection enables candor that would be impossible in adversarial review settings",
+      "Systemic fixes (protocol changes, staffing adjustments) prevent recurrence across the whole organization"
+    ],
+    "weaknesses": [
+      "Blame-free norm can erode to 'name and shame' if institutional culture degrades",
+      "Selection bias: conference leaders may avoid politically sensitive cases",
+      "Systemic recommendations often go unimplemented due to resource constraints",
+      "Hindsight bias makes it easy to identify correct decisions that were unclear in real-time"
+    ],
+    "agents": [
+      {
+        "role": "conference-leader",
+        "name": "Conference Leader",
+        "description": "Selects cases, moderates discussion, ensures blame-free norms are maintained, synthesizes lessons into recommendations",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "presenting-physician",
+        "name": "Presenting Physician",
+        "description": "Walks through the clinical timeline of the case, answers questions, and shares their real-time reasoning",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "attending-surgeon",
+        "name": "Attending Critic",
+        "description": "Asks probing questions about decision points, offers alternative approaches, identifies cognitive biases at play",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "systems-analyst",
+        "name": "Quality/Safety Officer",
+        "description": "Maps the case onto systemic patterns (staffing, protocols, equipment), connects to previous similar incidents",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "resident-audience",
+        "name": "Resident Audience",
+        "description": "Junior physicians who learn from the case discussion, internalize clinical reasoning patterns and failure modes",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "department-chair",
+        "name": "Department Chair",
+        "description": "Has authority to implement systemic changes recommended by the conference, sets resource allocation priorities",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Case Presentation",
+        "type": "broadcast",
+        "participants": [
+          "presenting-physician",
+          "conference-leader",
+          "attending-surgeon",
+          "systems-analyst",
+          "resident-audience",
+          "department-chair"
+        ]
+      },
+      {
+        "name": "Socratic Discussion",
+        "type": "threaded",
+        "participants": [
+          "conference-leader",
+          "attending-surgeon",
+          "presenting-physician",
+          "systems-analyst"
+        ]
+      },
+      {
+        "name": "Recommendations Log",
+        "type": "log",
+        "participants": [
+          "conference-leader",
+          "systems-analyst",
+          "department-chair"
+        ]
+      },
+      {
+        "name": "Protected Proceedings Record",
+        "type": "document",
+        "participants": [
+          "conference-leader",
+          "systems-analyst"
+        ]
+      },
+      {
+        "name": "Implementation Tracking",
+        "type": "decision",
+        "participants": [
+          "department-chair",
+          "systems-analyst"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "anonymized case summaries",
+        "systemic recommendations",
+        "implementation tracking",
+        "pattern library of recurring failure modes"
+      ],
+      "private": [
+        "individual case details (legally protected)",
+        "personal clinical reasoning notes",
+        "presenter's real-time thought process"
+      ],
+      "description": "Legal protection creates a unique memory architecture where the detailed proceedings are private and inadmissible, but the systemic lessons extracted are shared. The pattern library of recurring failure modes is shared institutional knowledge. Individual case details are deliberately kept private to maintain candor. This is intentional information destruction: the system works BECAUSE full details are not permanently recorded."
+    },
+    "diagram": "graph TD\n    CL[Conference Leader] -->|selects case| PP[Presenting Physician]\n    PP -->|presents timeline| DISC[Socratic Discussion]\n    AS[Attending Critic] -->|probes| DISC\n    SA[Quality/Safety Officer] -->|systemic patterns| DISC\n    DISC -->|lessons| REC[Recommendations]\n    REC -->|implementation| DC[Department Chair]\n    RA[Resident Audience] -->|learns from| DISC\n    DC -->|resources| CHANGE[Systemic Change]",
+    "hierarchyTypes": [
+      "consensus",
+      "adversarial"
+    ]
+  },
+  {
+    "id": "renaissance-bottega",
+    "name": "Renaissance Bottega (Artist's Workshop)",
+    "category": "Creative & Arts",
+    "tags": [
+      "master-apprentice",
+      "collaborative-authorship",
+      "brand-attribution",
+      "skill-ladder"
+    ],
+    "summary": "Master artist's name goes on works produced collaboratively by a workshop of apprentices at different skill levels.",
+    "description": "The Renaissance bottega (workshop) was a commercial art production studio where a master artist led a hierarchical team of apprentices who collaboratively produced works sold under the master's name. Apprentices entered at age 10-12 and progressed through a skill ladder: grinding pigments, preparing panels, painting drapery and backgrounds, then eventually faces and hands (the master's specialty). A single 'Raphael' painting might have had four different painters. The master designed compositions, painted the most important elements, and guaranteed quality. This was not fraud: patrons understood and accepted the system. The bottega was simultaneously a school, a brand, and a production line. Some apprentices (like Leonardo da Vinci in Verrocchio's shop) eventually surpassed their masters and established their own bottega.",
+    "realWorldExample": "Peter Paul Rubens operated the most productive bottega in 17th-century Antwerp, employing specialists: one for animals, one for landscapes, one for still life, one for drapery. Rubens would sketch the composition, paint key faces and hands, and supervise everything else. Patrons paid different rates depending on how much was 'by Rubens' hand.' Anthony van Dyck began as an apprentice in Rubens' studio, learning so well that their work became nearly indistinguishable, before leaving to establish his own career.",
+    "whenToUse": "When an agent system needs to produce complex creative outputs at scale under a quality brand, with specialized sub-agents handling different aspects while a master agent maintains coherence and handles the most critical elements.",
+    "strengths": [
+      "Scales creative output far beyond what a single master could produce alone",
+      "Skill ladder provides clear progression path and self-reinforcing training pipeline",
+      "Specialization allows each apprentice to develop deep expertise in one aspect",
+      "Brand attribution to the master provides quality assurance and commercial value"
+    ],
+    "weaknesses": [
+      "Apprentices' contributions are invisible, potentially demotivating the most talented",
+      "Quality depends entirely on the master's ability to supervise and integrate diverse hands",
+      "Best apprentices eventually leave and become competitors, taking techniques with them",
+      "Attribution under master's name obscures actual authorship for historical record"
+    ],
+    "agents": [
+      {
+        "role": "master-artist",
+        "name": "Master Artist",
+        "description": "Designs compositions, paints the most important elements (faces, hands), supervises all work, and signs the finished piece",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senior-apprentice",
+        "name": "Senior Apprentice",
+        "description": "Paints complex secondary elements (drapery, architecture), may design minor compositions independently",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "specialist-painter",
+        "name": "Specialist Painter",
+        "description": "Expert in one domain (landscapes, animals, still life) who executes that element across many paintings",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "junior-apprentice",
+        "name": "Junior Apprentice",
+        "description": "Prepares materials (grinding pigments, preparing panels, transferring cartoons), paints simple backgrounds",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "patron-client",
+        "name": "Patron / Client",
+        "description": "Commissions work, specifies subject matter and size, negotiates how much is 'by the master's own hand'",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Composition Design",
+        "type": "top-down",
+        "participants": [
+          "master-artist",
+          "senior-apprentice",
+          "specialist-painter"
+        ]
+      },
+      {
+        "name": "Work Assignment",
+        "type": "top-down",
+        "participants": [
+          "master-artist",
+          "senior-apprentice",
+          "specialist-painter",
+          "junior-apprentice"
+        ]
+      },
+      {
+        "name": "Quality Review",
+        "type": "advisory",
+        "participants": [
+          "master-artist",
+          "senior-apprentice"
+        ]
+      },
+      {
+        "name": "Patron Commission",
+        "type": "peer-to-peer",
+        "participants": [
+          "patron-client",
+          "master-artist"
+        ]
+      },
+      {
+        "name": "Technique Instruction",
+        "type": "top-down",
+        "participants": [
+          "master-artist",
+          "senior-apprentice",
+          "junior-apprentice"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "composition sketches (cartoons)",
+        "color palette standards",
+        "patron requirements",
+        "bottega house style"
+      ],
+      "private": [
+        "individual technique notebooks",
+        "personal color mixing formulas",
+        "specialist domain knowledge",
+        "master's unrevealed methods"
+      ],
+      "description": "The master maintains shared composition designs (cartoons) that guide all workers. House style standards are shared to maintain consistency across hands. Each specialist keeps private domain knowledge (how to paint realistic fur, how to mix specific flesh tones). The master's most valued techniques remain private, transmitted only to the most trusted senior apprentice. The finished work is the shared output, but the process of who painted what is deliberately unrecorded."
+    },
+    "diagram": "graph TD\n    PC[Patron/Client] -->|commissions| MA[Master Artist]\n    MA -->|design & key elements| WORK[Painting]\n    MA -->|assigns| SA[Senior Apprentice]\n    SA -->|drapery & architecture| WORK\n    MA -->|assigns| SP[Specialist Painter]\n    SP -->|landscape/animals| WORK\n    MA -->|trains| JA[Junior Apprentice]\n    JA -->|backgrounds & prep| WORK\n    MA -->|quality review| WORK\n    MA -->|signs| WORK",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh"
+    ]
+  },
+  {
+    "id": "dark-pool-matching",
+    "name": "Dark Pool / Alternative Trading System",
+    "category": "Corporate & Business",
+    "tags": [
+      "anonymous-matching",
+      "price-discovery",
+      "regulatory-oversight",
+      "information-hiding"
+    ],
+    "summary": "Anonymous buyers and sellers are matched without revealing order size or intent, preventing market impact.",
+    "description": "A dark pool is a private financial exchange where institutional investors trade large blocks of stock anonymously. Unlike public exchanges where all orders are visible in the order book, dark pool orders are hidden until executed. This prevents 'information leakage': if a pension fund needs to sell 10 million shares, placing that order on a public exchange would crash the price before the order fills. The matching engine pairs buyers and sellers at prices derived from public exchanges (typically the midpoint), so dark pools are parasitic on public price discovery while avoiding its transparency costs. A regulatory compliance layer monitors for manipulation, front-running, and unfair advantages. The inherent tension: participants want anonymity but regulators need transparency.",
+    "realWorldExample": "A large mutual fund needs to sell 5 million shares of Apple. Placing this on NASDAQ would signal to high-frequency traders that massive selling pressure is incoming, causing them to front-run the order. Instead, the fund routes to a dark pool where the order sits invisibly. Over three hours, the matching engine pairs it against institutional buyers in chunks of 100,000 shares at NASDAQ midpoint prices. The full trade completes with minimal market impact. Post-trade, the executed volumes are reported to the consolidated tape, but the fund's identity remains hidden.",
+    "whenToUse": "When an agent system must match parties who benefit from anonymity, where revealing intent would allow adversarial exploitation, but outcomes still need regulatory oversight and fairness guarantees.",
+    "strengths": [
+      "Anonymity prevents adversarial front-running that exploits revealed intent",
+      "Large transactions complete without distorting the market price for everyone",
+      "Midpoint pricing ensures fair execution based on public price discovery",
+      "Post-trade reporting maintains system-level transparency while preserving pre-trade privacy"
+    ],
+    "weaknesses": [
+      "Parasitic on public price discovery; if everyone moved to dark pools, prices would become meaningless",
+      "Operators can secretly give preferential access to high-frequency traders, undermining anonymity",
+      "Regulatory oversight is inherently limited because the whole point is information hiding",
+      "Fragmentation across many dark pools reduces matching efficiency compared to a single exchange"
+    ],
+    "agents": [
+      {
+        "role": "matching-engine",
+        "name": "Matching Engine",
+        "description": "Receives hidden orders, pairs buyers and sellers at midpoint prices, executes trades without revealing order details",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "institutional-buyer",
+        "name": "Institutional Buyer",
+        "description": "Submits large buy orders anonymously to acquire shares without signaling intent to the market",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "institutional-seller",
+        "name": "Institutional Seller",
+        "description": "Submits large sell orders anonymously to liquidate positions without crashing the price",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "compliance-monitor",
+        "name": "Regulatory Compliance Monitor",
+        "description": "Monitors for manipulation, front-running, and unfair preferential access; can halt trading and report to SEC",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "price-reference",
+        "name": "Public Price Reference",
+        "description": "Provides the NBBO (National Best Bid/Offer) from public exchanges used to set dark pool execution prices",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "post-trade-reporter",
+        "name": "Post-Trade Reporter",
+        "description": "Reports executed trades to the consolidated tape after completion, maintaining system-level transparency",
+        "memory": "append-only"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Order Submission",
+        "type": "queue",
+        "participants": [
+          "institutional-buyer",
+          "institutional-seller",
+          "matching-engine"
+        ]
+      },
+      {
+        "name": "Execution Notifications",
+        "type": "per-agent",
+        "participants": [
+          "matching-engine",
+          "institutional-buyer",
+          "institutional-seller"
+        ]
+      },
+      {
+        "name": "Price Feed",
+        "type": "broadcast",
+        "participants": [
+          "price-reference",
+          "matching-engine"
+        ]
+      },
+      {
+        "name": "Regulatory Audit",
+        "type": "top-down",
+        "participants": [
+          "compliance-monitor",
+          "matching-engine",
+          "post-trade-reporter"
+        ]
+      },
+      {
+        "name": "Trade Reporting Tape",
+        "type": "log",
+        "participants": [
+          "post-trade-reporter"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "public price reference (NBBO)",
+        "post-trade consolidated tape",
+        "regulatory audit logs"
+      ],
+      "private": [
+        "order book (matching engine only)",
+        "individual order details and sizes",
+        "trading strategies",
+        "position information"
+      ],
+      "description": "Information hiding is the fundamental architectural principle. The matching engine's order book is its private memory - no other agent can see it. Buyer and seller identities are private from each other AND from the public. Only post-trade data enters shared memory via the consolidated tape. The compliance monitor has privileged access to the matching engine's private memory but is bound by confidentiality. This architecture deliberately creates information asymmetry as a feature, not a bug."
+    },
+    "diagram": "graph TD\n    IB[Institutional Buyer] -->|hidden order| ME[Matching Engine]\n    IS[Institutional Seller] -->|hidden order| ME\n    PR[Public Price Reference] -->|NBBO| ME\n    ME -->|executes| TRADE[Matched Trade]\n    TRADE -->|notification| IB\n    TRADE -->|notification| IS\n    TRADE -->|reports| PTR[Post-Trade Reporter]\n    PTR -->|consolidated tape| PUBLIC[Public Record]\n    CM[Compliance Monitor] -.->|audits| ME",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated"
+    ]
+  },
+  {
+    "id": "benedictine-horarium",
+    "name": "Benedictine Ora et Labora (Rule of Life)",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "horarium",
+      "rhythmic-schedule",
+      "stability-vow",
+      "contemplative-work"
+    ],
+    "summary": "Monks follow a fixed daily schedule alternating prayer and work, sustained for a lifetime by vows of stability.",
+    "description": "The Rule of Saint Benedict (c. 530 AD) prescribes a complete system for communal life organized around the horarium: a daily schedule that divides the 24-hour day into fixed periods of communal prayer (the Divine Office, 7 times daily), manual labor, study, and rest. The three vows - stability (commitment to one monastery for life), obedience (to the abbot's decisions), and conversatio morum (ongoing conversion of life) - create an organizational structure optimized for centuries-long persistence. The abbot is elected for life by the community and holds absolute authority but must consult the entire community on important matters. The cellarer manages all material goods. The pattern is remarkable for its explicit design for indefinite duration: Benedictine monasteries have operated continuously for over 1,400 years using essentially the same rulebook.",
+    "realWorldExample": "At the Monastery of Monte Cassino, founded by Benedict himself in 529 AD, monks rise at 3:15 AM for Vigils. The day alternates: Lauds (dawn prayer), breakfast, work period (farming, bookbinding, or scholarship), Terce, Mass, Sext, lunch in silence while one monk reads aloud, None, work period, Vespers, supper, Compline (night prayer), and Great Silence until Vigils. This schedule has been maintained, with minor variations, for nearly 1,500 years through wars, plague, and the dissolution and refounding of the monastery.",
+    "whenToUse": "When an agent system must sustain operations indefinitely with high reliability, using fixed rhythmic scheduling, lifetime commitment of components, and explicit rules designed for centuries-long persistence.",
+    "strengths": [
+      "Designed explicitly for indefinite operation; some instances have run continuously for 1,400+ years",
+      "Fixed horarium eliminates scheduling decisions, reducing cognitive overhead to near zero",
+      "Stability vow prevents talent drain that kills most long-running organizations",
+      "The Rule is a complete, portable specification: any group can instantiate a new monastery from the text alone"
+    ],
+    "weaknesses": [
+      "Lifetime commitment means no mechanism to gracefully remove underperforming members",
+      "Abbot's absolute authority creates single-point-of-failure if a bad abbot is elected",
+      "Fixed schedule cannot easily accommodate novel tasks that don't fit the rhythmic pattern",
+      "Extreme stability resists adaptation; reform movements take centuries to propagate"
+    ],
+    "agents": [
+      {
+        "role": "abbot",
+        "name": "Abbot",
+        "description": "Elected for life by the community, holds absolute authority, must consult community on major decisions, interprets the Rule",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "prior",
+        "name": "Prior",
+        "description": "Second-in-command, manages daily operations when abbot is absent, appointed by the abbot",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "cellarer",
+        "name": "Cellarer",
+        "description": "Manages all material goods, food stores, buildings, and finances; steward of the monastery's physical needs",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "novice-master",
+        "name": "Novice Master",
+        "description": "Forms new members during their probationary year, determines readiness for permanent vows",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "choir-monk",
+        "name": "Choir Monk (Professed)",
+        "description": "Has taken lifetime vows, participates in all hours of prayer and assigned work, one voice among equals in chapter meetings",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "novice",
+        "name": "Novice",
+        "description": "In probationary period (1 year minimum), learning the Rule and the horarium, can leave or be dismissed",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Divine Office (7 Daily Hours)",
+        "type": "round-robin",
+        "participants": [
+          "abbot",
+          "prior",
+          "cellarer",
+          "choir-monk",
+          "novice"
+        ]
+      },
+      {
+        "name": "Chapter Meeting",
+        "type": "advisory",
+        "participants": [
+          "abbot",
+          "prior",
+          "cellarer",
+          "choir-monk"
+        ]
+      },
+      {
+        "name": "Abbot's Direction",
+        "type": "top-down",
+        "participants": [
+          "abbot",
+          "prior",
+          "cellarer",
+          "novice-master",
+          "choir-monk"
+        ]
+      },
+      {
+        "name": "Novitiate Formation",
+        "type": "peer-to-peer",
+        "participants": [
+          "novice-master",
+          "novice"
+        ]
+      },
+      {
+        "name": "Great Silence",
+        "type": "log",
+        "participants": [
+          "abbot",
+          "prior",
+          "cellarer",
+          "choir-monk",
+          "novice"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "the Rule of Saint Benedict (immutable specification)",
+        "horarium schedule",
+        "community decisions from chapter",
+        "monastery chronicles",
+        "material inventory"
+      ],
+      "private": [
+        "personal spiritual journals",
+        "confession content (absolutely private)",
+        "novice-master's formation assessments",
+        "individual work assignments"
+      ],
+      "description": "The Rule of Saint Benedict is the shared immutable specification that all agents reference. The horarium is shared and fixed. Chapter meeting decisions are shared. The monastery chronicles provide institutional memory across centuries. Private memory includes spiritual matters protected by the seal of confession. The Great Silence period (evening to morning) is a system-wide communication blackout that is itself a shared protocol. The pattern achieves remarkable longevity because the shared specification (the Rule) is treated as immutable."
+    },
+    "diagram": "graph TD\n    RULE[Rule of St. Benedict] -->|governs| ABB[Abbot]\n    ABB -->|directs| PR[Prior]\n    ABB -->|directs| CEL[Cellarer]\n    ABB -->|directs| NM[Novice Master]\n    PR -->|daily ops| CM[Choir Monks]\n    NM -->|forms| NOV[Novice]\n    HOR[Horarium Schedule] -->|structures all| ABB\n    HOR -->|structures all| CM\n    CM -->|chapter voice| ABB\n    CEL -->|provisions| CM",
+    "hierarchyTypes": [
+      "pipeline",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "antarctic-winter-over",
+    "name": "Antarctic Winter-Over Research Station",
+    "category": "Academic & Research",
+    "tags": [
+      "extreme-isolation",
+      "multi-discipline",
+      "crew-psychology",
+      "self-sufficiency"
+    ],
+    "summary": "A small crew survives months of total isolation in Antarctica, handling all roles with no possible evacuation.",
+    "description": "During the Antarctic winter (February to October), research stations like the South Pole Station are completely cut off. No flights in or out are possible for 8 months due to temperatures below -70C and perpetual darkness. A crew of 40-50 must maintain the station, conduct research, handle all medical emergencies (including surgery), manage power systems, and maintain psychological health with no external support. The station manager has nominal authority but real power rests on social cohesion. A physician is the only medical resource for any emergency. The 'winter-over syndrome' (irritability, insomnia, cognitive impairment from isolation and monotony) is a predictable threat that the crew must actively manage through social events, structured routines, and monitoring. The pattern is studied by NASA as an analog for long-duration spaceflight.",
+    "realWorldExample": "In 1961, Soviet physician Leonid Rogozov at Novolazarevskaya Station developed acute appendicitis during winter-over. With no possibility of evacuation and no other physician on station, he performed an appendectomy on himself using local anesthesia, a mirror, and two station members holding retractors. He recovered fully. The incident demonstrates the ultimate consequence of total isolation: every critical function must be handled by the existing crew, period.",
+    "whenToUse": "When an agent system must operate in complete isolation with no possibility of external help, requiring all agents to be cross-trained and psychologically resilient for long-duration missions.",
+    "strengths": [
+      "Total self-sufficiency forces comprehensive cross-training and redundancy planning",
+      "Small crew develops deep mutual understanding that enables seamless coordination",
+      "Structured routines and social events proactively manage psychological degradation",
+      "Extreme constraints force creative problem-solving with only available resources"
+    ],
+    "weaknesses": [
+      "No evacuation capability means any single critical failure could be catastrophic",
+      "Interpersonal conflicts in isolation can escalate with no escape valve",
+      "Winter-over syndrome degrades cognitive performance of all agents simultaneously",
+      "Limited personnel means losing one member overloads all others with their responsibilities"
+    ],
+    "agents": [
+      {
+        "role": "station-manager",
+        "name": "Station Manager",
+        "description": "Has nominal authority over station operations, manages schedules, mediates conflicts, but depends on crew goodwill",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "winter-physician",
+        "name": "Winter-Over Physician",
+        "description": "Sole medical resource for any emergency including surgery; also monitors crew psychological health",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "power-engineer",
+        "name": "Power Plant Engineer",
+        "description": "Maintains the station's power generation, heating, and life support systems; failure means death",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "comms-operator",
+        "name": "Communications Operator",
+        "description": "Maintains satellite links (when available), radio equipment, and internal communications",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "science-lead",
+        "name": "Science Lead",
+        "description": "Coordinates ongoing research programs (astronomy, meteorology, ice cores) that justify the station's existence",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "cook-morale",
+        "name": "Cook / Morale Officer",
+        "description": "Prepares meals from finite supplies and organizes social events; arguably the most important person for crew survival",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Daily All-Hands",
+        "type": "round-robin",
+        "participants": [
+          "station-manager",
+          "winter-physician",
+          "power-engineer",
+          "comms-operator",
+          "science-lead",
+          "cook-morale"
+        ]
+      },
+      {
+        "name": "Emergency Protocol",
+        "type": "emergency",
+        "participants": [
+          "station-manager",
+          "winter-physician",
+          "power-engineer"
+        ]
+      },
+      {
+        "name": "Station Log",
+        "type": "log",
+        "participants": [
+          "station-manager",
+          "comms-operator"
+        ]
+      },
+      {
+        "name": "Psychological Check-Ins",
+        "type": "peer-to-peer",
+        "participants": [
+          "winter-physician",
+          "station-manager",
+          "cook-morale"
+        ]
+      },
+      {
+        "name": "Morale Events Board",
+        "type": "broadcast",
+        "participants": [
+          "cook-morale",
+          "station-manager"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "station operations manual",
+        "emergency procedures",
+        "supply inventory",
+        "station log",
+        "maintenance schedules"
+      ],
+      "private": [
+        "medical records (physician only)",
+        "personal journals",
+        "research data in progress",
+        "psychological assessments"
+      ],
+      "description": "The station operations manual is the critical shared specification for survival. Supply inventory is tracked obsessively in shared memory because resupply is impossible. Medical records are strictly private (physician only). The station log is an append-only shared record. Personal psychological state is monitored privately by the physician. During communication blackouts, all shared memory is purely local - there is no cloud backup, no external validation."
+    },
+    "diagram": "graph TD\n    SM[Station Manager] -->|coordinates| PE[Power Engineer]\n    SM -->|coordinates| CO[Comms Operator]\n    SM -->|coordinates| SL[Science Lead]\n    WP[Winter Physician] -->|monitors health| SM\n    WP -->|monitors health| PE\n    CM[Cook/Morale] -->|sustains| ALL[All Crew]\n    PE -->|life support| ALL\n    CO -->|limited satellite| EXT[External World]\n    EXT -.->|no evacuation| SM",
+    "hierarchyTypes": [
+      "mesh",
+      "orchestrated",
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "potlatch-redistribution",
+    "name": "Potlatch Ceremony (Competitive Gift-Giving)",
+    "category": "Historical & Traditional",
+    "tags": [
+      "competitive-generosity",
+      "status-through-giving",
+      "wealth-redistribution",
+      "social-debt"
+    ],
+    "summary": "Chiefs compete for status by giving away or destroying wealth, creating obligations in recipients.",
+    "description": "The potlatch, practiced by Pacific Northwest Indigenous peoples (Kwakwaka'wakw, Tlingit, Haida), is an economic system that inverts Western assumptions: status comes from giving away wealth, not accumulating it. A chief hosts a feast and gives away blankets, coppers, canoes, and food to rival chiefs and their people. The recipients are obligated to reciprocate with an even larger potlatch or lose status. In extreme cases, chiefs destroyed valuable goods (breaking coppers, burning blankets) to demonstrate that they had so much they could afford waste. This creates a circulation system where wealth continuously redistributes through the community. The host gains social rank; the guests gain material goods but accrue social debt. The system was so threatening to colonial economic assumptions that Canada banned it from 1885-1951.",
+    "realWorldExample": "In 1921, Kwakwaka'wakw chief Dan Cranmer hosted a potlatch at Alert Bay, British Columbia, giving away pool tables, sewing machines, motorboats, blankets, and cash totaling thousands of dollars. Guests were ranked by the value of their gifts, and each gift created an obligation to reciprocate. The Canadian government arrested 45 participants under the Indian Act's potlatch ban, confiscating ceremonial regalia that was not fully returned until 1979.",
+    "whenToUse": "When an agent system benefits from resource redistribution driven by reputation competition, where status is earned by contributing to others rather than accumulating for oneself.",
+    "strengths": [
+      "Continuous wealth redistribution prevents dangerous concentration of resources",
+      "Status competition through generosity aligns individual incentives with collective benefit",
+      "Social debt creates strong interconnection and mutual obligation across the network",
+      "Ceremonial structure makes resource flows visible and accountable to the whole community"
+    ],
+    "weaknesses": [
+      "Escalation dynamic can lead to unsustainable destruction of resources",
+      "Status competition can become zero-sum, with chiefs impoverishing their own people to compete",
+      "Social debt tracking requires extensive shared memory and can create coercive obligations",
+      "System assumes surplus; collapses when resources become scarce"
+    ],
+    "agents": [
+      {
+        "role": "host-chief",
+        "name": "Host Chief",
+        "description": "Accumulates resources, hosts the ceremony, gives away wealth to gain status and create obligations in recipients",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "rival-chief",
+        "name": "Rival Chief",
+        "description": "Attends as guest, receives gifts, accrues social debt that must be repaid with a larger potlatch or suffer status loss",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "herald-speaker",
+        "name": "Herald / Speaker",
+        "description": "Announces gifts, recites lineage, and publicly records the transactions and their social implications",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "wealth-accumulator",
+        "name": "Wealth Accumulator (House Members)",
+        "description": "Members of the chief's house who contribute resources to build the potlatch stockpile",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "witness-community",
+        "name": "Witness Community",
+        "description": "Attendees who observe, validate, and remember the transactions; their memory IS the enforcement mechanism",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Potlatch Ceremony",
+        "type": "broadcast",
+        "participants": [
+          "host-chief",
+          "rival-chief",
+          "herald-speaker",
+          "witness-community"
+        ]
+      },
+      {
+        "name": "Gift Announcement",
+        "type": "broadcast",
+        "participants": [
+          "herald-speaker",
+          "host-chief",
+          "rival-chief",
+          "witness-community"
+        ]
+      },
+      {
+        "name": "Debt Ledger",
+        "type": "log",
+        "participants": [
+          "herald-speaker",
+          "host-chief",
+          "rival-chief",
+          "witness-community"
+        ]
+      },
+      {
+        "name": "Resource Gathering",
+        "type": "bottom-up",
+        "participants": [
+          "wealth-accumulator",
+          "host-chief"
+        ]
+      },
+      {
+        "name": "Status Rankings",
+        "type": "broadcast",
+        "participants": [
+          "herald-speaker",
+          "witness-community"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "gift transaction records (announced by herald)",
+        "status rankings",
+        "social debt obligations",
+        "lineage records"
+      ],
+      "private": [
+        "resource stockpile (pre-potlatch)",
+        "strategic gifting plans",
+        "rival assessment"
+      ],
+      "description": "Social memory IS the enforcement mechanism. The community's collective memory of who gave what to whom creates obligations that are as binding as written contracts. The herald maintains and recites the shared debt ledger orally. Status rankings are shared knowledge that determines everything from seating at feasts to marriage alliances. Private memory includes strategic plans about the timing and scale of future potlatches."
+    },
+    "diagram": "graph TD\n    WA[House Members] -->|contribute resources| HC[Host Chief]\n    HC -->|gives away wealth| RC[Rival Chief]\n    HS[Herald/Speaker] -->|announces| POT[Potlatch Ceremony]\n    HC -->|performs| POT\n    RC -->|receives & owes| POT\n    WC[Witness Community] -->|remembers & enforces| POT\n    RC -->|must reciprocate larger| FUTURE[Future Potlatch]\n    POT -->|updates| RANK[Status Rankings]",
+    "hierarchyTypes": [
+      "chain-of-command"
+    ]
+  },
+  {
+    "id": "underground-railroad-network",
+    "name": "Underground Railroad Escape Network",
+    "category": "Intelligence & Espionage",
+    "tags": [
+      "compartmented-routes",
+      "safe-houses",
+      "conductor-relay",
+      "plausible-deniability"
+    ],
+    "summary": "Compartmented relay network of safe houses and conductors moves fugitives north, each node knowing only neighbors.",
+    "description": "The Underground Railroad (1810s-1860s) was a covert network that helped enslaved people escape to free states and Canada. Its operational security was based on radical compartmentation: each 'station' (safe house) knew only the previous and next stations, never the full route. 'Conductors' guided fugitives between stations, often traveling at night using the North Star. 'Station masters' hid people in cellars, hidden rooms, and secret compartments. Communication used coded language ('passengers,' 'cargo,' 'the drinking gourd'). The network had no central command; it was an emergent system of individual moral actors making local decisions. This compartmentation meant that even if one station was compromised, the rest of the network survived. Harriet Tubman, the most famous conductor, made 13 trips and never lost a passenger.",
+    "realWorldExample": "Harriet Tubman would travel from Canada to Maryland, contact enslaved people through intermediaries, and lead groups of 5-10 north through a series of safe houses. She carried a revolver and reportedly told hesitant fugitives 'You'll be free or die.' Each station master knew Tubman by a code name and only knew the next station. When Tubman sensed danger, she would reverse direction or take an unexpected route, leveraging her personal knowledge of the landscape that no station master possessed.",
+    "whenToUse": "When an agent system must move sensitive information or resources through hostile territory, where compromise of any single node should not reveal the full network, and where decentralized local decisions must substitute for central coordination.",
+    "strengths": [
+      "Compartmentation limits blast radius: one compromised node cannot betray the full network",
+      "No central command means no single point of failure and no leader to capture",
+      "Coded communication provides plausible deniability for participants",
+      "Conductor's local knowledge enables adaptive routing around dangers in real-time"
+    ],
+    "weaknesses": [
+      "No central coordination means routes cannot be globally optimized",
+      "Trust must be established locally with no way to verify identity through a central authority",
+      "Compartmentation prevents nodes from assessing overall network health or capacity",
+      "A betrayal at any single point endangers the passengers currently in transit"
+    ],
+    "agents": [
+      {
+        "role": "conductor",
+        "name": "Conductor",
+        "description": "Guides fugitives between stations, knows the landscape, makes real-time routing decisions based on threat assessment",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "station-master",
+        "name": "Station Master",
+        "description": "Hides fugitives in safe houses, provides food and rest, knows only the previous and next stations in the chain",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "forwarding-agent",
+        "name": "Forwarding Agent",
+        "description": "Coordinates logistics in free states: arranges transport, funds, clothing, and onward connections",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "passenger",
+        "name": "Passenger (Fugitive)",
+        "description": "The person being moved through the network; must trust conductors absolutely and follow instructions precisely",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "lookout",
+        "name": "Lookout / Informant",
+        "description": "Monitors slave catchers, patrols, and local authorities; provides early warning to nearby stations",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "community-supporter",
+        "name": "Community Supporter",
+        "description": "Provides material support (food, clothing, money) without knowing operational details of the network",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Station-to-Station Relay",
+        "type": "peer-to-peer",
+        "participants": [
+          "station-master",
+          "conductor"
+        ]
+      },
+      {
+        "name": "Coded Messages",
+        "type": "peer-to-peer",
+        "participants": [
+          "conductor",
+          "station-master",
+          "forwarding-agent"
+        ]
+      },
+      {
+        "name": "Threat Warnings",
+        "type": "emergency",
+        "participants": [
+          "lookout",
+          "station-master",
+          "conductor"
+        ]
+      },
+      {
+        "name": "Logistics Coordination",
+        "type": "peer-to-peer",
+        "participants": [
+          "forwarding-agent",
+          "station-master"
+        ]
+      },
+      {
+        "name": "Oral Instructions to Passengers",
+        "type": "top-down",
+        "participants": [
+          "conductor",
+          "passenger"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "coded language dictionary",
+        "general direction (north)",
+        "known safe and unsafe areas (vaguely)"
+      ],
+      "private": [
+        "specific route knowledge (conductor only)",
+        "safe house locations (station master only)",
+        "identity of other network members (minimal)",
+        "threat intelligence (lookout only)"
+      ],
+      "description": "Radical compartmentation means almost all memory is private. Each agent knows only what they need for their immediate function. The conductor's private route knowledge is the most valuable and dangerous information in the system. Station masters deliberately do not know the full route. Shared knowledge is limited to coded language conventions and the general principle of moving north. This extreme privacy architecture is a survival feature: what you don't know, you can't betray under interrogation."
+    },
+    "diagram": "graph LR\n    P[Passenger] -->|guided by| C[Conductor]\n    C -->|delivers to| SM1[Station Master 1]\n    SM1 -->|next leg| C\n    C -->|delivers to| SM2[Station Master 2]\n    SM2 -->|next leg| C\n    C -->|delivers to| FA[Forwarding Agent]\n    FA -->|to freedom| CANADA[Free Territory]\n    LO[Lookout] -->|warnings| SM1\n    LO -->|warnings| SM2\n    CS[Community Supporter] -.->|supplies| SM1",
+    "hierarchyTypes": [
+      "orchestrated",
+      "chain-of-command",
+      "mesh",
+      "swarm",
+      "federated"
+    ]
+  },
+  {
+    "id": "improv-troupe-ensemble",
+    "name": "Live Theatrical Improv Troupe",
+    "category": "Creative & Arts",
+    "tags": [
+      "yes-and",
+      "group-mind",
+      "audience-input",
+      "emergent-narrative"
+    ],
+    "summary": "Performers create unscripted scenes in real-time using 'yes-and' to build on each other's contributions.",
+    "description": "An improv troupe performs without a script, creating scenes in real-time from audience suggestions. The foundational principle is 'yes-and': accept what your scene partner establishes ('yes') and build on it ('and'). A director/host manages the overall show structure, calls for audience suggestions, and edits scenes (calling 'cut' when a scene peaks or stalls). Players must simultaneously generate content, respond to partners, track narrative threads, and read audience energy. 'Group mind' emerges when players become so attuned to each other that they anticipate moves, create callbacks to earlier scenes, and find the game (the comedic pattern) of a scene without explicit discussion. The format produces emergent narratives that no single performer planned, where the quality of the output exceeds any individual's contribution.",
+    "realWorldExample": "At The Second City in Chicago, an ensemble of six performs a Harold (a long-form improv structure). The host gets a single word suggestion from the audience: 'umbrella.' Three pairs perform opening scenes inspired by the word. In the second beat, the scenes evolve: the umbrella salesman from scene one shows up as a customer in scene two's restaurant. By the third beat, all three scenes converge when it's revealed all characters are in the same building during a rainstorm. No performer planned the convergence; it emerged from each player tracking and connecting the threads.",
+    "whenToUse": "When an agent system must generate creative output collaboratively in real-time, where planning is impossible and quality depends on agents building on each other's contributions rather than competing.",
+    "strengths": [
+      "Emergent output exceeds what any individual agent could plan or produce alone",
+      "Yes-and protocol prevents creative deadlock by mandating acceptance and extension",
+      "Audience feedback provides real-time quality signal that guides the ensemble",
+      "Director/host provides structural guidance without controlling content"
+    ],
+    "weaknesses": [
+      "Quality is highly variable; bad nights produce incoherent output",
+      "One agent who blocks (says 'no' instead of 'yes-and') can derail the entire ensemble",
+      "Group mind requires extensive shared training; new members disrupt the dynamic",
+      "No ability to plan or revise; mistakes are permanent and public"
+    ],
+    "agents": [
+      {
+        "role": "director-host",
+        "name": "Director / Host",
+        "description": "Manages show structure, solicits audience suggestions, calls scene edits (cut/sweep), and sets the format",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "initiator",
+        "name": "Scene Initiator",
+        "description": "Steps out first to establish a scene's who/what/where, taking the risk of creating from nothing",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "support-player",
+        "name": "Support Player",
+        "description": "Enters scenes to yes-and the initiator's reality, adds characters, heightens patterns, and finds the game",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "callback-tracker",
+        "name": "Callback Tracker",
+        "description": "Mentally tracks all established elements across scenes and reintroduces them for callbacks and connections",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "audience-reader",
+        "name": "Audience Reader",
+        "description": "Monitors audience energy and laughter to gauge what's working, adjusts pacing and content accordingly",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "audience",
+        "name": "Audience",
+        "description": "Provides initial suggestions and ongoing feedback through laughter, silence, and engagement levels",
+        "memory": "ephemeral"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Stage (Performance Space)",
+        "type": "broadcast",
+        "participants": [
+          "initiator",
+          "support-player",
+          "callback-tracker",
+          "audience-reader",
+          "audience"
+        ]
+      },
+      {
+        "name": "Backline Signals",
+        "type": "peer-to-peer",
+        "participants": [
+          "initiator",
+          "support-player",
+          "callback-tracker"
+        ]
+      },
+      {
+        "name": "Director Edits",
+        "type": "top-down",
+        "participants": [
+          "director-host",
+          "initiator",
+          "support-player"
+        ]
+      },
+      {
+        "name": "Audience Suggestions",
+        "type": "bottom-up",
+        "participants": [
+          "audience",
+          "director-host"
+        ]
+      },
+      {
+        "name": "Post-Show Notes",
+        "type": "retrospective",
+        "participants": [
+          "director-host",
+          "initiator",
+          "support-player",
+          "callback-tracker",
+          "audience-reader"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "audience suggestion (the initial prompt)",
+        "established scene realities",
+        "show format structure"
+      ],
+      "private": [
+        "individual character choices in development",
+        "planned callbacks not yet deployed",
+        "audience energy assessment"
+      ],
+      "description": "Memory is overwhelmingly ephemeral and real-time. Established scene realities become shared the moment they are spoken aloud on stage. The callback tracker maintains the most critical private memory: a mental index of all established elements that can be reintroduced. Post-show, a retrospective creates shared learning but the performance itself is gone. The improv principle that 'everything on stage is true' means shared memory is created by utterance, not by agreement."
+    },
+    "diagram": "graph TD\n    AUD[Audience] -->|suggestion| DH[Director/Host]\n    DH -->|format & edits| STAGE[Stage]\n    INIT[Initiator] -->|establishes scene| STAGE\n    SP[Support Player] -->|yes-and| STAGE\n    CT[Callback Tracker] -->|connects threads| STAGE\n    STAGE -->|laughter/silence| AR[Audience Reader]\n    AR -->|energy signal| INIT\n    AR -->|energy signal| SP\n    DH -->|cut/sweep| STAGE",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "mesh",
+      "swarm"
+    ]
+  },
+  {
+    "id": "superforecasting-tournament",
+    "name": "Superforecasting Tournament",
+    "category": "Novel & Experimental",
+    "tags": [
+      "probability-calibration",
+      "brier-scoring",
+      "extremization",
+      "team-aggregation"
+    ],
+    "summary": "Teams of forecasters make calibrated probability estimates on world events, scored by Brier scores over time.",
+    "description": "A prediction tournament, as developed by Philip Tetlock's Good Judgment Project, assembles teams of forecasters who estimate probabilities for real-world events (elections, conflicts, economic indicators). Each forecaster independently estimates probabilities, then teams discuss and aggregate. Individual accuracy is tracked via Brier scores (quadratic scoring rule that rewards calibration: if you say 70%, the event should happen 70% of the time). 'Superforecasters' who consistently outperform are identified and grouped into elite teams. Key techniques: extremization (if the team average is 70%, push it to 80% because averaging washes out information), regular updating as new evidence arrives, and decomposing complex questions into estimable sub-questions. The system outperformed CIA analysts with access to classified intelligence.",
+    "realWorldExample": "In the IARPA ACE tournament, the Good Judgment Project fielded teams against intelligence analysts with classified access. On questions like 'Will North Korea conduct a nuclear test before December 2013?', individual superforecasters submitted daily probability updates. A team of five discussed via online forum, sharing reasoning and evidence. Their extremized aggregate (pushing the mean toward the edge) outperformed the intelligence community by 30%. The key was not better information but better calibration and reasoning discipline.",
+    "whenToUse": "When an agent system must make calibrated probability estimates about uncertain future events, combining multiple perspectives through structured aggregation while tracking individual accuracy over time.",
+    "strengths": [
+      "Brier scoring provides an objective, manipulation-resistant measure of prediction quality",
+      "Superforecaster identification concentrates authority in empirically-proven accurate agents",
+      "Extremization corrects the regression-to-mean effect of naive averaging",
+      "Regular updating prevents anchoring to initial estimates as new evidence arrives"
+    ],
+    "weaknesses": [
+      "Requires a large volume of resolvable questions to identify superforecasters reliably",
+      "Brier scores reward hedging toward 50% on questions where forecasters are genuinely uncertain",
+      "Team discussion can create social pressure that degrades independent judgment",
+      "Works only for questions with clear resolution criteria and medium time horizons"
+    ],
+    "agents": [
+      {
+        "role": "tournament-director",
+        "name": "Tournament Director",
+        "description": "Selects questions, defines resolution criteria, manages scoring, and identifies superforecasters from Brier score rankings",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "superforecaster-1",
+        "name": "Superforecaster Alpha",
+        "description": "Top-ranked forecaster who decomposes questions into sub-estimates, updates regularly, and provides calibrated probabilities",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "superforecaster-2",
+        "name": "Superforecaster Beta",
+        "description": "Second elite forecaster with complementary domain expertise, challenges Alpha's reasoning in team discussion",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "regular-forecaster",
+        "name": "Regular Forecaster",
+        "description": "Participates in the tournament with moderate accuracy, provides diverse perspectives that improve aggregate",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "aggregation-engine",
+        "name": "Aggregation Engine",
+        "description": "Combines individual forecasts using weighted averaging (by Brier score history) and applies extremization",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "evidence-curator",
+        "name": "Evidence Curator",
+        "description": "Monitors news feeds and data sources, surfaces relevant evidence to forecasters for updating",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Question Queue",
+        "type": "broadcast",
+        "participants": [
+          "tournament-director",
+          "superforecaster-1",
+          "superforecaster-2",
+          "regular-forecaster"
+        ]
+      },
+      {
+        "name": "Team Discussion",
+        "type": "threaded",
+        "participants": [
+          "superforecaster-1",
+          "superforecaster-2",
+          "regular-forecaster"
+        ]
+      },
+      {
+        "name": "Forecast Submissions",
+        "type": "per-agent",
+        "participants": [
+          "superforecaster-1",
+          "superforecaster-2",
+          "regular-forecaster",
+          "aggregation-engine"
+        ]
+      },
+      {
+        "name": "Evidence Feed",
+        "type": "pub-sub",
+        "participants": [
+          "evidence-curator",
+          "superforecaster-1",
+          "superforecaster-2",
+          "regular-forecaster"
+        ]
+      },
+      {
+        "name": "Brier Score Leaderboard",
+        "type": "broadcast",
+        "participants": [
+          "tournament-director",
+          "aggregation-engine"
+        ]
+      },
+      {
+        "name": "Post-Resolution Retrospective",
+        "type": "retrospective",
+        "participants": [
+          "tournament-director",
+          "superforecaster-1",
+          "superforecaster-2",
+          "regular-forecaster"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "question set with resolution criteria",
+        "Brier score leaderboard",
+        "aggregated team forecasts",
+        "resolved question outcomes",
+        "evidence corpus"
+      ],
+      "private": [
+        "individual forecast rationale",
+        "personal decomposition models",
+        "updating history",
+        "domain-specific knowledge bases"
+      ],
+      "description": "The Brier score leaderboard is shared, creating transparent accountability. Individual forecast submissions are private until aggregated. Reasoning and decomposition models are kept private to preserve independent judgment before team discussion. Evidence is shared but interpretation is private. Post-resolution analysis is shared to improve everyone's calibration. The aggregation engine's weighting formula (giving superforecasters more weight) is shared and auditable."
+    },
+    "diagram": "graph TD\n    TD[Tournament Director] -->|questions| SF1[Superforecaster Alpha]\n    TD -->|questions| SF2[Superforecaster Beta]\n    TD -->|questions| RF[Regular Forecaster]\n    EC[Evidence Curator] -->|evidence| SF1\n    EC -->|evidence| SF2\n    EC -->|evidence| RF\n    SF1 -->|estimate| AE[Aggregation Engine]\n    SF2 -->|estimate| AE\n    RF -->|estimate| AE\n    AE -->|extremized aggregate| TD\n    TD -->|resolution| LB[Brier Leaderboard]",
+    "hierarchyTypes": [
+      "adversarial",
+      "consensus",
+      "swarm"
+    ]
+  },
+  {
+    "id": "venetian-arsenal-assembly",
+    "name": "Venetian Arsenal Assembly Line",
+    "category": "Historical & Traditional",
+    "tags": [
+      "proto-assembly-line",
+      "standardized-parts",
+      "canal-flow",
+      "state-enterprise"
+    ],
+    "summary": "Medieval Venice mass-produced warships by floating hulls past specialized stations, one ship per day at peak.",
+    "description": "The Arsenal of Venice (Arsenale di Venezia), operational from the 12th century, was arguably the world's first assembly line, predating Henry Ford by 600 years. At its peak in the early 16th century, it employed 16,000 workers (arsenalotti) and could produce one fully-equipped warship per day. Galley hulls were floated down a canal, stopping at specialized stations: one for masts, one for armaments, one for rigging, one for oars, one for provisions. Standardized, interchangeable parts were pre-manufactured and stockpiled. The system was a state enterprise controlled by the Venetian Senate, which could order surge production during wartime. Workers were state employees with lifetime positions, forming a proto-industrial workforce. The Arsenal's production capacity was Venice's primary military deterrent.",
+    "realWorldExample": "In 1570, when the Ottoman Empire threatened Cyprus, the Venetian Senate ordered the Arsenal to surge production. Using pre-stockpiled standardized components and its canal-based assembly system, the Arsenal produced 100 galleys in two months, enough to form the core of the Holy League fleet that won the Battle of Lepanto in 1571. Henry III of France visited in 1574 and witnessed a complete galley assembled, armed, and provisioned during the time it took him to eat dinner.",
+    "whenToUse": "When an agent system must mass-produce complex outputs by flowing work-in-progress through specialized stations with pre-manufactured standardized components, especially when surge capacity is needed.",
+    "strengths": [
+      "Canal flow enforces sequential processing, preventing work-in-progress pile-ups",
+      "Standardized interchangeable parts enable rapid assembly without custom fitting",
+      "Pre-manufactured stockpiles enable surge production during crises",
+      "Lifetime employment creates deep station-level expertise and institutional loyalty"
+    ],
+    "weaknesses": [
+      "Sequential flow means a bottleneck at any single station halts the entire line",
+      "Standardization limits customization; all galleys are essentially identical",
+      "State monopoly eliminates competitive pressure to innovate",
+      "16,000-worker scale creates massive coordination overhead and bureaucratic inertia"
+    ],
+    "agents": [
+      {
+        "role": "arsenal-overseer",
+        "name": "Arsenal Overseer (Patroni)",
+        "description": "Appointed by the Senate, manages overall production flow, sets daily targets, and coordinates surge orders",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "hull-station",
+        "name": "Hull Construction Station",
+        "description": "Builds and launches bare galley hulls into the canal, setting the production cadence for all downstream stations",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "rigging-station",
+        "name": "Rigging and Mast Station",
+        "description": "Installs pre-manufactured masts, sails, and rigging as the hull floats past",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "armament-station",
+        "name": "Armament Station",
+        "description": "Mounts cannons, installs gunpowder stores, and fits defensive equipment from standardized stockpiles",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "provisioning-station",
+        "name": "Provisioning Station",
+        "description": "Loads food, water, oars, and crew supplies as the final station before the ship exits the canal",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "stockpile-manager",
+        "name": "Stockpile Manager",
+        "description": "Maintains pre-manufactured component inventories, orders replenishment, and enables surge production",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "senate-liaison",
+        "name": "Senate Liaison",
+        "description": "Transmits production orders from the Venetian Senate, reports capacity status, and negotiates surge timelines",
+        "memory": "persistent-shared"
+      }
+    ],
+    "forums": [
+      {
+        "name": "Production Flow Canal",
+        "type": "queue",
+        "participants": [
+          "hull-station",
+          "rigging-station",
+          "armament-station",
+          "provisioning-station"
+        ]
+      },
+      {
+        "name": "Daily Production Report",
+        "type": "bottom-up",
+        "participants": [
+          "hull-station",
+          "rigging-station",
+          "armament-station",
+          "provisioning-station",
+          "arsenal-overseer"
+        ]
+      },
+      {
+        "name": "Senate Orders",
+        "type": "top-down",
+        "participants": [
+          "senate-liaison",
+          "arsenal-overseer"
+        ]
+      },
+      {
+        "name": "Stockpile Status",
+        "type": "broadcast",
+        "participants": [
+          "stockpile-manager",
+          "arsenal-overseer",
+          "rigging-station",
+          "armament-station",
+          "provisioning-station"
+        ]
+      },
+      {
+        "name": "Bottleneck Alerts",
+        "type": "emergency",
+        "participants": [
+          "hull-station",
+          "rigging-station",
+          "armament-station",
+          "provisioning-station",
+          "arsenal-overseer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "production schedule",
+        "component stockpile levels",
+        "Senate orders",
+        "daily output counts",
+        "standardized part specifications"
+      ],
+      "private": [
+        "station-specific techniques",
+        "worker skill assignments",
+        "quality control records per station"
+      ],
+      "description": "Standardized part specifications are the critical shared memory: every mast, every cannon mount, every oar lock must be interchangeable. Stockpile levels are shared to enable production planning. Each station keeps private expertise on how to perform their assembly step efficiently. The canal itself serves as a physical shared memory: the position of each hull in the canal IS the production status board."
+    },
+    "diagram": "graph LR\n    SL[Senate Liaison] -->|orders| AO[Arsenal Overseer]\n    AO -->|directs| HS[Hull Station]\n    HS -->|hull floats| RS[Rigging Station]\n    RS -->|continues| AS[Armament Station]\n    AS -->|continues| PS[Provisioning Station]\n    PS -->|complete ship| FLEET[Fleet]\n    SM[Stockpile Manager] -->|components| RS\n    SM -->|components| AS\n    SM -->|components| PS",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "orchestrated",
+      "pipeline"
+    ]
+  }
+]
