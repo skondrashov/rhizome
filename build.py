@@ -74,13 +74,27 @@ with open(out_path, 'w', encoding='utf-8') as f:
 
 print(f"\nBuilt data.js with {len(structures)} structures from {len(glob.glob(os.path.join(structure_dir, '*.json')))} files")
 
-# Category breakdown
-cats = {}
-for s in structures:
-    cat = s.get('category', 'Uncategorized')
-    cats[cat] = cats.get(cat, 0) + 1
-for cat in sorted(cats, key=lambda c: -cats[c]):
-    print(f"  {cat}: {cats[cat]}")
+
+def count_by(items, key, default='Uncategorized'):
+    """Count items grouped by a field value, sorted by frequency descending."""
+    counts = {}
+    for item in items:
+        val = item.get(key, default)
+        if val:
+            counts[val] = counts.get(val, 0) + 1
+    return sorted(counts.items(), key=lambda x: -x[1])
+
+
+def print_breakdown(title, counted, label_fn=None):
+    """Print a named frequency breakdown."""
+    print(f"\n{title}:")
+    for key, count in counted:
+        label = label_fn(key) if label_fn else key
+        print(f"  {label}: {count}")
+
+
+print_breakdown("Category breakdown",
+                count_by(structures, 'category'))
 
 # Hierarchy type validation and breakdown
 VALID_TYPES = {"adversarial", "chain-of-command", "orchestrated", "swarm",
@@ -103,18 +117,10 @@ if missing_ht:
 else:
     print(f"\nAll {len(structures)} patterns have hierarchyTypes")
 
-print("\nHierarchy type breakdown (primary):")
-for t in sorted(htypes, key=lambda x: -htypes[x]):
-    print(f"  {t}: {htypes[t]}")
+print_breakdown("Hierarchy type breakdown (primary)",
+                sorted(htypes.items(), key=lambda x: -x[1]))
 
-# Structural class breakdown
 if structural_classes:
-    sc_counts = {}
-    for s in structures:
-        sc = s.get('structuralClass')
-        if sc:
-            sc_counts[sc] = sc_counts.get(sc, 0) + 1
-    print("\nStructural class breakdown:")
-    for c in sorted(sc_counts, key=lambda x: -sc_counts[x]):
-        label = structural_classes.get(c, {}).get('label', c)
-        print(f"  {label}: {sc_counts[c]}")
+    print_breakdown("Structural class breakdown",
+                    count_by(structures, 'structuralClass'),
+                    label_fn=lambda c: structural_classes.get(c, {}).get('label', c))

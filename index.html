@@ -1374,8 +1374,8 @@
       lightMode: localStorage.getItem('rhizome_theme') === 'light'
     };
 
-    // API base URL (empty = same origin; override for local dev)
-    const API_BASE = location.hostname === 'thisminute.org' ? '' : '';
+    // API base URL (empty = same origin)
+    const API_BASE = '';
 
     // ─── Helpers ──────────────────────────────────────────
     function esc(s) {
@@ -1394,6 +1394,10 @@
       try { localStorage.setItem('rhizome_visited', JSON.stringify([...state.visitedPatterns])); } catch {}
       const card = document.querySelector(`.card[data-id="${id}"]`);
       if (card) card.classList.add('visited');
+    }
+
+    function toList(val) {
+      return Array.isArray(val) ? val.join(', ') : (val || '');
     }
 
     function highlightText(text, query) {
@@ -1490,7 +1494,7 @@
           lines.push(`### ${f.name}`);
           lines.push('');
           lines.push(`- **Type:** ${f.type || 'general'}`);
-          const parts = f.participants ? (Array.isArray(f.participants) ? f.participants.join(', ') : f.participants) : 'all';
+          const parts = f.participants ? (toList(f.participants)) : 'all';
           lines.push(`- **Participants:** ${parts}`);
           lines.push('');
         });
@@ -1500,11 +1504,11 @@
         lines.push('## Memory Architecture');
         lines.push('');
         if (s.memoryArchitecture.shared) {
-          const val = Array.isArray(s.memoryArchitecture.shared) ? s.memoryArchitecture.shared.join(', ') : s.memoryArchitecture.shared;
+          const val = toList(s.memoryArchitecture.shared);
           lines.push(`- **Shared:** ${val}`);
         }
         if (s.memoryArchitecture.private) {
-          const val = Array.isArray(s.memoryArchitecture.private) ? s.memoryArchitecture.private.join(', ') : s.memoryArchitecture.private;
+          const val = toList(s.memoryArchitecture.private);
           lines.push(`- **Private:** ${val}`);
         }
         if (s.memoryArchitecture.description) {
@@ -1582,16 +1586,20 @@
       updateCategoryLabel();
     }
 
-    function updateCategoryLabel() {
-      const label = document.getElementById('category-active-label');
-      if (state.activeCategory) {
-        const color = CATEGORY_COLORS[state.activeCategory] || '#888';
-        label.textContent = state.activeCategory;
+    function updateFilterLabel(elementId, activeValue, colorMap, labelMap) {
+      const label = document.getElementById(elementId);
+      if (activeValue) {
+        const color = (colorMap || {})[activeValue] || '#888';
+        label.textContent = (labelMap || {})[activeValue] || activeValue;
         label.style.cssText = `background:${color}22;color:${color}`;
       } else {
         label.textContent = '';
         label.style.cssText = '';
       }
+    }
+
+    function updateCategoryLabel() {
+      updateFilterLabel('category-active-label', state.activeCategory, CATEGORY_COLORS);
     }
 
     // ─── Structural Class Tiles ──────────────────────────
@@ -1633,15 +1641,7 @@
     }
 
     function updateStructureLabel() {
-      const label = document.getElementById('structure-active-label');
-      if (state.activeStructuralClass) {
-        const color = SC_COLORS[state.activeStructuralClass] || '#888';
-        label.textContent = SC_LABELS[state.activeStructuralClass] || state.activeStructuralClass;
-        label.style.cssText = `background:${color}22;color:${color}`;
-      } else {
-        label.textContent = '';
-        label.style.cssText = '';
-      }
+      updateFilterLabel('structure-active-label', state.activeStructuralClass, SC_COLORS, SC_LABELS);
     }
 
     // Wire up panel expand/collapse
@@ -1979,7 +1979,7 @@
       if (s.forums && s.forums.length) {
         let chHtml = '<div class="channel-list">';
         s.forums.forEach(f => {
-          const parts = f.participants ? (Array.isArray(f.participants) ? f.participants.join(', ') : f.participants) : 'all';
+          const parts = f.participants ? (toList(f.participants)) : 'all';
           chHtml += `<div class="channel">
             <span class="channel-type">${esc(f.type || 'general')}</span>
             <span class="channel-name">${esc(f.name)}</span>
@@ -1994,11 +1994,11 @@
       if (s.memoryArchitecture) {
         let memHtml = '<div class="memory-grid">';
         if (s.memoryArchitecture.shared) {
-          const val = Array.isArray(s.memoryArchitecture.shared) ? s.memoryArchitecture.shared.join(', ') : s.memoryArchitecture.shared;
+          const val = toList(s.memoryArchitecture.shared);
           memHtml += `<div class="memory-item"><h4>Shared</h4><p>${esc(val)}</p></div>`;
         }
         if (s.memoryArchitecture.private) {
-          const val = Array.isArray(s.memoryArchitecture.private) ? s.memoryArchitecture.private.join(', ') : s.memoryArchitecture.private;
+          const val = toList(s.memoryArchitecture.private);
           memHtml += `<div class="memory-item"><h4>Private</h4><p>${esc(val)}</p></div>`;
         }
         if (s.memoryArchitecture.description) {
@@ -2089,34 +2089,37 @@
       });
 
       // Load and render comments
-      loadComments(s.id).then(comments => {
-        const listEl = document.getElementById('comment-list');
+      function renderComments(comments, listEl) {
         if (!listEl) return;
         if (!comments.length) {
           listEl.innerHTML = '<p class="no-comments">No comments yet. Be the first!</p>';
-        } else {
-          listEl.innerHTML = comments.map(c => `
-            <div class="comment-item${c.hidden ? ' hidden-comment' : ''}">
-              <div class="comment-header">
-                <span class="comment-name">${esc(c.display_name)}</span>
-                <span class="comment-time">${esc(c.time_ago)}</span>
-              </div>
-              <div class="comment-body">${esc(c.body)}</div>
-              <div class="comment-actions">
-                <button class="flag-btn" data-comment-id="${c.id}" title="Flag as inappropriate">flag</button>
-              </div>
-            </div>
-          `).join('');
-          listEl.querySelectorAll('.flag-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const result = await flagComment(parseInt(btn.dataset.commentId));
-              if (result) {
-                btn.textContent = 'flagged';
-                btn.disabled = true;
-              }
-            });
-          });
+          return;
         }
+        listEl.innerHTML = comments.map(c => `
+          <div class="comment-item${c.hidden ? ' hidden-comment' : ''}">
+            <div class="comment-header">
+              <span class="comment-name">${esc(c.display_name)}</span>
+              <span class="comment-time">${esc(c.time_ago)}</span>
+            </div>
+            <div class="comment-body">${esc(c.body)}</div>
+            <div class="comment-actions">
+              <button class="flag-btn" data-comment-id="${c.id}" title="Flag as inappropriate">flag</button>
+            </div>
+          </div>
+        `).join('');
+        listEl.querySelectorAll('.flag-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const result = await flagComment(parseInt(btn.dataset.commentId));
+            if (result) {
+              btn.textContent = 'flagged';
+              btn.disabled = true;
+            }
+          });
+        });
+      }
+
+      loadComments(s.id).then(comments => {
+        renderComments(comments, document.getElementById('comment-list'));
       });
 
       // Comment form submission
@@ -2138,23 +2141,8 @@
         const result = await postComment(s.id, nameInput.value.trim(), body);
         if (result && result.ok) {
           bodyInput.value = '';
-          // Reload comments
           const comments = await loadComments(s.id);
-          const listEl = document.getElementById('comment-list');
-          if (listEl && comments.length) {
-            listEl.innerHTML = comments.map(c => `
-              <div class="comment-item${c.hidden ? ' hidden-comment' : ''}">
-                <div class="comment-header">
-                  <span class="comment-name">${esc(c.display_name)}</span>
-                  <span class="comment-time">${esc(c.time_ago)}</span>
-                </div>
-                <div class="comment-body">${esc(c.body)}</div>
-                <div class="comment-actions">
-                  <button class="flag-btn" data-comment-id="${c.id}" title="Flag as inappropriate">flag</button>
-                </div>
-              </div>
-            `).join('');
-          }
+          renderComments(comments, document.getElementById('comment-list'));
         }
         submitBtn.disabled = false;
         submitBtn.textContent = 'Post';
@@ -2261,23 +2249,23 @@
       const cards = document.querySelectorAll('.card');
       if (!cards.length) return;
 
+      function focusCard(index) {
+        state.focusedCardIndex = index;
+        cards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cards.forEach(c => c.style.outline = '');
+        cards[index].style.outline = '2px solid var(--accent)';
+        cards[index].style.outlineOffset = '2px';
+      }
+
       if (e.key === 'j') {
         e.preventDefault();
-        state.focusedCardIndex = Math.min(state.focusedCardIndex + 1, cards.length - 1);
-        cards[state.focusedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        cards.forEach(c => c.style.outline = '');
-        cards[state.focusedCardIndex].style.outline = '2px solid var(--accent)';
-        cards[state.focusedCardIndex].style.outlineOffset = '2px';
+        focusCard(Math.min(state.focusedCardIndex + 1, cards.length - 1));
         return;
       }
 
       if (e.key === 'k') {
         e.preventDefault();
-        state.focusedCardIndex = Math.max(state.focusedCardIndex - 1, 0);
-        cards[state.focusedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        cards.forEach(c => c.style.outline = '');
-        cards[state.focusedCardIndex].style.outline = '2px solid var(--accent)';
-        cards[state.focusedCardIndex].style.outlineOffset = '2px';
+        focusCard(Math.max(state.focusedCardIndex - 1, 0));
         return;
       }
 

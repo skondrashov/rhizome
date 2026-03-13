@@ -47,14 +47,17 @@ app.add_middleware(
 
 # ─── Database ────────────────────────────────────────────────
 
+SCHEMA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.sql")
+
+
 def init_db():
     """Create tables if they don't exist."""
-    schema_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.sql")
-    if os.path.exists(schema_path):
+    if os.path.exists(SCHEMA_PATH):
         conn = sqlite3.connect(DB_PATH)
-        with open(schema_path, encoding="utf-8") as f:
+        with open(SCHEMA_PATH, encoding="utf-8") as f:
             conn.executescript(f.read())
         conn.close()
+
 
 init_db()
 
@@ -85,8 +88,13 @@ def get_fingerprint(request: Request) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
+_RATE_LIMIT_TABLES = {"upvotes", "comments"}
+
+
 def check_rate_limit(conn: sqlite3.Connection, fingerprint: str, table: str, limit: int):
     """Raise 429 if fingerprint exceeds rate limit in the last hour."""
+    if table not in _RATE_LIMIT_TABLES:
+        raise ValueError(f"Invalid rate limit table: {table}")
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
     row = conn.execute(
         f"SELECT COUNT(*) as cnt FROM {table} WHERE fingerprint = ? AND created_at > ?",
