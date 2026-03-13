@@ -22,10 +22,10 @@ import os
 import sys
 import re
 
-HIERARCHY_TYPES = [
-    "adversarial", "chain-of-command", "orchestrated", "swarm",
-    "mesh", "pipeline", "consensus", "federated"
-]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from common import VALID_HIERARCHY_TYPES
+
+HIERARCHY_TYPES = list(VALID_HIERARCHY_TYPES)
 
 # ─── Signal Definitions ──────────────────────────────────────
 
@@ -146,7 +146,7 @@ def score_pattern(pattern):
 
     # Chain-of-command: multiple layers with increasing counts
     counts = [a.get("count", 1) for a in agents]
-    if len(counts) >= 3 and counts == sorted(counts):
+    if len(counts) >= 3 and all(a < b for a, b in zip(counts, counts[1:])):
         scores["chain-of-command"] += 2
 
     # Orchestrated: has an orchestrator/conductor/coordinator role

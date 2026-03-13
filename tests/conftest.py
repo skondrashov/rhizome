@@ -1,25 +1,23 @@
 """Shared fixtures for Rhizome tests."""
 import json
-import glob
 import os
+import sys
 import tempfile
 
 import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+
+from common import load_patterns_from_dir
+
 STRUCTURES_DIR = os.path.join(ROOT, "structures")
 
 
 @pytest.fixture
 def all_patterns():
     """Load all patterns from structure JSON files."""
-    patterns = []
-    for fpath in sorted(glob.glob(os.path.join(STRUCTURES_DIR, "*.json"))):
-        with open(fpath, encoding="utf-8") as f:
-            data = json.load(f)
-        items = data if isinstance(data, list) else [data]
-        patterns.extend(items)
-    return patterns
+    return load_patterns_from_dir(STRUCTURES_DIR)
 
 
 @pytest.fixture
@@ -34,7 +32,6 @@ def _parse_data_js():
     data_js = os.path.join(ROOT, "data.js")
     with open(data_js, encoding="utf-8") as f:
         content = f.read()
-    # Split on window.STRUCTURAL_CLASSES assignment
     parts = content.split("\nwindow.STRUCTURAL_CLASSES = ")
     structures_json = parts[0].replace("window.STRUCTURES = ", "").rstrip(";\n")
     patterns = json.loads(structures_json)

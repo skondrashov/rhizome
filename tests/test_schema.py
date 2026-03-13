@@ -1,19 +1,9 @@
 """Tests for schema.json and pattern data validity."""
+import os
+import sys
 
-VALID_HIERARCHY_TYPES = {
-    "adversarial", "chain-of-command", "orchestrated", "swarm",
-    "mesh", "pipeline", "consensus", "federated"
-}
-
-VALID_CATEGORIES = {
-    "Military & Defense", "Corporate & Business", "Government & Political",
-    "Academic & Research", "Creative & Arts", "Technology & Engineering",
-    "Medical & Emergency", "Historical & Traditional", "Nature-Inspired",
-    "Network Topologies", "Agile & Software", "Social & Community",
-    "Novel & Experimental", "Religious & Spiritual", "Legal & Judicial",
-    "Education & Training", "Intelligence & Espionage", "Maritime & Aviation",
-    "Sports & Competition", "Media & Communications"
-}
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common import VALID_HIERARCHY_TYPES, VALID_CATEGORIES
 
 
 def test_schema_has_hierarchy_types(schema):

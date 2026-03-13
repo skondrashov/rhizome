@@ -11,7 +11,6 @@ import hashlib
 import os
 import re
 import sqlite3
-import time
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 
@@ -52,11 +51,12 @@ SCHEMA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.s
 
 def init_db():
     """Create tables if they don't exist."""
-    if os.path.exists(SCHEMA_PATH):
-        conn = sqlite3.connect(DB_PATH)
-        with open(SCHEMA_PATH, encoding="utf-8") as f:
-            conn.executescript(f.read())
-        conn.close()
+    if not os.path.exists(SCHEMA_PATH):
+        raise FileNotFoundError(f"Schema file not found: {SCHEMA_PATH}")
+    conn = sqlite3.connect(DB_PATH)
+    with open(SCHEMA_PATH, encoding="utf-8") as f:
+        conn.executescript(f.read())
+    conn.close()
 
 
 init_db()
@@ -195,7 +195,7 @@ def cast_vote(pattern_id: str, request: Request):
                 (pattern_id, fingerprint),
             )
         except sqlite3.IntegrityError:
-            raise HTTPException(status_code=409, detail="Already voted")
+            raise HTTPException(status_code=409, detail="Already voted") from None
     return {"ok": True, "pattern_id": pattern_id}
 
 
@@ -273,7 +273,7 @@ def flag_comment(comment_id: int, request: Request):
                 (comment_id, fingerprint),
             )
         except sqlite3.IntegrityError:
-            raise HTTPException(status_code=409, detail="Already flagged")
+            raise HTTPException(status_code=409, detail="Already flagged") from None
 
         # Check if should auto-hide
         flag_count = conn.execute(

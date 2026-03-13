@@ -166,6 +166,28 @@
       letter-spacing: 0.1em;
     }
 
+    .other-projects {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.7rem;
+      margin-right: 0.5rem;
+    }
+    .other-projects-label {
+      color: var(--text-muted);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .other-projects a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .other-projects a:hover {
+      color: var(--accent);
+    }
+
     /* ─── Controls ─────────────────────────────────────────── */
     .controls {
       padding: 1.5rem 2rem;
@@ -1182,6 +1204,11 @@
 <body>
   <header>
     <div class="header-actions">
+      <div class="other-projects">
+        <span class="other-projects-label">Also:</span>
+        <a href="../mainmenu">Main Menu</a>
+        <a href="../forge">Agent Forge</a>
+      </div>
       <button class="icon-btn" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
         <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none">
           <path d="M8 1a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1A.5.5 0 018 1zm0 11a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1A.5.5 0 018 12zm7-4a.5.5 0 01-.5.5h-1a.5.5 0 010-1h1A.5.5 0 0115 8zM4 8a.5.5 0 01-.5.5h-1a.5.5 0 010-1h1A.5.5 0 014 8zm8.95-3.54a.5.5 0 010 .71l-.71.71a.5.5 0 11-.71-.71l.71-.71a.5.5 0 01.71 0zM4.46 11.46a.5.5 0 010 .71l-.7.71a.5.5 0 11-.71-.71l.7-.71a.5.5 0 01.71 0zm8.49 1.42a.5.5 0 01-.71 0l-.71-.71a.5.5 0 01.71-.71l.71.71a.5.5 0 010 .71zM4.46 4.54a.5.5 0 01-.71 0l-.7-.71a.5.5 0 11.7-.71l.71.71a.5.5 0 010 .71zM8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" fill="currentColor"/>
@@ -1205,7 +1232,7 @@
         <span class="stat-label">Categories</span>
       </div>
       <div class="stat">
-        <span class="stat-value" id="structure-count">13</span>
+        <span class="stat-value" id="structure-count">0</span>
         <span class="stat-label">Structures</span>
       </div>
       <div class="stat">
@@ -1221,7 +1248,7 @@
         <span class="search-icon">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 110-10 5 5 0 010 10z"/></svg>
         </span>
-        <input type="search" id="search" placeholder="Search patterns by name, category, or tag...">
+        <input type="search" id="search" placeholder="Search patterns by name, category, or tag..." aria-label="Search patterns">
         <span class="search-hint">/</span>
       </div>
       <span class="result-count" id="result-count"></span>
@@ -1266,7 +1293,7 @@
   <main class="grid" id="grid"></main>
 
   <div class="overlay" id="overlay"></div>
-  <div class="detail" id="detail"></div>
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-label="Pattern details"></div>
 
   <button class="back-to-top" id="back-to-top" title="Back to top" aria-label="Back to top">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3.293l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 3.293zm0 5l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 8.293z"/></svg>
@@ -1769,8 +1796,10 @@
 
     // ─── Grid Rendering ───────────────────────────────────
     let lastFiltered = [];
+    let gridObserver = null;
 
     function renderGrid() {
+      if (gridObserver) { gridObserver.disconnect(); gridObserver = null; }
       const filtered = getFiltered();
       lastFiltered = filtered;
       const grid = document.getElementById('grid');
@@ -1834,15 +1863,15 @@
 
       // Staggered entrance animation via IntersectionObserver
       requestAnimationFrame(() => {
-        const observer = new IntersectionObserver((entries) => {
+        gridObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
+              gridObserver.unobserve(entry.target);
             }
           });
         }, { threshold: 0.05 });
-        grid.querySelectorAll('.card').forEach(card => observer.observe(card));
+        grid.querySelectorAll('.card').forEach(card => gridObserver.observe(card));
       });
 
       state.focusedCardIndex = -1;
@@ -1940,7 +1969,6 @@
           .slice(0, 8);
         if (similar.length) {
           const chips = similar.map(x => {
-            const catColor = CATEGORY_COLORS[x.category] || '#888';
             return `<span class="similar-chip" data-id="${esc(x.id)}" title="${esc(x.category)}">${esc(x.name)}</span>`;
           }).join('');
           html += buildSection('Structurally Similar', `<p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem">Different domains, same ${esc(detailScLabel)} structure</p><div class="similar-chips">${chips}</div>`, true);
@@ -2038,6 +2066,10 @@
       detail.classList.add('active');
       overlay.classList.add('active');
       history.replaceState(null, '', '#' + s.id);
+
+      // Focus management: move focus into drawer
+      const closeBtn = document.getElementById('detail-close');
+      if (closeBtn) closeBtn.focus();
 
       // Wire up section toggles
       detail.querySelectorAll('.section-toggle').forEach(toggle => {
@@ -2148,16 +2180,21 @@
         submitBtn.textContent = 'Post';
       });
 
-      // Render diagram
+      // Render diagram (guard against navigation during async render)
       if (s.diagram && typeof mermaid !== 'undefined') {
+        const renderingId = id;
         try {
           diagramCounter++;
           const { svg } = await mermaid.render('d' + diagramCounter, s.diagram);
-          const dc = document.getElementById('diagram-container');
-          if (dc) dc.innerHTML = svg;
+          if (currentDetailId === renderingId) {
+            const dc = document.getElementById('diagram-container');
+            if (dc) dc.innerHTML = svg;
+          }
         } catch (e) {
-          const dc = document.getElementById('diagram-container');
-          if (dc) dc.innerHTML = `<pre style="color:var(--text-muted);font-size:0.8rem;white-space:pre-wrap">${esc(s.diagram)}</pre>`;
+          if (currentDetailId === renderingId) {
+            const dc = document.getElementById('diagram-container');
+            if (dc) dc.innerHTML = `<pre style="color:var(--text-muted);font-size:0.8rem;white-space:pre-wrap">${esc(s.diagram)}</pre>`;
+          }
         }
       }
     }

@@ -8,12 +8,12 @@
     "strict-hierarchy": {
       "label": "Strict Hierarchy",
       "description": "A multi-layered tree where orders flow top-down and reports flow bottom-up through fixed ranks, with no level skipping.",
-      "color": "#1D3557"
+      "color": "#5B8FB9"
     },
     "mentor-apprentice": {
       "label": "Mentor-Apprentice",
       "description": "An experienced lead transfers knowledge and authority progressively to junior agents through supervised practice and graduated autonomy.",
-      "color": "#457B9D"
+      "color": "#29B6F6"
     },
     "peer-ensemble": {
       "label": "Peer Ensemble",
@@ -28,7 +28,7 @@
     "compartmented-cells": {
       "label": "Compartmented Cells",
       "description": "Small isolated groups connected only through intermediaries, maximizing operational security through strict information barriers.",
-      "color": "#264653"
+      "color": "#5E9BA0"
     },
     "federation-of-sovereigns": {
       "label": "Federation of Sovereigns",
@@ -43,12 +43,12 @@
     "adversarial-arena": {
       "label": "Adversarial Arena",
       "description": "Opposing agents compete or argue before a neutral judge or evaluator, with truth or quality emerging from structured conflict.",
-      "color": "#9B2226"
+      "color": "#E05555"
     },
     "swarm-stigmergy": {
       "label": "Swarm-Stigmergy",
       "description": "Many simple, interchangeable agents coordinate indirectly through environmental signals, producing emergent collective intelligence without central control.",
-      "color": "#606C38"
+      "color": "#7CB342"
     },
     "triage-and-dispatch": {
       "label": "Triage-and-Dispatch",
@@ -58,7 +58,7 @@
     "dual-key-safeguard": {
       "label": "Dual-Key Safeguard",
       "description": "Multiple independent agents must concur or verify before high-stakes actions proceed, with built-in veto and audit mechanisms.",
-      "color": "#780000"
+      "color": "#CC4466"
     },
     "creative-atelier": {
       "label": "Creative Atelier",
@@ -81,7 +81,7 @@
     "flat-organization": "peer-ensemble",
     "two-pizza-teams": "federation-of-sovereigns",
     "franchise-model": "federation-of-sovereigns",
-    "consulting-engagement": "mentor-apprentice",
+    "consulting-engagement": "strict-hierarchy",
     "trading-floor": "market-ecosystem",
     "early-stage-startup": "peer-ensemble",
     "conglomerate-holding": "federation-of-sovereigns",
@@ -107,9 +107,9 @@
     "mutual-aid-network": "swarm-stigmergy",
     "monastic-order": "cyclic-renewal",
     "quaker-meeting": "democratic-assembly",
-    "buddhist-sangha": "democratic-assembly",
+    "buddhist-sangha": "mentor-apprentice",
     "university-department": "federation-of-sovereigns",
-    "montessori-classroom": "mentor-apprentice",
+    "montessori-classroom": "swarm-stigmergy",
     "apprenticeship-guild": "mentor-apprentice",
     "medical-residency": "mentor-apprentice",
     "football-coaching-staff": "strict-hierarchy",
@@ -215,7 +215,7 @@
     "international-criminal-court": "adversarial-arena",
     "coding-bootcamp-cohort": "mentor-apprentice",
     "military-war-college-seminar": "peer-ensemble",
-    "flocking-v-formation": "cyclic-renewal",
+    "flocking-v-formation": "peer-ensemble",
     "jellyfish-nerve-net": "swarm-stigmergy",
     "east-india-company": "strict-hierarchy",
     "venetian-republic-governance": "dual-key-safeguard",
@@ -230,11 +230,11 @@
     "mixture-of-agents": "hub-and-spoke",
     "hierarchical-summarization-tree": "strict-hierarchy",
     "debate-protocol": "adversarial-arena",
-    "monte-carlo-agent-tree-search": "swarm-stigmergy",
+    "monte-carlo-agent-tree-search": "assembly-pipeline",
     "reflection-loop": "cyclic-renewal",
-    "multi-persona-council": "democratic-assembly",
+    "multi-persona-council": "hub-and-spoke",
     "token-budget-economy": "market-ecosystem",
-    "amish-barn-raising": "swarm-stigmergy",
+    "amish-barn-raising": "hub-and-spoke",
     "shuttle-launch-countdown": "dual-key-safeguard",
     "talmudic-chavruta": "peer-ensemble",
     "apache-lazy-consensus": "democratic-assembly",
@@ -244,7 +244,7 @@
     "cathedral-building-guild": "mentor-apprentice",
     "polynesian-wayfinding-fleet": "mentor-apprentice",
     "gosplan-planned-economy": "strict-hierarchy",
-    "hospital-mm-conference": "adversarial-arena",
+    "hospital-mm-conference": "peer-ensemble",
     "renaissance-bottega": "mentor-apprentice",
     "dark-pool-matching": "market-ecosystem",
     "benedictine-horarium": "cyclic-renewal",
