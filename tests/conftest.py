@@ -17,7 +17,8 @@ STRUCTURES_DIR = os.path.join(ROOT, "structures")
 @pytest.fixture
 def all_patterns():
     """Load all patterns from structure JSON files."""
-    return load_patterns_from_dir(STRUCTURES_DIR)
+    patterns, _ = load_patterns_from_dir(STRUCTURES_DIR)
+    return patterns
 
 
 @pytest.fixture

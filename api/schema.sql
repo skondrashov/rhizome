@@ -30,5 +30,7 @@ CREATE TABLE IF NOT EXISTS comment_flags (
 
 CREATE INDEX IF NOT EXISTS idx_upvotes_pattern ON upvotes(pattern_id);
 CREATE INDEX IF NOT EXISTS idx_upvotes_created ON upvotes(created_at);
+CREATE INDEX IF NOT EXISTS idx_upvotes_ratelimit ON upvotes(fingerprint, created_at);
 CREATE INDEX IF NOT EXISTS idx_comments_pattern ON comments(pattern_id);
+CREATE INDEX IF NOT EXISTS idx_comments_ratelimit ON comments(fingerprint, created_at);
 CREATE INDEX IF NOT EXISTS idx_comment_flags_comment ON comment_flags(comment_id);

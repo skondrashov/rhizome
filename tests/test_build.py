@@ -22,7 +22,7 @@ def test_build_runs_successfully():
 def test_data_js_is_valid_json(data_js_patterns):
     """data.js should contain a valid JSON array."""
     assert isinstance(data_js_patterns, list)
-    assert len(data_js_patterns) >= 207
+    assert len(data_js_patterns) >= 200
 
 
 def test_no_duplicate_ids(data_js_patterns):
@@ -47,9 +47,9 @@ def test_all_have_required_fields(data_js_patterns):
 
 
 def test_all_have_structural_class(data_js_patterns, data_js_structural_classes):
-    """Every pattern should have a structuralClass field (when agent-forge data is available)."""
+    """Every pattern should have a structuralClass field."""
     if not data_js_structural_classes:
-        pytest.skip("structural-classes.json not available (agent-forge export)")
+        pytest.skip("structural-classes.json not available")
     for p in data_js_patterns:
         assert "structuralClass" in p, f"Pattern {p['id']} missing 'structuralClass'"
         assert p["structuralClass"], f"Pattern {p['id']} has empty structuralClass"
@@ -58,7 +58,7 @@ def test_all_have_structural_class(data_js_patterns, data_js_structural_classes)
 def test_structural_classes_written_to_data_js(data_js_structural_classes):
     """data.js should contain window.STRUCTURAL_CLASSES with class definitions."""
     if not data_js_structural_classes:
-        pytest.skip("structural-classes.json not available (agent-forge export)")
+        pytest.skip("structural-classes.json not available")
     assert isinstance(data_js_structural_classes, dict)
     assert len(data_js_structural_classes) >= 12
     for key, val in data_js_structural_classes.items():
@@ -70,7 +70,7 @@ def test_structural_classes_written_to_data_js(data_js_structural_classes):
 def test_structural_class_values_are_valid(data_js_patterns, data_js_structural_classes):
     """Every pattern's structuralClass should reference a defined class."""
     if not data_js_structural_classes:
-        pytest.skip("structural-classes.json not available (agent-forge export)")
+        pytest.skip("structural-classes.json not available")
     valid_classes = set(data_js_structural_classes.keys())
     for p in data_js_patterns:
         sc = p.get("structuralClass")

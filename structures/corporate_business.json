@@ -114,8 +114,7 @@
     "diagram": "graph TD\n    GM[General Manager] --> FL1[Functional Lead 1]\n    GM --> FL2[Functional Lead 2]\n    GM --> PL1[Project Lead A]\n    GM --> PL2[Project Lead B]\n    FL1 --> S1[Specialist 1]\n    FL1 --> S2[Specialist 2]\n    FL2 --> S3[Specialist 3]\n    FL2 --> S4[Specialist 4]\n    PL1 --> S1\n    PL1 --> S3\n    PL2 --> S2\n    PL2 --> S4",
     "hierarchyTypes": [
       "consensus",
-      "federated",
-      "chain-of-command"
+      "federated"
     ]
   },
   {
@@ -210,8 +209,8 @@
       "swarm",
       "mesh",
       "chain-of-command",
-      "pipeline",
-      "consensus"
+      "consensus",
+      "pipeline"
     ]
   },
   {
@@ -320,9 +319,9 @@
       "swarm",
       "chain-of-command",
       "federated",
-      "mesh",
+      "consensus",
       "pipeline",
-      "consensus"
+      "mesh"
     ]
   },
   {
@@ -429,7 +428,10 @@
     "diagram": "graph TD\n    FR[Franchisor] -->|Playbook| F1[Franchisee 1]\n    FR -->|Playbook| F2[Franchisee 2]\n    FR -->|Playbook| F3[Franchisee 3]\n    FR -->|Playbook| F4[Franchisee 4]\n    CA[Compliance Auditor] -->|Audit| F1\n    CA -->|Audit| F2\n    CA -->|Audit| F3\n    CA -->|Audit| F4\n    CA -->|Report| FR",
     "hierarchyTypes": [
       "chain-of-command",
-      "mesh"
+      "mesh",
+      "consensus",
+      "federated",
+      "pipeline"
     ]
   },
   {
@@ -742,7 +744,7 @@
       "shared": [
         "Everything -- full codebase, customer notes, metrics, strategy docs all visible to all agents"
       ],
-      "private": [],
+      "private": "Minimal -- each agent may hold transient working notes on their current task, but all meaningful information is expected to flow into shared channels immediately. The founder retains a private mental model of strategic priorities that may not yet be articulated to the team.",
       "description": "Total transparency with zero information barriers. Every agent sees everything. The customer signal log and ship log are the two most important shared artifacts. Memory is informal and often lives in conversation rather than documents. Speed over organization."
     },
     "diagram": "graph TD\n    F[Founder] <--> G1[Generalist 1]\n    F <--> G2[Generalist 2]\n    F <--> G3[Generalist 3]\n    G1 <--> G2\n    G2 <--> G3\n    G1 <--> G3\n    F <-->|Feedback| MKT[Market/Users]",
@@ -1545,8 +1547,7 @@
     "diagram": "graph TD\n    PM[Product Management] --> PB[Program Backlog]\n    PB --> PI[PI Planning]\n    RTE[Release Train Engineer] -->|Facilitates| PI\n    SA[System Architect] -->|Architecture| PI\n    PI --> T1[Team 1]\n    PI --> T2[Team 2]\n    PI --> T3[Team 3]\n    PI --> T4[Team 4]\n    T1 -.->|Dependency| T2\n    T3 -.->|Dependency| T4\n    T1 --> SD[System Demo]\n    T2 --> SD\n    T3 --> SD\n    T4 --> SD",
     "hierarchyTypes": [
       "consensus",
-      "swarm",
-      "chain-of-command"
+      "swarm"
     ]
   },
   {
@@ -1681,9 +1682,9 @@
     "hierarchyTypes": [
       "federated",
       "orchestrated",
+      "consensus",
       "swarm",
-      "mesh",
-      "consensus"
+      "mesh"
     ]
   },
   {
@@ -2054,8 +2055,8 @@
     "hierarchyTypes": [
       "consensus",
       "adversarial",
-      "chain-of-command",
       "orchestrated",
+      "chain-of-command",
       "swarm",
       "mesh"
     ]

@@ -1,9 +1,8 @@
 """Combines all structure JSON files into a single data.js for the UI."""
 import json
-import glob
 import os
 
-from common import VALID_HIERARCHY_TYPES
+from common import VALID_HIERARCHY_TYPES, load_patterns_from_dir
 
 
 def count_by(items, key, default='Uncategorized'):
@@ -28,22 +27,7 @@ def main():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     structure_dir = os.path.join(root_dir, 'structures')
 
-    structures = []
-    seen_ids = set()
-
-    for fpath in sorted(glob.glob(os.path.join(structure_dir, '*.json'))):
-        try:
-            with open(fpath, encoding='utf-8') as f:
-                data = json.load(f)
-            items = data if isinstance(data, list) else [data]
-            for item in items:
-                if item.get('id') and item['id'] not in seen_ids:
-                    seen_ids.add(item['id'])
-                    structures.append(item)
-                elif not item.get('id'):
-                    print(f"  WARNING: structure in {os.path.basename(fpath)} missing 'id' field, skipping")
-        except (json.JSONDecodeError, OSError) as e:
-            print(f"  ERROR reading {os.path.basename(fpath)}: {e}")
+    structures, file_count = load_patterns_from_dir(structure_dir, dedup=True, warn=True)
 
     # Read structural classes (lives in this repo)
     structural_classes_path = os.path.join(root_dir, 'structural-classes.json')
@@ -88,7 +72,7 @@ def main():
             json.dump(structural_classes, f, indent=2, ensure_ascii=False)
             f.write(';\n')
 
-    print(f"\nBuilt data.js with {len(structures)} structures from {len(glob.glob(os.path.join(structure_dir, '*.json')))} files")
+    print(f"\nBuilt data.js with {len(structures)} structures from {file_count} files")
 
     print_breakdown("Category breakdown",
                     count_by(structures, 'category'))

@@ -1,6 +1,19 @@
 # Rhizome
 
-Browsable taxonomy of 207 agent orchestration patterns. Live at https://thisminute.org/rhizome.
+If told to go, start, or begin — you are the **steward**. See `agents/steward.md`.
+
+Browsable taxonomy of 200 agent orchestration patterns. Live at https://thisminute.org/rhizome.
+
+## Forge Notes
+
+Observations from operating agent systems across 6 projects (thisminute, mainmenu, rhizome, ops, sts2, agent-forge). These are field notes, not theory — maintained by the forge that manages all of them.
+
+- **Stigmergy has a hard ceiling.** Forum-based coordination (agents read/write a shared file) is the most natural pattern that emerges. But it fails via unbounded growth — one project's forum went from 51 to 621 lines in a single session, another hit 904 across 7 cycles. Every shared-context pattern needs a maintenance agent. The pattern and its maintenance cost are inseparable.
+- **Fitness beats compliance.** A game mod project is effective at Structured+ using checkpoints and a section index instead of memory/ and forum. A catalog (this project) is effective with one steward. A news platform needs 10 agents because it has 10 genuinely different concerns. The right question is "is this working?" not "does this match a checklist?"
+- **Premature structure costs more than no structure.** This project proved it. A single steward handled bug fixes, accessibility, data quality, and maintained meaningful memory without ever needing a role split. Scaffolding 5 roles on day one would have been empty ceremony.
+- **Memory is the lagging indicator.** Projects adopt role files and protocols quickly. Memory files are the last thing used consistently. One project has 10 agents but only 3 memory files — 7 agents re-learn things every session.
+- **Reflection loops need a consumer.** Asking agents to evaluate their context at shutdown produces great signal. But without a keeper to process it, reflections pile up and nothing changes. The loop is only as good as its feedback processing.
+- **Domain adaptation > pattern conformance.** The most effective agent systems adapted conventions to fit their domain (30-second build-test-fix loops, single-page catalogs, async news pipelines) rather than conforming to a template. The forge's job is recognizing that, not flattening it.
 
 ## Stack
 
@@ -8,7 +21,8 @@ Browsable taxonomy of 207 agent orchestration patterns. Live at https://thisminu
 - **Data**: 13 JSON files in `structures/` → `build.py` aggregates them into `data.js`
 - **API**: FastAPI + SQLite in `api/` — upvotes, comments, trending (optional; site degrades gracefully without it)
 - **Deploy**: `deploy.sh` runs build, scp's to Google Cloud, optionally deploys API
-- No package manager. No test suite.
+- **Tests**: pytest suite in `tests/` — API endpoints, build pipeline, classifier, schema validation (92 tests)
+- No package manager.
 
 ## Commands
 
@@ -17,6 +31,7 @@ Browsable taxonomy of 207 agent orchestration patterns. Live at https://thisminu
 - **Classify**: `python classify_hierarchy.py` — auto-classify patterns by hierarchy type
 - **Init DB**: `python api/init_db.py` — create SQLite database for social features
 - **Run API locally**: `uvicorn api.main:app --host 0.0.0.0 --port 8100`
+- **Test**: `python -m pytest tests/ -v` — run all 92 tests
 - **Local dev**: open `index.html` in a browser (file:// works; social features need API)
 
 ## Key files
@@ -24,9 +39,9 @@ Browsable taxonomy of 207 agent orchestration patterns. Live at https://thisminu
 | File | What it does |
 |------|-------------|
 | `index.html` | Entire frontend — filtering, hierarchy types, votes, comments |
-| `data.js` | Generated. 207 patterns as `window.STRUCTURES` array |
+| `data.js` | Generated. 200 patterns as `window.STRUCTURES` array |
 | `build.py` | Aggregates `structures/*.json`, merges structural classes, dedupes by ID, validates, sorts |
-| `structural-classes.json` | 15 structural classes with mappings for all 207 patterns |
+| `structural-classes.json` | 15 structural classes with mappings for all 200 patterns |
 | `schema.json` | JSON Schema (draft-07) defining pattern shape including `hierarchyTypes` |
 | `deploy.sh` | Build + scp to GCloud + HTTP verify + optional API deploy |
 | `structures/` | 13 source JSON files, ~14K lines total |
@@ -82,11 +97,16 @@ location /rhizome/api/ {
 }
 ```
 
+## Deploying & Pushing
+
+**Deploys and git pushes are handled by the ops steward** (see `../ops/agents/steward.md`). Do not deploy or push directly.
+
+To request a deploy: add an entry to `../ops/DEPLOY_QUEUE.md` with scope (push/deploy/both), changed files, and any notes. The steward runs tests, pushes to GitHub, deploys via `bash deploy.sh`, cache-busts `?v=` on `data.js`, and verifies health — on a 60-minute cycle.
+
 ## Notes
 
 - `build.py` validates hierarchy types and warns on missing/invalid entries
 - Patterns span corporate, military, nature-inspired, AI-native, experimental, etc.
 - Mermaid diagrams are embedded per-pattern and rendered client-side
-- Deploy requires `gcloud` CLI configured with access to the target instance
 - Social features degrade gracefully — if API is down, the site still works
 - Systemd service: `rhizome-api` (managed by deploy.sh --api)

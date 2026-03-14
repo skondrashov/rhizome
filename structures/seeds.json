@@ -12,7 +12,7 @@
     ],
     "summary": "Specialized agents coordinate through a shared forum to build composable ML models autonomously.",
     "description": "A multi-agent system where specialized Claude instances work together autonomously on a long-running research project. Each agent has a specific role (builder, verifier, strategist, librarian, debugger) and they coordinate through a shared forum file. The orchestrator spawns and monitors all agents. Forum posts can be upvoted/downvoted to surface consensus. On-demand agents (verifier, debugger) are spawned only when needed, reducing waste.",
-    "realWorldExample": "Autonomous AI research lab",
+    "realWorldExample": "Google DeepMind's AlphaFold team — specialized sub-groups for protein structure prediction, training, and verification, coordinating through shared experiment logs.",
     "whenToUse": "Long-running research or engineering projects requiring diverse expertise with continuous autonomous operation and minimal human oversight.",
     "strengths": [
       "Continuous autonomous operation",
@@ -121,7 +121,7 @@
     ],
     "summary": "Strict tree hierarchy where orders flow down and situation reports flow up through fixed layers.",
     "description": "The classic military organizational model with strict hierarchy. Information and orders flow through a well-defined chain. Each agent reports to exactly one superior and commands one or more subordinates. No level may be skipped in communication. Designed for clarity of authority and accountability in high-stakes, time-critical environments where ambiguity can be fatal.",
-    "realWorldExample": "US Army division structure",
+    "realWorldExample": "US Army's 82nd Airborne Division — brigade commanders report to the division general, battalion commanders to brigade, company to battalion, all the way down to four-soldier fire teams.",
     "whenToUse": "When you need absolute clarity of authority, strict accountability, and disciplined execution of complex multi-phase plans under pressure.",
     "strengths": [
       "Clear authority lines",
@@ -236,7 +236,7 @@
     ],
     "summary": "Self-organizing circles with distributed authority where roles are fluid and governance is consent-based.",
     "description": "A system of nested, self-organizing circles where authority is distributed to roles rather than people. Each circle has a lead link (appointed by parent circle) and a rep link (elected by members) creating bidirectional information flow. Governance meetings use an integrative decision-making process where proposals pass unless there is a reasoned objection. Tensions drive evolution: anyone who senses a gap between current reality and potential can propose a change.",
-    "realWorldExample": "Zappos (2013-2020)",
+    "realWorldExample": "Zappos adopted Holacracy company-wide in 2013, replacing all traditional managers with self-organizing circles — the experiment lasted until 2020 and became a landmark case study in whether flat structures scale.",
     "whenToUse": "When you need rapid adaptation to changing conditions, want to distribute decision-making authority, and can tolerate the learning curve of a novel governance system.",
     "strengths": [
       "Rapid adaptation",

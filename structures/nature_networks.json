@@ -276,118 +276,6 @@
     ]
   },
   {
-    "id": "mycelium-fungal-network",
-    "name": "Mycelium Fungal Network",
-    "category": "Nature-Inspired",
-    "tags": [
-      "mesh",
-      "resource-sharing",
-      "resilient",
-      "underground",
-      "mutualistic"
-    ],
-    "summary": "Underground mesh network where hub nodes redistribute resources and signals between disconnected producers.",
-    "description": "Based on mycorrhizal fungal networks that connect forest trees underground. Hub nodes (mature trees with large root systems) connect to many partners, while peripheral nodes may connect to only one or two hubs. The network redistributes resources from surplus areas to deficit areas, taking a small tax for the transport. Critically, the network also carries warning signals: when one node is attacked, chemical alarm signals propagate through the mesh to pre-activate defenses in distant nodes. The topology is scale-free, with a few highly-connected hubs.",
-    "realWorldExample": "The 'Wood Wide Web' connecting Douglas fir mother trees to hundreds of seedlings in Pacific Northwest forests",
-    "whenToUse": "When agents have uneven resource availability and you need passive redistribution, early warning propagation, and resilience to localized failures.",
-    "strengths": [
-      "Passive resource redistribution without central planning",
-      "Warning signals propagate faster than direct observation",
-      "Highly resilient to localized damage",
-      "Supports agents of vastly different capability levels"
-    ],
-    "weaknesses": [
-      "Hub nodes become critical infrastructure",
-      "Transport tax reduces overall efficiency",
-      "Slow to establish new connections",
-      "Parasitic agents can exploit the network's generosity"
-    ],
-    "agents": [
-      {
-        "role": "mother-hub",
-        "name": "Mother Hub",
-        "description": "Highly connected node that redistributes resources to many dependents and amplifies warning signals",
-        "memory": "persistent-shared",
-        "count": 3
-      },
-      {
-        "role": "mature-node",
-        "name": "Mature Node",
-        "description": "Established node connected to 2-4 hubs, both produces and consumes resources",
-        "memory": "persistent-private",
-        "count": 6
-      },
-      {
-        "role": "seedling",
-        "name": "Seedling",
-        "description": "New node connected to one hub, primarily a resource consumer until established",
-        "memory": "ephemeral",
-        "count": 8
-      },
-      {
-        "role": "mycelium-bridge",
-        "name": "Mycelium Bridge",
-        "description": "Transport agent that moves resources between nodes and takes a small tax",
-        "memory": "append-only",
-        "count": 4
-      }
-    ],
-    "forums": [
-      {
-        "name": "Nutrient Channel",
-        "type": "pub-sub",
-        "participants": [
-          "mother-hub",
-          "mature-node",
-          "seedling"
-        ]
-      },
-      {
-        "name": "Warning Signal",
-        "type": "broadcast",
-        "participants": [
-          "all"
-        ]
-      },
-      {
-        "name": "Resource Ledger",
-        "type": "log",
-        "participants": [
-          "mycelium-bridge",
-          "mother-hub"
-        ]
-      },
-      {
-        "name": "Connection Requests",
-        "type": "queue",
-        "participants": [
-          "seedling",
-          "mother-hub"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "Resource flow ledger",
-        "Network topology map",
-        "Active warning signals"
-      ],
-      "private": [
-        "Local resource reserves",
-        "Connection partner list",
-        "Defense state"
-      ],
-      "description": "The mycelium bridges maintain an append-only ledger of resource transfers. Hub nodes hold the topology map. Warning signals are written to shared memory and propagate through connected nodes. Individual resource reserves are private."
-    },
-    "diagram": "graph TD\n    MH1((Mother Hub 1)) -->|nutrients| S1[Seedling 1]\n    MH1 -->|nutrients| S2[Seedling 2]\n    MH1 -->|nutrients| M1[Mature 1]\n    MH2((Mother Hub 2)) -->|nutrients| M2[Mature 2]\n    MH2 -->|nutrients| S3[Seedling 3]\n    M1 -.->|bridge| MH2\n    MH1 -.->|bridge| MH2\n    M2 -.->|bridge| MH1\n    MH1 ==>|warning| MH2\n    MH2 ==>|warning| M2",
-    "hierarchyTypes": [
-      "swarm",
-      "pipeline",
-      "orchestrated",
-      "mesh"
-    ]
-  },
-  {
     "id": "slime-mold-physarum",
     "name": "Slime Mold (Physarum)",
     "category": "Nature-Inspired",
@@ -823,8 +711,8 @@
       "pipeline",
       "swarm",
       "adversarial",
-      "mesh",
-      "federated"
+      "federated",
+      "mesh"
     ]
   },
   {
@@ -1508,8 +1396,8 @@
       "swarm",
       "mesh",
       "chain-of-command",
-      "pipeline",
       "federated",
+      "pipeline",
       "adversarial"
     ]
   },

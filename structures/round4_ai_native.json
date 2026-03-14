@@ -178,7 +178,7 @@
       ],
       "description": "All generators write to a shared candidate pool with no awareness of each other. The judge reads the full pool and applies the rubric. Memory is entirely ephemeral per round -- no generator remembers previous rounds. The selection history exists only for external analysis of which temperature tiers produce the most winners over time."
     },
-    "diagram": "graph TD\n    P[Shared Prompt] --> CG[Cold Generator t=0.1]\n    P --> WG[Warm Generator t=0.7]\n    P --> HG[Hot Generator t=1.4]\n    CG -->|candidate| CP[Candidate Pool]\n    WG -->|candidate| CP\n    HG -->|candidate| CP\n    CP --> CJ[Cold Judge t=0.0]\n    CJ -->|selected output| OUT[Final Output]",
+    "diagram": "graph TD\n    P[Shared Prompt] --> CG[Cold Generator t=0.1]\n    P --> WG[Warm Generator t=0.7]\n    P --> HG[Hot Generator t=1.4]\n    CG -->|candidate| CP[Candidate Pool]\n    WG -->|candidate| CP\n    HG -->|candidate| CP\n    CP --> CJ[Cold Judge t=0.0]\n    CJ",
     "hierarchyTypes": [
       "adversarial",
       "consensus",
@@ -384,10 +384,11 @@
       ],
       "description": "The router maintains a shared capability registry describing what each specialist can do. Each specialist maintains private memory of tool-specific patterns and error recovery strategies learned over time. Results flow back through a shared assembly area where the router combines them. No specialist sees another specialist's work directly."
     },
-    "diagram": "graph TD\n    IN[Incoming Task] --> R[Task Router]\n    R -->|code subtask| CS[Code Specialist]\n    R -->|search subtask| SS[Search Specialist]\n    R -->|math subtask| MS[Math Specialist]\n    R -->|file subtask| FS[File Specialist]\n    CS -->|result| RA[Results Assembly]\n    SS -->|result| RA\n    MS -->|result| RA\n    FS -->|result| RA\n    RA --> R\n    R --> OUT[Final Output]",
+    "diagram": "graph TD\n    R[Task Router]\n    R -->|code subtask| CS[Code Specialist]\n    R -->|search subtask| SS[Search Specialist]\n    R -->|math subtask| MS[Math Specialist]\n    R -->|file subtask| FS[File Specialist]\n    CS -->|result| RA[Results Assembly]\n    SS -->|result| RA\n    MS -->|result| RA\n    FS -->|result| RA\n    RA",
     "hierarchyTypes": [
       "chain-of-command",
-      "pipeline"
+      "pipeline",
+      "orchestrated"
     ]
   },
   {
@@ -482,11 +483,10 @@
       ],
       "description": "The constitution document is the shared source of truth. The violation log records every flagged issue for pattern analysis. The red-team agent deliberately uses ephemeral memory so it approaches each output fresh, avoiding the trap of only checking for previously seen failure modes. The reviser is also ephemeral to prevent developing blind spots."
     },
-    "diagram": "graph LR\n    G[Generator] -->|draft output| CK[Constitution Keeper]\n    CK -->|pass or flag| RT[Red Team]\n    RT -->|pass or flag| REV[Reviser]\n    REV -->|revised output| CK\n    CK -->|approved| OUT[Final Output]\n    PD[Principle Document] -.->|guides| CK\n    PD -.->|guides| REV\n    VL[Violation Log] -.->|patterns| CK",
+    "diagram": "graph LR\n    G[Generator] -->|draft output| CK[Constitution Keeper]\n    CK -->|pass or flag| RT[Red Team]\n    RT -->|pass or flag| REV[Reviser]\n    REV -->|revised output| CK\n    CK\n    PD[Principle Document] -.->|guides| CK\n    PD -.->|guides| REV\n    VL[Violation Log] -.->|patterns| CK",
     "hierarchyTypes": [
       "adversarial",
-      "pipeline",
-      "chain-of-command"
+      "pipeline"
     ]
   },
   {
@@ -583,7 +583,7 @@
       ],
       "description": "The artifact flows through a shared queue, visible only to the current stage. Each stage saves a snapshot for debugging. All agent memory is ephemeral -- they have no knowledge of previous runs or other stages. A hash of the original request travels with the artifact so the verifier can check for intent drift without seeing the full original prompt."
     },
-    "diagram": "graph LR\n    REQ[Original Request] --> D[Drafter]\n    D -->|rough draft| S[Structurer]\n    S -->|structured| E[Enricher]\n    E -->|enriched| P[Polisher]\n    P -->|polished| V[Verifier]\n    V -->|verified| OUT[Final Artifact]\n    D -.->|snapshot| LOG[Inspection Log]\n    S -.->|snapshot| LOG\n    E -.->|snapshot| LOG\n    P -.->|snapshot| LOG",
+    "diagram": "graph LR\n    D[Drafter]\n    D -->|rough draft| S[Structurer]\n    S -->|structured| E[Enricher]\n    E -->|enriched| P[Polisher]\n    P -->|polished| V[Verifier]\n    V\n    D -.->|snapshot| LOG[Inspection Log]\n    S -.->|snapshot| LOG\n    E -.->|snapshot| LOG\n    P -.->|snapshot| LOG",
     "hierarchyTypes": [
       "pipeline"
     ]
@@ -673,7 +673,7 @@
       ],
       "description": "The librarian maintains a persistent index of available sources and learns retrieval preferences over time. The analyst is deliberately ephemeral -- it reasons only from the context provided, preventing it from relying on memorized knowledge. The feedback agent tracks patterns of insufficiency to proactively improve future retrieval."
     },
-    "diagram": "graph TD\n    Q[User Query] --> L[Librarian]\n    L -->|searches| VS[Vector Store]\n    L -->|searches| DB[Document DB]\n    L -->|searches| WEB[Web Sources]\n    L -->|curated context| A[Analyst]\n    Q --> A\n    A -->|grounded answer| OUT[Output with Citations]\n    A -->|need more| FB[Feedback Agent]\n    FB -->|refined query| L",
+    "diagram": "graph TD\n    L[Librarian]\n    L -->|searches| VS[Vector Store]\n    L -->|searches| DB[Document DB]\n    L -->|searches| WEB[Web Sources]\n    L -->|curated context| A[Analyst]\n    Q --> A\n    A\n    A -->|need more| FB[Feedback Agent]\n    FB -->|refined query| L",
     "hierarchyTypes": [
       "pipeline",
       "orchestrated"
@@ -755,14 +755,13 @@
       ],
       "description": "The current artifact version is shared between generator and critic. Critique history accumulates so the generator can see all past feedback. The quality trajectory tracks scores over iterations so the loop controller can detect plateaus and oscillation. Both generator and critic are ephemeral per-iteration to prevent staleness, but see the full critique history."
     },
-    "diagram": "graph TD\n    G[Generator] -->|draft v1| C[Critic]\n    C -->|feedback| G\n    G -->|draft v2| C\n    C -->|feedback| G\n    G -->|draft vN| C\n    C -->|approved| OUT[Final Output]\n    C -->|scores| LC[Loop Controller]\n    LC -->|terminate signal| C",
+    "diagram": "graph TD\n    G[Generator] -->|draft v1| C[Critic]\n    C -->|feedback| G\n    G -->|draft v2| C\n    C -->|feedback| G\n    G -->|draft vN| C\n    C\n    C -->|scores| LC[Loop Controller]\n    LC -->|terminate signal| C",
     "hierarchyTypes": [
       "mesh",
       "adversarial",
-      "chain-of-command",
       "orchestrated",
-      "pipeline",
-      "federated"
+      "federated",
+      "pipeline"
     ]
   },
   {
@@ -854,7 +853,7 @@
       ],
       "description": "All specialists write to a shared output pool but cannot see each other's outputs. The aggregator reads all outputs and produces a synthesis with an explicit rationale explaining which elements came from which specialist. All memory is ephemeral -- each query is independent. The synthesis rationale log exists for external analysis of which specialists are most valuable."
     },
-    "diagram": "graph TD\n    IN[Input Query] --> SA[Reasoning Specialist]\n    IN --> SB[Creative Specialist]\n    IN --> SC[Factual Specialist]\n    IN --> SD[Code Specialist]\n    SA -->|output| AGG[Aggregator]\n    SB -->|output| AGG\n    SC -->|output| AGG\n    SD -->|output| AGG\n    AGG -->|synthesized| OUT[Final Output]",
+    "diagram": "graph TD\n    SA[Reasoning Specialist]\n    IN --> SB[Creative Specialist]\n    IN --> SC[Factual Specialist]\n    IN --> SD[Code Specialist]\n    SA -->|output| AGG[Aggregator]\n    SB -->|output| AGG\n    SC -->|output| AGG\n    SD -->|output| AGG\n    AGG",
     "hierarchyTypes": [
       "orchestrated",
       "pipeline",
@@ -943,7 +942,7 @@
       ],
       "description": "The summary tree itself is the primary shared data structure, with summaries flowing upward. Each agent's memory is ephemeral -- it only sees its inputs and produces its output. The chunk planner maintains persistent memory of what chunking strategies work well for different document types. Multi-resolution summaries at each tree level are retained as a useful byproduct."
     },
-    "diagram": "graph TD\n    CP[Chunk Planner] -->|plan| L1[Leaf 1]\n    CP -->|plan| L2[Leaf 2]\n    CP -->|plan| L3[Leaf 3]\n    CP -->|plan| L4[Leaf 4]\n    L1 -->|summary| B1[Branch Merger 1]\n    L2 -->|summary| B1\n    L3 -->|summary| B2[Branch Merger 2]\n    L4 -->|summary| B2\n    B1 -->|merged summary| R[Root Synthesizer]\n    B2 -->|merged summary| R\n    R -->|final synthesis| OUT[Output]",
+    "diagram": "graph TD\n    CP[Chunk Planner] -->|plan| L1[Leaf 1]\n    CP -->|plan| L2[Leaf 2]\n    CP -->|plan| L3[Leaf 3]\n    CP -->|plan| L4[Leaf 4]\n    L1 -->|summary| B1[Branch Merger 1]\n    L2 -->|summary| B1\n    L3 -->|summary| B2[Branch Merger 2]\n    L4 -->|summary| B2\n    B1 -->|merged summary| R[Root Synthesizer]\n    B2 -->|merged summary| R\n    R",
     "hierarchyTypes": [
       "chain-of-command"
     ]
@@ -1041,7 +1040,7 @@
       ],
       "description": "The debate transcript is shared among all agents. Both debaters see the full transcript to construct rebuttals. The judge reads the full transcript but only after both sides rest. The moderator maintains private memory of rhetorical manipulation patterns to catch debate fouls. Evidence cited by either debater is registered in a shared evidence pool for verification."
     },
-    "diagram": "graph TD\n    Q[Question] --> MOD[Moderator]\n    MOD -->|assigns positions| PRO[Pro Debater]\n    MOD -->|assigns positions| CON[Con Debater]\n    PRO -->|argument| DF[Debate Floor]\n    CON -->|rebuttal| DF\n    PRO -->|counter-rebuttal| DF\n    CON -->|closing| DF\n    DF -->|full transcript| J[Judge]\n    J -->|ruling| OUT[Final Answer]\n    MOD -.->|enforces rules| DF",
+    "diagram": "graph TD\n    MOD[Moderator]\n    MOD -->|assigns positions| PRO[Pro Debater]\n    MOD -->|assigns positions| CON[Con Debater]\n    PRO -->|argument| DF[Debate Floor]\n    CON -->|rebuttal| DF\n    PRO -->|counter-rebuttal| DF\n    CON -->|closing| DF\n    DF -->|full transcript| J[Judge]\n    J\n    MOD -.->|enforces rules| DF",
     "hierarchyTypes": [
       "adversarial",
       "consensus"
@@ -1139,7 +1138,7 @@
       ],
       "description": "The search tree is the core shared data structure, with node values and visit counts updated after every rollout cycle. The selector and backpropagator need persistent access to tree state. Expanders and simulators are ephemeral -- they do their job and report results. The best complete path found so far is maintained as an anytime result."
     },
-    "diagram": "graph TD\n    SEL[Selector] -->|picks node| EXP[Expander]\n    EXP -->|creates children| SIM1[Simulator 1]\n    EXP -->|creates children| SIM2[Simulator 2]\n    SIM1 -->|value estimate| BP[Backpropagator]\n    SIM2 -->|value estimate| BP\n    BP -->|updates| ST[Search Tree]\n    ST -->|UCB scores| SEL\n    ST -->|best path| OUT[Best Solution]",
+    "diagram": "graph TD\n    SEL[Selector] -->|picks node| EXP[Expander]\n    EXP -->|creates children| SIM1[Simulator 1]\n    EXP -->|creates children| SIM2[Simulator 2]\n    SIM1 -->|value estimate| BP[Backpropagator]\n    SIM2 -->|value estimate| BP\n    BP -->|updates| ST[Search Tree]\n    ST -->|UCB scores| SEL\n    ST",
     "hierarchyTypes": [
       "pipeline",
       "adversarial",
@@ -1230,12 +1229,11 @@
       ],
       "description": "Each mode is ephemeral within a single task but shares the output and critique. The reflection memory is append-only and persists across tasks, accumulating patterns like 'I tend to forget edge cases' or 'My introductions are often too long.' This persistent self-knowledge is injected into future generation prompts as preemptive guidance."
     },
-    "diagram": "graph TD\n    IN[Input] --> GEN[Generator Mode]\n    GEN -->|output v1| REF[Reflector Mode]\n    REF -->|self-critique| REGEN[Regenerator Mode]\n    REGEN -->|output v2| REF2[Reflector Mode 2]\n    REF2 -->|approved| OUT[Final Output]\n    REF -->|patterns| RM[Reflection Memory]\n    RM -->|pre-emptive guidance| GEN",
+    "diagram": "graph TD\n    GEN[Generator Mode]\n    GEN -->|output v1| REF[Reflector Mode]\n    REF -->|self-critique| REGEN[Regenerator Mode]\n    REGEN -->|output v2| REF2[Reflector Mode 2]\n    REF2\n    REF -->|patterns| RM[Reflection Memory]\n    RM -->|pre-emptive guidance| GEN",
     "hierarchyTypes": [
       "mesh",
-      "chain-of-command",
-      "pipeline",
-      "federated"
+      "federated",
+      "pipeline"
     ]
   },
   {
@@ -1330,10 +1328,9 @@
       ],
       "description": "Each persona operates in isolation with its own private system prompt and examples that define its worldview. Persona outputs are collected in a shared space that only the meta-synthesizer reads in full. All persona memory is ephemeral -- they do not remember previous council sessions. The synthesis rationale documents which persona insights were prioritized and why."
     },
-    "diagram": "graph TD\n    IN[Input Problem] --> PS[Skeptical Scientist]\n    IN --> PE[Pragmatic Entrepreneur]\n    IN --> PTH[Cautious Ethicist]\n    IN --> PEG[Systems Engineer]\n    PS -->|analysis| CT[Council Table]\n    PE -->|analysis| CT\n    PTH -->|analysis| CT\n    PEG -->|analysis| CT\n    CT --> MS[Meta Synthesizer]\n    MS -->|balanced synthesis| OUT[Final Output]",
+    "diagram": "graph TD\n    PS[Skeptical Scientist]\n    IN --> PE[Pragmatic Entrepreneur]\n    IN --> PTH[Cautious Ethicist]\n    IN --> PEG[Systems Engineer]\n    PS -->|analysis| CT[Council Table]\n    PE -->|analysis| CT\n    PTH -->|analysis| CT\n    PEG -->|analysis| CT\n    CT --> MS[Meta Synthesizer]\n    MS",
     "hierarchyTypes": [
       "orchestrated",
-      "chain-of-command",
       "swarm"
     ]
   },
@@ -1425,7 +1422,6 @@
     "diagram": "graph TD\n    TB[Total Token Budget] --> MA[Market Allocator]\n    W1[Worker 1] -->|bid: 500 tokens| MA\n    W2[Worker 2] -->|bid: 2000 tokens| MA\n    W3[Worker 3] -->|bid: 200 tokens| MA\n    MA -->|allocate 400| W1\n    MA -->|allocate 1800| W2\n    MA -->|allocate 200| W3\n    W1 -->|output| EA[Efficiency Auditor]\n    W2 -->|output| EA\n    W3 -->|output| EA\n    EA -->|reputation update| MA",
     "hierarchyTypes": [
       "pipeline",
-      "chain-of-command",
       "swarm"
     ]
   }

@@ -1,28 +1,32 @@
 [
   {
-    "id": "hospital-incident-command",
-    "name": "Hospital Incident Command System",
+    "id": "incident-command-system",
+    "name": "Incident Command System (ICS)",
     "category": "Medical & Emergency",
     "tags": [
       "emergency",
       "hierarchy",
       "scalable",
-      "standardized"
+      "standardized",
+      "modular-expansion",
+      "span-of-control",
+      "unified-command"
     ],
-    "summary": "HICS organizes hospital disaster response through a scalable command hierarchy with clear authority chains.",
-    "description": "Based on the National Incident Management System (NIMS), the Hospital Incident Command System activates a modular hierarchy during mass casualty events, pandemics, or facility emergencies. An Incident Commander delegates authority to Section Chiefs (Operations, Planning, Logistics, Finance), who spin up Branch Directors and Unit Leaders as the incident scales. Unity of command ensures every responder reports to exactly one supervisor, while span of control stays between 3-7 direct reports. The structure can expand or contract in real time as the crisis evolves.",
-    "realWorldExample": "During COVID-19 surges, hospitals activated HICS with an Incident Commander coordinating bed capacity (Operations), PPE procurement (Logistics), staffing projections (Planning), and emergency funding (Finance) across dozens of units.",
+    "summary": "A modular command hierarchy that scales from a single responder to thousands while maintaining 3-7 span of control at every level.",
+    "description": "The Incident Command System is a standardized emergency management framework used across fire, medical, law enforcement, and disaster response. An Incident Commander delegates authority to four Section Chiefs (Operations, Planning, Logistics, Finance/Admin), who activate Branch Directors and Unit Leaders as the incident scales. Unity of command ensures every responder reports to exactly one supervisor, while span of control stays between 3-7 direct reports. The structure expands or contracts in real time: a house fire needs one engine company under a single IC, while a wildfire complex activates the full hierarchy with hundreds of personnel. Unified Command mode allows multiple agencies to share command without subordinating any agency to another.",
+    "realWorldExample": "During COVID-19 surges, hospitals activated ICS with an Incident Commander coordinating bed capacity (Operations), PPE procurement (Logistics), staffing projections (Planning), and emergency funding (Finance). The same framework scales to wildfires: the 2018 Camp Fire in Paradise, California grew from a single-engine response to a Type 1 incident with 5,000+ personnel, all managed under ICS with 12-hour Incident Action Plans.",
     "whenToUse": "When an agent system must handle unpredictable, escalating crises with clear accountability, scalable delegation, and strict span-of-control limits.",
     "strengths": [
-      "Scales dynamically from 4 agents to 40+ without restructuring",
+      "Scales smoothly from 5 to 5,000 agents using the same structural rules",
       "Unity of command eliminates conflicting orders",
-      "Standardized roles allow any trained agent to slot in",
-      "Built-in planning section enables proactive resource forecasting"
+      "Standardized roles allow any trained agent to slot in across agencies",
+      "Unified Command solves multi-agency coordination without subordinating any agency",
+      "Built-in planning section enables proactive resource forecasting via Incident Action Plans"
     ],
     "weaknesses": [
-      "Activation overhead makes it overkill for routine operations",
+      "Full ICS overhead is excessive for small incidents, tempting people to skip structure",
       "Rigid hierarchy can slow lateral communication between sections",
-      "Requires pre-trained agents who understand ICS terminology",
+      "Transfer of command between shifts loses tacit knowledge that doesn't fit the IAP",
       "Incident Commander becomes a bottleneck if they micromanage"
     ],
     "agents": [
@@ -137,7 +141,8 @@
     },
     "diagram": "graph TD\n    IC[Incident Commander] --> OPS[Operations Chief]\n    IC --> PLAN[Planning Chief]\n    IC --> LOG[Logistics Chief]\n    IC --> FIN[Finance Chief]\n    OPS --> MED[Medical Branch]\n    OPS --> STG[Staging Manager]\n    PLAN --> SIT[Situation Unit]\n    LOG --> SUP[Supply Unit]\n    MED --> TRI[Triage]\n    MED --> TREAT[Treatment]",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "orchestrated"
     ]
   },
   {
@@ -509,8 +514,8 @@
     },
     "diagram": "graph TD\n    CC[Central Command] --> RH1[Regional Hub West]\n    CC --> RH2[Regional Hub East]\n    CC --> EPI[Epi Analysis]\n    RH1 --> LS1[Local Officer A]\n    RH1 --> LS2[Local Officer B]\n    RH2 --> LS3[Local Officer C]\n    RH2 --> LS4[Local Officer D]\n    EPI --> CC\n    LS1 -.->|surveillance| RH1\n    LS3 -.->|surveillance| RH2\n    CC --> SC[Supply Chain]\n    CC --> RC[Risk Comms]",
     "hierarchyTypes": [
-      "chain-of-command",
-      "orchestrated"
+      "orchestrated",
+      "chain-of-command"
     ]
   },
   {
@@ -641,8 +646,8 @@
     "diagram": "graph TD\n    SP[Sponsor] --> PI[Principal Investigator]\n    SP --> SM[Clinical Monitor]\n    PI --> DM[Data Manager]\n    DM -->|blinded data| PI\n    DM -->|unblinded data| BIO[Biostatistician]\n    BIO --> DSMB[DSMB Chair]\n    DSMB -.->|continue/halt| SP\n    IRB[IRB Reviewer] -.->|approval| PI\n    PI ---|firewall| DSMB",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
-      "pipeline"
+      "pipeline",
+      "chain-of-command"
     ]
   },
   {
@@ -769,7 +774,7 @@
       ],
       "description": "The court record is the authoritative append-only log of everything said in open court. Exhibits, once admitted, become shared. However, attorney work product (strategy, witness preparation notes, legal research) is strictly private and privileged. Jury deliberations are sealed and never become part of the record. Discovery materials are shared between parties but may not all be admitted into evidence."
     },
-    "diagram": "graph TD\n    J[Judge] --> P[Prosecutor]\n    J --> D[Defense Attorney]\n    J --> JR[Jury Foreperson]\n    P --> EW1[Expert Witness]\n    D --> EW2[Expert Witness]\n    P <-->|discovery| D\n    CC[Court Clerk] --> J\n    JR --> VERDICT[Verdict]\n    J -.->|instructions| JR",
+    "diagram": "graph TD\n    J[Judge] -->|rules| CT((Courtroom))\n    PR[Prosecutor] -->|argues| CT\n    DEF[Defense Attorney] -->|argues| CT\n    W1[Expert Witness] -->|testifies| CT\n    W2[Expert Witness] -->|testifies| CT\n    JR[Jury Foreperson] -->|deliberates| CT\n    CT -->|evidence & arguments| JR\n    CL[Court Clerk] -.->|records| J",
     "hierarchyTypes": [
       "adversarial",
       "consensus",
@@ -895,7 +900,8 @@
     },
     "diagram": "graph TD\n    MP[Managing Partner] --> SP1[Senior Partner A]\n    MP --> SP2[Senior Partner B]\n    SP1 --> MA1[Mid-Level Associate]\n    SP1 --> MA2[Mid-Level Associate]\n    SP2 --> MA3[Mid-Level Associate]\n    MA1 --> JA1[Junior Associate]\n    MA1 --> JA2[Junior Associate]\n    MA2 --> PL1[Paralegal]\n    MA3 --> JA3[Junior Associate]",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "consensus"
     ]
   },
   {
@@ -1125,7 +1131,6 @@
     "hierarchyTypes": [
       "consensus",
       "adversarial",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -1252,7 +1257,9 @@
     },
     "diagram": "graph TD\n    COS[Chief of Station] --> COA[Case Officer Alpha]\n    COS --> COB[Case Officer Bravo]\n    COS --> RO[Reports Officer]\n    COS --> BC[Base Chief]\n    COS --> CI[CI Officer]\n    COA --> A1[Asset 1]\n    COA --> A2[Asset 2]\n    COB --> A3[Asset 3]\n    COB --> A4[Asset 4]\n    RO --> HQ[Headquarters]\n    COA ---|firewall| COB",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "orchestrated",
+      "consensus"
     ]
   },
   {
@@ -1362,7 +1369,7 @@
       }
     ],
     "memoryArchitecture": {
-      "shared": [],
+      "shared": "Coded signal protocols and emergency procedures known to all agents at a given tier, enabling cells to recognize network-wide abort signals or authentication challenges without revealing the network's structure.",
       "private": [
         "controller strategic plan",
         "handler operational orders",
@@ -1373,10 +1380,11 @@
     },
     "diagram": "graph TD\n    CTRL[Controller] --> CO1[Cutout 1]\n    CTRL --> CO2[Cutout 2]\n    CO1 --> HN[Handler North]\n    CO2 --> HS[Handler South]\n    HN --> CL1[Cell Leader 1]\n    HN --> CL2[Cell Leader 2]\n    HS --> CL3[Cell Leader 3]\n    CL1 --> OP1[Operatives]\n    CL2 --> OP2[Operatives]\n    CL3 --> OP3[Operatives]\n    HN ---|firewall| HS",
     "hierarchyTypes": [
-      "chain-of-command",
       "swarm",
+      "chain-of-command",
       "orchestrated",
-      "mesh"
+      "mesh",
+      "federated"
     ]
   },
   {
@@ -1611,7 +1619,7 @@
       }
     ],
     "memoryArchitecture": {
-      "shared": [],
+      "shared": "The investigation vault serves as the team's shared evidence repository, containing the running suspect matrix, confirmed access overlaps, and coordination timeline -- visible only to the hunt team, never to the broader organization.",
       "private": [
         "suspect list and evidence matrix",
         "access logs and bigot lists",
@@ -1623,9 +1631,9 @@
     },
     "diagram": "graph TD\n    LI[Lead Investigator] --> AA[Access Analyst]\n    LI --> CO[Canary Operator]\n    LI --> BA[Behavioral Analyst]\n    LI --> DP[Deception Planner]\n    CO -->|planted docs| S1[Suspect 1]\n    CO -->|planted docs| S2[Suspect 2]\n    CO -->|planted docs| S3[Suspect 3]\n    S1 -.->|leak detected?| CO\n    BA -.->|anomalies| LI\n    AA -.->|access match| LI",
     "hierarchyTypes": [
-      "chain-of-command",
       "consensus",
       "adversarial",
+      "chain-of-command",
       "federated"
     ]
   },
@@ -1768,11 +1776,11 @@
     },
     "diagram": "graph TD\n    ADM[Admiral] --> CV[Carrier]\n    ADM --> CG[Aegis Cruiser]\n    ADM --> ASW[ASW Commander]\n    ADM --> IC[Intel Center]\n    CV --> CAG[Air Wing]\n    CAG --> STRIKE[Strike Aircraft]\n    CAG --> CAP[Combat Air Patrol]\n    CG --> AAW[Air Defense Screen]\n    ASW --> DDG[Destroyers]\n    ASW --> HELO[ASW Helicopters]\n    SUB[Submarine] -.-> ADM\n    IC --> ADM",
     "hierarchyTypes": [
-      "chain-of-command",
       "swarm",
       "adversarial",
-      "mesh",
       "consensus",
+      "mesh",
+      "chain-of-command",
       "orchestrated",
       "federated"
     ]
@@ -1785,7 +1793,10 @@
       "confined",
       "autonomous",
       "watch-rotation",
-      "silent-running"
+      "silent-running",
+      "closed-system",
+      "high-stakes",
+      "compressed-hierarchy"
     ],
     "summary": "An autonomous submarine crew operates in isolation with strict watch rotations and independent decision authority.",
     "description": "Submarine operations represent the extreme end of autonomous agent systems: once submerged, the crew operates with minimal or no communication with command authority for weeks. The Commanding Officer has absolute authority and independent launch/action capability. The Executive Officer manages the crew rotation across three watch sections to ensure 24/7 operation. A Watch Officer commands the submarine during each watch period. Department Heads (Weapons, Engineering, Navigation, Communications) manage specialized subsystems. The crew operates under strict acoustic discipline during covert operations, where even internal communication is minimized. Decision-making is highly decentralized within departments but absolutely centralized for tactical decisions.",
@@ -1795,7 +1806,8 @@
       "Full autonomy enables operation without external communication infrastructure",
       "Watch rotation ensures continuous 24/7 capability without any single agent burning out",
       "Department specialization allows deep expertise in each subsystem",
-      "Pre-authorized decision parameters enable rapid response without waiting for external approval"
+      "Pre-authorized decision parameters enable rapid response without waiting for external approval",
+      "Cross-training on damage control means every agent can respond to emergencies regardless of role"
     ],
     "weaknesses": [
       "Complete isolation means no external error correction or reality checking",
@@ -1817,10 +1829,17 @@
         "memory": "persistent-shared"
       },
       {
+        "role": "chief-of-boat",
+        "name": "Chief of the Boat",
+        "description": "Senior enlisted advisor, bridge between officers and crew, cross-trained on every system and responsible for crew welfare and damage control readiness",
+        "memory": "persistent-shared"
+      },
+      {
         "role": "officer-of-deck",
         "name": "Officer of the Deck",
         "description": "Commands the submarine during their watch period, executing standing orders and handling routine navigation and operations",
-        "memory": "ephemeral"
+        "memory": "ephemeral",
+        "count": 3
       },
       {
         "role": "weapons-officer",
@@ -1908,7 +1927,7 @@
       ],
       "description": "The ship's log is the authoritative append-only record of all events, maintained by the Officer of the Deck during each watch. Standing orders are shared and govern routine operations. Weapons-related information is strictly compartmented to the CO and Weapons Officer. Watch turnover briefings pass ephemeral situational awareness from outgoing to incoming watch officers. During silent running, all communication shifts to written notes to minimize acoustic signature, and the log becomes the primary coordination mechanism."
     },
-    "diagram": "graph TD\n    CO[Commanding Officer] --> XO[Executive Officer]\n    XO --> OOD1[Watch Officer 1]\n    XO --> OOD2[Watch Officer 2]\n    XO --> OOD3[Watch Officer 3]\n    CO --> WEPS[Weapons Officer]\n    CO --> ENG[Engineering Officer]\n    CO --> NAV[Navigation Officer]\n    ENG --> REACTOR[Reactor Control]\n    WEPS --> TORPEDOES[Torpedo Room]\n    NAV --> SONAR[Sonar]",
+    "diagram": "graph TD\n    CO[Commanding Officer] --> XO[Executive Officer]\n    CO --> COB[Chief of Boat]\n    XO --> OOD1[Watch Officer 1]\n    XO --> OOD2[Watch Officer 2]\n    XO --> OOD3[Watch Officer 3]\n    CO --> WEPS[Weapons Officer]\n    CO --> ENG[Engineering Officer]\n    CO --> NAV[Navigation Officer]\n    COB -.->|crew welfare| OOD1\n    COB -.->|crew welfare| OOD2\n    COB -.->|crew welfare| OOD3\n    ENG --> REACTOR[Reactor Control]\n    WEPS --> TORPEDOES[Torpedo Room]\n    NAV --> SONAR[Sonar]\n    OOD1 -.->|turnover| OOD2\n    OOD2 -.->|turnover| OOD3\n    OOD3 -.->|turnover| OOD1",
     "hierarchyTypes": [
       "chain-of-command",
       "pipeline"
@@ -2042,7 +2061,6 @@
     "hierarchyTypes": [
       "orchestrated",
       "pipeline",
-      "chain-of-command",
       "mesh"
     ]
   },

@@ -108,138 +108,10 @@
     "diagram": "graph TD\n    H[Handler] -->|briefs| C1[Cutout 1]\n    H -->|briefs| C2[Cutout 2]\n    H -->|briefs| C3[Cutout 3]\n    C1 -->|dead drop| CL1[Cell Alpha]\n    C2 -->|dead drop| CL2[Cell Bravo]\n    C3 -->|dead drop| CL3[Cell Charlie]\n    CL1 --> O1[Op 1]\n    CL1 --> O2[Op 2]\n    CL1 --> O3[Op 3]",
     "hierarchyTypes": [
       "chain-of-command",
-      "federated"
-    ]
-  },
-  {
-    "id": "carrier-strike-group",
-    "name": "Aircraft Carrier Strike Group",
-    "category": "Military & Defense",
-    "tags": [
-      "layered-defense",
-      "multi-domain",
-      "centralized-command",
-      "specialized-assets",
-      "real-time"
-    ],
-    "summary": "Central command platform coordinates specialized units across air, surface, and subsurface domains simultaneously.",
-    "description": "Based on a carrier strike group where a flagship coordinates fundamentally different asset types (aircraft, surface combatants, submarines, logistics) that each operate in distinct domains with different constraints. The carrier is the center of gravity but not a bottleneck: each asset type has its own tactical commander who makes real-time decisions within the strike group commander's intent. A combat information center fuses sensor data from all domains into a common operating picture shared across the group.",
-    "realWorldExample": "US Navy Carrier Strike Group (e.g., CSG-3 led by USS Abraham Lincoln)",
-    "whenToUse": "When coordinating fundamentally different agent types that operate in different domains or at different speeds, and you need a unified picture while preserving domain-specific tactical autonomy.",
-    "strengths": [
-      "Integrates diverse capabilities into unified action",
-      "Domain experts retain tactical autonomy",
-      "Redundant sensing across domains",
-      "Common operating picture enables coordination",
-      "Layered defense provides depth"
-    ],
-    "weaknesses": [
-      "Extremely complex to set up",
-      "High communication bandwidth required",
-      "Carrier loss is catastrophic",
-      "Cross-domain coordination has inherent latency",
-      "Expensive in agent resources"
-    ],
-    "agents": [
-      {
-        "role": "strike-group-commander",
-        "name": "Strike Group Commander",
-        "description": "Sets strategic intent and priorities from the flagship",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "air-boss",
-        "name": "Air Boss",
-        "description": "Controls all air operations: launch, recovery, combat air patrol",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "surface-warfare",
-        "name": "Surface Warfare Commander",
-        "description": "Coordinates escort ships for defense and surface engagement",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "sub-warfare",
-        "name": "Undersea Warfare Commander",
-        "description": "Manages submarine assets and anti-submarine operations",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "intel-fusion",
-        "name": "Combat Information Center",
-        "description": "Fuses all sensor data into common operating picture",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "logistics",
-        "name": "Logistics Coordinator",
-        "description": "Manages fuel, munitions, and supply across the strike group",
-        "memory": "append-only"
-      }
-    ],
-    "forums": [
-      {
-        "name": "Common Operating Picture",
-        "type": "broadcast",
-        "participants": [
-          "all"
-        ]
-      },
-      {
-        "name": "Commander's Intent",
-        "type": "top-down",
-        "participants": [
-          "strike-group-commander",
-          "air-boss",
-          "surface-warfare",
-          "sub-warfare"
-        ]
-      },
-      {
-        "name": "Threat Alerts",
-        "type": "emergency",
-        "participants": [
-          "all"
-        ]
-      },
-      {
-        "name": "Sensor Fusion Feed",
-        "type": "pub-sub",
-        "participants": [
-          "intel-fusion",
-          "air-boss",
-          "surface-warfare",
-          "sub-warfare"
-        ]
-      },
-      {
-        "name": "Logistics Status",
-        "type": "log",
-        "participants": [
-          "logistics",
-          "strike-group-commander"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "Common operating picture",
-        "Rules of engagement",
-        "Commander's intent",
-        "Threat library"
-      ],
-      "private": [
-        "Domain-specific sensor data",
-        "Tactical plans per domain",
-        "Asset readiness status"
-      ],
-      "description": "The combat information center maintains a continuously updated shared picture. Each domain commander has private tactical context. Sensor data flows into fusion center which publishes the integrated view. Logistics maintains an append-only consumption log."
-    },
-    "diagram": "graph TD\n    SGC[Strike Group Commander] --> AB[Air Boss]\n    SGC --> SW[Surface Warfare]\n    SGC --> UW[Undersea Warfare]\n    SGC --> LOG[Logistics]\n    AB -->|sensors| CIC((CIC Fusion))\n    SW -->|sensors| CIC\n    UW -->|sensors| CIC\n    CIC -->|COP| SGC\n    CIC -->|COP| AB\n    CIC -->|COP| SW\n    CIC -->|COP| UW",
-    "hierarchyTypes": [
-      "chain-of-command",
-      "orchestrated"
+      "federated",
+      "pipeline",
+      "swarm",
+      "mesh"
     ]
   },
   {
@@ -502,140 +374,6 @@
     ]
   },
   {
-    "id": "submarine-crew",
-    "name": "Submarine Crew Organization",
-    "category": "Military & Defense",
-    "tags": [
-      "closed-system",
-      "watch-rotation",
-      "high-stakes",
-      "compressed-hierarchy",
-      "resource-constrained"
-    ],
-    "summary": "Compressed hierarchy in a sealed environment where watch rotations ensure 24/7 coverage with minimal crew.",
-    "description": "Based on submarine operations where a small crew operates a complex system in complete isolation with no external communication for extended periods. The hierarchy is compressed: only 3-4 levels between commanding officer and lowest rating. Watch rotations (typically 6 hours on, 12 off) ensure continuous operation. Every crew member is cross-trained on damage control. The sealed environment means all problems must be solved internally with finite resources. Communication is terse and protocol-driven to prevent errors in a system where a single mistake can kill everyone.",
-    "realWorldExample": "US Navy Los Angeles-class submarine crew, Royal Navy Vanguard-class SSBN",
-    "whenToUse": "When agents must operate autonomously in a resource-constrained environment with no external support, where continuous operation is required, and where errors have severe consequences.",
-    "strengths": [
-      "Operates indefinitely without external input",
-      "Cross-training provides redundancy",
-      "Compressed hierarchy enables fast decisions",
-      "Protocol-driven communication prevents errors",
-      "Extreme resource efficiency"
-    ],
-    "weaknesses": [
-      "Cannot scale beyond crew capacity",
-      "Isolation prevents external expertise",
-      "Crew fatigue from watch rotations",
-      "Finite resources constrain options",
-      "Single catastrophic failure destroys entire system"
-    ],
-    "agents": [
-      {
-        "role": "commanding-officer",
-        "name": "Commanding Officer",
-        "description": "Ultimate authority, makes all strategic and emergency decisions",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "executive-officer",
-        "name": "Executive Officer",
-        "description": "Manages crew rotation, training, and internal operations",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "chief-of-boat",
-        "name": "Chief of the Boat",
-        "description": "Senior enlisted, bridge between officers and crew, knows every system",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "watch-officer",
-        "name": "Officer of the Deck",
-        "description": "Commands the boat during their watch rotation",
-        "memory": "ephemeral",
-        "count": 3
-      },
-      {
-        "role": "department-head",
-        "name": "Department Head",
-        "description": "Manages one of: engineering, weapons, navigation, or communications",
-        "memory": "persistent-private",
-        "count": 4
-      },
-      {
-        "role": "watchstander",
-        "name": "Watchstander",
-        "description": "Operates specific systems during watch, cross-trained on damage control",
-        "memory": "ephemeral",
-        "count": 8
-      }
-    ],
-    "forums": [
-      {
-        "name": "Watch Turnover",
-        "type": "round-robin",
-        "participants": [
-          "watch-officer",
-          "watchstander"
-        ]
-      },
-      {
-        "name": "Captain's Standing Orders",
-        "type": "document",
-        "participants": [
-          "all"
-        ]
-      },
-      {
-        "name": "Damage Control Circuit",
-        "type": "emergency",
-        "participants": [
-          "all"
-        ]
-      },
-      {
-        "name": "Departmental Log",
-        "type": "log",
-        "participants": [
-          "department-head",
-          "executive-officer"
-        ]
-      },
-      {
-        "name": "Officers' Wardroom",
-        "type": "advisory",
-        "participants": [
-          "commanding-officer",
-          "executive-officer",
-          "department-head"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "Standing orders",
-        "Watch bill",
-        "System status boards",
-        "Damage control procedures"
-      ],
-      "private": [
-        "Department-specific logs",
-        "Personal watchstanding notes",
-        "Training records"
-      ],
-      "description": "Watch turnover is the critical memory mechanism: outgoing watch formally transfers situational awareness to incoming watch. All system states are logged on shared boards. Standing orders persist across watches. Private notes help individual watchstanders track trends in their systems."
-    },
-    "diagram": "graph TD\n    CO[Commanding Officer] --> XO[Executive Officer]\n    CO --> COB[Chief of Boat]\n    XO --> DH1[Engineering]\n    XO --> DH2[Weapons]\n    XO --> DH3[Navigation]\n    XO --> DH4[Comms]\n    COB --> W1[Watch Team 1]\n    COB --> W2[Watch Team 2]\n    COB --> W3[Watch Team 3]\n    W1 -.->|turnover| W2\n    W2 -.->|turnover| W3\n    W3 -.->|turnover| W1",
-    "hierarchyTypes": [
-      "chain-of-command",
-      "consensus",
-      "swarm",
-      "mesh",
-      "pipeline"
-    ]
-  },
-  {
     "id": "nuclear-launch-authority",
     "name": "Nuclear Launch Authority",
     "category": "Military & Defense",
@@ -751,13 +489,14 @@
       ],
       "description": "Authentication material is distributed in advance and kept strictly private. Each agent has their own sealed codes that can be verified against but never shared. The action log is append-only and immutable. No single agent's memory contains enough information to reconstruct the full authorization chain."
     },
-    "diagram": "graph TD\n    NCA[National Command] -->|order| AUTH[Authenticator]\n    AUTH -->|verified order| LOA[Launch Officer A]\n    AUTH -->|verified order| LOB[Launch Officer B]\n    LOA -->|key turn| DUAL{Dual Consent}\n    LOB -->|key turn| DUAL\n    DUAL -->|both agree| EXEC[Execute]\n    FSM[Failsafe Monitor] -.->|abort| DUAL\n    FSM -.->|abort| EXEC",
+    "diagram": "graph TD\n    NCA[National Command] -->|order| AUTH[Authenticator]\n    AUTH -->|verified order| LOA[Launch Officer A]\n    AUTH -->|verified order| LOB[Launch Officer B]\n    LOA -->|key turn| DUAL{Dual Consent}\n    LOB -->|key turn| DUAL\n    DUAL -->|both agree| LS[Launch System]\n    FSM[Failsafe Monitor] -.->|abort| DUAL\n    FSM -.->|abort| LS",
     "hierarchyTypes": [
       "chain-of-command",
       "adversarial",
-      "mesh",
+      "consensus",
       "pipeline",
-      "consensus"
+      "mesh",
+      "federated"
     ]
   },
   {
@@ -1264,8 +1003,8 @@
     "diagram": "graph TD\n    SG[Secretary-General] --> COUNCIL((Council Chamber))\n    P1[Permanent 1] -->|veto power| COUNCIL\n    P2[Permanent 2] -->|veto power| COUNCIL\n    P3[Permanent 3] -->|veto power| COUNCIL\n    P4[Permanent 4] -->|veto power| COUNCIL\n    P5[Permanent 5] -->|veto power| COUNCIL\n    R1[Rotating 1] --> COUNCIL\n    R2[Rotating 2] --> COUNCIL\n    RAP[Rapporteur] -.->|reports| COUNCIL",
     "hierarchyTypes": [
       "consensus",
-      "swarm",
       "federated",
+      "swarm",
       "adversarial",
       "mesh"
     ]
@@ -1500,7 +1239,7 @@
       ],
       "description": "Nearly everything is shared. All votes are public record. The constitution is amendable only by double majority. Proposals must be published for debate before voting. Private memory is limited to individual reasoning and draft proposals not yet submitted."
     },
-    "diagram": "graph TD\n    C1[Citizen 1] --> A((Assembly))\n    C2[Citizen 2] --> A\n    C3[Citizen 3] --> A\n    C4[Citizen 4] --> A\n    C5[Citizen 5] --> A\n    A -->|decides| FC[Federal Council]\n    FC -->|implements| EXEC[Execution]\n    CH[Chancellor] -.->|organizes| A\n    C1 -.->|proposes| REF{Referendum}",
+    "diagram": "graph TD\n    CIT[Citizens] -->|referendum| VOT((Vote))\n    CIT -->|initiative| VOT\n    VOT -->|majority + cantons| FC[Federal Council]\n    FC -->|collegial decision| DEPT[Department Heads]\n    DEPT -->|implements| EXEC[Executive Branch]\n    NA[National Assembly] -->|legislation| VOT\n    CA[Council of States] -->|cantonal check| VOT",
     "hierarchyTypes": [
       "consensus",
       "chain-of-command",
@@ -2292,9 +2031,9 @@
       "swarm",
       "federated",
       "adversarial",
-      "mesh",
+      "consensus",
       "pipeline",
-      "consensus"
+      "mesh"
     ]
   },
   {
@@ -2437,10 +2176,10 @@
     "hierarchyTypes": [
       "consensus",
       "adversarial",
-      "swarm",
-      "mesh",
+      "federated",
       "pipeline",
-      "federated"
+      "swarm",
+      "mesh"
     ]
   },
   {

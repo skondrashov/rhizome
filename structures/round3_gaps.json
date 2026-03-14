@@ -144,7 +144,6 @@
     "diagram": "graph TD\n    PI[Principal Investigator] --> PS[Senior Postdoc]\n    PI --> PJ[Junior Postdoc]\n    PI --> LM[Lab Manager]\n    PS --> PhD1[Senior PhD Student]\n    PS --> PhD2[Junior PhD Student]\n    PJ --> PhD2\n    PhD1 --> UG[Undergrad RA]\n    LM -->|equipment & compliance| PS\n    LM -->|equipment & compliance| PJ",
     "hierarchyTypes": [
       "mesh",
-      "chain-of-command",
       "consensus"
     ]
   },
@@ -405,7 +404,6 @@
     "hierarchyTypes": [
       "consensus",
       "federated",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -544,8 +542,7 @@
     "diagram": "graph TD\n    CD[Center Director] --> FA[Faculty A - Physics]\n    CD --> FB[Faculty B - Biology]\n    CD --> FC[Faculty C - CS]\n    CD --> BP[Boundary Postdoc]\n    CD --> CA[Center Admin]\n    FA <-->|collaboration| BP\n    FB <-->|collaboration| BP\n    FC <-->|collaboration| BP\n    DA[Dept A] -.->|tenure line| FA\n    DB[Dept B] -.->|tenure line| FB\n    DC[Dept C] -.->|tenure line| FC",
     "hierarchyTypes": [
       "consensus",
-      "mesh",
-      "chain-of-command"
+      "mesh"
     ]
   },
   {
@@ -677,7 +674,10 @@
     "diagram": "graph TD\n    F[Founder Advisor Gen 0] --> A[Advisor A Gen 1]\n    F --> B[Advisor B Gen 1]\n    A --> SA1[Student A1 Gen 2]\n    A --> SA2[Student A2 Gen 2]\n    B --> SB1[Student B1 Gen 2]\n    B --> SB2[Student B2 Gen 2]\n    SA1 -.->|future| GA1[Gen 3...]\n    SB1 -.->|future| GB1[Gen 3...]",
     "hierarchyTypes": [
       "chain-of-command",
-      "mesh"
+      "mesh",
+      "orchestrated",
+      "federated",
+      "swarm"
     ]
   },
   {
@@ -817,138 +817,9 @@
     "diagram": "graph TD\n    NSA[NSA - United States] <-->|bilateral| GCHQ[GCHQ - United Kingdom]\n    NSA <-->|bilateral| CSE[CSE - Canada]\n    NSA <-->|bilateral| ASD[ASD - Australia]\n    NSA <-->|bilateral| GCSB[GCSB - New Zealand]\n    GCHQ <-->|bilateral| ASD\n    GCHQ <-->|bilateral| CSE\n    FVEY[FVEY Shared Pool] --- NSA\n    FVEY --- GCHQ\n    FVEY --- CSE\n    FVEY --- ASD\n    FVEY --- GCSB",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "mesh",
       "federated",
-      "adversarial"
-    ]
-  },
-  {
-    "id": "counterintelligence-task-force",
-    "name": "Counterintelligence Task Force",
-    "category": "Intelligence & Espionage",
-    "tags": [
-      "internal-investigation",
-      "compartmented",
-      "deception",
-      "trust-verification"
-    ],
-    "summary": "Internal investigators hunt moles within their own organization using compartmented access and deception operations.",
-    "description": "A counterintelligence task force is assembled when an organization suspects it has been penetrated by a hostile agent. The task force operates under extreme compartmentation: even its existence may be classified. A task force leader reports directly to the agency head, bypassing normal chains of command that might include the mole. Investigators are selected based on polygraph results and access history. They employ canary traps (feeding unique information to suspects to see what leaks), behavioral analysis, communications monitoring, and financial audits. The fundamental challenge is epistemic: the investigators must assume any colleague could be compromised, including potentially members of the task force itself. Trust is established through verification, not assumption.",
-    "realWorldExample": "The FBI's investigation of Robert Hanssen, codenamed GRAYSUIT, operated for years as a small compartmented team reporting directly to the FBI Director. They used a combination of SVR source recruitment (a former KGB officer who provided Hanssen's file), behavioral analysis, and surveillance to identify Hanssen as the mole who had spied for Russia for 22 years from within the FBI's own counterintelligence division.",
-    "whenToUse": "When an agent system must investigate potential compromise within itself, requiring extreme compartmentation, trust verification, and the ability to operate without alerting the suspected compromised agent.",
-    "strengths": [
-      "Direct reporting to the top bypasses potentially compromised middle management",
-      "Canary traps systematically narrow the suspect pool through information control",
-      "Small team size limits exposure and reduces the chance of tipping off the target",
-      "Compartmented access means each investigator sees only what they need"
-    ],
-    "weaknesses": [
-      "Paranoid culture can damage morale and legitimate collaboration across the organization",
-      "Task force itself could be compromised if the mole is senior enough to influence staffing",
-      "Extreme secrecy prevents leveraging the full organization's resources and expertise",
-      "Long investigations (years) strain the small team and risk operational security fatigue"
-    ],
-    "agents": [
-      {
-        "role": "agency-head",
-        "name": "Agency Director",
-        "description": "Authorizes the task force's existence, receives reports, and makes decisions about arrests, doubles, or continued monitoring",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "task-force-lead",
-        "name": "Task Force Leader",
-        "description": "Manages the investigation, assigns compartmented tasks to team members, and reports directly to the agency head",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "behavioral-analyst",
-        "name": "Behavioral Analyst",
-        "description": "Studies suspect behavior patterns, lifestyle changes, travel anomalies, and psychological indicators of espionage",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "sigint-monitor",
-        "name": "Communications Monitor",
-        "description": "Conducts authorized surveillance of suspect communications, dead drops, and digital activity under court order",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "financial-investigator",
-        "name": "Financial Investigator",
-        "description": "Traces unexplained wealth, foreign bank accounts, and spending patterns inconsistent with official salary",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "deception-officer",
-        "name": "Deception Operations Officer",
-        "description": "Designs and executes canary traps, feeding unique marked information to suspects to identify the leak source",
-        "memory": "persistent-private"
-      }
-    ],
-    "forums": [
-      {
-        "name": "Director Briefing",
-        "type": "top-down",
-        "participants": [
-          "agency-head",
-          "task-force-lead"
-        ]
-      },
-      {
-        "name": "Task Force Sync",
-        "type": "threaded",
-        "participants": [
-          "task-force-lead",
-          "behavioral-analyst",
-          "sigint-monitor",
-          "financial-investigator",
-          "deception-officer"
-        ]
-      },
-      {
-        "name": "Canary Trap Results",
-        "type": "bottom-up",
-        "participants": [
-          "deception-officer",
-          "task-force-lead"
-        ]
-      },
-      {
-        "name": "Surveillance Log",
-        "type": "log",
-        "participants": [
-          "sigint-monitor",
-          "task-force-lead"
-        ]
-      },
-      {
-        "name": "Evidence Vault",
-        "type": "document",
-        "participants": [
-          "task-force-lead",
-          "behavioral-analyst",
-          "financial-investigator"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "suspect list (compartmented within task force only)",
-        "canary trap registry",
-        "timeline of anomalies"
-      ],
-      "private": [
-        "individual investigator's working theories",
-        "surveillance raw data",
-        "source identities",
-        "financial audit details"
-      ],
-      "description": "Memory is aggressively compartmented. Each investigator knows only their lane: the behavioral analyst doesn't see raw SIGINT, and the communications monitor doesn't see financial records. Only the task force leader integrates all threads. The evidence vault is append-only and cryptographically logged to prevent tampering. The task force's very existence is private from the rest of the organization. Canary trap information is uniquely marked per suspect, making the registry a critical shared asset."
-    },
-    "diagram": "graph TD\n    DIR[Agency Director] --> TFL[Task Force Leader]\n    TFL --> BA[Behavioral Analyst]\n    TFL --> SM[SIGINT Monitor]\n    TFL --> FI[Financial Investigator]\n    TFL --> DO[Deception Officer]\n    DO -->|canary traps| SUSPECTS[Suspect Pool]\n    SM -->|surveillance| SUSPECTS\n    BA -->|behavioral analysis| SUSPECTS\n    FI -->|financial audit| SUSPECTS\n    TFL -->|reports| DIR",
-    "hierarchyTypes": [
+      "adversarial",
       "chain-of-command"
     ]
   },
@@ -1094,7 +965,6 @@
     "hierarchyTypes": [
       "adversarial",
       "consensus",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -1386,7 +1256,6 @@
     "diagram": "graph TD\n    PM[Program Manager] --> LI[Lead Instructor]\n    PM --> CC[Career Coach]\n    LI --> TA[Teaching Assistant]\n    LI -->|lectures| SA[Student A]\n    LI -->|lectures| SB[Student B]\n    TA -->|1-on-1 help| SA\n    TA -->|1-on-1 help| SB\n    SA <-->|pair programming| SB\n    IM[Industry Mentor] -->|code review| SA\n    IM -->|code review| SB\n    CC -->|career prep| SA\n    CC -->|career prep| SB",
     "hierarchyTypes": [
       "mesh",
-      "chain-of-command",
       "orchestrated",
       "consensus"
     ]
@@ -1538,8 +1407,8 @@
     "diagram": "graph TD\n    SL[Seminar Leader] --> SD[Seminar Discussion]\n    CP[Civilian Professor] --> SD\n    AC[Army Colonel] --> SD\n    NC[Navy Captain] --> SD\n    AFC[Air Force Colonel] --> SD\n    MC[Marine Colonel] --> SD\n    AO[Allied Officer] --> SD\n    SD --> WG[Wargame Exercise]\n    SD --> RP[Research Papers]\n    WG --> AAR[After Action Review]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "mesh",
+      "chain-of-command",
       "adversarial"
     ]
   },
@@ -1931,8 +1800,8 @@
     },
     "diagram": "graph TD\n    PARL[Parliament] -->|oversight| COD[Court of Directors - London]\n    COD -->|dispatches 6mo| GG[Governor-General - India]\n    GG --> PMad[Presidency - Madras]\n    GG --> PBom[Presidency - Bombay]\n    GG --> MIL[Military Commander]\n    GG --> CM[Chief Merchant]\n    GG --> RC[Revenue Collector]\n    MIL -->|force| TERR[Territories]\n    RC -->|taxes| TERR\n    CM -->|trade| TERR",
     "hierarchyTypes": [
-      "chain-of-command",
-      "consensus"
+      "consensus",
+      "chain-of-command"
     ]
   },
   {

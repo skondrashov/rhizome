@@ -144,7 +144,7 @@
     },
     "structuralClass": {
       "type": "string",
-      "description": "Structural class identifier connecting structurally similar patterns across domains (injected by build.py from agent-forge's structural-classes.json)"
+      "description": "Structural class identifier connecting structurally similar patterns across domains (injected by build.py from structural-classes.json)"
     }
   }
 }

@@ -513,7 +513,9 @@
     "diagram": "graph TD\n    ORDER[Order In] --> EC[Executive Chef]\n    EC -->|fires courses| SC[Sous Chef]\n    SC --> SAU[Saucier]\n    SC --> GRL[Grillardin]\n    SC --> GM[Garde Manger]\n    SC --> PAT[Patissier]\n    SAU -->|plate component| PASS[The Pass]\n    GRL -->|plate component| PASS\n    GM -->|plate component| PASS\n    PAT -->|plate component| PASS\n    EC -->|inspects & sends| TABLE[Table]",
     "hierarchyTypes": [
       "chain-of-command",
-      "pipeline"
+      "pipeline",
+      "orchestrated",
+      "swarm"
     ]
   },
   {
@@ -632,8 +634,8 @@
     },
     "diagram": "graph TD\n    ATC[Air Traffic Control] -->|clearances| FD[Flight Deck]\n    DISP[Dispatch] -->|weather/fuel updates| FD\n    FD --> CAPT[Captain]\n    FD --> FO[First Officer]\n    CAPT <-->|challenge-response| FO\n    CAPT -->|orders| CCL[Cabin Crew Lead]\n    CCL -->|cabin status| CAPT\n    FMC[Flight Computer] <--> CAPT\n    FMC <--> FO\n    CL[Checklists] --> CAPT\n    CL --> FO",
     "hierarchyTypes": [
-      "chain-of-command",
-      "mesh"
+      "mesh",
+      "chain-of-command"
     ]
   },
   {
@@ -755,143 +757,7 @@
     },
     "diagram": "graph TD\n    MM[Mastermind] -->|partial briefing| INF[Infiltrator]\n    MM -->|partial briefing| SE[Social Engineer]\n    MM -->|partial briefing| TS[Tech Specialist]\n    MM -->|partial briefing| WH[Wheelman]\n    IA[Inside Agent] -->|dead drops| MM\n    SE -->|creates opening| INF\n    INF -->|gains access| TS\n    TS -->|disables security| TARGET[Target]\n    WH -->|extraction| INF\n    WH -->|extraction| SE",
     "hierarchyTypes": [
-      "orchestrated",
-      "chain-of-command"
-    ]
-  },
-  {
-    "id": "firefighting-incident-command",
-    "name": "Firefighting Incident Command System",
-    "category": "Government & Political",
-    "tags": [
-      "scalable-hierarchy",
-      "span-of-control",
-      "modular-expansion",
-      "unified-command"
-    ],
-    "summary": "A hierarchy that grows modularly from 1 truck to 10,000 personnel, maintaining 3-7 span of control at every level.",
-    "description": "ICS is the most battle-tested scalable organizational pattern in existence. It starts with a single Incident Commander on a one-truck response and can expand to manage 10,000+ personnel across multiple agencies on a month-long wildfire -- using the exact same structural principles. The key constraint is span of control: no agent supervises more than 7 subordinates (ideally 3-5). When a level gets overloaded, it splits by creating a new level below it. The four sections (Operations, Planning, Logistics, Finance) activate only when needed. Unified Command allows multiple agencies to share leadership without creating a separate hierarchy for each. Every 12-24 hours, the Planning section produces an Incident Action Plan that becomes the shared operational truth.",
-    "realWorldExample": "The 2018 Camp Fire in Paradise, California deployed ICS to coordinate 5,600+ personnel from 70+ agencies over 17 days, scaling from initial alarm to a Type 1 incident management team within 48 hours.",
-    "whenToUse": "When the scale of the problem is unknown at the start and may grow by orders of magnitude, when multiple independent organizations must coordinate under unified direction, and when the response may last days or weeks.",
-    "strengths": [
-      "Scales smoothly from 5 to 5,000 agents using the same structural rules",
-      "Modular activation means you only create overhead that the current situation demands",
-      "Unified Command elegantly solves multi-agency coordination without subordinating any agency",
-      "Incident Action Plans create a shared 12-24 hour operational picture that aligns everyone"
-    ],
-    "weaknesses": [
-      "Overhead of full ICS is excessive for small incidents, tempting people to skip structure",
-      "Transfer of command between shifts loses tacit knowledge that doesn't fit the IAP",
-      "The planning cycle assumes incident evolution is slow enough for 12-24 hour plans",
-      "Strict hierarchy can suppress ground-level intelligence that doesn't flow up through channels"
-    ],
-    "agents": [
-      {
-        "role": "incident-commander",
-        "name": "Incident Commander",
-        "description": "Overall authority for the incident; sets objectives, approves the Incident Action Plan, manages command staff",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "operations-chief",
-        "name": "Operations Section Chief",
-        "description": "Directs all tactical operations; manages divisions, groups, and strike teams that do the actual work",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "planning-chief",
-        "name": "Planning Section Chief",
-        "description": "Produces the Incident Action Plan; tracks resources, maps the situation, forecasts incident evolution",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "logistics-chief",
-        "name": "Logistics Section Chief",
-        "description": "Provides all support: food, fuel, equipment, communications, medical for responders, base camp",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "division-supervisor",
-        "name": "Division Supervisor",
-        "description": "Manages 3-7 strike teams or task forces within a geographic division; the lowest level with tactical authority",
-        "memory": "ephemeral"
-      },
-      {
-        "role": "safety-officer",
-        "name": "Safety Officer",
-        "description": "Has authority to stop any unsafe operation regardless of who ordered it; reports directly to IC, not through chain",
-        "memory": "append-only"
-      }
-    ],
-    "forums": [
-      {
-        "name": "Incident Action Plan",
-        "type": "document",
-        "participants": [
-          "incident-commander",
-          "operations-chief",
-          "planning-chief",
-          "logistics-chief",
-          "safety-officer"
-        ]
-      },
-      {
-        "name": "Tactical Radio Net",
-        "type": "broadcast",
-        "participants": [
-          "operations-chief",
-          "division-supervisor"
-        ]
-      },
-      {
-        "name": "Planning Meeting",
-        "type": "decision",
-        "participants": [
-          "incident-commander",
-          "operations-chief",
-          "planning-chief",
-          "logistics-chief",
-          "safety-officer"
-        ]
-      },
-      {
-        "name": "Situation Report",
-        "type": "bottom-up",
-        "participants": [
-          "division-supervisor",
-          "operations-chief",
-          "planning-chief"
-        ]
-      },
-      {
-        "name": "Safety Alert",
-        "type": "emergency",
-        "participants": [
-          "safety-officer",
-          "incident-commander",
-          "operations-chief"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "incident-action-plan-current",
-        "situation-map-with-perimeter",
-        "resource-status-board",
-        "incident-objectives"
-      ],
-      "private": [
-        "division-assignment-lists",
-        "safety-concern-notes",
-        "logistics-supply-chain-status"
-      ],
-      "description": "The Incident Action Plan is the central shared memory artifact, regenerated every operational period (12-24 hours). It contains objectives, organization chart, assignments, communications plan, and maps. The situation map is continuously updated shared state. Resource tracking is critical shared memory: who is deployed where, what's available, what's en route. Private memory exists at each level for operational details that don't need to flow up. The planning section is essentially the memory management unit of the entire system."
-    },
-    "diagram": "graph TD\n    IC[Incident Commander] --> SO[Safety Officer]\n    IC --> OPS[Operations Chief]\n    IC --> PLAN[Planning Chief]\n    IC --> LOG[Logistics Chief]\n    OPS --> DIV1[Division A]\n    OPS --> DIV2[Division B]\n    OPS --> DIV3[Division C]\n    DIV1 --> ST1[Strike Team 1]\n    DIV1 --> ST2[Strike Team 2]\n    PLAN -->|produces| IAP[Incident Action Plan]\n    IAP -->|guides| OPS",
-    "hierarchyTypes": [
-      "chain-of-command",
-      "orchestrated",
-      "consensus"
+      "orchestrated"
     ]
   },
   {
@@ -1015,10 +881,9 @@
     "diagram": "graph TD\n    YC[YC Partners] -->|office hours| S1[Startup A]\n    YC -->|office hours| S2[Startup B]\n    YC -->|office hours| S3[Startup C]\n    YC -->|office hours| S4[Startup N]\n    S1 <-->|peer feedback| S2\n    S2 <-->|peer feedback| S3\n    S3 <-->|peer feedback| S4\n    VS[Visiting Speakers] -->|talks| ALL[Group Dinner]\n    S1 -->|pitch| DD[Demo Day]\n    S2 -->|pitch| DD\n    S3 -->|pitch| DD\n    DD --> INV[Investors]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "orchestrated",
-      "swarm",
-      "federated"
+      "federated",
+      "swarm"
     ]
   },
   {
@@ -1514,10 +1379,10 @@
     },
     "diagram": "graph TD\n    M1[Member A] <-->|advice process| M2[Member B]\n    M1 <-->|advice process| M3[Member C]\n    M2 <-->|peer feedback| M3\n    M3 <-->|advice process| M4[Member D]\n    M4 <-->|peer feedback| M1\n    CM[Conflict Mediator] -.->|when needed| M1\n    CM -.->|when needed| M2\n    PL[Purpose Listener] -->|senses direction| ALL[Purpose Circle]\n    OB[Onboarding Buddy] -->|guides| NEW[New Member]",
     "hierarchyTypes": [
-      "chain-of-command",
       "federated",
-      "mesh",
       "consensus",
+      "mesh",
+      "chain-of-command",
       "swarm"
     ]
   },
@@ -1647,11 +1512,11 @@
     "diagram": "graph TD\n    SIGINT[SIGINT Analyst] -->|assessment| FC[Fusion Coordinator]\n    HUMINT[HUMINT Analyst] -->|assessment| FC\n    IMINT[IMINT Analyst] -->|assessment| FC\n    OSINT[OSINT Analyst] -->|assessment| FC\n    FC -->|fused picture| DM[Decision-Maker]\n    RT[Red Team] -->|challenges| DM\n    RT -->|challenges| FC\n    DM -->|decides| CO[Comms Officer]\n    CO -->|orders| FIELD[Field Assets]\n    CHR[Chronicler] -->|records| LOG[Decision Log]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "orchestrated",
       "adversarial",
-      "swarm",
-      "pipeline"
+      "chain-of-command",
+      "pipeline",
+      "swarm"
     ]
   },
   {
@@ -1772,8 +1637,8 @@
     "diagram": "graph TD\n    OC[One Commandment] --> F[Founder]\n    F -->|bootstraps| COMM[Online Community]\n    COMM -->|grows into| NS[Network Society]\n    NS -->|crowdfunds| TERR[Physical Territory]\n    CIT[Citizens] -->|vote on-chain| GOV[Governance Smart Contract]\n    GOV -->|enforces| NS\n    CD[Census Dashboard] -->|tracks| CIT\n    CD -->|tracks| TERR\n    DIP[Diplomat] -->|seeks recognition| EXT[Existing Nations]",
     "hierarchyTypes": [
       "consensus",
-      "swarm",
       "federated",
+      "swarm",
       "mesh"
     ]
   },
@@ -1897,7 +1762,6 @@
       "consensus",
       "orchestrated",
       "federated",
-      "chain-of-command",
       "mesh"
     ]
   }

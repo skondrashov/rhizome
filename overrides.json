@@ -1,36 +1,164 @@
 {
-  "burning-man-festival": ["federated", "swarm", "consensus"],
-  "conglomerate-holding": ["federated", "chain-of-command"],
-  "amish-barn-raising": ["swarm", "consensus"],
-  "symphony-orchestra": ["orchestrated"],
-  "talmudic-chavruta": ["mesh", "consensus"],
-  "dark-pool-matching": ["pipeline", "orchestrated"],
-  "benedictine-horarium": ["pipeline", "chain-of-command"],
-  "open-source-bazaar": ["mesh", "consensus", "federated"],
-  "renaissance-bottega": ["chain-of-command", "mesh"],
-  "shuttle-launch-countdown": ["pipeline", "chain-of-command", "orchestrated"],
-  "trading-floor": ["mesh", "adversarial", "swarm"],
-  "scrum-team": ["consensus", "swarm"],
-  "sre-incident-response": ["chain-of-command", "orchestrated", "pipeline"],
-  "basketball-motion-offense": ["mesh", "swarm"],
-  "surgical-team-orchestration": ["orchestrated", "chain-of-command", "pipeline"],
-  "emergency-room-triage": ["pipeline", "orchestrated", "chain-of-command"],
-  "mixture-of-agents": ["orchestrated", "pipeline", "swarm"],
-  "superforecasting-tournament": ["adversarial", "consensus", "swarm"],
-  "witness-protection-program": ["chain-of-command", "federated"],
-  "early-stage-startup": ["mesh", "consensus"],
-  "flocking-v-formation": ["swarm", "mesh"],
-  "game-dev-studio": ["pipeline", "orchestrated", "mesh"],
-  "carrier-strike-group": ["chain-of-command", "orchestrated"],
-  "submarine-crew-operations": ["chain-of-command", "pipeline"],
-  "toyota-production-system": ["pipeline", "swarm", "consensus"],
-  "monte-carlo-agent-tree-search": ["pipeline", "adversarial", "swarm"],
-  "checkpoint-and-branch": ["pipeline", "adversarial"],
-  "temperature-gradient-ensemble": ["adversarial", "consensus", "orchestrated"],
-  "cellular-automaton-grid": ["swarm", "mesh"],
-  "autopoietic-cell": ["swarm", "pipeline"],
-  "rhizome-network": ["mesh", "swarm", "federated"],
-  "dialectical-engine": ["adversarial", "pipeline", "consensus"],
-  "rag-librarian-analyst-split": ["pipeline", "orchestrated"],
-  "peer-review-double-blind": ["adversarial", "pipeline", "consensus"]
+  "burning-man-festival": [
+    "federated",
+    "swarm",
+    "consensus"
+  ],
+  "conglomerate-holding": [
+    "federated",
+    "chain-of-command"
+  ],
+  "amish-barn-raising": [
+    "swarm",
+    "consensus"
+  ],
+  "symphony-orchestra": [
+    "orchestrated"
+  ],
+  "talmudic-chavruta": [
+    "mesh",
+    "consensus"
+  ],
+  "dark-pool-matching": [
+    "pipeline",
+    "orchestrated"
+  ],
+  "benedictine-horarium": [
+    "pipeline",
+    "chain-of-command"
+  ],
+  "open-source-bazaar": [
+    "mesh",
+    "consensus",
+    "federated"
+  ],
+  "renaissance-bottega": [
+    "chain-of-command",
+    "mesh"
+  ],
+  "shuttle-launch-countdown": [
+    "pipeline",
+    "chain-of-command",
+    "orchestrated"
+  ],
+  "trading-floor": [
+    "mesh",
+    "adversarial",
+    "swarm"
+  ],
+  "scrum-team": [
+    "consensus",
+    "swarm"
+  ],
+  "sre-incident-response": [
+    "chain-of-command",
+    "orchestrated",
+    "pipeline"
+  ],
+  "basketball-motion-offense": [
+    "mesh",
+    "swarm"
+  ],
+  "surgical-team-orchestration": [
+    "orchestrated",
+    "chain-of-command",
+    "pipeline"
+  ],
+  "emergency-room-triage": [
+    "pipeline",
+    "orchestrated",
+    "chain-of-command"
+  ],
+  "mixture-of-agents": [
+    "orchestrated",
+    "pipeline",
+    "swarm"
+  ],
+  "superforecasting-tournament": [
+    "adversarial",
+    "consensus",
+    "swarm"
+  ],
+  "witness-protection-program": [
+    "chain-of-command",
+    "federated"
+  ],
+  "early-stage-startup": [
+    "mesh",
+    "consensus"
+  ],
+  "flocking-v-formation": [
+    "swarm",
+    "mesh"
+  ],
+  "game-dev-studio": [
+    "pipeline",
+    "orchestrated",
+    "mesh"
+  ],
+  "submarine-crew-operations": [
+    "chain-of-command",
+    "pipeline"
+  ],
+  "toyota-production-system": [
+    "pipeline",
+    "swarm",
+    "consensus"
+  ],
+  "monte-carlo-agent-tree-search": [
+    "pipeline",
+    "adversarial",
+    "swarm"
+  ],
+  "checkpoint-and-branch": [
+    "pipeline",
+    "adversarial"
+  ],
+  "temperature-gradient-ensemble": [
+    "adversarial",
+    "consensus",
+    "orchestrated"
+  ],
+  "cellular-automaton-grid": [
+    "swarm",
+    "mesh"
+  ],
+  "autopoietic-cell": [
+    "swarm",
+    "pipeline"
+  ],
+  "rhizome-network": [
+    "mesh",
+    "swarm",
+    "federated"
+  ],
+  "dialectical-engine": [
+    "adversarial",
+    "pipeline",
+    "consensus"
+  ],
+  "rag-librarian-analyst-split": [
+    "pipeline",
+    "orchestrated"
+  ],
+  "peer-review-double-blind": [
+    "adversarial",
+    "pipeline",
+    "consensus"
+  ],
+  "papal-conclave": [
+    "consensus"
+  ],
+  "wildfire-hotshot-crew": [
+    "chain-of-command",
+    "pipeline"
+  ],
+  "samurai-domain-governance": [
+    "chain-of-command",
+    "federated"
+  ],
+  "traveling-circus": [
+    "pipeline",
+    "orchestrated"
+  ]
 }

@@ -503,11 +503,10 @@
       ],
       "description": "All decisions are recorded on public mailing lists, creating a permanent shared archive. Lazy consensus windows are tracked with timestamps. Veto justifications become part of the permanent record. The committer roster is a shared meritocratic ledger. Private communications among PMC members handle sensitive personnel matters like committer nominations."
     },
-    "diagram": "graph TD\n    CONT[Contributor] -->|proposes| ML[Dev Mailing List]\n    ML -->|72h silence| LC[Lazy Consensus Pass]\n    ML -->|veto -1| VD[Veto Discussion]\n    VD -->|revised proposal| ML\n    SC[Senior Committer] -->|binding vote| ML\n    COM[Committer] -->|binding vote| ML\n    PMC[PMC Chair] -->|oversees| ML\n    RM[Release Manager] -->|release vote| PMC",
+    "diagram": "graph TD\n    DEV[Contributor] -->|proposes| ML((Mailing List))\n    COM[Committer] -->|reviews| ML\n    PMC[PMC Member] -->|oversees| ML\n    COM -->|+1 binding| ML\n    PMC -->|+1 binding| ML\n    DEV -->|+1 non-binding| ML\n    COM -->|veto -1| ML\n    ML -->|approved| COM",
     "hierarchyTypes": [
       "consensus",
       "federated",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -769,140 +768,8 @@
     },
     "diagram": "graph TD\n    W[Warden] -->|official orders| GS[Guard Sergeant]\n    GS -->|surveillance| W\n    SC[Shot-Caller] -->|orders| UG[Underground Economy]\n    CT[Commissary Trader] <-->|trades| SC\n    CT <-->|trades| UI[Unaffiliated Inmate]\n    JL[Jailhouse Lawyer] <-->|legal services| UI\n    JL <-->|legal services| SC\n    GS -.->|monitors| UG\n    W -.->|cannot see| SC",
     "hierarchyTypes": [
-      "chain-of-command"
-    ]
-  },
-  {
-    "id": "tcg-tournament-swiss",
-    "name": "Trading Card Game Tournament (Swiss Rounds)",
-    "category": "Sports & Competition",
-    "tags": [
-      "swiss-pairing",
-      "deck-metagame",
-      "judges",
-      "coverage"
-    ],
-    "summary": "Players compete in Swiss rounds where wins pair you against other winners, surfacing the best without elimination.",
-    "description": "A major trading card game tournament (Magic: The Gathering, Yu-Gi-Oh, Pokemon) uses Swiss-system rounds to efficiently rank hundreds of players without eliminating anyone early. Each round, players with the same win-loss record are paired against each other. After enough rounds (log2 of player count), the top 8 players advance to a single-elimination bracket. Crucially, the metagame layer operates above individual games: players must predict what decks others will bring and choose their own deck accordingly, creating a rock-paper-scissors dynamic at the population level. Judges handle rule disputes in real-time using a layered appeals system. Feature match coverage and commentary create a parallel broadcast layer. Side events run simultaneously for eliminated players, keeping the whole venue active.",
-    "realWorldExample": "At Magic: The Gathering Pro Tour 2024, 250 players compete in 16 rounds of Swiss (8 draft, 8 constructed). A player at 5-2 is paired against another 5-2 player. Tiebreakers (opponent match win percentage) determine standings when records are equal. Head judge makes a ruling that a player accidentally drew an extra card; the floor judge's ruling is appealed and overturned. The top 8 advance to single-elimination on Sunday, with live commentary reaching 100,000 viewers.",
-    "whenToUse": "When an agent system must efficiently rank many participants with minimal rounds, tolerate some losses without elimination, and handle a metagame layer where strategy depends on predicting others' strategies.",
-    "strengths": [
-      "Swiss pairing efficiently surfaces top performers in O(log N) rounds without eliminating anyone",
-      "Same-record pairing ensures competitive matches at every skill level throughout the event",
-      "Metagame prediction layer adds strategic depth beyond individual match skill",
-      "Layered judge system handles disputes without halting the tournament"
-    ],
-    "weaknesses": [
-      "Tiebreaker math (opponent win percentage) is opaque and can feel arbitrary to participants",
-      "Intentional draws in final rounds by top players can lock out deserving competitors",
-      "Metagame can become stale if one dominant strategy emerges with no counter",
-      "Late rounds are high-variance: one bad pairing can end a 12-1 player's tournament"
-    ],
-    "agents": [
-      {
-        "role": "head-judge",
-        "name": "Head Judge",
-        "description": "Final arbiter on all rules disputes, sets tournament policy, handles appeals from floor judges",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "floor-judge",
-        "name": "Floor Judge",
-        "description": "Roams the tournament floor, answers rules questions, makes initial rulings on disputes",
-        "memory": "ephemeral"
-      },
-      {
-        "role": "scorekeeper",
-        "name": "Scorekeeper",
-        "description": "Runs the Swiss pairing algorithm, records results, calculates tiebreakers, posts standings",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "competitor-aggro",
-        "name": "Aggressive Competitor",
-        "description": "Chose a fast deck predicting a slow metagame; wins quickly or loses to prepared opponents",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "competitor-control",
-        "name": "Control Competitor",
-        "description": "Chose a reactive deck predicting aggression; excels in long games against fast strategies",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "coverage-commentator",
-        "name": "Coverage Commentator",
-        "description": "Selects feature matches, provides real-time analysis, and broadcasts the metagame narrative",
-        "memory": "persistent-shared"
-      }
-    ],
-    "forums": [
-      {
-        "name": "Pairings Board",
-        "type": "broadcast",
-        "participants": [
-          "scorekeeper",
-          "competitor-aggro",
-          "competitor-control",
-          "head-judge"
-        ]
-      },
-      {
-        "name": "Rules Dispute",
-        "type": "advisory",
-        "participants": [
-          "floor-judge",
-          "head-judge",
-          "competitor-aggro",
-          "competitor-control"
-        ]
-      },
-      {
-        "name": "Results Slip",
-        "type": "queue",
-        "participants": [
-          "competitor-aggro",
-          "competitor-control",
-          "scorekeeper"
-        ]
-      },
-      {
-        "name": "Feature Match Coverage",
-        "type": "broadcast",
-        "participants": [
-          "coverage-commentator"
-        ]
-      },
-      {
-        "name": "Metagame Analysis",
-        "type": "log",
-        "participants": [
-          "coverage-commentator",
-          "scorekeeper"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "pairings per round",
-        "standings",
-        "tiebreaker calculations",
-        "rules errata",
-        "metagame breakdown"
-      ],
-      "private": [
-        "deck composition",
-        "sideboard strategy",
-        "opponent scouting notes",
-        "match history"
-      ],
-      "description": "The scorekeeper maintains the authoritative shared standings and pairings. Deck composition is private until the top 8, when decklists are published. Each competitor keeps private scouting notes on opponents' decks observed in previous rounds. The metagame breakdown is a shared statistical layer maintained by coverage. Judge rulings create precedent stored in shared memory for consistent future rulings."
-    },
-    "diagram": "graph TD\n    SK[Scorekeeper] -->|pairings| PB[Pairings Board]\n    CA[Competitor A] -->|plays| MATCH[Match]\n    CC[Competitor B] -->|plays| MATCH\n    MATCH -->|result| SK\n    FJ[Floor Judge] -->|ruling| MATCH\n    FJ -->|appeal| HJ[Head Judge]\n    HJ -->|final ruling| MATCH\n    SK -->|standings| TOP8[Top 8 Bracket]\n    COV[Coverage] -->|broadcasts| MATCH",
-    "hierarchyTypes": [
-      "adversarial",
-      "pipeline",
-      "chain-of-command"
+      "chain-of-command",
+      "mesh"
     ]
   },
   {
@@ -1030,7 +897,6 @@
     "diagram": "graph TD\n    CP[Cathedral Chapter] -->|commissions & funds| MB[Master Builder]\n    MB -->|templates| TF[Tracing Floor]\n    MB -->|directs| LM[Lodge Master]\n    LM -->|supervises| JM[Journeyman Mason]\n    JM -->|trains| AM[Apprentice Mason]\n    JM <-->|travels between sites| OTHER[Other Cathedrals]\n    MB -->|succession| SB[Successor Builder]\n    SB -->|reinterprets| TF\n    TF -->|guides| STONE[The Building Itself]",
     "hierarchyTypes": [
       "federated",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -1151,10 +1017,11 @@
     },
     "diagram": "graph LR\n    MN[Master Navigator] -->|course| LCC[Lead Canoe Captain]\n    LCC -->|signals| FC1[Fleet Canoe 1]\n    FC1 -->|relays| FC2[Fleet Canoe 2]\n    STARS[Stars & Swells] -->|reads| MN\n    BIRDS[Bird Patterns] -->|reads| MN\n    MN -->|teaches| APP[Apprentice]\n    PM[Provisions Master] -->|status| LCC",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
+      "chain-of-command",
       "swarm",
-      "mesh"
+      "mesh",
+      "federated"
     ]
   },
   {
@@ -1285,7 +1152,8 @@
     "diagram": "graph TD\n    GP[Gosplan] -->|quotas| MH[Ministry Head]\n    MH -->|quotas| FD[Factory Director]\n    FD -->|fictional reports| MH\n    MH -->|aggregated fiction| GP\n    FD <-->|off-plan trades| TK[Tolkach Fixer]\n    TK <-->|brokers| FD2[Other Factory]\n    PI[Party Inspector] -->|audits| FD\n    FD -.->|co-opts| PI\n    BMO[Blat Network] <-->|fills gaps| FD",
     "hierarchyTypes": [
       "chain-of-command",
-      "mesh"
+      "mesh",
+      "federated"
     ]
   },
   {
@@ -1944,8 +1812,7 @@
     "diagram": "graph TD\n    SM[Station Manager] -->|coordinates| PE[Power Engineer]\n    SM -->|coordinates| CO[Comms Operator]\n    SM -->|coordinates| SL[Science Lead]\n    WP[Winter Physician] -->|monitors health| SM\n    WP -->|monitors health| PE\n    CM[Cook/Morale] -->|sustains| ALL[All Crew]\n    PE -->|life support| ALL\n    CO -->|limited satellite| EXT[External World]\n    EXT -.->|no evacuation| SM",
     "hierarchyTypes": [
       "mesh",
-      "orchestrated",
-      "chain-of-command"
+      "orchestrated"
     ]
   },
   {
@@ -2070,7 +1937,11 @@
     },
     "diagram": "graph TD\n    WA[House Members] -->|contribute resources| HC[Host Chief]\n    HC -->|gives away wealth| RC[Rival Chief]\n    HS[Herald/Speaker] -->|announces| POT[Potlatch Ceremony]\n    HC -->|performs| POT\n    RC -->|receives & owes| POT\n    WC[Witness Community] -->|remembers & enforces| POT\n    RC -->|must reciprocate larger| FUTURE[Future Potlatch]\n    POT -->|updates| RANK[Status Rankings]",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "orchestrated",
+      "pipeline",
+      "swarm",
+      "adversarial"
     ]
   },
   {
@@ -2198,9 +2069,9 @@
     "diagram": "graph LR\n    P[Passenger] -->|guided by| C[Conductor]\n    C -->|delivers to| SM1[Station Master 1]\n    SM1 -->|next leg| C\n    C -->|delivers to| SM2[Station Master 2]\n    SM2 -->|next leg| C\n    C -->|delivers to| FA[Forwarding Agent]\n    FA -->|to freedom| CANADA[Free Territory]\n    LO[Lookout] -->|warnings| SM1\n    LO -->|warnings| SM2\n    CS[Community Supporter] -.->|supplies| SM1",
     "hierarchyTypes": [
       "orchestrated",
-      "chain-of-command",
       "mesh",
       "swarm",
+      "chain-of-command",
       "federated"
     ]
   },
@@ -2335,7 +2206,9 @@
     "hierarchyTypes": [
       "chain-of-command",
       "mesh",
-      "swarm"
+      "swarm",
+      "orchestrated",
+      "federated"
     ]
   },
   {

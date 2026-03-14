@@ -60,7 +60,7 @@ def test_all_patterns_have_forums(all_patterns):
 
 
 def test_pattern_count(all_patterns):
-    """Should have exactly 207 patterns."""
+    """Should have exactly 200 patterns."""
     ids = [p["id"] for p in all_patterns if "id" in p]
     unique_ids = set(ids)
-    assert len(unique_ids) == 207, f"Expected 207, got {len(unique_ids)} unique patterns"
+    assert len(unique_ids) == 200, f"Expected 200, got {len(unique_ids)} unique patterns"

@@ -209,7 +209,7 @@ def get_comments(pattern_id: str):
                    (SELECT COUNT(*) FROM comment_flags WHERE comment_id = c.id) as flag_count
             FROM comments c
             WHERE c.pattern_id = ? AND c.flagged = 0
-            ORDER BY c.created_at DESC
+            ORDER BY c.created_at DESC, c.id DESC
             """,
             (pattern_id,),
         ).fetchall()

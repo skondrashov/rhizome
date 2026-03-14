@@ -149,10 +149,13 @@
     },
     "diagram": "graph TD\n    FD[Flight Director] --> CAPCOM[CAPCOM]\n    FD --> FIDO[FIDO]\n    FD --> EECOM[EECOM]\n    FD --> GNC[GNC]\n    FD --> INCO[INCO]\n    FD --> SURG[Flight Surgeon]\n    CAPCOM -->|air-to-ground| CREW[Crew]\n    FIDO --> BR1[Back Room - Trajectory]\n    EECOM --> BR2[Back Room - Power/Life Support]\n    GNC --> BR3[Back Room - Guidance]",
     "hierarchyTypes": [
-      "chain-of-command",
       "federated",
+      "chain-of-command",
+      "consensus",
       "mesh",
-      "consensus"
+      "adversarial",
+      "orchestrated",
+      "swarm"
     ]
   },
   {
@@ -288,8 +291,8 @@
     },
     "diagram": "graph TD\n    NRC[NRC Resident Inspector] -.->|independent oversight| PM[Plant Manager]\n    PM --> SRC[Safety Review Committee]\n    PM --> CRS[Control Room Supervisor]\n    CRS --> RO1[Reactor Operator - Primary]\n    CRS --> RO2[Reactor Operator - BOP]\n    STA[Shift Technical Advisor] -.->|independent analysis| CRS\n    SRC -.->|safety reviews| CRS\n    RO1 --> REACTOR[Reactor Systems]\n    RO2 --> BOP[Balance of Plant]",
     "hierarchyTypes": [
-      "chain-of-command",
       "consensus",
+      "chain-of-command",
       "mesh"
     ]
   },
@@ -429,7 +432,6 @@
     "diagram": "graph LR\n    RAW[Raw Materials] --> SW1[Station 1 - Frame]\n    SW1 --> SW2[Station 2 - Engine]\n    SW2 --> SW3[Station 3 - Body]\n    SW3 --> QC1[Quality Check]\n    QC1 --> SW4[Station 4 - Electrical]\n    SW4 --> SW5[Station 5 - Final Assembly]\n    SW5 --> QC2[Final Inspection]\n    MH[Material Handler] --> SW1\n    MH --> SW2\n    MH --> SW3\n    LS[Line Supervisor] -.-> SW1\n    LS -.-> SW5",
     "hierarchyTypes": [
       "pipeline",
-      "chain-of-command",
       "orchestrated",
       "consensus"
     ]
@@ -703,7 +705,6 @@
     "hierarchyTypes": [
       "federated",
       "consensus",
-      "chain-of-command",
       "mesh"
     ]
   },
@@ -843,7 +844,6 @@
     "diagram": "graph TD\n    SR[Showrunner] --> HOST[Host]\n    SR --> IP[Investigative Producer]\n    SR --> SE[Story Editor]\n    IP -->|research| SR\n    IP -->|interview briefs| HOST\n    HOST -->|raw tape| SE\n    SE -->|draft scripts| AE[Audio Engineer]\n    FC[Fact-Checker] -.->|verification| SR\n    LC[Legal Counsel] -.->|clearance| SR\n    AE -->|final mix| PUB[Publication]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "pipeline"
     ]
   },
@@ -992,11 +992,11 @@
     },
     "diagram": "graph LR\n    CD[Content Director] --> VC[Video Creator]\n    CD --> GD[Graphic Designer]\n    CD --> CW[Copywriter]\n    VC --> ED[Editor]\n    GD --> ED\n    CW --> ED\n    ED --> SCH[Scheduler]\n    SCH --> PUB[Multi-Platform Publish]\n    DA[Data Analyst] -.->|metrics| CD\n    CM[Community Manager] -.->|trending| CD\n    PUB -.->|engagement data| DA",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
-      "pipeline",
       "consensus",
+      "pipeline",
       "adversarial",
+      "chain-of-command",
       "swarm"
     ]
   },
@@ -1151,12 +1151,12 @@
     },
     "diagram": "graph TD\n    PROD[Producer] --> DIR[Director]\n    DIR --> TD[Technical Director]\n    DIR --> CAM1[Camera Op - Wide]\n    DIR --> CAM2[Camera Op - Tight]\n    DIR --> GFX[Graphics Operator]\n    DIR --> RPL[Replay Operator]\n    PROD --> SM[Stage Manager]\n    PROD --> AUD[Audio Mixer]\n    TD --> OUTPUT[Live Output]\n    GFX --> OUTPUT\n    RPL --> OUTPUT\n    AUD --> OUTPUT",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
       "mesh",
       "pipeline",
-      "swarm",
-      "federated"
+      "chain-of-command",
+      "federated",
+      "swarm"
     ]
   },
   {
@@ -1295,7 +1295,10 @@
     },
     "diagram": "graph TD\n    FOC[Fleet Ops Center] --> VM1[Vessel Master - Ship A]\n    FOC --> VM2[Vessel Master - Ship B]\n    FOC --> PC1[Port Captain - Rotterdam]\n    FOC --> PC2[Port Captain - Singapore]\n    VM1 --> CO1[Chief Officer]\n    VM1 --> CE1[Chief Engineer]\n    PC1 -.->|berth coordination| VM1\n    PC2 -.->|berth coordination| VM2\n    CA[Chartering Analyst] --> FOC\n    RCO[Compliance Officer] -.->|regulations| FOC",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "orchestrated",
+      "federated",
+      "mesh"
     ]
   },
   {
@@ -1448,9 +1451,11 @@
     },
     "diagram": "graph TD\n    SC[Station Commander] --> FE1[Flight Engineer - Systems]\n    SC --> FE2[Flight Engineer - Science]\n    SC --> FE3[Flight Engineer - Robotics/EVA]\n    HC[Houston CAPCOM] -.->|US segment| SC\n    MT[Moscow TsUP] -.->|Russian segment| SC\n    GST[Ground Science Team] -.->|experiment procedures| FE2\n    FE1 --> LS[Life Support Systems]\n    FE3 --> ARM[Robotic Arm / EVA]\n    HC <-.->|telemetry| LS",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
-      "mesh"
+      "chain-of-command",
+      "mesh",
+      "federated",
+      "swarm"
     ]
   },
   {
@@ -1581,10 +1586,11 @@
     },
     "diagram": "graph LR\n    COACH[Coach] -.->|race plan| R1[Leg 1 - Start]\n    R1 -->|baton| EZ1[Exchange Zone 1]\n    EZ1 --> R2[Leg 2]\n    R2 -->|baton| EZ2[Exchange Zone 2]\n    EZ2 --> R3[Leg 3]\n    R3 -->|baton| EZ3[Exchange Zone 3]\n    EZ3 --> R4[Leg 4 - Anchor]\n    R4 --> FINISH[Finish Line]\n    EA[Exchange Analyst] -.->|optimization| EZ1\n    EA -.->|optimization| EZ2\n    EA -.->|optimization| EZ3",
     "hierarchyTypes": [
-      "chain-of-command",
       "mesh",
       "pipeline",
-      "federated"
+      "chain-of-command",
+      "federated",
+      "adversarial"
     ]
   },
   {
@@ -1733,8 +1739,7 @@
     "diagram": "graph TD\n    COACH[Head Coach] -->|strategy prep| IGL[In-Game Leader]\n    ANALYST[Analyst] -->|scouting| COACH\n    IGL -->|calls| ENTRY[Entry Fragger]\n    IGL -->|calls| SUPPORT[Support]\n    IGL -->|calls| AWPER[AWPer]\n    IGL -->|calls| LURKER[Lurker]\n    SUPPORT -.->|utility| ENTRY\n    LURKER -.->|info| IGL\n    ENTRY -.->|trade| SUPPORT",
     "hierarchyTypes": [
       "consensus",
-      "adversarial",
-      "chain-of-command"
+      "adversarial"
     ]
   },
   {
@@ -1871,9 +1876,9 @@
     },
     "diagram": "graph TD\n    TD[Tournament Director] --> CA[Chief Arbiter]\n    CA --> PD[Pairing Director]\n    CA --> DA1[Deputy Arbiter - Floor]\n    CA --> DA2[Deputy Arbiter - Results]\n    PD -->|pairings| BOARD[Pairings Board]\n    DA1 -->|monitor| GAMES[Playing Hall]\n    DA2 -->|results| PD\n    AC[Appeals Committee] -.->|appeals| CA\n    TO[Technical Officer] --> BOARD\n    TO --> GAMES",
     "hierarchyTypes": [
-      "chain-of-command",
       "consensus",
-      "adversarial"
+      "adversarial",
+      "chain-of-command"
     ]
   },
   {
@@ -2031,7 +2036,6 @@
     "hierarchyTypes": [
       "orchestrated",
       "consensus",
-      "chain-of-command",
       "swarm"
     ]
   },
@@ -2187,7 +2191,8 @@
     "diagram": "graph TD\n    POPE[Pope] --> COC[College of Cardinals]\n    POPE --> CURIA[Roman Curia / Dicasteries]\n    POPE --> NUNCIO[Papal Nuncios]\n    COC --> ARCH[Archbishops]\n    CURIA --> ARCH\n    ARCH --> BISHOP[Bishops]\n    BISHOP --> PP[Parish Priests]\n    RS[Religious Order Superiors] -.->|semi-autonomous| POPE\n    PP --> FAITHFUL[The Faithful]\n    BISHOP --> FAITHFUL",
     "hierarchyTypes": [
       "chain-of-command",
-      "federated"
+      "federated",
+      "mesh"
     ]
   }
 ]

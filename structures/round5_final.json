@@ -243,11 +243,10 @@
     "diagram": "graph TD\n    CON[Consigner] -->|submit item| AUTH[Authenticator]\n    AUTH -->|verify & rate| CAT[Auction Catalog]\n    CAT -->|publish| AUC[Auctioneer]\n    AUC -->|open bidding| FLOOR[Auction Floor]\n    B1[Bidder 1] -->|bid| FLOOR\n    B2[Bidder 2] -->|bid| FLOOR\n    PBP[Phone Bidder Proxy] -->|relay bid| FLOOR\n    FLOOR -->|hammer falls| AUC\n    AUC -->|declare winner| SC[Settlement Clerk]\n    SC -->|transfer & payment| LEDGER[Settlement Ledger]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "orchestrated",
+      "pipeline",
       "swarm",
-      "mesh",
-      "pipeline"
+      "mesh"
     ]
   },
   {
@@ -635,7 +634,11 @@
     },
     "diagram": "graph TD\n    IC[Incident Commander] -->|approve plan| PS[Planning Section]\n    PS -->|assign segments| HT1[Hasty Team 1]\n    PS -->|assign segments| HT2[Hasty Team 2]\n    PS -->|assign grids| GT1[Grid Team 1]\n    PS -->|assign grids| GT2[Grid Team 2]\n    PS -->|direct| AO[Air Ops]\n    HT1 -->|field report| PS\n    HT2 -->|field report| PS\n    GT1 -->|field report| PS\n    GT2 -->|field report| PS\n    AO -->|imagery & sightings| PS\n    PS -->|update probability map| PMAP[Probability Map]\n    BCM[Base Camp Manager] -->|logistics| HT1\n    BCM -->|logistics| GT1",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "orchestrated",
+      "consensus",
+      "federated",
+      "pipeline"
     ]
   },
   {
@@ -763,7 +766,6 @@
     "hierarchyTypes": [
       "mesh",
       "consensus",
-      "chain-of-command",
       "federated"
     ]
   },
@@ -899,7 +901,6 @@
     "diagram": "graph TD\n    COM[Commissioner] -->|set rules| RULES[League Rules]\n    RULES --> DR[Draft Room]\n    DR -->|pick players| TM1[Team Manager 1]\n    DR -->|pick players| TM2[Team Manager 2]\n    DR -->|pick players| TM3[Team Manager 3]\n    TM1 <-->|propose trade| TM2\n    TM2 <-->|propose trade| TM3\n    TR[Trade Reviewer] -->|advisory| COM\n    COM -->|approve/veto| TRADES[Trade Log]\n    SE[Scoring Engine] -->|weekly scores| SB[Scoreboard]\n    TM1 -->|claim| WW[Waiver Wire]\n    SA[Stats Analyst] -->|projections| TM1",
     "hierarchyTypes": [
       "mesh",
-      "chain-of-command",
       "orchestrated",
       "consensus",
       "federated",
@@ -1032,8 +1033,11 @@
     "diagram": "graph LR\n    PF[Pathfinder] -->|scout report| CM[Caravan Master]\n    EL[Elder] -->|route lore| CM\n    CM -->|route decision| COLUMN[Caravan Column]\n    OR1[Outrider Left] -->|threat alert| CM\n    OR2[Outrider Right] -->|threat alert| CM\n    COLUMN -->|arrive at| WP[Waypoint Settlement]\n    TR[Trader] -->|negotiate| WP\n    TR -->|intel & supplies| CM\n    WP -->|depart| PF\n    CMP[Camp Master] -->|make/break camp| COLUMN",
     "hierarchyTypes": [
       "chain-of-command",
+      "consensus",
       "mesh",
-      "consensus"
+      "adversarial",
+      "orchestrated",
+      "federated"
     ]
   },
   {
@@ -1158,7 +1162,6 @@
       "swarm",
       "orchestrated",
       "mesh",
-      "chain-of-command",
       "federated"
     ]
   },
@@ -1291,8 +1294,488 @@
     },
     "diagram": "graph TD\n    IC[Incident Commander] -->|problem statement| FT[Forward Tracer]\n    IC -->|problem statement| BT[Backward Tracer]\n    IC -->|problem statement| CA[Change Analyst]\n    IC -->|problem statement| FZ[Fuzzer]\n    FT -->|findings| SYN[Synthesizer]\n    BT -->|findings| SYN\n    CA -->|findings| SYN\n    FZ -->|findings| SYN\n    FT -.-|isolated| BT\n    BT -.-|isolated| CA\n    CA -.-|isolated| FZ\n    SYN -->|root cause| IC\n    IC -->|resolution| LOG[Incident Log]",
     "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "papal-conclave",
+    "name": "Papal Conclave",
+    "category": "Religious & Spiritual",
+    "tags": [
+      "locked-in",
+      "iterative-voting",
+      "smoke-signals",
       "consensus",
-      "chain-of-command"
+      "secrecy",
+      "ancient"
+    ],
+    "summary": "Cardinals are sealed into the Sistine Chapel and vote in rounds until a two-thirds supermajority elects a new pope.",
+    "description": "The papal conclave is a consensus mechanism refined over 800 years. After a pope dies or resigns, the College of Cardinals is physically locked inside the Vatican (cum clave, 'with a key') with no outside contact. They vote up to four times daily by secret ballot. After each round, ballots are burned: black smoke means no result, white smoke signals a new pope. The two-thirds supermajority threshold prevents factional captures. Between votes, cardinals lobby, negotiate, and build coalitions in the Domus Sanctae Marthae. The Master of Ceremonies manages the ritual choreography. The whole system is designed to produce a legitimate outcome that all factions accept, even if their candidate lost, because the process itself confers legitimacy.",
+    "realWorldExample": "The 2013 conclave that elected Pope Francis lasted 5 ballots over 2 days. 115 cardinals from 48 countries participated. Jorge Bergoglio was not among the pre-conclave favorites, but coalition-building between Latin American and reform-minded European cardinals produced a surprise supermajority on the fifth ballot.",
+    "whenToUse": "When a group of equals must choose a single leader or make a binding decision that all factions will accept, especially when legitimacy of the process matters as much as the outcome.",
+    "strengths": [
+      "Two-thirds threshold ensures broad consensus, not bare majority",
+      "Physical isolation prevents outside pressure and information leaks",
+      "Iterative voting allows coalition-building between rounds",
+      "Ancient protocol confers legitimacy that no faction can challenge",
+      "Binary smoke signal communicates outcome without revealing internal politics"
+    ],
+    "weaknesses": [
+      "Can deadlock for days or weeks when factions are evenly matched",
+      "Horse-trading between rounds can produce compromise candidates who satisfy no one",
+      "Secrecy makes it impossible to audit or verify the process externally",
+      "Physical confinement creates pressure to converge that may override deliberation",
+      "System assumes all participants share enough common ground to eventually agree"
+    ],
+    "agents": [
+      {
+        "role": "cardinal-elector",
+        "name": "Cardinal Elector",
+        "description": "Casts secret ballots, lobbies between rounds, and builds coalitions; each carries the weight of their national church's interests and theological priorities",
+        "memory": "persistent-private",
+        "count": 120
+      },
+      {
+        "role": "dean",
+        "name": "Dean of the College",
+        "description": "Presides over the conclave, calls votes, and announces results; has no extra voting power but sets the procedural tempo",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "master-of-ceremonies",
+        "name": "Master of Papal Ceremonies",
+        "description": "Manages the ritual choreography: ballot distribution, counting, burning, and smoke signals; is the only non-cardinal present during votes",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "scrutineer",
+        "name": "Scrutineer",
+        "description": "Randomly selected each round to count and verify ballots, ensuring no fraud in the secret vote",
+        "memory": "ephemeral",
+        "count": 3
+      }
+    ],
+    "forums": [
+      {
+        "name": "Sistine Chapel Ballot",
+        "type": "decision",
+        "participants": [
+          "cardinal-elector",
+          "dean",
+          "scrutineer"
+        ]
+      },
+      {
+        "name": "Domus Lobbying",
+        "type": "peer-to-peer",
+        "participants": [
+          "cardinal-elector"
+        ]
+      },
+      {
+        "name": "Smoke Signal",
+        "type": "broadcast",
+        "participants": [
+          "master-of-ceremonies"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Vote tally per round (announced orally)",
+        "Procedural rules (Universi Dominici Gregis)",
+        "Smoke signal history"
+      ],
+      "private": [
+        "Individual ballot choices",
+        "Coalition commitments and negotiations",
+        "National church priorities and mandates"
+      ],
+      "description": "Ballots are burned after counting, making the process literally append-only with physical destruction of inputs. No cardinal knows how any other cardinal voted -- only the aggregate tally. Between rounds, all coalition-building happens in private conversations. The smoke signal is the only information that escapes the locked system. After election, all notes and records are destroyed."
+    },
+    "diagram": "graph TD\n    DEAN[Dean of College] -->|calls vote| SC[Sistine Chapel]\n    C1[Cardinal Bloc A] --> SC\n    C2[Cardinal Bloc B] --> SC\n    C3[Cardinal Bloc C] --> SC\n    SC --> SCRUT[Scrutineers]\n    SCRUT -->|tally| DEAN\n    SCRUT -->|burn ballots| MC[Master of Ceremonies]\n    MC -->|black smoke| WORLD((Outside World))\n    MC -->|white smoke| WORLD\n    DEAN -.->|no result| SC",
+    "hierarchyTypes": [
+      "consensus"
+    ]
+  },
+  {
+    "id": "wildfire-hotshot-crew",
+    "name": "Wildfire Hotshot Crew",
+    "category": "Medical & Emergency",
+    "tags": [
+      "elite",
+      "hand-tools",
+      "fireline",
+      "autonomous",
+      "high-stakes",
+      "self-contained"
+    ],
+    "summary": "A 20-person elite wildfire crew builds fireline by hand in extreme terrain with full tactical autonomy.",
+    "description": "Interagency Hotshot Crews are the special forces of wildfire suppression. Twenty firefighters operate as a self-contained unit, building fireline with hand tools (Pulaskis, chainsaws, shovels) in terrain too steep or remote for engines. The Superintendent has full tactical authority on the fireline and can refuse assignments deemed unsafe. Three Squad Bosses each lead 6-7 crew members. A dedicated Lookout watches fire behavior and weather, maintaining an escape route at all times. The crew deploys fire shelters as last-resort survival. Communication is terse and protocol-driven: the LCES system (Lookouts, Communication, Escape routes, Safety zones) is the core operational framework. Every crew member is trained to take over any role if someone goes down.",
+    "realWorldExample": "The Granite Mountain Hotshots, based in Prescott, Arizona, were one of about 110 IHCs nationally. During the 2013 Yarnell Hill Fire, the 20-member crew was overrun by a wind-driven fire that changed direction. The tragedy led to sweeping reforms in how hotshot crews communicate changing conditions and maintain escape routes.",
+    "whenToUse": "When a small autonomous team must operate in hostile, rapidly changing conditions with no infrastructure support, relying entirely on training, tools, and team cohesion.",
+    "strengths": [
+      "Complete tactical autonomy allows rapid adaptation to changing conditions",
+      "Small team size enables tight coordination without communication overhead",
+      "Cross-training means any agent can fill any role if the team takes losses",
+      "LCES framework provides a simple, universally understood safety protocol",
+      "Self-contained logistics: crew carries everything they need"
+    ],
+    "weaknesses": [
+      "Superintendent is single point of failure for tactical decisions",
+      "Physical exhaustion over multi-day deployments degrades judgment",
+      "Limited communication range in remote terrain can isolate the crew from incident command",
+      "Refusal of unsafe assignments requires the Superintendent to override the chain of command",
+      "Twenty-person cap means the crew cannot scale for larger tasks"
+    ],
+    "agents": [
+      {
+        "role": "superintendent",
+        "name": "Superintendent",
+        "description": "Crew commander with full tactical authority on the fireline; briefs with incident command, accepts or refuses assignments, and positions the crew",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "captain",
+        "name": "Captain",
+        "description": "Second-in-command who runs the other half of the crew when split and takes over if the superintendent goes down",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "squad-boss",
+        "name": "Squad Boss",
+        "description": "Leads a squad of 6-7 firefighters on a section of fireline, directing sawyers and swampers and monitoring fire behavior",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "lookout",
+        "name": "Lookout",
+        "description": "Monitors fire behavior, weather, and escape routes from a vantage point; has authority to call emergency evacuation independently",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "sawyer",
+        "name": "Lead Sawyer",
+        "description": "Runs the chainsaw at the front of the fireline, cutting brush and trees; sets the pace for the entire crew",
+        "memory": "ephemeral",
+        "count": 3
+      },
+      {
+        "role": "firefighter",
+        "name": "Hotshot Firefighter",
+        "description": "Digs fireline, clears brush, carries gear, and deploys as directed; cross-trained on all hand tools and fire shelter deployment",
+        "memory": "ephemeral",
+        "count": 10
+      }
+    ],
+    "forums": [
+      {
+        "name": "Morning Briefing",
+        "type": "top-down",
+        "participants": [
+          "superintendent",
+          "captain",
+          "squad-boss",
+          "lookout"
+        ]
+      },
+      {
+        "name": "Fireline Radio",
+        "type": "broadcast",
+        "participants": [
+          "superintendent",
+          "squad-boss",
+          "lookout"
+        ]
+      },
+      {
+        "name": "LCES Check",
+        "type": "round-robin",
+        "participants": [
+          "squad-boss",
+          "lookout",
+          "superintendent"
+        ]
+      },
+      {
+        "name": "Emergency Evacuation",
+        "type": "emergency",
+        "participants": [
+          "all"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Incident Action Plan (daily)",
+        "LCES status (Lookouts, Communication, Escape routes, Safety zones)",
+        "Current fire perimeter and weather forecast",
+        "Crew accountability roster"
+      ],
+      "private": [
+        "Superintendent's risk assessment",
+        "Individual physical readiness status",
+        "Personal fire shelter location"
+      ],
+      "description": "The Incident Action Plan is the shared document updated every operational period. LCES status is continuously verified by all leaders. The Lookout maintains a private mental model of fire behavior and escape timing. After-action reviews at end of each shift capture lessons learned. Communication is terse by design: radio traffic is minimized on active fireline to keep channels clear for emergencies."
+    },
+    "diagram": "graph TD\n    IC[Incident Command] -.->|IAP| SUPT[Superintendent]\n    SUPT --> CAPT[Captain]\n    SUPT --> SB1[Squad Boss 1]\n    SUPT --> SB2[Squad Boss 2]\n    CAPT --> SB3[Squad Boss 3]\n    SB1 --> SAW1[Sawyer]\n    SB1 --> FF1[Firefighters]\n    SB2 --> SAW2[Sawyer]\n    SB2 --> FF2[Firefighters]\n    SB3 --> SAW3[Sawyer]\n    SB3 --> FF3[Firefighters]\n    LO[Lookout] -.->|fire behavior| SUPT\n    LO -.->|evacuation| SB1\n    LO -.->|evacuation| SB2\n    LO -.->|evacuation| SB3",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "pipeline"
+    ]
+  },
+  {
+    "id": "samurai-domain-governance",
+    "name": "Samurai Domain Governance (Han)",
+    "category": "Historical & Traditional",
+    "tags": [
+      "feudal",
+      "loyalty",
+      "bushido",
+      "dual-authority",
+      "castle-town"
+    ],
+    "summary": "A feudal Japanese domain balances the daimyo's authority with the shogun's oversight through layered retainer hierarchies and rotating attendance.",
+    "description": "Edo-period han governance was a sophisticated dual-authority system. The daimyo held absolute power within his domain but served under the shogun's national authority. The karō (chief retainers) managed daily governance, finances, and military readiness. Bugyō (magistrates) handled specific domains: town administration, tax collection, temple oversight. The sankin-kōtai system forced daimyō to alternate years between their domain and Edo, leaving families as hostages and running two parallel administrations. Lower samurai served as metsuke (inspectors) reporting directly to the daimyo, bypassing the karō -- an internal audit function baked into the hierarchy. The domain was economically self-contained, managing rice production, trade, and infrastructure independently.",
+    "realWorldExample": "The Satsuma domain (modern Kagoshima) governed 770,000 people with a samurai class of 40,000 -- the highest samurai-to-population ratio in Japan. Its karō managed sugar monopolies, secret trade with the Ryukyu Kingdom, and a weapons modernization program that eventually helped topple the shogunate in 1868.",
+    "whenToUse": "When an agent system must maintain full local autonomy while operating under a remote central authority that constrains strategic direction, and where loyalty and internal oversight are critical.",
+    "strengths": [
+      "Dual-administration creates resilience: domain functions whether the daimyo is present or in Edo",
+      "Metsuke inspection channel bypasses the chain of command, catching corruption early",
+      "Economic self-sufficiency makes the domain robust to central disruption",
+      "Loyalty culture reduces principal-agent problems within the hierarchy",
+      "Sankin-kōtai forces information exchange between domains via Edo contact"
+    ],
+    "weaknesses": [
+      "Dual residence is enormously expensive, consuming up to half of domain revenue",
+      "Remote daimyo cannot respond quickly to local crises",
+      "Rigid class hierarchy prevents talent from rising based on merit",
+      "Metsuke system creates atmosphere of surveillance that chills initiative",
+      "Hostage system means strategic decisions are always made under coercion"
+    ],
+    "agents": [
+      {
+        "role": "daimyo",
+        "name": "Daimyō",
+        "description": "Absolute lord of the domain, alternating between castle and Edo; sets strategic direction and holds final authority on all matters",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "karo",
+        "name": "Karō (Chief Retainer)",
+        "description": "Senior counselor managing daily governance, military affairs, and domain finances; runs the domain during the daimyo's absence in Edo",
+        "memory": "persistent-shared",
+        "count": 3
+      },
+      {
+        "role": "bugyo",
+        "name": "Bugyō (Magistrate)",
+        "description": "Specialist administrator handling a specific domain: town governance, tax collection, temple affairs, or construction",
+        "memory": "persistent-private",
+        "count": 4
+      },
+      {
+        "role": "metsuke",
+        "name": "Metsuke (Inspector)",
+        "description": "Internal auditor reporting directly to the daimyo, monitoring retainer conduct and loyalty while bypassing the normal chain of command",
+        "memory": "persistent-private",
+        "count": 2
+      },
+      {
+        "role": "ashigaru-captain",
+        "name": "Ashigaru Captain",
+        "description": "Leads foot soldiers and manages castle garrison, town patrols, and domain border security",
+        "memory": "ephemeral",
+        "count": 5
+      }
+    ],
+    "forums": [
+      {
+        "name": "Castle Council",
+        "type": "advisory",
+        "participants": [
+          "daimyo",
+          "karo",
+          "bugyo"
+        ]
+      },
+      {
+        "name": "Karō Standing Orders",
+        "type": "top-down",
+        "participants": [
+          "karo",
+          "bugyo",
+          "ashigaru-captain"
+        ]
+      },
+      {
+        "name": "Metsuke Reports",
+        "type": "bottom-up",
+        "participants": [
+          "metsuke",
+          "daimyo"
+        ]
+      },
+      {
+        "name": "Edo Correspondence",
+        "type": "document",
+        "participants": [
+          "daimyo",
+          "karo"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Domain laws and precedents",
+        "Tax and rice harvest records",
+        "Military roster and readiness reports"
+      ],
+      "private": [
+        "Metsuke surveillance reports (daimyo eyes only)",
+        "Daimyo's strategic intentions",
+        "Secret trade agreements",
+        "Karō financial reserves"
+      ],
+      "description": "The domain maintains meticulous shared records of taxes, harvests, and population for shogunate inspections. Private memory is critical: the metsuke channel exists precisely because the shared record may be falsified by the people it describes. Edo correspondence between the absent daimyo and the governing karō is the lifeline of dual-administration, often encrypted to prevent interception. Domain secrets (hidden trade, weapons programs) are known only to the daimyo and inner karō."
+    },
+    "diagram": "graph TD\n    SHOGUN[Shogun] -.->|sankin-kōtai| DAI[Daimyō]\n    DAI --> K1[Karō 1]\n    DAI --> K2[Karō 2]\n    DAI --> K3[Karō 3]\n    DAI --> MET[Metsuke]\n    K1 --> B1[Town Bugyō]\n    K2 --> B2[Tax Bugyō]\n    K3 --> B3[Temple Bugyō]\n    K1 --> ASH[Ashigaru Captains]\n    MET -.->|inspects| K1\n    MET -.->|inspects| K2\n    MET -.->|inspects| K3\n    MET -.->|reports| DAI",
+    "hierarchyTypes": [
+      "chain-of-command",
+      "federated"
+    ]
+  },
+  {
+    "id": "traveling-circus",
+    "name": "Traveling Circus",
+    "category": "Creative & Arts",
+    "tags": [
+      "nomadic",
+      "spectacle",
+      "setup-teardown",
+      "multi-skill",
+      "showmanship"
+    ],
+    "summary": "A self-contained troupe of performers and crew moves between cities, setting up, performing, and tearing down in a continuous cycle.",
+    "description": "The traditional traveling circus is a complete organization that packs into trucks, moves to a new town, assembles itself, performs, and does it again. The Ringmaster is the public face but not the operational leader -- the Boss Canvasman and Lot Superintendent run the physical operation. An Advance Man scouts locations weeks ahead, arranging permits and publicity. Performers (aerialists, clowns, animal acts) rehearse and perform semi-autonomously, each act self-contained. The Roustabout crew handles all physical setup and teardown, working in parallel to raise the big top in hours. The whole system runs on a pipeline: advance → setup → perform → teardown → travel, but within each phase, work is highly parallel. The circus is essentially a small city that assembles and disassembles on a 2-3 day cycle.",
+    "realWorldExample": "Ringling Bros. at its peak traveled with 1,400 employees, 400 animals, and 60 railcars. A 20-person advance crew arrived in each city 3 weeks early to arrange lots, permits, and advertising. The tent crew could raise the big top (seating 10,000) in under 4 hours. Performers often came from multi-generational circus families who specialized in specific acts for decades.",
+    "whenToUse": "When an agent system must repeatedly deploy, operate, and redeploy across different environments, requiring both reliable logistics pipelines and creative autonomous performers.",
+    "strengths": [
+      "Complete self-sufficiency: the system carries everything it needs",
+      "Pipeline cycle (advance/setup/perform/teardown/travel) is deeply rehearsed and reliable",
+      "Performer autonomy means each act can innovate without affecting others",
+      "Advance scouting decouples planning from execution",
+      "Parallel teardown-while-performing maximizes time efficiency"
+    ],
+    "weaknesses": [
+      "Enormous logistical overhead to move the entire operation",
+      "Any delay in the pipeline (weather, permits, breakdowns) cascades through the schedule",
+      "Performer injuries have no backup -- each specialty act is unique",
+      "The Advance Man operates with zero oversight, creating principal-agent risk",
+      "Tight schedule leaves no slack for recovery or iteration"
+    ],
+    "agents": [
+      {
+        "role": "circus-director",
+        "name": "Circus Director",
+        "description": "Owns the show: sets the route, manages finances, hires acts, and makes all strategic decisions about the season",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "ringmaster",
+        "name": "Ringmaster",
+        "description": "Orchestrates the live performance, introduces acts, manages audience energy, and handles emergencies during the show",
+        "memory": "ephemeral"
+      },
+      {
+        "role": "advance-man",
+        "name": "Advance Man",
+        "description": "Arrives in the next city weeks early to secure the lot, arrange permits, buy advertising, and seed local publicity",
+        "memory": "persistent-private"
+      },
+      {
+        "role": "lot-superintendent",
+        "name": "Lot Superintendent",
+        "description": "Commands the setup and teardown operation, directing roustabouts to raise the big top, wire lights, and build seating",
+        "memory": "persistent-shared"
+      },
+      {
+        "role": "performer",
+        "name": "Specialty Performer",
+        "description": "Develops, rehearses, and performs a self-contained act (aerial, acrobatic, clown, animal); responsible for own equipment and safety",
+        "memory": "persistent-private",
+        "count": 8
+      },
+      {
+        "role": "roustabout",
+        "name": "Roustabout",
+        "description": "General laborer handling tent setup, teardown, loading, unloading, and all physical infrastructure during moves",
+        "memory": "ephemeral",
+        "count": 15
+      }
+    ],
+    "forums": [
+      {
+        "name": "Route Planning",
+        "type": "decision",
+        "participants": [
+          "circus-director",
+          "advance-man"
+        ]
+      },
+      {
+        "name": "Setup Call",
+        "type": "top-down",
+        "participants": [
+          "lot-superintendent",
+          "roustabout"
+        ]
+      },
+      {
+        "name": "Show Rundown",
+        "type": "broadcast",
+        "participants": [
+          "ringmaster",
+          "performer"
+        ]
+      },
+      {
+        "name": "Advance Reports",
+        "type": "bottom-up",
+        "participants": [
+          "advance-man",
+          "circus-director"
+        ]
+      },
+      {
+        "name": "Performer Notes",
+        "type": "peer-to-peer",
+        "participants": [
+          "performer"
+        ]
+      }
+    ],
+    "memoryArchitecture": {
+      "shared": [
+        "Season route and schedule",
+        "Show rundown (act order and timing)",
+        "Setup blueprints per lot size",
+        "Equipment manifest"
+      ],
+      "private": [
+        "Advance Man's local contacts and deals",
+        "Performer act secrets and choreography",
+        "Director's financial books",
+        "Lot-specific setup adaptations"
+      ],
+      "description": "The route and schedule are the backbone shared memory. The show rundown is updated at each venue based on lot size and audience. Each performer maintains private act choreography -- acts are proprietary and often family secrets passed through generations. The Advance Man accumulates private knowledge of every town's venues, officials, and audiences over years. Setup blueprints are versioned by lot type (indoor arena vs. open field vs. parking lot)."
+    },
+    "diagram": "graph TD\n    DIR[Circus Director] --> ADV[Advance Man]\n    DIR --> RM[Ringmaster]\n    DIR --> LOT[Lot Superintendent]\n    ADV -.->|scouts ahead| NEXT((Next City))\n    LOT --> R1[Roustabout Crew]\n    R1 -->|raises| TENT[Big Top]\n    RM --> P1[Aerialists]\n    RM --> P2[Acrobats]\n    RM --> P3[Clowns]\n    RM --> P4[Animal Acts]\n    LOT -.->|teardown| R1\n    NEXT -.->|permits ready| LOT",
+    "hierarchyTypes": [
+      "pipeline",
+      "orchestrated"
     ]
   }
 ]

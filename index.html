@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rhizome — Agent Orchestration Patterns</title>
+  <title>Rhizome — 200 Ways to Organize</title>
 
   <!-- Open Graph / Social Embed -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://thisminute.org/rhizome">
-  <meta property="og:title" content="Rhizome — 207 Agent Orchestration Patterns">
-  <meta property="og:description" content="A taxonomy of every way to organize collaborating agents — from military hierarchies and jazz ensembles to ant colonies and AI-native architectures. Browse 207 blueprints with roles, communication channels, memory structures, and topology diagrams.">
+  <meta property="og:title" content="Rhizome — 200 Ways to Organize">
+  <meta property="og:description" content="From pirate democracies and papal conclaves to ant colonies and Formula 1 pit crews — a catalog of every interesting way humans and other organisms have figured out how to coordinate.">
   <meta property="og:image" content="https://thisminute.org/rhizome/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Rhizome — 207 Agent Orchestration Patterns">
-  <meta name="twitter:description" content="A taxonomy of every way to organize collaborating agents — from military hierarchies and jazz ensembles to ant colonies and AI-native architectures.">
+  <meta name="twitter:title" content="Rhizome — 200 Ways to Organize">
+  <meta name="twitter:description" content="From pirate democracies and papal conclaves to ant colonies and Formula 1 pit crews — a catalog of every interesting way to coordinate.">
   <meta name="twitter:image" content="https://thisminute.org/rhizome/og-image.png">
 
-  <meta name="description" content="A browsable collection of 207 agent orchestration patterns across 20 categories. Each pattern includes agent roles, communication channels, memory architecture, and topology diagrams.">
+  <meta name="description" content="A browsable catalog of 200 organizational patterns across 20 categories — from military hierarchies to jazz ensembles. Each includes roles, communication channels, information flows, and topology diagrams.">
 
   <!-- Analytics -->
   <script defer data-domain="thisminute.org/rhizome" src="https://plausible.io/js/script.js"></script>
@@ -327,6 +327,10 @@
     .filter-tile:hover {
       border-color: var(--border-light);
       background: var(--bg-card-hover);
+    }
+    .filter-tile:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
     .filter-tile.active {
       background: color-mix(in srgb, var(--tile-color, var(--accent)) 12%, transparent);
@@ -695,6 +699,17 @@
       background: rgba(8, 145, 178, 0.15);
       color: #0e7490;
     }
+    .card-example {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+      font-style: italic;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     .card-tags {
       display: flex;
       flex-wrap: wrap;
@@ -736,9 +751,9 @@
     .detail {
       position: fixed;
       top: 0; right: 0;
-      width: min(720px, 92vw);
+      width: 90%;
       height: 100vh;
-      background: var(--bg-secondary);
+      background: var(--bg-primary);
       z-index: 100;
       transform: translateX(calc(100% + 16px));
       transition: transform var(--transition-slow), opacity 0.2s ease;
@@ -755,8 +770,8 @@
       display: flex;
       justify-content: flex-end;
       gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: var(--bg-secondary);
+      padding: 0.75rem 2rem;
+      background: var(--bg-primary);
       border-bottom: 1px solid var(--border);
     }
     .detail-top-btn {
@@ -798,7 +813,12 @@
       border-color: var(--border-light);
       color: var(--text-primary);
     }
+    body.light-mode .detail-close:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
     .detail-header {
+      max-width: 1400px;
+      margin: 0 auto;
       padding: 1.5rem 2rem 1.5rem;
       border-bottom: 1px solid var(--border);
     }
@@ -815,7 +835,16 @@
       flex-wrap: wrap;
       margin-top: 0.5rem;
     }
-    .detail-body { padding: 1.5rem 2rem 3rem; }
+    .detail-body {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 2.5rem;
+      align-items: start;
+    }
+    .detail-col { min-width: 0; }
 
     /* ─── Collapsible Sections ──────────────────────────────── */
     .detail-section { margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
@@ -977,9 +1006,10 @@
     .detail-nav {
       display: flex;
       justify-content: space-between;
+      max-width: 1400px;
+      margin: 1rem auto 0;
       padding: 1rem 2rem;
       border-top: 1px solid var(--border);
-      margin-top: 1rem;
     }
     .detail-nav-btn {
       background: none;
@@ -1135,6 +1165,78 @@
       color: var(--text-muted);
     }
 
+    /* ─── Field Notes ─────────────────────────────────────── */
+    .fieldnotes-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-overlay);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .fieldnotes-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .fieldnotes-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      max-width: 640px;
+      width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .fieldnotes-panel h2 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .fieldnotes-panel .fieldnotes-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .fieldnote {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .fieldnote:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .fieldnote-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .fieldnote-body {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .fieldnotes-close-hint {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
     /* ─── Scrollbar ────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -1143,13 +1245,19 @@
     body.light-mode ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
     body.light-mode ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
 
+    /* ─── Tablet ──────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .detail-body { grid-template-columns: 1fr; }
+    }
+
     /* ─── Mobile ───────────────────────────────────────────── */
     .mobile-filter-bar { display: none; }
     @media (max-width: 768px) {
       header h1 { font-size: 1.75rem; }
       .header-actions { top: 0.75rem; right: 0.75rem; }
       .grid { grid-template-columns: 1fr; padding: 1rem; }
-      .detail { width: 100vw; }
+      .detail { width: 100%; border-left: none; }
+      .detail-body { grid-template-columns: 1fr; }
       .controls { padding: 1rem; position: static; }
       .sw-grid { grid-template-columns: 1fr; }
       .back-to-top { bottom: 1rem; right: 1rem; }
@@ -1218,10 +1326,13 @@
         </svg>
       </button>
       <button class="icon-btn" id="shortcuts-btn" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+      <button class="icon-btn" id="fieldnotes-btn" title="Field notes from the forge" aria-label="Field notes" style="font-size:0.7rem;letter-spacing:0.03em">notes</button>
+      <a class="icon-btn" href="evolution" title="How one project evolved from solo to 10 agents" aria-label="Evolution case study" style="font-size:0.7rem;letter-spacing:0.03em;text-decoration:none">case</a>
     </div>
     <h1>RHIZOME</h1>
-    <p class="subtitle">A Taxonomy of Agent Orchestration Patterns</p>
-    <p class="about">Every organization is a way of connecting minds. This is a collection of those ways — military hierarchies, jazz ensembles, ant colonies, AI-native architectures, and everything in between — each described as a concrete blueprint of agent roles, communication channels, and memory structures.</p>
+    <p class="subtitle">200 Ways to Organize</p>
+    <p class="about">From pirate democracies and papal conclaves to ant colonies and Formula 1 pit crews — a catalog of how humans (and other organisms) have figured out how to coordinate, each one broken down into roles, communication channels, and information flows.</p>
+    <p class="about" style="margin-top: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">Originally built as blueprints for AI agent systems. Turns out organizational design is interesting on its own.</p>
     <div class="stats">
       <div class="stat">
         <span class="stat-value" id="total-count">0</span>
@@ -1237,7 +1348,7 @@
       </div>
       <div class="stat">
         <span class="stat-value" id="agent-count">0</span>
-        <span class="stat-label">Total Agents</span>
+        <span class="stat-label">Total Roles</span>
       </div>
     </div>
   </header>
@@ -1274,7 +1385,7 @@
     <div class="toolbar">
       <span class="sort-label">Sort:</span>
       <button id="sort-name">A-Z</button>
-      <button id="sort-agents">Most Agents</button>
+      <button id="sort-agents">Most Roles</button>
       <button id="sort-category" class="active">Category</button>
       <button id="sort-structure">Structure</button>
       <button id="sort-votes">Most Voted</button>
@@ -1299,7 +1410,7 @@
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3.293l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 3.293zm0 5l-4.354 4.354a.5.5 0 01-.707-.708l5-5a.5.5 0 01.707 0l5 5a.5.5 0 11-.707.708L8 8.293z"/></svg>
   </button>
 
-  <div class="shortcuts-overlay" id="shortcuts-overlay">
+  <div class="shortcuts-overlay" id="shortcuts-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
     <div class="shortcuts-panel">
       <h2>Keyboard Shortcuts</h2>
       <div class="shortcut-row"><span class="shortcut-desc">Focus search</span><span class="shortcut-key">/</span></div>
@@ -1311,6 +1422,38 @@
       <div class="shortcut-row"><span class="shortcut-desc">Toggle theme</span><span class="shortcut-key">t</span></div>
       <div class="shortcut-row"><span class="shortcut-desc">Show shortcuts</span><span class="shortcut-key">?</span></div>
       <p class="shortcuts-close-hint">Press any key to close</p>
+    </div>
+  </div>
+
+  <div class="fieldnotes-overlay" id="fieldnotes-overlay" role="dialog" aria-modal="true" aria-label="Field notes from the forge">
+    <div class="fieldnotes-panel">
+      <h2>Field Notes</h2>
+      <p class="fieldnotes-subtitle">Observations from operating agent systems across 6 projects. These are field notes, not theory &mdash; maintained by the forge that manages all of them.</p>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Stigmergy has a hard ceiling.</div>
+        <div class="fieldnote-body">Forum-based coordination (agents read/write a shared file) is the most natural pattern that emerges. But it fails via unbounded growth &mdash; one project's forum went from 51 to 621 lines in a single session, another hit 904 across 7 cycles. Every shared-context pattern needs a maintenance agent. The pattern and its maintenance cost are inseparable.</div>
+      </div>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Fitness beats compliance.</div>
+        <div class="fieldnote-body">A game mod project is effective at Structured+ using checkpoints and a section index instead of memory/ and forum. A catalog (this project) is effective with one steward. A news platform needs 10 agents because it has 10 genuinely different concerns. The right question is &ldquo;is this working?&rdquo; not &ldquo;does this match a checklist?&rdquo;</div>
+      </div>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Premature structure costs more than no structure.</div>
+        <div class="fieldnote-body">This project proved it. A single steward handled bug fixes, accessibility, data quality, and maintained meaningful memory without ever needing a role split. Scaffolding 5 roles on day one would have been empty ceremony.</div>
+      </div>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Memory is the lagging indicator.</div>
+        <div class="fieldnote-body">Projects adopt role files and protocols quickly. Memory files are the last thing used consistently. One project has 10 agents but only 3 memory files &mdash; 7 agents re-learn things every session.</div>
+      </div>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Reflection loops need a consumer.</div>
+        <div class="fieldnote-body">Asking agents to evaluate their context at shutdown produces great signal. But without a keeper to process it, reflections pile up and nothing changes. The loop is only as good as its feedback processing.</div>
+      </div>
+      <div class="fieldnote">
+        <div class="fieldnote-title">Domain adaptation > pattern conformance.</div>
+        <div class="fieldnote-body">The most effective agent systems adapted conventions to fit their domain (30-second build-test-fix loops, single-page catalogs, async news pipelines) rather than conforming to a template. The forge's job is recognizing that, not flattening it.</div>
+      </div>
+      <p class="fieldnotes-close-hint">Click outside or press Escape to close</p>
     </div>
   </div>
 
@@ -1395,10 +1538,10 @@
       searchQuery: '',
       sortBy: 'category',
       focusedCardIndex: -1,
-      visitedPatterns: new Set(JSON.parse(localStorage.getItem('rhizome_visited') || '[]')),
-      votedPatterns: new Set(JSON.parse(localStorage.getItem('rhizome_votes') || '[]')),
+      visitedPatterns: (() => { try { return new Set(JSON.parse(localStorage.getItem('rhizome_visited') || '[]')); } catch { return new Set(); } })(),
+      votedPatterns: (() => { try { return new Set(JSON.parse(localStorage.getItem('rhizome_votes') || '[]')); } catch { return new Set(); } })(),
       voteData: {},       // { pattern_id: { total, recent, seriousness, rate_label } }
-      lightMode: localStorage.getItem('rhizome_theme') === 'light'
+      lightMode: (() => { try { return localStorage.getItem('rhizome_theme') === 'light'; } catch { return false; } })()
     };
 
     // API base URL (empty = same origin)
@@ -1434,12 +1577,51 @@
       return escaped.replace(new RegExp(`(${qEsc})`, 'gi'), '<mark>$1</mark>');
     }
 
+    // ─── Focus Trap (accessibility) ──────────────────────
+    let activeFocusTrap = null;
+    let preTrapFocus = null;
+
+    function enableFocusTrap(container) {
+      if (activeFocusTrap) {
+        // Re-entering (e.g. prev/next nav) — remove old listener, keep original preTrapFocus
+        container.removeEventListener('keydown', activeFocusTrap);
+      } else {
+        preTrapFocus = document.activeElement;
+      }
+      activeFocusTrap = function(e) {
+        if (e.key !== 'Tab') return;
+        const focusable = container.querySelectorAll(
+          'button:not([disabled]), [href], input:not([tabindex="-1"]), select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      };
+      container.addEventListener('keydown', activeFocusTrap);
+    }
+
+    function disableFocusTrap(container) {
+      if (activeFocusTrap) {
+        container.removeEventListener('keydown', activeFocusTrap);
+        activeFocusTrap = null;
+      }
+      if (preTrapFocus) {
+        preTrapFocus.focus();
+        preTrapFocus = null;
+      }
+    }
+
     // ─── Theme ────────────────────────────────────────────
     function applyTheme() {
       document.body.classList.toggle('light-mode', state.lightMode);
       document.getElementById('theme-icon-dark').style.display = state.lightMode ? 'block' : 'none';
       document.getElementById('theme-icon-light').style.display = state.lightMode ? 'none' : 'block';
-      localStorage.setItem('rhizome_theme', state.lightMode ? 'light' : 'dark');
+      try { localStorage.setItem('rhizome_theme', state.lightMode ? 'light' : 'dark'); } catch {}
     }
     applyTheme();
 
@@ -1501,14 +1683,13 @@
       }
 
       if (s.agents && s.agents.length) {
-        lines.push('## Agents');
+        lines.push('## Roles');
         lines.push('');
         s.agents.forEach(a => {
           const count = a.count && a.count > 1 ? ` (×${a.count})` : '';
           lines.push(`### ${a.name || a.role}${count}`);
           lines.push('');
-          lines.push(`- **Role:** ${a.role}`);
-          if (a.description) lines.push(`- **Description:** ${a.description}`);
+          if (a.description) lines.push(`${a.description}`);
           if (a.memory) lines.push(`- **Memory:** ${a.memory}`);
           lines.push('');
         });
@@ -1528,18 +1709,18 @@
       }
 
       if (s.memoryArchitecture) {
-        lines.push('## Memory Architecture');
+        lines.push('## Information Flow');
         lines.push('');
         if (s.memoryArchitecture.shared) {
           const val = toList(s.memoryArchitecture.shared);
-          lines.push(`- **Shared:** ${val}`);
+          lines.push(`- **Shared knowledge:** ${val}`);
         }
         if (s.memoryArchitecture.private) {
           const val = toList(s.memoryArchitecture.private);
-          lines.push(`- **Private:** ${val}`);
+          lines.push(`- **Private to individuals:** ${val}`);
         }
         if (s.memoryArchitecture.description) {
-          lines.push(`- **Notes:** ${s.memoryArchitecture.description}`);
+          lines.push(`- **How it works:** ${s.memoryArchitecture.description}`);
         }
         lines.push('');
       }
@@ -1586,29 +1767,38 @@
       document.getElementById('agent-count').textContent = totalAgents;
     }
 
-    function renderCategories() {
-      const cats = getCategories();
-      const container = document.getElementById('category-tiles');
-      let html = `<div class="filter-tile filter-tile-all${!state.activeCategory ? ' active' : ''}" data-category="" style="--tile-color:var(--accent)">
+    // ─── Shared filter tile helpers ─────────────────────
+    function buildFilterTiles(items, activeValue, attr, colorMap, labelMap) {
+      let html = `<div class="filter-tile filter-tile-all${!activeValue ? ' active' : ''}" data-${attr}="" style="--tile-color:var(--accent)" tabindex="0" role="button">
         <div class="filter-tile-name">All</div>
         <div class="filter-tile-count">${state.structures.length}</div>
       </div>`;
-      cats.forEach(([cat, count]) => {
-        const color = CATEGORY_COLORS[cat] || '#888';
-        html += `<div class="filter-tile${state.activeCategory === cat ? ' active' : ''}" data-category="${esc(cat)}" style="--tile-color:${color}">
-          <div class="filter-tile-name">${esc(cat)}</div>
+      items.forEach(([key, count]) => {
+        html += `<div class="filter-tile${activeValue === key ? ' active' : ''}" data-${attr}="${esc(key)}" style="--tile-color:${colorMap[key] || '#888'}" tabindex="0" role="button">
+          <div class="filter-tile-name">${esc(labelMap ? (labelMap[key] || key) : key)}</div>
           <div class="filter-tile-count">${count}</div>
         </div>`;
       });
-      container.innerHTML = html;
-      container.querySelectorAll('.filter-tile').forEach(tile => {
-        tile.addEventListener('click', () => {
-          state.activeCategory = tile.dataset.category || null;
-          renderCategories();
-          updateCategoryLabel();
-          renderGrid();
-          syncMobileCategories();
-        });
+      return html;
+    }
+
+    function wireFilterTiles(container, attr, onActivate) {
+      container.querySelectorAll(`[data-${attr}]`).forEach(tile => {
+        const activate = () => onActivate(tile.dataset[attr] || null);
+        tile.addEventListener('click', activate);
+        tile.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+      });
+    }
+
+    function renderCategories() {
+      const container = document.getElementById('category-tiles');
+      container.innerHTML = buildFilterTiles(getCategories(), state.activeCategory, 'category', CATEGORY_COLORS);
+      wireFilterTiles(container, 'category', val => {
+        state.activeCategory = val;
+        renderCategories();
+        updateCategoryLabel();
+        renderGrid();
+        syncMobileCategories();
       });
       updateCategoryLabel();
     }
@@ -1640,29 +1830,14 @@
     }
 
     function renderStructureTiles() {
-      const counts = getStructuralClassCounts();
       const container = document.getElementById('structure-tiles');
-      let html = `<div class="filter-tile filter-tile-all${!state.activeStructuralClass ? ' active' : ''}" data-sc="" style="--tile-color:var(--accent)">
-        <div class="filter-tile-name">All</div>
-        <div class="filter-tile-count">${state.structures.length}</div>
-      </div>`;
-      counts.forEach(([sc, count]) => {
-        const color = SC_COLORS[sc] || '#888';
-        const label = SC_LABELS[sc] || sc;
-        html += `<div class="filter-tile${state.activeStructuralClass === sc ? ' active' : ''}" data-sc="${sc}" style="--tile-color:${color}">
-          <div class="filter-tile-name">${esc(label)}</div>
-          <div class="filter-tile-count">${count}</div>
-        </div>`;
-      });
-      container.innerHTML = html;
-      container.querySelectorAll('.filter-tile').forEach(tile => {
-        tile.addEventListener('click', () => {
-          state.activeStructuralClass = tile.dataset.sc || null;
-          renderStructureTiles();
-          updateStructureLabel();
-          renderGrid();
-          syncMobileCategories();
-        });
+      container.innerHTML = buildFilterTiles(getStructuralClassCounts(), state.activeStructuralClass, 'sc', SC_COLORS, SC_LABELS);
+      wireFilterTiles(container, 'sc', val => {
+        state.activeStructuralClass = val;
+        renderStructureTiles();
+        updateStructureLabel();
+        renderGrid();
+        syncMobileCategories();
       });
       updateStructureLabel();
     }
@@ -1699,11 +1874,13 @@
         if (resp.ok || resp.status === 409) {
           state.votedPatterns.add(patternId);
           try { localStorage.setItem('rhizome_votes', JSON.stringify([...state.votedPatterns])); } catch {}
-          // Optimistic update
-          if (!state.voteData[patternId]) state.voteData[patternId] = { total: 0, recent: 0, seriousness: 0 };
-          state.voteData[patternId].total++;
-          state.voteData[patternId].recent++;
-          state.voteData[patternId].seriousness = state.voteData[patternId].total + state.voteData[patternId].recent * 3;
+          // Optimistic update — only increment on new vote, not duplicate
+          if (resp.ok) {
+            if (!state.voteData[patternId]) state.voteData[patternId] = { total: 0, recent: 0, seriousness: 0 };
+            state.voteData[patternId].total++;
+            state.voteData[patternId].recent++;
+            state.voteData[patternId].seriousness = state.voteData[patternId].total + state.voteData[patternId].recent * 3;
+          }
           return true;
         }
       } catch (e) { /* API unavailable */ }
@@ -1852,6 +2029,7 @@
           <div class="card-structure-badge">${structureBadge}</div>
           <div class="card-category">${esc(s.category)}</div>
           <div class="card-summary">${summary}</div>
+          ${s.realWorldExample ? `<div class="card-example">${esc(s.realWorldExample.length > 120 ? s.realWorldExample.slice(0, 117) + '...' : s.realWorldExample)}</div>` : ''}
           <div class="card-tags">${(s.tags || []).slice(0, 5).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
         </div>`;
       }).join('');
@@ -1952,7 +2130,8 @@
             ${s.realWorldExample ? `<span style="color:var(--text-muted);font-size:0.8rem">e.g. ${esc(s.realWorldExample)}</span>` : ''}
           </div>
         </div>
-        <div class="detail-body">`;
+        <div class="detail-body">
+          <div class="detail-col">`;
 
       // Topology
       if (s.diagram) {
@@ -1993,6 +2172,8 @@
         html += buildSection('Strengths & Weaknesses', swHtml, true);
       }
 
+      html += `</div><div class="detail-col">`;
+
       // Agents
       if (s.agents && s.agents.length) {
         let agentHtml = `<table class="agent-table"><thead><tr><th>Role</th><th>Description</th><th>Memory</th></tr></thead><tbody>`;
@@ -2000,7 +2181,7 @@
           agentHtml += `<tr><td>${esc(a.name || a.role)}</td><td>${esc(a.description || '')}</td><td><span class="tag">${esc(a.memory || 'private')}</span></td></tr>`;
         });
         agentHtml += `</tbody></table>`;
-        html += buildSection('Agents', agentHtml, false);
+        html += buildSection('Agents', agentHtml, true);
       }
 
       // Communication Channels
@@ -2040,14 +2221,14 @@
       html += buildSection('Community Notes', `<div class="comments-section" id="comments-section">
         <div class="comment-list" id="comment-list"><p class="no-comments">Loading...</p></div>
         <form class="comment-form" id="comment-form">
-          <input type="text" id="comment-name" placeholder="Name (optional)" maxlength="50">
-          <textarea id="comment-body" placeholder="Share what works, what doesn't, or how you've used this pattern..." maxlength="2000"></textarea>
+          <input type="text" id="comment-name" placeholder="Name (optional)" maxlength="50" aria-label="Display name">
+          <textarea id="comment-body" placeholder="Share what works, what doesn't, or how you've used this pattern..." maxlength="2000" aria-label="Comment"></textarea>
           <input type="text" class="hp-field" name="website" id="comment-hp" tabindex="-1" autocomplete="off">
           <button type="submit" class="comment-submit" id="comment-submit">Post</button>
         </form>
-      </div>`, false);
+      </div>`, true);
 
-      html += `</div>`;
+      html += `</div></div>`;
 
       // Prev / Next navigation
       html += `<div class="detail-nav">
@@ -2067,7 +2248,8 @@
       overlay.classList.add('active');
       history.replaceState(null, '', '#' + s.id);
 
-      // Focus management: move focus into drawer
+      // Focus management: trap focus in drawer
+      enableFocusTrap(detail);
       const closeBtn = document.getElementById('detail-close');
       if (closeBtn) closeBtn.focus();
 
@@ -2200,7 +2382,9 @@
     }
 
     function closeDetail() {
-      document.getElementById('detail').classList.remove('active');
+      const detail = document.getElementById('detail');
+      disableFocusTrap(detail);
+      detail.classList.remove('active');
       document.getElementById('overlay').classList.remove('active');
       currentDetailId = null;
       history.replaceState(null, '', location.pathname);
@@ -2234,14 +2418,30 @@
       shortcutsOverlay.classList.add('visible');
     });
 
+    const fieldnotesOverlay = document.getElementById('fieldnotes-overlay');
+    document.getElementById('fieldnotes-btn').addEventListener('click', () => {
+      fieldnotesOverlay.classList.add('visible');
+    });
+    fieldnotesOverlay.addEventListener('click', e => {
+      if (e.target === fieldnotesOverlay) fieldnotesOverlay.classList.remove('visible');
+    });
+
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
       const isInput = tag === 'input' || tag === 'textarea' || tag === 'select';
 
-      // Close shortcuts overlay on any key
+      // Close field notes overlay on Escape
+      if (fieldnotesOverlay.classList.contains('visible')) {
+        if (e.key === 'Escape') { fieldnotesOverlay.classList.remove('visible'); e.preventDefault(); }
+        return;
+      }
+
+      // Close shortcuts overlay on any non-modifier key
       if (shortcutsOverlay.classList.contains('visible')) {
-        shortcutsOverlay.classList.remove('visible');
-        e.preventDefault();
+        if (!['Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) {
+          shortcutsOverlay.classList.remove('visible');
+          e.preventDefault();
+        }
         return;
       }
 
@@ -2259,6 +2459,26 @@
 
       // Skip if typing in input
       if (isInput) return;
+
+      // When detail drawer is open, only allow detail-specific keys
+      if (currentDetailId) {
+        if (e.key === 'ArrowLeft' || e.key === 'h') {
+          const prev = document.getElementById('nav-prev');
+          if (prev && prev.dataset.id) openDetail(prev.dataset.id);
+          return;
+        }
+        if (e.key === 'ArrowRight' || e.key === 'l') {
+          const next = document.getElementById('nav-next');
+          if (next && next.dataset.id) openDetail(next.dataset.id);
+          return;
+        }
+        if (e.key === 't') {
+          state.lightMode = !state.lightMode;
+          applyTheme();
+          return;
+        }
+        return;
+      }
 
       if (e.key === '/') {
         e.preventDefault();
@@ -2301,8 +2521,9 @@
       }
 
       if (e.key === 'k') {
+        if (state.focusedCardIndex <= 0) return;
         e.preventDefault();
-        focusCard(Math.max(state.focusedCardIndex - 1, 0));
+        focusCard(state.focusedCardIndex - 1);
         return;
       }
 
@@ -2311,19 +2532,6 @@
         return;
       }
 
-      // Left/right arrow in detail for prev/next
-      if (currentDetailId) {
-        if (e.key === 'ArrowLeft' || e.key === 'h') {
-          const prev = document.getElementById('nav-prev');
-          if (prev && prev.dataset.id) openDetail(prev.dataset.id);
-          return;
-        }
-        if (e.key === 'ArrowRight' || e.key === 'l') {
-          const next = document.getElementById('nav-next');
-          if (next && next.dataset.id) openDetail(next.dataset.id);
-          return;
-        }
-      }
     });
 
     // ─── Mobile ───────────────────────────────────────────
@@ -2333,41 +2541,22 @@
     const mobilePanelEl = document.getElementById('mobile-filter-panel');
 
     function syncMobileCategories() {
-      // Structure tiles
-      const scCounts = getStructuralClassCounts();
       let html = `<div style="width:100%;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.25rem">Structure</div>`;
-      html += `<div class="filter-tile filter-tile-all${!state.activeStructuralClass ? ' active' : ''}" data-sc="" style="--tile-color:var(--accent)"><div class="filter-tile-name">All</div></div>`;
-      scCounts.forEach(([sc, count]) => {
-        const color = SC_COLORS[sc] || '#888';
-        const label = SC_LABELS[sc] || sc;
-        html += `<div class="filter-tile${state.activeStructuralClass === sc ? ' active' : ''}" data-sc="${sc}" style="--tile-color:${color}"><div class="filter-tile-name">${esc(label)}</div><div class="filter-tile-count">${count}</div></div>`;
-      });
-
-      // Category tiles
-      const cats = getCategories();
+      html += buildFilterTiles(getStructuralClassCounts(), state.activeStructuralClass, 'sc', SC_COLORS, SC_LABELS);
       html += `<div style="width:100%;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:0.75rem 0 0.25rem;border-top:1px solid var(--border);padding-top:0.75rem">Category</div>`;
-      html += `<div class="filter-tile filter-tile-all${!state.activeCategory ? ' active' : ''}" data-category="" style="--tile-color:var(--accent)"><div class="filter-tile-name">All</div></div>`;
-      cats.forEach(([cat, count]) => {
-        const color = CATEGORY_COLORS[cat] || '#888';
-        html += `<div class="filter-tile${state.activeCategory === cat ? ' active' : ''}" data-category="${esc(cat)}" style="--tile-color:${color}"><div class="filter-tile-name">${esc(cat)}</div><div class="filter-tile-count">${count}</div></div>`;
-      });
-
+      html += buildFilterTiles(getCategories(), state.activeCategory, 'category', CATEGORY_COLORS);
       mobilePanelEl.innerHTML = html;
-      mobilePanelEl.querySelectorAll('.filter-tile[data-sc]').forEach(tile => {
-        tile.addEventListener('click', () => {
-          state.activeStructuralClass = tile.dataset.sc || null;
-          renderStructureTiles();
-          renderGrid();
-          mobileBar.classList.remove('open');
-        });
+      wireFilterTiles(mobilePanelEl, 'sc', val => {
+        state.activeStructuralClass = val;
+        renderStructureTiles();
+        renderGrid();
+        mobileBar.classList.remove('open');
       });
-      mobilePanelEl.querySelectorAll('.filter-tile[data-category]').forEach(tile => {
-        tile.addEventListener('click', () => {
-          state.activeCategory = tile.dataset.category || null;
-          renderCategories();
-          renderGrid();
-          mobileBar.classList.remove('open');
-        });
+      wireFilterTiles(mobilePanelEl, 'category', val => {
+        state.activeCategory = val;
+        renderCategories();
+        renderGrid();
+        mobileBar.classList.remove('open');
       });
     }
 

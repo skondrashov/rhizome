@@ -303,11 +303,10 @@
     "diagram": "graph TD\n    S1[Specialist 1] -->|bets| OB[Order Book]\n    S2[Specialist 2] -->|bets| OB\n    S3[Specialist 3] -->|bets| OB\n    ARB[Arbitrageur] -->|corrects| OB\n    MM[Market Maker] -->|liquidity| OB\n    OB -->|prices| PF[Price Feed]\n    PF --> AL[Resource Allocator]\n    OR[Resolution Oracle] -->|outcomes| MM\n    AL -->|routes work| WORK[Task Execution]",
     "hierarchyTypes": [
       "mesh",
-      "chain-of-command",
       "orchestrated",
-      "swarm",
-      "pipeline",
       "federated",
+      "pipeline",
+      "swarm",
       "adversarial"
     ]
   },
@@ -439,7 +438,6 @@
     "diagram": "graph TD\n    S5[S5: Identity] -->|policy| S4[S4: Intelligence]\n    S5 -->|policy| S3[S3: Control]\n    S4 <-->|homeostat| S3\n    S3 -->|resources| S2[S2: Coordination]\n    S3 -->|audit S3*| OP1[Operations 1]\n    S3 -->|audit S3*| OP2[Operations 2]\n    S2 -->|anti-oscillation| OP1\n    S2 -->|anti-oscillation| OP2\n    S4 -->|environment| EXT[External World]\n    OP1 <-->|lateral| OP2",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "orchestrated",
       "swarm",
       "mesh"
@@ -675,10 +673,9 @@
     "diagram": "graph TD\n    P[Pioneer - Growth] -->|matures| C[Conservator - K]\n    C -->|rigidity trap| CD[Creative Destroyer - Omega]\n    CD -->|collapse| R[Reorganizer - Alpha]\n    R -->|new growth| P\n    CD -->|revolt UP| CSL[Cross-Scale Linker]\n    CSL -->|remember DOWN| R\n    CSL -->|connects| LARGE[Larger Cycle]\n    CSL -->|connects| SMALL[Smaller Cycle]",
     "hierarchyTypes": [
       "consensus",
-      "chain-of-command",
       "orchestrated",
-      "swarm",
-      "federated"
+      "federated",
+      "swarm"
     ]
   },
   {
@@ -788,7 +785,6 @@
     "diagram": "graph LR\n    MS[Morphogen Source] -->|gradient| U1[Agent - High Conc]\n    MS -->|gradient| U2[Agent - Mid Conc]\n    MS -->|gradient| U3[Agent - Low Conc]\n    U1 -->|differentiates| SPEC1[Specialist Type A]\n    U2 -->|differentiates| BD[Boundary Detector]\n    U3 -->|differentiates| SPEC2[Specialist Type B]\n    GR[Gradient Reader] -->|monitors| U1\n    GR -->|monitors| U2\n    GR -->|monitors| U3\n    FM[Fate Mapper] -->|records| FATE[Fate Map]",
     "hierarchyTypes": [
       "swarm",
-      "chain-of-command",
       "orchestrated",
       "mesh"
     ]
@@ -1142,9 +1138,8 @@
     "diagram": "graph TD\n    AW[Active Workers] -->|experiences| EB[Experience Buffer]\n    CC[Circadian Controller] -->|wake signal| AW\n    CC -->|dream signal| CON[Consolidation Agent]\n    EB -->|replay| CON\n    CON -->|patterns| CKB[Consolidated Knowledge]\n    PR[Pruner] -->|removes| EB\n    CON -->|signals| PR\n    CKB -->|informs next wake| AW\n    CC -->|monitors| CKB",
     "hierarchyTypes": [
       "orchestrated",
-      "chain-of-command",
-      "swarm",
-      "pipeline"
+      "pipeline",
+      "swarm"
     ]
   },
   {
@@ -1608,11 +1603,12 @@
     },
     "diagram": "graph TD\n    W1[Worker 1] -->|telemetry| MA[Meta-Architect]\n    W2[Worker 2] -->|telemetry| MA\n    MA -->|proposes change| SV[Safety Validator]\n    SV -->|approved| MA\n    MA -->|restructures| W1\n    MA -->|restructures| W2\n    MA -->|checkpoint| RC[Rollback Controller]\n    RC -->|revert if needed| W1\n    RC -->|revert if needed| W2\n    CM[Convergence Monitor] -->|cycle detected| MA\n    W1 -->|performance| CM",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
-      "swarm",
+      "chain-of-command",
       "consensus",
-      "federated"
+      "federated",
+      "swarm",
+      "pipeline"
     ]
   },
   {
@@ -1732,7 +1728,7 @@
       ],
       "description": "Pre-registered predictions are append-only and cannot be modified after submission. Accepted steelmen become shared reference points. Each advocate's true beliefs and strategy are private. The synthesis document is collaboratively edited shared state. The crux identification is shared so both sides agree on what they actually disagree about."
     },
-    "diagram": "graph TD\n    AA[Advocate Alpha] -->|steelmans B| SE[Steelman Exchange]\n    AB[Advocate Beta] -->|steelmans A| SE\n    SE -->|quality check| MED[Mediator]\n    MED -->|approved| ARG[Argument Phase]\n    PR[Pre-Registrar] -->|locks predictions| VAULT[Pre-Reg Vault]\n    AA -->|argues A| ARG\n    AB -->|argues B| ARG\n    ARG --> SYN[Synthesizer]\n    SYN -->|convergence map| DOC[Synthesis Document]\n    MED -->|crux| SYN",
+    "diagram": "graph TD\n    PR[Pre-Registrar] -->|locks hypotheses| A1[Advocate 1]\n    PR -->|locks hypotheses| A2[Advocate 2]\n    A1 -->|steelmanned arguments| MED[Mediator]\n    A2 -->|steelmanned arguments| MED\n    MED -->|identifies cruxes| A1\n    MED -->|identifies cruxes| A2\n    A1 -->|final case| SYN[Synthesizer]\n    A2 -->|final case| SYN\n    MED -->|crux analysis| SYN",
     "hierarchyTypes": [
       "consensus",
       "adversarial"
@@ -1855,7 +1851,7 @@
       ],
       "description": "Circle decisions are logged in shared state and binding. The policy registry tracks all active policies and their review dates. Each agent's personal range of tolerance (what they can live with vs what they must object to) is private. Delegates maintain shared memory accessible to both their circles for double-link transparency."
     },
-    "diagram": "graph TD\n    CM1[Member 1] --> F[Facilitator]\n    CM2[Member 2] --> F\n    CM3[Member 3] --> F\n    F -->|consent process| CR[Consent Round]\n    CR -->|objection| OI[Objection Integrator]\n    OI -->|amended proposal| CR\n    DU[Delegate Up] --> PC[Parent Circle]\n    DD[Delegate Down] --> F\n    PC --> DD\n    DU <-->|double link| DD",
+    "diagram": "graph TD\n    TC[Top Circle] --> ML1[Lead Link]\n    ML1 --> DC[Domain Circle]\n    DC --> RL1[Rep Link]\n    RL1 --> TC\n    DC --> F[Facilitator]\n    F -->|proposes| DC\n    DC -->|objections| OI[Objection Integrator]\n    OI -->|amended proposal| F",
     "hierarchyTypes": [
       "consensus",
       "federated",
@@ -2084,7 +2080,8 @@
     },
     "diagram": "graph TD\n    CD[Context Detector] -->|security context| SH[Security Hierarchy]\n    CD -->|performance context| PH[Performance Hierarchy]\n    CD -->|innovation context| IH[Innovation Hierarchy]\n    SH --> A1[Agent A: Rank 1]\n    SH --> A2[Agent B: Rank 2]\n    PH --> A2B[Agent B: Rank 1]\n    PH --> A1B[Agent A: Rank 3]\n    IH --> A3[Agent C: Rank 1]\n    CR[Conflict Resolver] -->|resolves| CD\n    HR[Hierarchy Registrar] -->|defines| SH\n    HR -->|defines| PH\n    HR -->|defines| IH",
     "hierarchyTypes": [
-      "chain-of-command"
+      "chain-of-command",
+      "consensus"
     ]
   }
 ]

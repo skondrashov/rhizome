@@ -518,8 +518,8 @@
     "hierarchyTypes": [
       "consensus",
       "orchestrated",
-      "mesh",
-      "federated"
+      "federated",
+      "mesh"
     ]
   },
   {
@@ -780,346 +780,9 @@
       ],
       "description": "The articles of agreement are the immutable constitution. The loot ledger is shared and transparent to prevent disputes. Vote records are append-only for accountability. Navigation knowledge is held by the specialist but shared on request. During crisis mode, memory switches to ephemeral for speed."
     },
-    "diagram": "graph TD\n    CREW[Crew Vote] --> CAP[Captain]\n    CREW --> QM[Quartermaster]\n    CAP -->|crisis| CREW\n    QM -->|daily ops| CREW\n    QM --> LOOT[Loot Distribution]\n    NAV[Navigator] --> CAP\n    BOSN[Boatswain] --> QM\n    ART[Articles] --> QM\n    ART --> CAP",
+    "diagram": "graph TD\n    CAP[Captain] -->|tactical command| CREW[Crew]\n    QM[Quartermaster] -->|provisions & discipline| CREW\n    CREW -->|vote to elect| CAP\n    CREW -->|vote to elect| QM\n    CREW -->|vote| COUNCIL((Ship's Council))\n    CAP -->|proposes targets| COUNCIL\n    QM -->|distributes shares| CREW\n    BO[Boatswain] -->|rigging & sails| CREW\n    GM[Gunner] -->|artillery| CREW",
     "hierarchyTypes": [
       "consensus"
-    ]
-  },
-  {
-    "id": "commune-kibbutz",
-    "name": "Commune / Kibbutz",
-    "category": "Social & Community",
-    "tags": [
-      "egalitarian",
-      "consensus",
-      "shared-resources",
-      "rotating-roles"
-    ],
-    "summary": "Fully egalitarian collective where all decisions are made by consensus and roles rotate among members.",
-    "description": "The kibbutz model eliminates permanent hierarchy. All members participate equally in decision-making through general assemblies. Work roles rotate so no one permanently holds authority or is stuck with undesirable tasks. Resources are pooled and distributed based on need rather than contribution. Committees handle specialized domains (agriculture, education, finance) but report to the general assembly. This pattern maximizes buy-in and prevents power concentration at the cost of decision speed.",
-    "realWorldExample": "Kibbutz Degania in Israel where 100+ members governed by weekly general assembly with rotating work assignments",
-    "whenToUse": "When all agents are roughly equal in capability, no task is permanently more important than others, and collective buy-in matters more than speed.",
-    "strengths": [
-      "Maximum buy-in since every agent participates in every decision",
-      "No single point of failure -- any agent can fill any role",
-      "Rotating roles build cross-functional capability in all agents",
-      "Resource pooling prevents hoarding and optimizes utilization"
-    ],
-    "weaknesses": [
-      "Consensus decision-making is extremely slow for large groups",
-      "Rotating roles prevent deep specialization in any domain",
-      "Free-rider problem when contributions are not individually tracked",
-      "Scales very poorly beyond 15-20 agents"
-    ],
-    "agents": [
-      {
-        "role": "member",
-        "name": "Commune Member",
-        "description": "Equal participant who votes on all decisions, rotates through all work roles",
-        "memory": "persistent-shared",
-        "count": 8
-      },
-      {
-        "role": "committee-coordinator",
-        "name": "Committee Coordinator",
-        "description": "Temporarily leads a domain committee; rotates monthly; has no authority beyond facilitation",
-        "memory": "ephemeral",
-        "count": 3
-      },
-      {
-        "role": "secretary",
-        "name": "Rotating Secretary",
-        "description": "Records decisions and distributes minutes; role rotates each meeting",
-        "memory": "append-only"
-      }
-    ],
-    "forums": [
-      {
-        "name": "General Assembly",
-        "type": "decision",
-        "participants": [
-          "member",
-          "committee-coordinator",
-          "secretary"
-        ]
-      },
-      {
-        "name": "Work Committee",
-        "type": "peer-to-peer",
-        "participants": [
-          "committee-coordinator",
-          "member"
-        ]
-      },
-      {
-        "name": "Resource Pool",
-        "type": "broadcast",
-        "participants": [
-          "member"
-        ]
-      },
-      {
-        "name": "Meeting Minutes",
-        "type": "document",
-        "participants": [
-          "secretary",
-          "member"
-        ]
-      },
-      {
-        "name": "Rotation Schedule",
-        "type": "broadcast",
-        "participants": [
-          "member",
-          "committee-coordinator"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "decision-log",
-        "resource-inventory",
-        "rotation-schedule",
-        "meeting-minutes"
-      ],
-      "private": [
-        "personal-preference-notes"
-      ],
-      "description": "Nearly everything is shared. The decision log records all assembly votes. The resource inventory is fully transparent. The rotation schedule ensures fairness. Private memory is minimal -- only personal notes on preferences. This radical transparency is core to the egalitarian model."
-    },
-    "diagram": "graph TD\n    GA[General Assembly] --> C1[Committee 1]\n    GA --> C2[Committee 2]\n    GA --> C3[Committee 3]\n    C1 --> M1[Members]\n    C2 --> M1\n    C3 --> M1\n    M1 --> GA\n    SEC[Secretary] --> GA",
-    "hierarchyTypes": [
-      "consensus",
-      "orchestrated",
-      "swarm",
-      "chain-of-command"
-    ]
-  },
-  {
-    "id": "secret-society-cells",
-    "name": "Secret Society Cell Structure",
-    "category": "Social & Community",
-    "tags": [
-      "compartmentalized",
-      "covert",
-      "cell-based",
-      "need-to-know"
-    ],
-    "summary": "Isolated cells connected only through cutouts, maximizing operational security through compartmentalization.",
-    "description": "A cell-based structure organizes agents into small, isolated groups (3-5 members) that know nothing about other cells. Communication flows only through designated cutouts (liaison agents) who connect cells to leadership. If any cell is compromised, the damage is contained because members cannot reveal what they don't know. Leadership communicates through dead drops and one-way channels. This pattern trades coordination efficiency for maximum resilience against information leakage.",
-    "realWorldExample": "The French Resistance during WWII organized in 3-person cells where members only knew their cellmates and one contact",
-    "whenToUse": "When agents handle sensitive information and a breach in one area must not compromise the entire system. Security and containment matter more than coordination speed.",
-    "strengths": [
-      "Compromise of one cell cannot cascade to others",
-      "Need-to-know basis minimizes information exposure",
-      "Small cells enable high trust within each group",
-      "System survives loss of individual cells gracefully"
-    ],
-    "weaknesses": [
-      "Coordination across cells is extremely slow and lossy",
-      "Cutout agents become critical bottlenecks and single points of failure",
-      "Duplicate work is common because cells cannot share findings",
-      "Leadership has limited visibility into cell-level operations"
-    ],
-    "agents": [
-      {
-        "role": "leadership",
-        "name": "Central Leadership",
-        "description": "Sets strategy and priorities; communicates only through cutouts; never contacts cells directly",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "cutout",
-        "name": "Cutout Liaison",
-        "description": "Bridges communication between leadership and cells; knows only adjacent nodes",
-        "memory": "ephemeral",
-        "count": 3
-      },
-      {
-        "role": "cell-leader",
-        "name": "Cell Leader",
-        "description": "Leads a small cell; only contact point with the cutout; shields cell members from exposure",
-        "memory": "persistent-private",
-        "count": 3
-      },
-      {
-        "role": "cell-operative",
-        "name": "Cell Operative",
-        "description": "Executes tasks within cell; knows only cellmates; no knowledge of larger structure",
-        "memory": "ephemeral",
-        "count": 6
-      }
-    ],
-    "forums": [
-      {
-        "name": "Dead Drop",
-        "type": "queue",
-        "participants": [
-          "leadership",
-          "cutout"
-        ]
-      },
-      {
-        "name": "Cell-Cutout Channel",
-        "type": "peer-to-peer",
-        "participants": [
-          "cutout",
-          "cell-leader"
-        ]
-      },
-      {
-        "name": "Internal Cell Comms",
-        "type": "peer-to-peer",
-        "participants": [
-          "cell-leader",
-          "cell-operative"
-        ]
-      },
-      {
-        "name": "Emergency Signal",
-        "type": "emergency",
-        "participants": [
-          "cell-leader",
-          "cutout"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "mission-objectives-per-cell"
-      ],
-      "private": [
-        "cell-operational-details",
-        "leadership-strategy",
-        "contact-protocols",
-        "cover-identities"
-      ],
-      "description": "Almost nothing is shared globally. Each cell has its own private memory silo. The cutout maintains ephemeral memory that is wiped after each relay. Leadership's strategic memory is heavily compartmentalized. Even mission objectives are shared only with the relevant cell, never across cells."
-    },
-    "diagram": "graph TD\n    L[Leadership] --> CO1[Cutout 1]\n    L --> CO2[Cutout 2]\n    L --> CO3[Cutout 3]\n    CO1 --> CL1[Cell Leader A]\n    CO2 --> CL2[Cell Leader B]\n    CO3 --> CL3[Cell Leader C]\n    CL1 --> OP1[Operative]\n    CL1 --> OP2[Operative]\n    CL2 --> OP3[Operative]\n    CL2 --> OP4[Operative]\n    CL3 --> OP5[Operative]\n    CL3 --> OP6[Operative]",
-    "hierarchyTypes": [
-      "federated"
-    ]
-  },
-  {
-    "id": "wiki-collaborative",
-    "name": "Wiki Collaborative",
-    "category": "Social & Community",
-    "tags": [
-      "open-edit",
-      "consensus-by-editing",
-      "versioned",
-      "self-governing"
-    ],
-    "summary": "Open editing model where any contributor can modify shared documents, governed by edit wars and consensus.",
-    "description": "The wiki model allows any agent to edit any shared document, with changes tracked through version history. Quality emerges not from gatekeeping but from collective revision -- bad edits get reverted, good edits survive. Administrators handle disputes and enforce community norms but cannot override consensus. Talk pages provide structured debate when edits conflict. Featured article reviews set quality standards. This pattern maximizes parallelism and openness but requires robust conflict resolution.",
-    "realWorldExample": "Wikipedia's editing model with 40M+ articles maintained by 300K+ active editors with elected administrators",
-    "whenToUse": "When many agents need to contribute to shared knowledge artifacts and you trust collective revision to produce quality. Works best when contributions are independently verifiable.",
-    "strengths": [
-      "Any agent can improve any output at any time",
-      "Version history provides full accountability and rollback capability",
-      "Scales to thousands of contributors without central bottleneck",
-      "Quality emerges from collective revision rather than gatekeeping"
-    ],
-    "weaknesses": [
-      "Edit wars waste energy when agents disagree persistently",
-      "Vandalism and low-quality edits require constant patrolling",
-      "Consensus process can be gamed by organized factions",
-      "No clear authority for resolving deep disputes quickly"
-    ],
-    "agents": [
-      {
-        "role": "editor",
-        "name": "Editor",
-        "description": "Contributes content, revises others' work, participates in talk page discussions",
-        "memory": "versioned",
-        "count": 8
-      },
-      {
-        "role": "administrator",
-        "name": "Administrator",
-        "description": "Elected by editors; can protect pages and block vandals but cannot override consensus",
-        "memory": "persistent-shared",
-        "count": 2
-      },
-      {
-        "role": "bot",
-        "name": "Maintenance Bot",
-        "description": "Automated agent that fixes formatting, detects vandalism, and enforces style guidelines",
-        "memory": "ephemeral",
-        "count": 2
-      },
-      {
-        "role": "reviewer",
-        "name": "Peer Reviewer",
-        "description": "Reviews articles for featured status; provides structured quality assessments",
-        "memory": "persistent-private",
-        "count": 2
-      }
-    ],
-    "forums": [
-      {
-        "name": "Article Space",
-        "type": "document",
-        "participants": [
-          "editor",
-          "administrator",
-          "bot"
-        ]
-      },
-      {
-        "name": "Talk Pages",
-        "type": "threaded",
-        "participants": [
-          "editor",
-          "administrator",
-          "reviewer"
-        ]
-      },
-      {
-        "name": "Admin Noticeboard",
-        "type": "decision",
-        "participants": [
-          "administrator",
-          "editor"
-        ]
-      },
-      {
-        "name": "Recent Changes",
-        "type": "log",
-        "participants": [
-          "editor",
-          "administrator",
-          "bot"
-        ]
-      },
-      {
-        "name": "Featured Review",
-        "type": "advisory",
-        "participants": [
-          "reviewer",
-          "editor"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "article-database",
-        "version-history",
-        "policy-pages",
-        "talk-page-archives"
-      ],
-      "private": [
-        "editor-watchlists",
-        "draft-workspace"
-      ],
-      "description": "Everything is versioned and shared by default. The version history is the core memory -- it records every change, by whom, and when. Talk page archives preserve the reasoning behind decisions. Editors maintain private watchlists to monitor articles they care about. Policy pages are themselves wiki-editable, making even governance transparent."
-    },
-    "diagram": "graph LR\n    E1[Editor 1] --> ART[Article Space]\n    E2[Editor 2] --> ART\n    E3[Editor 3] --> ART\n    ART --> VH[Version History]\n    E1 --> TP[Talk Page]\n    E2 --> TP\n    ADM[Admin] --> ART\n    BOT[Bot] --> ART\n    REV[Reviewer] --> ART\n    TP --> ADM",
-    "hierarchyTypes": [
-      "consensus",
-      "adversarial",
-      "pipeline"
     ]
   },
   {
@@ -1229,151 +892,6 @@
     "hierarchyTypes": [
       "swarm",
       "orchestrated"
-    ]
-  },
-  {
-    "id": "monastic-order",
-    "name": "Monastic Order",
-    "category": "Religious & Spiritual",
-    "tags": [
-      "rule-based",
-      "contemplative",
-      "disciplined",
-      "hierarchical-spiritual"
-    ],
-    "summary": "Rule-governed community where an abbot leads monks through structured daily cycles of work, study, and reflection.",
-    "description": "A monastic order operates under a fixed Rule (e.g., Rule of St. Benedict) that dictates the daily schedule, behavioral norms, and decision-making process. The abbot holds authority but is constrained by the Rule and must consult the community on major decisions. Life follows strict cycles: prayer, work, study, and communal meals. New members progress through novitiate stages before full admission. This pattern excels at long-term, patient work where consistency and depth matter more than speed or novelty.",
-    "realWorldExample": "A Benedictine monastery following the 1500-year-old Rule of St. Benedict with 30 monks in a daily cycle of ora et labora",
-    "whenToUse": "When agents must maintain discipline over very long time horizons, follow strict protocols, and prioritize depth and quality over speed. Good for archival, curation, and maintenance tasks.",
-    "strengths": [
-      "Extreme consistency -- the Rule prevents drift over long time horizons",
-      "Structured cycles ensure balanced attention across all responsibilities",
-      "Deep focus enabled by elimination of distraction and novelty-seeking",
-      "Novitiate process ensures new agents are properly vetted and trained"
-    ],
-    "weaknesses": [
-      "Very slow to adapt to changed circumstances -- the Rule resists modification",
-      "Rigid hierarchy can suppress legitimate innovation from junior members",
-      "Contemplative pace is unsuitable for time-sensitive tasks",
-      "Isolation from outside input can lead to blind spots"
-    ],
-    "agents": [
-      {
-        "role": "abbot",
-        "name": "Abbot",
-        "description": "Elected leader who interprets the Rule and makes final decisions; serves for life or until resignation",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "prior",
-        "name": "Prior",
-        "description": "Second in command; manages daily operations and substitutes for the abbot",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "monk",
-        "name": "Monk",
-        "description": "Full member who follows the daily cycle of work, study, and contemplation",
-        "memory": "persistent-private",
-        "count": 6
-      },
-      {
-        "role": "novice",
-        "name": "Novice",
-        "description": "Probationary member learning the Rule; limited privileges; supervised by novice master",
-        "memory": "ephemeral",
-        "count": 2
-      },
-      {
-        "role": "novice-master",
-        "name": "Novice Master",
-        "description": "Senior monk responsible for training and evaluating novices",
-        "memory": "persistent-private"
-      },
-      {
-        "role": "librarian",
-        "name": "Librarian",
-        "description": "Maintains the community's knowledge store; preserves and catalogs all texts",
-        "memory": "append-only"
-      }
-    ],
-    "forums": [
-      {
-        "name": "Chapter Meeting",
-        "type": "decision",
-        "participants": [
-          "abbot",
-          "prior",
-          "monk"
-        ]
-      },
-      {
-        "name": "The Rule",
-        "type": "document",
-        "participants": [
-          "abbot",
-          "prior",
-          "monk",
-          "novice",
-          "novice-master",
-          "librarian"
-        ]
-      },
-      {
-        "name": "Daily Office",
-        "type": "broadcast",
-        "participants": [
-          "abbot",
-          "prior",
-          "monk",
-          "novice"
-        ]
-      },
-      {
-        "name": "Novice Instruction",
-        "type": "top-down",
-        "participants": [
-          "novice-master",
-          "novice"
-        ]
-      },
-      {
-        "name": "Scriptorium",
-        "type": "document",
-        "participants": [
-          "librarian",
-          "monk"
-        ]
-      },
-      {
-        "name": "Confession",
-        "type": "per-agent",
-        "participants": [
-          "monk",
-          "abbot"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "the-rule",
-        "community-chronicle",
-        "library-catalog",
-        "daily-schedule"
-      ],
-      "private": [
-        "personal-journals",
-        "spiritual-reflections",
-        "novice-evaluations"
-      ],
-      "description": "The Rule is the immutable constitution that governs all behavior. The community chronicle is an append-only record of significant events. The library catalog is maintained by the librarian. Monks keep private spiritual journals. Novice evaluations are shared only between the novice master and abbot."
-    },
-    "diagram": "graph TD\n    RULE[The Rule] --> ABB[Abbot]\n    ABB --> PR[Prior]\n    PR --> M1[Monks]\n    ABB --> NM[Novice Master]\n    NM --> NOV[Novices]\n    NOV -->|promotion| M1\n    M1 --> LIB[Librarian]\n    LIB --> SCRIP[Scriptorium]\n    M1 --> CH[Chapter Meeting]\n    ABB --> CH",
-    "hierarchyTypes": [
-      "orchestrated",
-      "swarm",
-      "chain-of-command",
-      "consensus"
     ]
   },
   {
@@ -1487,7 +1005,7 @@
       ],
       "description": "Approved minutes are the only authoritative shared record -- they capture the exact wording of the sense of the meeting. Held-over matters are queued for future sessions. Each participant maintains private discernment notes. The recording clerk's raw notes are preserved as an append-only backup. There is no voting record because there are no votes."
     },
-    "diagram": "graph TD\n    SIL[Silence] --> P1[Friend]\n    SIL --> P2[Friend]\n    SIL --> P3[Friend]\n    P1 -->|speaks when moved| CLK[Clerk]\n    P2 -->|speaks when moved| CLK\n    P3 -->|speaks when moved| CLK\n    ELD[Elder] --> SIL\n    CLK --> SOM[Sense of Meeting]\n    SOM --> RC[Recording Clerk]\n    RC --> MIN[Minutes]\n    SOM -->|no unity| HO[Held Over]",
+    "diagram": "graph TD\n    CL[Clerk] -->|sets agenda| MEET((Meeting))\n    F1[Friend 1] -->|speaks when moved| MEET\n    F2[Friend 2] -->|speaks when moved| MEET\n    F3[Friend 3] -->|speaks when moved| MEET\n    MEET -->|sense of meeting| CL\n    CL -->|tests for unity| MEET\n    RC[Recording Clerk] -.->|minutes| CL",
     "hierarchyTypes": [
       "consensus"
     ]
@@ -1758,8 +1276,8 @@
     "hierarchyTypes": [
       "adversarial",
       "orchestrated",
-      "swarm",
       "consensus",
+      "swarm",
       "pipeline"
     ]
   },
@@ -1887,136 +1405,6 @@
     "hierarchyTypes": [
       "swarm",
       "orchestrated"
-    ]
-  },
-  {
-    "id": "apprenticeship-guild",
-    "name": "Apprenticeship Guild System",
-    "category": "Education & Training",
-    "tags": [
-      "master-apprentice",
-      "graduated-skill",
-      "craft-based",
-      "credentialing"
-    ],
-    "summary": "Masters train journeymen and apprentices through hands-on practice, with guild standards governing quality.",
-    "description": "The guild system organizes skill development through a strict three-tier hierarchy: master, journeyman, and apprentice. Apprentices learn by doing under direct master supervision. Journeymen work independently but are not yet authorized to train others. Masters have proven their craft through a masterwork and earned the right to take apprentices. The guild itself sets standards, adjudicates disputes, and controls admission. Knowledge transfers through direct practice, not textbooks -- you learn by making things alongside someone better.",
-    "realWorldExample": "Medieval Goldsmith's Guild in Florence where apprentices served 7 years before journeyman status and produced a masterwork for master rank",
-    "whenToUse": "When skills are best learned through hands-on practice rather than instruction, quality standards must be maintained across the community, and credentialing gates access to higher responsibility.",
-    "strengths": [
-      "Hands-on learning ensures skills transfer through practice, not just theory",
-      "Clear progression path motivates agents and ensures readiness at each level",
-      "Guild standards maintain consistent quality across all practitioners",
-      "Master-apprentice bond creates deep mentorship and accountability"
-    ],
-    "weaknesses": [
-      "Very slow progression -- years per level is common",
-      "Masters may resist innovation that threatens their expertise",
-      "Guild protectionism can exclude capable outsiders",
-      "Single-master dependency -- if master is flawed, apprentice inherits those flaws"
-    ],
-    "agents": [
-      {
-        "role": "guild-master",
-        "name": "Guild Master",
-        "description": "Leads the guild; sets standards, adjudicates disputes, evaluates masterworks",
-        "memory": "persistent-shared"
-      },
-      {
-        "role": "master",
-        "name": "Master Craftsman",
-        "description": "Proven expert authorized to take apprentices and produce work independently",
-        "memory": "persistent-private",
-        "count": 3
-      },
-      {
-        "role": "journeyman",
-        "name": "Journeyman",
-        "description": "Independent worker who has completed apprenticeship but not yet produced a masterwork",
-        "memory": "persistent-private",
-        "count": 4
-      },
-      {
-        "role": "apprentice",
-        "name": "Apprentice",
-        "description": "Learner bound to a master; works alongside them daily; limited independent authority",
-        "memory": "ephemeral",
-        "count": 4
-      }
-    ],
-    "forums": [
-      {
-        "name": "Guild Hall",
-        "type": "decision",
-        "participants": [
-          "guild-master",
-          "master"
-        ]
-      },
-      {
-        "name": "Workshop",
-        "type": "peer-to-peer",
-        "participants": [
-          "master",
-          "journeyman",
-          "apprentice"
-        ]
-      },
-      {
-        "name": "Master-Apprentice Pair",
-        "type": "per-agent",
-        "participants": [
-          "master",
-          "apprentice"
-        ]
-      },
-      {
-        "name": "Masterwork Review",
-        "type": "advisory",
-        "participants": [
-          "guild-master",
-          "master",
-          "journeyman"
-        ]
-      },
-      {
-        "name": "Guild Standards",
-        "type": "document",
-        "participants": [
-          "guild-master",
-          "master"
-        ]
-      },
-      {
-        "name": "Journeyman Exchange",
-        "type": "peer-to-peer",
-        "participants": [
-          "journeyman"
-        ]
-      }
-    ],
-    "memoryArchitecture": {
-      "shared": [
-        "guild-standards",
-        "masterwork-archive",
-        "member-registry",
-        "quality-specifications"
-      ],
-      "private": [
-        "workshop-techniques",
-        "apprentice-evaluations",
-        "trade-secrets"
-      ],
-      "description": "Guild standards and the masterwork archive are shared to maintain quality benchmarks. Each master's specific techniques are private trade knowledge. Apprentice evaluations are shared only between the master and guild master. The member registry tracks everyone's rank and progression. Journeymen carry their skills between workshops, building a private portfolio."
-    },
-    "diagram": "graph TD\n    GM[Guild Master] --> GH[Guild Hall]\n    M1[Master 1] --> GH\n    M2[Master 2] --> GH\n    M1 --> A1[Apprentice]\n    M1 --> A2[Apprentice]\n    M2 --> A3[Apprentice]\n    J1[Journeyman] --> M1\n    J2[Journeyman] --> M2\n    J1 -->|masterwork| GH\n    GH --> STD[Guild Standards]",
-    "hierarchyTypes": [
-      "orchestrated",
-      "consensus",
-      "chain-of-command",
-      "federated",
-      "adversarial",
-      "mesh"
     ]
   },
   {
@@ -2156,11 +1544,11 @@
     },
     "diagram": "graph TD\n    ATT[Attending] --> CR[Chief Resident]\n    CR --> R1[Resident 1]\n    CR --> R2[Resident 2]\n    R1 --> I1[Intern 1]\n    R2 --> I2[Intern 2]\n    NRS[Nurse] -->|alert| I1\n    NRS -->|alert| R1\n    I1 -->|escalate| R1\n    R1 -->|escalate| CR\n    CR -->|escalate| ATT\n    ATT --> ROUNDS[Morning Rounds]\n    ATT --> MMC[M&M Conference]",
     "hierarchyTypes": [
-      "chain-of-command",
       "orchestrated",
+      "chain-of-command",
+      "consensus",
       "swarm",
       "mesh",
-      "consensus",
       "adversarial"
     ]
   },
@@ -2438,7 +1826,7 @@
       ],
       "description": "The pit stop procedure is the shared, immutable choreography -- every movement is specified. Timing benchmarks track performance against targets. Rehearsal recordings enable post-practice analysis. Individual performance metrics are private to each agent and their coach. The race engineer's strategy models are private. During execution, all memory is effectively ephemeral -- there is no time to consult anything."
     },
-    "diagram": "graph LR\n    RE[Race Engineer] --> CC[Crew Chief]\n    CC --> GO[Go Signal]\n    GO --> J1[Front Jack]\n    GO --> J2[Rear Jack]\n    GO --> TC1[Tire Gun FL]\n    GO --> TC2[Tire Gun FR]\n    GO --> TC3[Tire Gun RL]\n    GO --> TC4[Tire Gun RR]\n    TC1 --> DONE[Completion]\n    TC2 --> DONE\n    TC3 --> DONE\n    TC4 --> DONE\n    DONE --> CC",
+    "diagram": "graph TD\n    CC[Crew Chief] -->|go signal| FL[Front Left Gunner]\n    CC --> FR[Front Right Gunner]\n    CC --> RL[Rear Left Gunner]\n    CC --> RR[Rear Right Gunner]\n    CC --> JM[Jack Man]\n    CC --> FM[Fuel Man]\n    JM -->|car up| FL\n    JM -->|car up| FR\n    JM -->|car up| RL\n    JM -->|car up| RR\n    FL -->|done| CC\n    FR -->|done| CC\n    RL -->|done| CC\n    RR -->|done| CC",
     "hierarchyTypes": [
       "swarm",
       "chain-of-command"
